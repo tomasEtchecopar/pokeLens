@@ -4,10 +4,12 @@ import { inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { computed } from '@angular/core';
 import { Router } from '@angular/router';
+import { PokemonCard } from '../pokemon-card/pokemon-card';
+import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-pokemon-catalog',
-  imports: [],
+  imports: [PokemonCard, JsonPipe],
   templateUrl: './pokemon-catalog.html',
   styleUrl: './pokemon-catalog.css'
 })

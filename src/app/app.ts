@@ -4,7 +4,7 @@ import { PokemonCatalog } from "./pokemon/pokemon-catalog/pokemon-catalog";
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, PokemonCatalog],
+  imports: [RouterOutlet],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })
