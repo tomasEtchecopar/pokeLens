@@ -1,11 +1,14 @@
-<div class="catalogo">
+
+@let pokemons = this.pokemons().results;
+<pre>{{pokemons | json}}</pre><div class="catalog">
     <h1>Pokemon Catalog</h1>
-@let pokemons = this.pokemons();
+
     @if(isLoading()){
         <p>Cargando Pokemons...</p>
-    }@else if (pokemons && pokemons.length > 0 ) {
+    }@else {
         <div class="grid">
-            @for (pokemon of pokemons(); track pokemon.name){
+            <p>hola1</p>
+            @for (pokemon of pokemons; track pokemon.name){
                 <app-pokemon-card [pokemonRef]="pokemon"></app-pokemon-card>
             }
         </div>

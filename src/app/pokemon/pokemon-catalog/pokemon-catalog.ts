@@ -31,6 +31,7 @@ export class PokemonCatalog {
   * Automatically updates when the Observable emits new values.
   */
   protected readonly pokemons = toSignal(this.service.getPokemonList())
+
   /**
  * Signal indicating whether data is still loading.
  * True until the first response from `pokemons` is available.
