@@ -1,0 +1,10 @@
+<div class="catalogo">
+    <h1>Pokemon Catalog</h1>
+    @let pokemons = this.pokemons();
+
+    @if(isLoading()){
+        <p>Cargando Pokemons...</p>
+    }@else if (pokemons && pokemons.length > 0 ) {
+        <div class="grid"></div>
+    }
+</div>
