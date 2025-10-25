@@ -15,7 +15,7 @@ import { shareReplay, catchError } from 'rxjs/operators';
  */
 export class PokemonService {
 
-  private client = new PokemonClient(); //Instance of the PokeAPI client used to perform HTTP requests.
+  private readonly client = new PokemonClient(); //Instance of the PokeAPI client used to perform HTTP requests.
 
 
   /**
@@ -44,7 +44,7 @@ export class PokemonService {
       return this.cache.get(key)!;
     }
 
-    const obs$ = from(this.client.listPokemons(limit, offset)).pipe(
+    const obs$ = from(this.client.listPokemons(offset, limit)).pipe(
       shareReplay(1),
       catchError(err => {
         console.error('Error fetching Pokémon list:', err);
