@@ -6,6 +6,7 @@ import { computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { PokemonCard } from '../pokemon-card/pokemon-card';
 import { JsonPipe } from '@angular/common';
+import { PokemonClient } from 'pokenode-ts';
 
 @Component({
   selector: 'app-pokemon-catalog',
@@ -24,6 +25,7 @@ import { JsonPipe } from '@angular/common';
 export class PokemonCatalog {
 
   private readonly service = inject(PokemonService); //Injected service used to retrieve Pokémon data from the API.
+  private readonly client = inject(PokemonClient);
   private readonly router = inject(Router); //Injected Angular Router used for navigation within the app.
 
   /**
