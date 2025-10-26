@@ -1,14 +1,15 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { Input } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { PokemonService } from '../pokemon-service';
-import { signal } from '@angular/core';
 import { NamedAPIResource, Pokemon } from '../pokemon-models';
-import { TitleCasePipe } from '@angular/common';
+import { NgOptimizedImage, TitleCasePipe } from '@angular/common';
+import { toObservable } from '@angular/core/rxjs-interop';
+import { switchMap } from 'rxjs';
+import { PokeImgPipe } from '../poke-img-pipe';
 
 @Component({
   selector: 'app-pokemon-card',
-  imports: [TitleCasePipe],
+  imports: [TitleCasePipe, PokeImgPipe, NgOptimizedImage],
   templateUrl: './pokemon-card.html',
   styleUrl: './pokemon-card.css'
 })
@@ -17,6 +18,12 @@ export class PokemonCard {
   private service = inject(PokemonService);
 
   readonly pokemonResource = input.required<NamedAPIResource>();
+
+  readonly pokemon = toSignal(
+    toObservable(this.pokemonResource).pipe(
+      switchMap(resource => this.service.getPokemonByName(resource.name))
+    )
+  );
 
   protected readonly isLoading = computed(() => this.pokemonResource() === undefined);
 }

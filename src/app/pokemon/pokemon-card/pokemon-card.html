@@ -1,8 +1,16 @@
 <div class="card">
-    @let pokemon = this.pokemonResource();
-    @if(isLoading()){
+        @let pokemon = this.pokemon();
+        @if(isLoading()){
         <p>Cargando pokemon...</p>
     }@else if(pokemon){
-        <h2>{{pokemon.name | titlecase}}</h2>
+        <img width="120" height="120" [ngSrc]="pokemonResource().url | pokeImg" alt="{{pokemon.name}}">
+        <h2>{{ pokemon.name | titlecase }}</h2>
+    <div class="types">
+        @for (type of pokemon.types; track type.type.name) {
+            <span class="type">{{ type.type.name | titlecase }}</span>
+        }
+    </div>
+    <p>Weight: {{ pokemon.weight / 10 }} kg</p>
+    <p>Height: {{ pokemon.height / 10 }} m</p>
     }
 </div>
