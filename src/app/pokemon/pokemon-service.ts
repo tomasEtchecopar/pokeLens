@@ -1,9 +1,7 @@
-import { httpResource } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { httpResource } from '@angular/common/http';
-import { NamedAPIResource } from './pokemon-models';
-
+import { NamedAPIResourceList } from './pokemon-models';
 
 @Injectable({
   providedIn: 'root'
@@ -13,10 +11,12 @@ import { NamedAPIResource } from './pokemon-models';
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
   private readonly baseURL = "https://pokeapi.co/api/v2";
+  private readonly http = inject(HttpClient);
 
   getPokemonList(limit: number = 20, offset: number = 0): Observable<NamedAPIResourceList> {
-    const url = offset === 0 ? `${this.baseUrl}?limit=${limit}&offset=${offset}` : this.nextUrl!;
-    const resource = new HttpResource<NamedAPIResourceList>(url, this.http);
-    return resource.get();
+    const url = `${this.baseURL}/pokemon?limit=${limit}&offset=${offset}`;
+    return this.http.get<NamedAPIResourceList>(url);
   }
+
+  getPokemon()
 }

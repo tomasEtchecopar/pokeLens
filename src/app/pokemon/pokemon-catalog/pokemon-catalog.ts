@@ -5,12 +5,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { computed } from '@angular/core';
 import { Router } from '@angular/router';
 import { PokemonCard } from '../pokemon-card/pokemon-card';
-import { JsonPipe } from '@angular/common';
-import { PokemonClient } from 'pokenode-ts';
 
 @Component({
   selector: 'app-pokemon-catalog',
-  imports: [PokemonCard, JsonPipe],
+  imports: [PokemonCard],
   templateUrl: './pokemon-catalog.html',
   styleUrl: './pokemon-catalog.css'
 })
@@ -25,19 +23,11 @@ import { PokemonClient } from 'pokenode-ts';
 export class PokemonCatalog {
 
   private readonly service = inject(PokemonService); //Injected service used to retrieve Pokémon data from the API.
-  private readonly client = inject(PokemonClient);
   private readonly router = inject(Router); //Injected Angular Router used for navigation within the app.
 
-  /**
-  * Signal holding the list of Pokémon returned by the service.
-  * Automatically updates when the Observable emits new values.
-  */
-  protected readonly pokemons = toSignal(this.service.getPokemonList())
+  protected readonly pokemons = toSignal(this.service.getPokemonList());
 
-  /**
- * Signal indicating whether data is still loading.
- * True until the first response from `pokemons` is available.
- */
+
   protected readonly isLoading = computed(() => this.pokemons() === undefined);
 
   /**
