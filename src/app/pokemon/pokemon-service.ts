@@ -2,6 +2,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { NamedAPIResourceList } from './pokemon-models';
+import { Pokemon } from './pokemon-models';
 
 @Injectable({
   providedIn: 'root'
@@ -18,5 +19,11 @@ export class PokemonService {
     return this.http.get<NamedAPIResourceList>(url);
   }
 
-  getPokemon()
+  getPokemonByName(name: string){
+    return this.http.get<Pokemon>(`${this.baseURL}/pokemon/${name}`);
+  }
+
+  getPokemonByURL(url: string){
+    return this.http.get<Pokemon>(url);
+  }
 }

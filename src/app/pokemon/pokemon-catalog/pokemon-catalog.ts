@@ -25,10 +25,10 @@ export class PokemonCatalog {
   private readonly service = inject(PokemonService); //Injected service used to retrieve Pokémon data from the API.
   private readonly router = inject(Router); //Injected Angular Router used for navigation within the app.
 
-  protected readonly pokemons = toSignal(this.service.getPokemonList());
+  protected readonly pokeResourcesList = toSignal(this.service.getPokemonList());
 
 
-  protected readonly isLoading = computed(() => this.pokemons() === undefined);
+  protected readonly isLoading = computed(() => this.pokeResourcesList() === undefined);
 
   /**
   * Navigates to the Pokémon detail page for the given identifier.
