@@ -12,41 +12,44 @@ import { takeUntil } from 'rxjs';
 import { Subject } from 'rxjs';
 import { of } from 'rxjs';
 
+/**
+ * Pokemon catalog component with infinite scroll and reactive search.
+ * 
+ * Shows a grid of Pokemon cards that loads more as you scroll down.
+ * Includes a search bar that filters Pokemon by name in real-time.
+ */
 @Component({
   selector: 'app-pokemon-catalog',
   imports: [PokemonCard, ReactiveFormsModule],
   templateUrl: './pokemon-catalog.html',
   styleUrl: './pokemon-catalog.css'
 })
-/**
- * Component model for the Pokemon catalog landing page with infinite scroll.
- * 
-*/
 export class PokemonCatalog {
 
-  private readonly service = inject(PokemonService); //Injected service used to retrieve Pokemon data from the API.
-  private readonly router = inject(Router); //Injected Angular Router used for navigation within the app.
-  private destroy$ = new Subject<void>();
+  // services and utilities
+  private readonly service = inject(PokemonService); // handles API calls to PokeAPI
+  private readonly router = inject(Router); // for navigating to Pokemon details
+  private destroy$ = new Subject<void>(); // cleanup trigger for subscriptions
 
+  // infinite scroll detection
+  @ViewChild('scrollSentinel') scrollSentinel?: ElementRef; // invisible element at bottom of list
 
-  // Element reference for detecting when user scrolls to bottom
-  @ViewChild('scrollSentinel') scrollSentinel?: ElementRef;
+  // search state
+  protected readonly searchControl = new FormControl(''); // input field binding
+  protected readonly searchTerm = signal(''); // reactive search term for computed properties
+  protected readonly searchResults = signal<NamedAPIResource[]>([]); // filtered Pokemon from search
+  protected readonly isSearching = signal(false); // loading indicator for search
 
-  //search
-  protected readonly searchControl = new FormControl('');
-  protected readonly searchTerm = signal('');
-  protected readonly searchResults = signal<NamedAPIResource[]>([]);
-  protected readonly isSearching = signal(false);
-
-  private readonly pageSize = 20; // Number of Pokemon to load per batch
-  private offset = signal(0); // Current pagination offset
-  protected readonly allPokemon = signal<NamedAPIResource[]>([]); // Accumulated list of all loaded Pokemon
-  protected readonly hasMore = signal(true); // Whether more Pokemon are available
-  protected readonly isLoadingMore = signal(false); // Loading state for pagination
-
+  // pagination state
+  private readonly pageSize = 20; // how many Pokemon to fetch per batch
+  private offset = signal(0); // current position in the full Pokemon list
+  protected readonly allPokemon = signal<NamedAPIResource[]>([]); // all loaded Pokemon so far
+  protected readonly hasMore = signal(true); // whether there are more Pokemon to load
+  protected readonly isLoadingMore = signal(false); // loading indicator for pagination
 
   /**
-   * Computed property that returns either search results or all Pokemon
+   * Returns either search results or the full catalog depending on search state.
+   * This is what actually gets displayed in the template.
    */
   protected readonly displayedPokemon = computed(() => {
     const term = this.searchTerm();
@@ -58,18 +61,18 @@ export class PokemonCatalog {
     return term.trim() ? search : all;
   });
 
-
   /**
-   * Computed property to check if we're in search mode
+   * Checks if we're currently in search mode (user has typed something).
+   * Used to disable infinite scroll during search.
    */
   protected readonly isInSearchMode = computed(() => {
     const searchTerm = this.searchControl.value;
     return !!(searchTerm && searchTerm.trim());
   });
 
-
   /**
-   * Loads the next batch of Pokemon from the API.
+   * Fetches the next batch of Pokemon for infinite scroll.
+   * Won't load if already loading or no more results.
    */
   private loadMorePokemon() {
     if (!this.hasMore() || this.isLoadingMore()) return;
@@ -89,30 +92,35 @@ export class PokemonCatalog {
     });
   }
 
+  /**
+   * Initialization - loads first batch and sets up reactive search.
+   */
   ngOnInit() {
-  // Load initial batch
-  this.loadMorePokemon();
+    // load initial batch of Pokemon
+    this.loadMorePokemon();
 
-  // Setup reactive search
-  console.log('Setting up search subscription');
-  
- this.searchControl.valueChanges.pipe(
-      takeUntil(this.destroy$),
-      debounceTime(300),
-      distinctUntilChanged(),
+    // set up reactive search with debouncing
+    console.log('Setting up search subscription');
+    
+    this.searchControl.valueChanges.pipe(
+      takeUntil(this.destroy$), // auto-unsubscribe on component destroy
+      debounceTime(300), // wait 300ms after user stops typing
+      distinctUntilChanged(), // only search if value actually changed
       switchMap(term => {
         const searchTerm = term || '';
         console.log('Search triggered:', searchTerm);
         
-        // Actualizar la signal del término de búsqueda
+        // update reactive search term
         this.searchTerm.set(searchTerm);
         
+        // empty search = show all Pokemon
         if (!searchTerm.trim()) {
           this.isSearching.set(false);
           this.searchResults.set([]);
           return of({ count: 0, next: null, previous: null, results: [] });
         }
         
+        // perform search
         this.isSearching.set(true);
         return this.service.searchPokemon(searchTerm);
       })
@@ -136,46 +144,51 @@ export class PokemonCatalog {
         this.isSearching.set(false);
       }
     });
-}
+  }
 
-
+  /**
+   * Sets up infinite scroll by watching when the sentinel element comes into view.
+   * Only triggers when NOT in search mode.
+   */
   ngAfterViewInit() {
     if (!this.scrollSentinel?.nativeElement) return;
 
     const observer = new IntersectionObserver((entries) => {
-      //only trigger infinite scroll when not in search mode
+      // only trigger infinite scroll when not searching
       if (entries[0].isIntersecting && !this.isInSearchMode()) {
         this.loadMorePokemon();
       }
     }, {
-      threshold: 0.1
+      threshold: 0.1 // trigger when 10% of sentinel is visible
     });
 
     observer.observe(this.scrollSentinel.nativeElement);
   }
 
+  /**
+   * Cleanup - prevents memory leaks by completing subscriptions.
+   */
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
   }
 
-
+  /**
+   * Shows loading state only on initial load (not during search or pagination).
+   */
   protected readonly isLoading = computed(() =>
     this.allPokemon().length === 0 && !this.isLoadingMore() && !this.isInSearchMode()
   );
 
-
   /**
-  * Navigates to the Pokemon detail page for the given identifier.
-  *
-  * @param id Pokemon numeric ID or name string.
-  */
+   * Navigates to the detail page for a specific Pokemon.
+   */
   navigateToDetails(id: string | number) {
     this.router.navigateByUrl(`catalogo/${id}`);
   }
 
-    /**
-   * Clears the search and returns to normal catalog view
+  /**
+   * Clears the search input and returns to full catalog view.
    */
   protected clearSearch() {
     this.searchControl.setValue('');
