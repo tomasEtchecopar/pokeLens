@@ -6,6 +6,7 @@ import { NgOptimizedImage, TitleCasePipe } from '@angular/common';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
 import { PokeImgPipe } from '../poke-img-pipe';
+import { translateType } from '../pokemon-helpers';
 
 /**
  * Card component that displays a single Pokemon.
@@ -31,4 +32,7 @@ export class PokemonCard {
   );
 
   protected readonly isLoading = computed(() => this.pokemonResource() === undefined);
+  
+  // Use imported translateType function
+  protected translateType = translateType;
 }

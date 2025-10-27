@@ -1,12 +1,12 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { NamedAPIResourceList } from './pokemon-models';
 import { Pokemon } from './pokemon-models';
+import { catchError, map } from 'rxjs';
 
 /**
  * Service that talks to the PokeAPI
- * 
  * Handles all the HTTP calls to get Pokemon data - lists, by name, or by URL
  */
 @Injectable({ providedIn: 'root' })
@@ -36,5 +36,33 @@ export class PokemonService {
    */
   getPokemonByURL(url: string){
     return this.http.get<Pokemon>(url);
+  }
+
+    /**
+   * Searches Pokemon by name from a large list
+   * @param term Search term to filter Pokemon names
+   * @param maxResults Maximum number of results to return
+   */
+  searchPokemon(term: string, maxResults: number = 20): Observable<NamedAPIResourceList> {
+    if (!term.trim()) {
+      return of({ count: 0, next: null, previous: null, results: [] });
+    }
+
+    // Get a large list and filter client-side (PokeAPI doesn't have search endpoint)
+    return this.http.get<NamedAPIResourceList>(`${this.baseURL}/pokemon?limit=1000`).pipe(
+      map(response => {
+        const filtered = response.results.filter(pokemon =>
+          pokemon.name.toLowerCase().includes(term.toLowerCase())
+        );
+        
+        return {
+          count: filtered.length,
+          next: null,
+          previous: null,
+          results: filtered.slice(0, maxResults)
+        };
+      }),
+      catchError(() => of({ count: 0, next: null, previous: null, results: [] }))
+    );
   }
 }

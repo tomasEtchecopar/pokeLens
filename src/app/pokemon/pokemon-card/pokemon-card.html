@@ -2,7 +2,7 @@
         @let pokemon = this.pokemon();
         @if(isLoading()){
         <div class="loading-screen">
-            <p>Loading...</p>
+            <p>Cargando...</p>
         </div>
     }@else if(pokemon){
         <div class="screen-bezel">
@@ -21,16 +21,16 @@
                     <h2>{{ pokemon.name | titlecase }}</h2>
                     <div class="types">
                         @for (type of pokemon.types; track type.type.name) {
-                            <span class="type type-{{ type.type.name }}">{{ type.type.name | titlecase }}</span>
+                            <span class="type type-{{ type.type.name }}">{{ translateType(type.type.name) | titlecase }}</span>
                         }
                     </div>
                     <div class="info">
                         <div class="info-row">
-                            <span>HT</span>
+                            <span>ALT</span>
                             <span>{{ pokemon.height / 10 }}m</span>
                         </div>
                         <div class="info-row">
-                            <span>WT</span>
+                            <span>PESO</span>
                             <span>{{ pokemon.weight / 10 }}kg</span>
                         </div>
                     </div>
