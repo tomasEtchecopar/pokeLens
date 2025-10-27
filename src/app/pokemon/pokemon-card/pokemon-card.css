@@ -1,54 +1,41 @@
-/* Pokedex Screen Styles */
+/* Pokedex Screen Styles - Retro Edition */
 .pokedex-screen {
-  background: #c51717;
-  border-radius: 15px;
-  padding: 12px;
+  width: 100%;
+  height: 240px;
+  min-width: 320px;
+  background: #3a3a3a;
+  border-radius: 0;
+  padding: 8px;
+  border: 4px solid #c51717;
   box-shadow: 
-    0 0 0 4px #2c2c2c,
-    0 0 0 6px #333,
-    inset 0 2px 10px rgba(0, 0, 0, 0.3),
-    0 8px 16px rgba(0, 0, 0, 0.4);
-  transition: all 0.3s ease;
+    inset 2px 2px 0px #4a4a4a,
+    inset -2px -2px 0px #2a2a2a,
+    4px 4px 0px #1a1a1a;
+  transition: all 0.1s ease;
   cursor: pointer;
   position: relative;
-}
-
-.pokedex-screen::before {
-  content: '';
-  position: absolute;
-  top: -4px;
-  left: -4px;
-  right: -4px;
-  bottom: -4px;
-  background: linear-gradient(135deg, #e53935, #c62828);
-  border-radius: 15px;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: -1;
-}
-
-.pokedex-screen:hover::before {
-  opacity: 1;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
 }
 
 .pokedex-screen:hover {
-  transform: translateY(-4px);
+  transform: translateY(-2px);
   box-shadow: 
-    0 0 0 4px #2c2c2c,
-    0 0 0 6px #333,
-    inset 0 2px 10px rgba(0, 0, 0, 0.3),
-    0 12px 24px rgba(0, 0, 0, 0.5);
+    inset 2px 2px 0px #4a4a4a,
+    inset -2px -2px 0px #2a2a2a,
+    2px 2px 0px #1a1a1a;
 }
 
 .screen-bezel {
-  background: #1a1a1a;
-  border-radius: 8px;
-  padding: 12px;
+  background: #2c2c2c;
+  border-radius: 0;
+  padding: 6px;
   display: flex;
-  min-height: 220px;
-  max-height: 280px;
-  gap: 8px;
+  height: 100%;
+  gap: 6px;
   overflow: hidden;
+  border: 2px solid #1a1a1a;
 }
 
 .screen-left {
@@ -58,21 +45,20 @@
   justify-content: center;
   min-width: 0;
   overflow: hidden;
+  height: 100%;
 }
 
 .lcd-screen {
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, #84b8b8, #6b9898);
-  border: 3px solid #1a1a1a;
-  border-radius: 5px;
-  padding: 0.5rem;
+  background: #9dbc9b;
+  border: 2px solid #1a1a1a;
+  border-radius: 0;
+  padding: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 
-    inset 0 2px 10px rgba(0, 0, 0, 0.4),
-    0 0 0 1px #4a8a8a;
+  box-shadow: inset 2px 2px 0px #8fae8d;
 }
 
 .sprite-container {
@@ -103,24 +89,22 @@
 .data-screen {
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom, #ababab, #8a8a8a);
+  background: #8b8680;
   border: 2px solid #1a1a1a;
-  border-radius: 4px;
-  padding: 0.75rem;
+  border-radius: 0;
+  padding: 4px;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  box-shadow: 
-    inset 0 2px 10px rgba(0, 0, 0, 0.3),
-    0 0 0 1px #6b6b6b;
+  gap: 3px;
+  box-shadow: inset 1px 1px 0px #9b9690;
   overflow: hidden;
 }
 
 .screen-header {
   text-align: right;
   border-bottom: 2px solid #333;
-  padding-bottom: 0.25rem;
-  margin-bottom: 0.25rem;
+  padding-bottom: 0.15rem;
+  margin-bottom: 0.15rem;
   flex-shrink: 0;
 }
 
@@ -128,69 +112,72 @@
   color: #2c2c2c;
   font-family: 'Courier New', monospace;
   font-weight: bold;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
 }
 
 h2 {
   text-align: left;
   margin: 0;
   color: #1a1a1a;
-  font-size: 1.2rem;
+  font-size: 1rem;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
-  word-wrap: break-word;
-  word-break: break-word;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   flex-shrink: 0;
   line-height: 1.2;
+  max-width: 100%;
 }
 
 .types {
   display: flex;
-  gap: 0.35rem;
+  gap: 0.2rem;
   flex-wrap: wrap;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.15rem;
   flex-shrink: 0;
 }
 
 .type {
   display: inline-block;
-  padding: 0.35rem 0.75rem;
-  border-radius: 12px;
-  font-size: 0.7rem;
+  padding: 2px 6px;
+  border-radius: 0;
+  border: 2px solid #1a1a1a;
+  font-size: 0.6rem;
   font-weight: 600;
   text-transform: uppercase;
   color: white;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  transition: all 0.2s ease;
+  box-shadow: 2px 2px 0px #1a1a1a;
+  transition: all 0.1s ease;
   white-space: nowrap;
 }
 
 .type:hover {
-  transform: scale(1.05);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0px #1a1a1a;
 }
 
-/* Type-specific colors */
-.type-fire { background: linear-gradient(135deg, #ff6b35 0%, #f7931e 100%); }
-.type-water { background: linear-gradient(135deg, #4fc3f7 0%, #29b6f6 100%); }
-.type-grass { background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%); }
-.type-electric { background: linear-gradient(135deg, #ffd54f 0%, #ffb300 100%); }
-.type-psychic { background: linear-gradient(135deg, #ce93d8 0%, #ba68c8 100%); }
-.type-ice { background: linear-gradient(135deg, #81d4fa 0%, #4fc3f7 100%); }
-.type-dragon { background: linear-gradient(135deg, #7b1fa2 0%, #6a1b9a 100%); }
-.type-dark { background: linear-gradient(135deg, #616161 0%, #424242 100%); }
-.type-fairy { background: linear-gradient(135deg, #f48fb1 0%, #ec407a 100%); }
-.type-normal { background: linear-gradient(135deg, #bcaaa4 0%, #a1887f 100%); }
-.type-fighting { background: linear-gradient(135deg, #d84315 0%, #bf360c 100%); }
-.type-flying { background: linear-gradient(135deg, #90caf9 0%, #64b5f6 100%); }
-.type-poison { background: linear-gradient(135deg, #ab47bc 0%, #9c27b0 100%); }
-.type-ground { background: linear-gradient(135deg, #ef9a3e 0%, #ef6c00 100%); }
-.type-rock { background: linear-gradient(135deg, #a1887f 0%, #8d6e63 100%); }
-.type-bug { background: linear-gradient(135deg, #aed581 0%, #9ccc65 100%); }
-.type-ghost { background: linear-gradient(135deg, #9575cd 0%, #7e57c2 100%); }
-.type-steel { background: linear-gradient(135deg, #90a4ae 0%, #78909c 100%); }
+/* Type-specific colors - Retro Pixel Style */
+.type-fire { background: #ff6b35; }
+.type-water { background: #3b88c3; }
+.type-grass { background: #4aad4e; }
+.type-electric { background: #ffd54f; }
+.type-psychic { background: #ab47bc; }
+.type-ice { background: #5fb3d5; }
+.type-dragon { background: #6a27a0; }
+.type-dark { background: #494949; }
+.type-fairy { background: #ec407a; }
+.type-normal { background: #8f8782; }
+.type-fighting { background: #b85123; }
+.type-flying { background: #64b5f6; }
+.type-poison { background: #9c27b0; }
+.type-ground { background: #ef6c00; }
+.type-rock { background: #8d6e63; }
+.type-bug { background: #66bb6a; }
+.type-ghost { background: #7575cd; }
+.type-steel { background: #78909c; }
 
 .info {
   margin-top: auto;
@@ -201,12 +188,13 @@ h2 {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   color: #2c2c2c;
   font-weight: 600;
   margin: 0.15rem 0;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  white-space: nowrap;
 }
 
 .info-row span:first-child {

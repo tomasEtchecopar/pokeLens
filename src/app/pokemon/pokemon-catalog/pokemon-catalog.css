@@ -1,7 +1,9 @@
 /* Pokemon Catalog Styles */
 .catalog {
-  max-width: 1400px;
+  width: 100%;
+  max-width: none;
   margin: 0 auto;
+  padding: 0;
 }
 
 .catalog h1 {
@@ -9,7 +11,8 @@
   font-size: 3.5rem;
   font-weight: 900;
   text-align: center;
-  margin-bottom: 2rem;
+  margin: 1rem 0;
+  padding: 0 1rem;
   text-shadow: 3px 3px 0px #2c2c2c, 4px 4px 8px rgba(0, 0, 0, 0.6);
   letter-spacing: 4px;
   font-family: 'Courier New', monospace;
@@ -18,9 +21,11 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 2rem;
-  padding: 1rem;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 0;
+  padding: 0;
+  background: #2c2c2c;
+  border: 4px solid #c51717;
 }
 
 /* Loading State */
@@ -54,16 +59,13 @@
   }
 
   .grid {
-    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-    gap: 1.5rem;
-    padding: 0.5rem;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
   }
 }
 
 @media (max-width: 480px) {
   .grid {
     grid-template-columns: 1fr;
-    gap: 1rem;
   }
 
   .catalog h1 {
