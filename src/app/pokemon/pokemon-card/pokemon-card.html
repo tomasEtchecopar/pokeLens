@@ -1,16 +1,41 @@
-<div class="card">
+<div class="pokedex-screen">
         @let pokemon = this.pokemon();
         @if(isLoading()){
-        <p>Cargando pokemon...</p>
+        <div class="loading-screen">
+            <p>Loading...</p>
+        </div>
     }@else if(pokemon){
-        <img width="120" height="120" [ngSrc]="pokemonResource().url | pokeImg" alt="{{pokemon.name}}">
-        <h2>{{ pokemon.name | titlecase }}</h2>
-    <div class="types">
-        @for (type of pokemon.types; track type.type.name) {
-            <span class="type">{{ type.type.name | titlecase }}</span>
-        }
-    </div>
-    <p>Weight: {{ pokemon.weight / 10 }} kg</p>
-    <p>Height: {{ pokemon.height / 10 }} m</p>
+        <div class="screen-bezel">
+            <div class="screen-left">
+                <div class="lcd-screen">
+                    <div class="sprite-container">
+                        <img width="200" height="200" [ngSrc]="pokemonResource().url | pokeImg" alt="{{pokemon.name}}">
+                    </div>
+                </div>
+            </div>
+            <div class="screen-right">
+                <div class="data-screen">
+                    <div class="screen-header">
+                        <span class="poke-number">#{{ pokemon.id.toString().padStart(3, '0') }}</span>
+                    </div>
+                    <h2>{{ pokemon.name | titlecase }}</h2>
+                    <div class="types">
+                        @for (type of pokemon.types; track type.type.name) {
+                            <span class="type type-{{ type.type.name }}">{{ type.type.name | titlecase }}</span>
+                        }
+                    </div>
+                    <div class="info">
+                        <div class="info-row">
+                            <span>HT</span>
+                            <span>{{ pokemon.height / 10 }}m</span>
+                        </div>
+                        <div class="info-row">
+                            <span>WT</span>
+                            <span>{{ pokemon.weight / 10 }}kg</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     }
 </div>

@@ -7,6 +7,11 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { switchMap } from 'rxjs';
 import { PokeImgPipe } from '../poke-img-pipe';
 
+/**
+ * Card component that displays a single Pokemon.
+ * 
+ * Takes a resource with name and URL, then fetches the full Pokemon details to show them in card format. 
+ */
 @Component({
   selector: 'app-pokemon-card',
   imports: [TitleCasePipe, PokeImgPipe, NgOptimizedImage],

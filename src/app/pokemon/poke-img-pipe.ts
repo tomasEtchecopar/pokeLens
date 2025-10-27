@@ -1,5 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
+/**
+ * Simple pipe that converts PokeAPI resource URLs to sprite image URLs.
+ * Takes a resource URL, extracts the Pokemon ID, and returns a CDN image URL.
+ */
 @Pipe({
   name: 'pokeImg'
 })
