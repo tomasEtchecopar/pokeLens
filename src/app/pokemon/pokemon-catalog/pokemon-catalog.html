@@ -1,23 +1,46 @@
-
-    <div class="catalog">
+<div class="catalog">
     <h1>PokeLens</h1>
 
+<!--     SEARCH BAR -->
+    <div class="search-section">
+        <div class="search-bar">
+            <input type="text" [formControl]="searchControl" placeholder="Buscar Pokémon por nombre..."
+                class="search-input" />
+            @if (searchControl.value) {
+            <button class="clear-button" (click)="clearSearch()">
+                ✕
+            </button>
+            }
+            @if (isSearching()) {
+            <span class="loading-indicator">Buscando...</span>
+            }
+        </div>
+        @if (isInSearchMode() && searchResults().length === 0 && !isSearching()) {
+        <div class="no-results">
+            No se encontraron Pokémon con ese nombre
+        </div>
+        }
+    </div>
+
+
+
     @if(isLoading()){
-        <p>Cargando Pokemons...</p>
+    <p>Cargando Pokemons...</p>
     }@else {
-        <div class="grid">
-            @for (pokemonResource of allPokemon(); track pokemonResource){
-                <app-pokemon-card [pokemonResource]="pokemonResource"></app-pokemon-card> <!-- passes a namedAPIResource with name and url of each pokemon-->
-            }
-        </div>
-        
-        <!-- Sentinel element for infinite scroll -->
-        <div #scrollSentinel class="scroll-sentinel">
-            @if(isLoadingMore()){
-                <p>Cargando más Pokemons...</p>
-            }@else if(!hasMore()){
-                <p>No hay más Pokemons</p>
-            }
-        </div>
+    <div class="grid">
+        @for (pokemonResource of displayedPokemon(); track pokemonResource){
+        <app-pokemon-card [pokemonResource]="pokemonResource"></app-pokemon-card>
+        <!-- passes a namedAPIResource with name and url of each pokemon-->
+        }
+    </div>
+
+    <!-- Sentinel element for infinite scroll -->
+    @if (!isInSearchMode() && hasMore()){
+    <div #scrollSentinel class="scroll-sentinel">
+        @if(isLoadingMore()){
+        <p>Cargando más Pokemons...</p>
+        }
+    </div>
     }
+}
 </div>
