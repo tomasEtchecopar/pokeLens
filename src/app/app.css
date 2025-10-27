@@ -1,0 +1,51 @@
+/* App Layout Styles */
+header {
+  background: linear-gradient(135deg, #c51717 0%, #a01212 100%);
+  padding: 1.5rem 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.4);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 4px solid #2c2c2c;
+}
+
+header h1 {
+  color: white;
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+main {
+  min-height: calc(100vh - 200px);
+  padding: 2rem;
+}
+
+footer {
+  background: #2c3e50;
+  color: var(--text-light);
+  text-align: center;
+  padding: 1.5rem;
+  margin-top: auto;
+}
+
+footer p {
+  margin: 0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  header {
+    padding: 1rem;
+  }
+
+  header h1 {
+    font-size: 1.5rem;
+  }
+
+  main {
+    padding: 1rem;
+  }
+}
+
