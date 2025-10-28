@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { PokemonCatalog } from './pokemon/pokemon-catalog/pokemon-catalog';
+import { LogIn } from './client/log-in/log-in';
 
 export const routes: Routes = [
     {
@@ -12,6 +13,10 @@ export const routes: Routes = [
     {
         path: 'catalogo/:id', component: PokemonCatalog, //aca va PokemonDetails (SEBA)
         title: 'Detalles de Pokémon' //eventualmente cambiar a nombre de pokemon
+    },
+    {
+        path: 'login', component: LogIn,
+        title: 'Log In'
     },
     {
         path: '**', redirectTo: 'catalogo'
