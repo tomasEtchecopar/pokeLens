@@ -1,0 +1,17 @@
+ :host {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    max-width: 900px;
+}
+
+form {
+    width: 100%;
+
+}
+
+.form-field {
+    display: flex;
+    flex-direction: column;
+}

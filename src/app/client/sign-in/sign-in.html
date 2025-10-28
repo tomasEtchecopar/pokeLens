@@ -1,1 +1,23 @@
-<p>sign-in works!</p>
+<h1>Sign In</h1>
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+  <div class="form-field">
+    <label for="username">Nombre y Apellido</label>
+    <input type="text" id="username" formControlName="username" placeholder="John Doe">
+  </div>
+
+  <div class="form-field">
+    <label for="age">Edad</label>
+    <input type="number" id="age" formControlName="age" min="8" placeholder="8">
+  </div>
+
+  <div class="form-field">
+    <label for="mail">E-Mail</label>
+    <input type="text" id="mail" formControlName="mail" placeholder="example@gmail.com">
+  </div>
+
+  <div class="form-field">
+    <label for="password">Password</label>
+    <input type="text", id="password" formControlName="password" placeholder="Please use a secure password">
+  </div>
+
+</form>
