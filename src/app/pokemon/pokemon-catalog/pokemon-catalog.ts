@@ -56,7 +56,6 @@ export class PokemonCatalog {
     const search = this.searchResults();
     const all = this.allPokemon();
     
-    console.log('displayedPokemon computed - term:', term, 'search results:', search.length, 'all:', all.length);
     
     return term.trim() ? search : all;
   });
@@ -99,8 +98,6 @@ export class PokemonCatalog {
     // load initial batch of Pokemon
     this.loadMorePokemon();
 
-    // set up reactive search with debouncing
-    console.log('Setting up search subscription');
     
     this.searchControl.valueChanges.pipe(
       takeUntil(this.destroy$), // auto-unsubscribe on component destroy
@@ -108,7 +105,6 @@ export class PokemonCatalog {
       distinctUntilChanged(), // only search if value actually changed
       switchMap(term => {
         const searchTerm = term || '';
-        console.log('Search triggered:', searchTerm);
         
         // update reactive search term
         this.searchTerm.set(searchTerm);
@@ -129,7 +125,6 @@ export class PokemonCatalog {
         console.log('Search results received:', data);
         
         if (data && data.results && Array.isArray(data.results)) {
-          console.log('Setting results:', data.results.length);
           this.searchResults.set(data.results);
         } else {
           console.log('No valid results');
