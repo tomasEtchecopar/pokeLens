@@ -1,4 +1,4 @@
-import { User } from './clientTemplate';
+import { User } from './user-model';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
@@ -7,17 +7,17 @@ import { inject, Injectable } from '@angular/core';
 @Injectable({
   providedIn: 'root'
 })
-export class Client {
+export class UserClient {
 
 
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = "http://localhost:3000/clients"
+  private readonly baseUrl = "http://localhost:3000/users"
 
-  addClient(user: User){
+  addUser(user: User){
     return this.http.post<User>(this.baseUrl, user);
   }
 
-  updateClient(user: User, id: number){
+  updateUser(user: User, id: number){
     return this.http.put<User>(`${this.baseUrl}/${id}`, user)
   }
 

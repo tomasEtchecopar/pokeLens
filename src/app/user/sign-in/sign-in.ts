@@ -1,7 +1,7 @@
 import { Component, inject, input } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { User } from '../clientTemplate';
-import { Client } from '../client';
+import { User } from '../user-model';
+import { UserClient } from '../user-client';
 
 @Component({
   selector: 'app-sign-in',
@@ -11,7 +11,7 @@ import { Client } from '../client';
 })
 export class SignIn {
 
-  private readonly user = inject(Client);
+  private readonly users = inject(UserClient);
   private readonly formBuilder = inject(FormBuilder);
   readonly isEditing = input(false);
   readonly client = input<User>();
@@ -31,9 +31,9 @@ export class SignIn {
     if(confirm("Desea confirmar los datos?")){
       const userForm = this.form.getRawValue();
 
-      this.user.addClient(userForm).subscribe(() => {
+      this.users.addUser(userForm).subscribe(() => {
       alert("User registered!");
-        console.log(this.user);
+        console.log(this.users);
         this.form.reset();
       });
     }
