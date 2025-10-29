@@ -44,6 +44,7 @@ export class PokemonService {
    * @param maxResults Maximum number of results to return
    */
   searchPokemon(term: string, maxResults: number = 20): Observable<NamedAPIResourceList> {
+    console.log('Search performed with term: '), term;
     if (!term.trim()) {
       return of({ count: 0, next: null, previous: null, results: [] });
     }
@@ -66,3 +67,4 @@ export class PokemonService {
     );
   }
 }
+

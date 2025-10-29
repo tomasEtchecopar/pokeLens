@@ -122,7 +122,7 @@ export class PokemonCatalog {
         
         // perform search
         this.isSearching.set(true);
-        return this.service.searchPokemon(searchTerm);
+        return this.service.searchPokemonByName(searchTerm);
       })
     ).subscribe({
       next: (data) => {
