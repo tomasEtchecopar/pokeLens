@@ -58,21 +58,22 @@ export class PokemonService {
    * @returns an Observable of NamedAPIResources
    */
   searchPokemon(term: string, maxResults: number = 20): Observable<NamedAPIResourceList> {
-    console.log('Search performed with term: '), term;
-    if (!term.trim()) {
+    const termTrimmed = term.trim();
+    if (!termTrimmed) {
       return of({ count: 0, next: null, previous: null, results: [] });
     }
 
-    const isNumericSearch = /^\d+$/.test(term.trim()); //use of regex to check if the term is numeric
+    const isNumericSearch = /^\d+$/.test(termTrimmed); //use of regex to check if the term is numeric
+
     if(isNumericSearch){
-      return this.getPokemonByID(parseInt(term.trim())).pipe( //passing the string as int and mapping return as a NamedAPIResource
+      return this.getPokemonByID(parseInt(termTrimmed)).pipe( //passing the string as int and mapping return as a NamedAPIResource
         map(pokemon =>({
           count: 1,
           next: null,
           previous: null,
           results: [{
             name: pokemon.name,
-            url: `${this.baseURL}/pokemon/${pokemon.name}/`
+            url: `${this.baseURL}/pokemon/${pokemon.id}/`
           }]
         }))
       );
