@@ -11,6 +11,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { takeUntil } from 'rxjs';
 import { Subject } from 'rxjs';
 import { of } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 /**
  * Pokemon catalog component with infinite scroll and reactive search.
@@ -100,7 +101,7 @@ export class PokemonCatalog {
 
     
     this.searchControl.valueChanges.pipe(
-      takeUntil(this.destroy$), // auto-unsubscribe on component destroy
+      takeUntilDestroyed(this.destroyRef), // auto-unsubscribe on component destroy
       debounceTime(300), // wait 300ms after user stops typing
       distinctUntilChanged(), // only search if value actually changed
       switchMap(term => {
