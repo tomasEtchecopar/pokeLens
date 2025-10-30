@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, ViewChild } from '@angular/core';
 import { PokemonService } from '../pokemon-service';
 import { inject } from '@angular/core';
 import { computed } from '@angular/core';
@@ -29,7 +29,7 @@ export class PokemonCatalog {
   // services and utilities
   private readonly service = inject(PokemonService); // handles API calls to PokeAPI
   private readonly router = inject(Router); // for navigating to Pokemon details
-  private destroy$ = new Subject<void>(); // cleanup trigger for subscriptions
+  private destroyRef = inject(DestroyRef) 
 
   // infinite scroll detection
   @ViewChild('scrollSentinel') scrollSentinel?: ElementRef; // invisible element at bottom of list
@@ -160,13 +160,7 @@ export class PokemonCatalog {
     observer.observe(this.scrollSentinel.nativeElement);
   }
 
-  /**
-   * Cleanup - prevents memory leaks by completing subscriptions.
-   */
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+
 
   /**
    * Shows loading state only on initial load (not during search or pagination).
