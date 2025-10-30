@@ -8,10 +8,10 @@ import { PokemonCard } from '../pokemon-card/pokemon-card';
 import { signal } from '@angular/core';
 import { NamedAPIResource } from '../pokemon-models';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
-import { takeUntil } from 'rxjs';
-import { Subject } from 'rxjs';
 import { of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 
 /**
  * Pokemon catalog component with infinite scroll and reactive search.
@@ -30,14 +30,21 @@ export class PokemonCatalog {
   // services and utilities
   private readonly service = inject(PokemonService); // handles API calls to PokeAPI
   private readonly router = inject(Router); // for navigating to Pokemon details
-  private destroyRef = inject(DestroyRef) 
+  private readonly destroyRef = inject(DestroyRef) 
 
   // infinite scroll detection
   @ViewChild('scrollSentinel') scrollSentinel?: ElementRef; // invisible element at bottom of list
 
   // search state
   protected readonly searchControl = new FormControl(''); // input field binding
-  protected readonly searchTerm = signal(''); // reactive search term for computed properties
+  protected readonly searchTerm = toSignal(
+  this.searchControl.valueChanges.pipe(
+    debounceTime(300),
+    distinctUntilChanged(),
+    map(term => term || '')
+  ),
+  { initialValue: '' }
+);; // reactive search term for computed properties
   protected readonly searchResults = signal<NamedAPIResource[]>([]); // filtered Pokemon from search
   protected readonly isSearching = signal(false); // loading indicator for search
 
@@ -53,12 +60,7 @@ export class PokemonCatalog {
    * This is what actually gets displayed in the template.
    */
   protected readonly displayedPokemon = computed(() => {
-    const term = this.searchTerm();
-    const search = this.searchResults();
-    const all = this.allPokemon();
-    
-    
-    return term.trim() ? search : all;
+    return this.searchTerm().trim() ? this.searchResults() : this.allPokemon(); 
   });
 
   /**
