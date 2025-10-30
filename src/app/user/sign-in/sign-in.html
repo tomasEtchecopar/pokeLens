@@ -1,23 +1,37 @@
-<h1>Sign In</h1>
 <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="form-field">
     <label for="username">Nombre y Apellido</label>
     <input type="text" id="username" formControlName="username" placeholder="John Doe">
+    @if (form.get('username')?.invalid && form.get('username')?.touched) {
+      <small>El nombre es requerido</small>
+    }
   </div>
 
   <div class="form-field">
     <label for="age">Edad</label>
     <input type="number" id="age" formControlName="age" min="8" placeholder="8">
+    @if (form.get('age')?.invalid && form.get('age')?.touched) {
+      <small>La edad es requerido</small>
+    }
   </div>
 
   <div class="form-field">
     <label for="mail">E-Mail</label>
-    <input type="text" id="mail" formControlName="mail" placeholder="example@gmail.com">
+    <input type="email" id="mail" formControlName="mail" placeholder="example@gmail.com">
+    @if (form.get('email')?.invalid && form.get('email')?.touched) {
+      <small>El e-mail es requerido</small>
+    }
   </div>
 
   <div class="form-field">
     <label for="password">Password</label>
-    <input type="text", id="password" formControlName="password" placeholder="Please use a secure password">
+    <input type="password" id="password" formControlName="password" placeholder="Please use a secure password" required="">
+    @if (form.get('password')?.invalid && form.get('password')?.touched) {
+      <small>The password is required</small>
+    }
   </div>
+
+  <button class="btn-signIn" type="submit">Submit</button>
+  <button class="btn-signIn" type="reset">Reset</button>
 
 </form>

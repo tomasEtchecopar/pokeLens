@@ -1,5 +1,11 @@
 {
   "users": [
-
+    {
+      "id": "3b88",
+      "username": "wado wado",
+      "age": 27,
+      "mail": "waowado@gmail.com",
+      "password": "123456"
+    }
   ]
 }
