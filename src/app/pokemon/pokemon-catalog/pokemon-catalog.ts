@@ -83,6 +83,10 @@ export class PokemonCatalog {
     this.isLoadingMore.set(true);
     this.service.getPokemonList(this.pageSize, this.offset()).subscribe({
       next: (data) => {
+        if (!data?.results || !Array.isArray(data.results)) {
+    console.error('Invalid API response');
+    return;
+  }
         const newPokemon = data.results;
         this.allPokemon.set([...this.allPokemon(), ...newPokemon]);
         this.hasMore.set(data.next !== null);
