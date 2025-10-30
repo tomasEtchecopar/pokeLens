@@ -7,11 +7,12 @@ import { Router } from '@angular/router';
 import { PokemonCard } from '../pokemon-card/pokemon-card';
 import { signal } from '@angular/core';
 import { NamedAPIResource } from '../pokemon-models';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
 import { of } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
+import { EMPTY } from 'rxjs';
 
 /**
  * Pokemon catalog component with infinite scroll and reactive search.
@@ -44,7 +45,8 @@ export class PokemonCatalog {
     map(term => term || '')
   ),
   { initialValue: '' }
-);; // reactive search term for computed properties
+); 
+
   protected readonly searchResults = signal<NamedAPIResource[]>([]); // filtered Pokemon from search
   protected readonly isSearching = signal(false); // loading indicator for search
 
@@ -67,10 +69,9 @@ export class PokemonCatalog {
    * Checks if we're currently in search mode (user has typed something).
    * Used to disable infinite scroll during search.
    */
-  protected readonly isInSearchMode = computed(() => {
-    const searchTerm = this.searchControl.value;
-    return !!(searchTerm && searchTerm.trim());
-  });
+  protected readonly isInSearchMode = computed(() => 
+  !!this.searchTerm().trim()
+);
 
   /**
    * Fetches the next batch of Pokemon for infinite scroll.
@@ -107,42 +108,21 @@ export class PokemonCatalog {
       debounceTime(300), // wait 300ms after user stops typing
       distinctUntilChanged(), // only search if value actually changed
       switchMap(term => {
-        const searchTerm = term || '';
+        const searchTerm = (term || '').trim();
         
-        // update reactive search term
-        this.searchTerm.set(searchTerm);
-        
-        // empty search = show all Pokemon
-        if (!searchTerm.trim()) {
+        if (!searchTerm){
           this.isSearching.set(false);
-          this.searchResults.set([]);
-          return of({ count: 0, next: null, previous: null, results: [] });
+          return EMPTY; 
         }
         
         // perform search
         this.isSearching.set(true);
-        return this.service.searchPokemon(searchTerm);
+        return this.service.searchPokemon(searchTerm).pipe(
+          catchError(() => of({results: [] }))
+        );
       })
-    ).subscribe({
-      next: (data) => {
-        console.log('Search results received:', data);
-        
-        if (data && data.results && Array.isArray(data.results)) {
-          this.searchResults.set(data.results);
-        } else {
-          console.log('No valid results');
-          this.searchResults.set([]);
-        }
-        
-        this.isSearching.set(false);
-      },
-      error: (err) => {
-        console.error('Search error:', err);
-        this.searchResults.set([]);
-        this.isSearching.set(false);
-      }
-    });
-  }
+    )
+}
 
   /**
    * Sets up infinite scroll by watching when the sentinel element comes into view.
@@ -152,15 +132,14 @@ export class PokemonCatalog {
     if (!this.scrollSentinel?.nativeElement) return;
 
     const observer = new IntersectionObserver((entries) => {
-      // only trigger infinite scroll when not searching
       if (entries[0].isIntersecting && !this.isInSearchMode()) {
         this.loadMorePokemon();
       }
-    }, {
-      threshold: 0.1 // trigger when 10% of sentinel is visible
-    });
+    }, { threshold: 0.1 });
 
     observer.observe(this.scrollSentinel.nativeElement);
+
+    this.destroyRef.onDestroy(() => observer.disconnect()); 
   }
 
 
@@ -175,7 +154,7 @@ export class PokemonCatalog {
   /**
    * Navigates to the detail page for a specific Pokemon.
    */
-  navigateToDetails(id: string | number) {
+  navigateToDetails(id: string | number): void {
     this.router.navigateByUrl(`catalogo/${id}`);
   }
 
