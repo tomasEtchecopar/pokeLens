@@ -11,7 +11,26 @@ form {
 
 }
 
+.btn-signIn {
+    background: #2c2c2c;
+    color: white;
+    border: 3px solid #1a1a1a;
+    padding: 0.5rem 1rem;
+    font-family: 'Courier New', monospace;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 2px 0 #1a1a1a;
+  }
+
+label {
+    color: rgb(150, 29, 29);
+}
+
 .form-field {
     display: flex;
     flex-direction: column;
+    background-color: rgb(202, 202, 202);
 }
