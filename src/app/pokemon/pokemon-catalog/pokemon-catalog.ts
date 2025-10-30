@@ -28,6 +28,10 @@ import { EMPTY } from 'rxjs';
 })
 export class PokemonCatalog {
 
+  // cachear 1000 pokemon
+  //
+
+
   // services and utilities
   private readonly service = inject(PokemonService); // handles API calls to PokeAPI
   private readonly router = inject(Router); // for navigating to Pokemon details
@@ -49,6 +53,7 @@ export class PokemonCatalog {
 
   protected readonly searchResults = signal<NamedAPIResource[]>([]); // filtered Pokemon from search
   protected readonly isSearching = signal(false); // loading indicator for search
+
 
   // pagination state
   private readonly pageSize = 20; // how many Pokemon to fetch per batch
@@ -103,10 +108,7 @@ export class PokemonCatalog {
    * Initialization - loads first batch and sets up reactive search.
    */
   ngOnInit() {
-    // load initial batch of Pokemon
-    this.loadMorePokemon();
-
-    
+    // load initial batch of Pokemon this.loadMorePokemon();
     this.searchControl.valueChanges.pipe(
       takeUntilDestroyed(this.destroyRef), // auto-unsubscribe on component destroy
       debounceTime(300), // wait 300ms after user stops typing
