@@ -16,12 +16,12 @@ export const routes: Routes = [
         title: 'Detalles de Pokémon' //eventualmente cambiar a nombre de pokemon
     },
     {
-        path: 'login', component: LogIn,
+        path: 'logIn', component: LogIn,
         title: 'Log In'
     },
     {
         path: 'signIn', component: SignIn,
-        title: 'Log In'
+        title: 'Sign In'
     },
     {
         path: '**', redirectTo: 'catalogo'

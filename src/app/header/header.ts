@@ -13,4 +13,7 @@ export class Header {
   goToSignIn(){
     this.router.navigateByUrl('signIn');
   }
+  goToLogIn(){
+    this.router.navigateByUrl('logIn');
+  }
 }

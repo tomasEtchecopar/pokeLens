@@ -7,5 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './log-in.css',
 })
 export class LogIn {
-
+  
 }
