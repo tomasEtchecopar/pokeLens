@@ -31,12 +31,21 @@ export class PokemonCatalog {
   // cachear 1000 pokemon
   // modularizar busqueda e infinite scroll en servicios
   // USAR OBSERVABLES 
+  
+  //hacer un componente que sirva de barra de busqueda en toda la pagina
+  // hacer servicio pokemon-catalog-search que use ese componente 
 
+  //hacer servicio para infinite scroll en toda la pagina
+  //hacer servicio pokemon-catalog-displayed o pokemon-catalog-scrolling (o algo asi) que maneje la logica de paginación
+
+  //que pokemon-catalog solo sea la ui y llame a los demas componentes
 
   // services and utilities
   private readonly service = inject(PokemonService); // handles API calls to PokeAPI
   private readonly router = inject(Router); // for navigating to Pokemon details
-  private readonly destroyRef = inject(DestroyRef) 
+  private readonly destroyRef = inject(DestroyRef);
+
+  protected readonly pokemonList = toSignal(this.service.getAllPokemon());
 
   // infinite scroll detection
   @ViewChild('scrollSentinel') scrollSentinel?: ElementRef; // invisible element at bottom of list
@@ -59,7 +68,7 @@ export class PokemonCatalog {
   // pagination state
   private readonly pageSize = 20; // how many Pokemon to fetch per batch
   private offset = signal(0); // current position in the full Pokemon list
-  protected readonly allPokemon = signal<NamedAPIResource[]>([]); // all loaded Pokemon so far
+  protected readonly loadedPokemon = signal<NamedAPIResource[]>([]); // all loaded Pokemon so far
   protected readonly hasMore = signal(true); // whether there are more Pokemon to load
   protected readonly isLoadingMore = signal(false); // loading indicator for pagination
 
@@ -68,7 +77,7 @@ export class PokemonCatalog {
    * This is what actually gets displayed in the template.
    */
   protected readonly displayedPokemon = computed(() => {
-    return this.searchTerm().trim() ? this.searchResults() : this.allPokemon(); 
+    return this.searchTerm().trim() ? this.searchResults() : this.loadedPokemon(); 
   });
 
   /**
@@ -94,7 +103,7 @@ export class PokemonCatalog {
     return;
   }
         const newPokemon = data.results;
-        this.allPokemon.set([...this.allPokemon(), ...newPokemon]);
+        this.loadedPokemon.set([...this.loadedPokemon(), ...newPokemon]);
         this.hasMore.set(data.next !== null);
         this.offset.set(this.offset() + this.pageSize);
         this.isLoadingMore.set(false);
@@ -155,7 +164,7 @@ export class PokemonCatalog {
    * Shows loading state only on initial load (not during search or pagination).
    */
   protected readonly isLoading = computed(() =>
-    this.allPokemon().length === 0 && !this.isLoadingMore() && !this.isInSearchMode()
+    this.loadedPokemon().length === 0 && !this.isLoadingMore() && !this.isInSearchMode()
   );
 
   /**
