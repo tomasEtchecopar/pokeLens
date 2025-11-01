@@ -23,6 +23,7 @@ export class PokemonService {
     const url = `${this.baseURL}/pokemon?limit=${limit}&offset=${offset}`;
     return this.http.get<NamedAPIResourceList>(url);
   }
+<<<<<<< HEAD
   
   /**
    * Function to fetch the resource for all pokemon
@@ -31,6 +32,8 @@ export class PokemonService {
   getAllPokemon(){
     return this.http.get<PokemonResourceList>(`${this.baseURL}/pokemon?limit=9999`);
   }
+=======
+>>>>>>> parent of dc85ec4 (renamed NamedAPIResource to PokemonResource to improve readability)
 
   /**
    * 
