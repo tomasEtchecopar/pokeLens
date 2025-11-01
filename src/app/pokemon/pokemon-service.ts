@@ -8,13 +8,14 @@ import { catchError, map } from 'rxjs';
 /**
  * Service that talks to the PokeAPI
  * Handles all the HTTP calls to get Pokemon data - lists, by name, or by URL
+ * 
  */
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
   private readonly baseURL = "https://pokeapi.co/api/v2";
   private readonly http = inject(HttpClient);
 
-  /**
+/*   /**
    * @param limit How many Pokemon to get (default 20)
    * @param offset Where to start from (default 0)
    * @returns NamedAPIResourceList
@@ -22,7 +23,7 @@ export class PokemonService {
   getPokemonList(limit: number = 20, offset: number = 0){
     const url = `${this.baseURL}/pokemon?limit=${limit}&offset=${offset}`;
     return this.http.get<NamedAPIResourceList>(url);
-  }
+  } */
 
   /**
    * 

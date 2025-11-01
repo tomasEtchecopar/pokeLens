@@ -1,11 +1,11 @@
 /** A named resource from the PokeAPI */
-export interface NamedAPIResource {
+export interface PokemonResource{
     name: string; // Resource name
     url: string;  // Resource URL
 }
 
 /** A paginated list of named resources from the PokeAPI */
-export interface NamedAPIResourceList {
+export interface PokemonResourceList{
     count: number;                   // Total resources
     next: string | null;             // Next page URL
     previous: string | null;         // Previous page URL
