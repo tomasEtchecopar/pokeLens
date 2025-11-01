@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { NamedAPIResourceList, PokemonResourceList } from './pokemon-models';
+import { NamedAPIResourceList} from './pokemon-models';
 import { Pokemon } from './pokemon-models';
 import { catchError, map } from 'rxjs';
 
@@ -23,17 +23,14 @@ export class PokemonService {
     const url = `${this.baseURL}/pokemon?limit=${limit}&offset=${offset}`;
     return this.http.get<NamedAPIResourceList>(url);
   }
-<<<<<<< HEAD
   
   /**
    * Function to fetch the resource for all pokemon
    * @returns 
    */
   getAllPokemon(){
-    return this.http.get<PokemonResourceList>(`${this.baseURL}/pokemon?limit=9999`);
+    return this.http.get<NamedAPIResourceList>(`${this.baseURL}/pokemon?limit=9999`);
   }
-=======
->>>>>>> parent of dc85ec4 (renamed NamedAPIResource to PokemonResource to improve readability)
 
   /**
    * 
