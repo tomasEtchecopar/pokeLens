@@ -29,7 +29,8 @@ import { EMPTY } from 'rxjs';
 export class PokemonCatalog {
 
   // cachear 1000 pokemon
-  //
+  // modularizar busqueda e infinite scroll en servicios
+  // USAR OBSERVABLES 
 
 
   // services and utilities
