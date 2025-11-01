@@ -1,21 +1,20 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { NamedAPIResourceList } from './pokemon-models';
+import { NamedAPIResourceList, PokemonResourceList } from './pokemon-models';
 import { Pokemon } from './pokemon-models';
 import { catchError, map } from 'rxjs';
 
 /**
  * Service that talks to the PokeAPI
  * Handles all the HTTP calls to get Pokemon data - lists, by name, or by URL
- * 
  */
 @Injectable({ providedIn: 'root' })
 export class PokemonService {
   private readonly baseURL = "https://pokeapi.co/api/v2";
   private readonly http = inject(HttpClient);
 
-/*   /**
+  /**
    * @param limit How many Pokemon to get (default 20)
    * @param offset Where to start from (default 0)
    * @returns NamedAPIResourceList
@@ -23,7 +22,15 @@ export class PokemonService {
   getPokemonList(limit: number = 20, offset: number = 0){
     const url = `${this.baseURL}/pokemon?limit=${limit}&offset=${offset}`;
     return this.http.get<NamedAPIResourceList>(url);
-  } */
+  }
+  
+  /**
+   * Function to fetch the resource for all pokemon
+   * @returns 
+   */
+  getAllPokemon(){
+    return this.http.get<PokemonResourceList>(`${this.baseURL}/pokemon?limit=9999`);
+  }
 
   /**
    * 
