@@ -33,7 +33,7 @@ export class PokemonCatalog {
   // USAR OBSERVABLES 
   
   //hacer un componente que sirva de barra de busqueda en toda la pagina
-  // hacer servicio pokemon-catalog-search que use ese componente 
+  // hacer servicio pokemon-catalog-search que use ese componente y haga la logica
 
   //hacer servicio para infinite scroll en toda la pagina
   //hacer servicio pokemon-catalog-displayed o pokemon-catalog-scrolling (o algo asi) que maneje la logica de paginación
