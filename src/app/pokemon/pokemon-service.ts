@@ -26,10 +26,11 @@ export class PokemonService {
   
   /**
    * Function to fetch the resource for all pokemon
-   * @returns 
+   * @returns NamedApiResource[]
    */
   getAllPokemon(){
-    return this.http.get<NamedAPIResourceList>(`${this.baseURL}/pokemon?limit=9999`);
+    return this.http.get<NamedAPIResourceList>(`${this.baseURL}/pokemon?limit=9999`)
+    .pipe(map(res => res.results))
   }
 
   /**
