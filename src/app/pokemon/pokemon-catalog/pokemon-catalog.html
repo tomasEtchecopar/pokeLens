@@ -3,19 +3,7 @@
 
 <!--     SEARCH BAR -->
     <div class="search-section">
-        <div class="search-bar">
-            <input type="text" [formControl]="searchControl" placeholder="Buscar Pokémon por nombre o id..."
-                class="search-input" />
-            @if (searchControl.value) {
-            <button class="clear-button" (click)="clearSearch()">
-                ✕
-            </button>
-            }
-            @if (isSearching()) {
-            <span class="loading-indicator">Buscando...</span>
-            }
-        </div>
-        @if (isInSearchMode() && searchResults().length === 0 && !isSearching()) {
+       @if (isInSearchMode() && searchResults().length === 0 && !isSearching()) {
         <div class="no-results">
             No se encontraron Pokémon con ese nombre
         </div>
