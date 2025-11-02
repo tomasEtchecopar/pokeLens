@@ -3,11 +3,7 @@
 
 <!--     SEARCH BAR -->
     <div class="search-section">
-       @if (isInSearchMode() && searchResults().length === 0 && !isSearching()) {
-        <div class="no-results">
-            No se encontraron Pokémon con ese nombre
-        </div>
-        }
+        <app-search-bar placeholder="Buscar pokemon..."></app-search-bar>
     </div>
 
 
@@ -16,14 +12,14 @@
     <p>Cargando Pokemons...</p>
     }@else {
     <div class="grid">
-        @for (pokemonResource of displayedPokemon(); track pokemonResource){
+        @for (pokemonResource of loadedPokemon(); track pokemonResource){
         <app-pokemon-card [pokemonResource]="pokemonResource"></app-pokemon-card>
         <!-- passes a namedAPIResource with name and url of each pokemon-->
         }
     </div>
 
     <!-- Sentinel element for infinite scroll -->
-    @if (!isInSearchMode() && hasMore()){
+    @if (hasMore()){
     <div #scrollSentinel class="scroll-sentinel">
         @if(isLoadingMore()){
         <p>Cargando más Pokemons...</p>
