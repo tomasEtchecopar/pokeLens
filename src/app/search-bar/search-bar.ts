@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { map } from 'rxjs';
 import { signal, computed } from '@angular/core';
 import { input, output } from '@angular/core';
@@ -9,7 +9,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-search-bar',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './search-bar.html',
   styleUrl: './search-bar.css',
 })
