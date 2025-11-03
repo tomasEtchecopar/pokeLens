@@ -1,191 +1,85 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, untracked, ViewChild } from '@angular/core';
 import { PokemonService } from '../pokemon-service';
 import { inject } from '@angular/core';
 import { computed } from '@angular/core';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
+import { effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { PokemonCard } from '../pokemon-card/pokemon-card';
-import { signal } from '@angular/core';
 import { NamedAPIResource } from '../pokemon-models';
-import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs';
-import { takeUntil } from 'rxjs';
-import { Subject } from 'rxjs';
-import { of } from 'rxjs';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { PokemonCatalogSearch } from './pokemon-catalog-search';
+import { SearchBar } from "../../search-bar/search-bar";
+import { PokemonCatalogPagination} from './pokemon-catalog-pagination';
 
-/**
- * Pokemon catalog component with infinite scroll and reactive search.
- * 
- * Shows a grid of Pokemon cards that loads more as you scroll down.
- * Includes a search bar that filters Pokemon by name in real-time.
- */
 @Component({
   selector: 'app-pokemon-catalog',
-  imports: [PokemonCard, ReactiveFormsModule],
+  imports: [PokemonCard, ReactiveFormsModule, SearchBar],
   templateUrl: './pokemon-catalog.html',
   styleUrl: './pokemon-catalog.css'
 })
-export class PokemonCatalog {
+export class PokemonCatalog implements AfterViewInit, OnDestroy{
 
-  // services and utilities
-  private readonly service = inject(PokemonService); // handles API calls to PokeAPI
-  private readonly router = inject(Router); // for navigating to Pokemon details
-  private destroy$ = new Subject<void>(); // cleanup trigger for subscriptions
+  private readonly service = inject(PokemonService); 
+  private readonly router = inject(Router);
+  private readonly pokemonSearch = inject(PokemonCatalogSearch);
+  protected readonly pagination = inject(PokemonCatalogPagination)
 
-  // infinite scroll detection
-  @ViewChild('scrollSentinel') scrollSentinel?: ElementRef; // invisible element at bottom of list
+  protected readonly allPokemon = toSignal(this.service.getAllPokemon(), {initialValue : [] as NamedAPIResource[]});
 
-  // search state
-  protected readonly searchControl = new FormControl(''); // input field binding
-  protected readonly searchTerm = signal(''); // reactive search term for computed properties
-  protected readonly searchResults = signal<NamedAPIResource[]>([]); // filtered Pokemon from search
-  protected readonly isSearching = signal(false); // loading indicator for search
+  @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>; 
 
-  // pagination state
-  private readonly pageSize = 20; // how many Pokemon to fetch per batch
-  private offset = signal(0); // current position in the full Pokemon list
-  protected readonly allPokemon = signal<NamedAPIResource[]>([]); // all loaded Pokemon so far
-  protected readonly hasMore = signal(true); // whether there are more Pokemon to load
-  protected readonly isLoadingMore = signal(false); // loading indicator for pagination
+  protected readonly searchResults = this.pokemonSearch.results;
 
-  /**
-   * Returns either search results or the full catalog depending on search state.
-   * This is what actually gets displayed in the template.
-   */
-  protected readonly displayedPokemon = computed(() => {
-    const term = this.searchTerm();
+  protected readonly pokemonList = computed<NamedAPIResource[]>(() => {
     const search = this.searchResults();
-    const all = this.allPokemon();
-    
-    
-    return term.trim() ? search : all;
+    if(search && search.length >0){
+      return search;
+    }
+    return this.allPokemon();
   });
 
-  /**
-   * Checks if we're currently in search mode (user has typed something).
-   * Used to disable infinite scroll during search.
-   */
-  protected readonly isInSearchMode = computed(() => {
-    const searchTerm = this.searchControl.value;
-    return !!(searchTerm && searchTerm.trim());
-  });
+  readonly displayedPokemon = this.pagination.displayedPokemon;
 
-  /**
-   * Fetches the next batch of Pokemon for infinite scroll.
-   * Won't load if already loading or no more results.
-   */
-  private loadMorePokemon() {
-    if (!this.hasMore() || this.isLoadingMore()) return;
-
-    this.isLoadingMore.set(true);
-    this.service.getPokemonList(this.pageSize, this.offset()).subscribe({
-      next: (data) => {
-        const newPokemon = data.results;
-        this.allPokemon.set([...this.allPokemon(), ...newPokemon]);
-        this.hasMore.set(data.next !== null);
-        this.offset.set(this.offset() + this.pageSize);
-        this.isLoadingMore.set(false);
-      },
-      error: () => {
-        this.isLoadingMore.set(false);
-      }
-    });
-  }
-
-  /**
-   * Initialization - loads first batch and sets up reactive search.
-   */
-  ngOnInit() {
-    // load initial batch of Pokemon
-    this.loadMorePokemon();
-
-    
-    this.searchControl.valueChanges.pipe(
-      takeUntil(this.destroy$), // auto-unsubscribe on component destroy
-      debounceTime(300), // wait 300ms after user stops typing
-      distinctUntilChanged(), // only search if value actually changed
-      switchMap(term => {
-        const searchTerm = term || '';
-        
-        // update reactive search term
-        this.searchTerm.set(searchTerm);
-        
-        // empty search = show all Pokemon
-        if (!searchTerm.trim()) {
-          this.isSearching.set(false);
-          this.searchResults.set([]);
-          return of({ count: 0, next: null, previous: null, results: [] });
-        }
-        
-        // perform search
-        this.isSearching.set(true);
-        return this.service.searchPokemon(searchTerm);
-      })
-    ).subscribe({
-      next: (data) => {
-        console.log('Search results received:', data);
-        
-        if (data && data.results && Array.isArray(data.results)) {
-          this.searchResults.set(data.results);
-        } else {
-          console.log('No valid results');
-          this.searchResults.set([]);
-        }
-        
-        this.isSearching.set(false);
-      },
-      error: (err) => {
-        console.error('Search error:', err);
-        this.searchResults.set([]);
-        this.isSearching.set(false);
-      }
-    });
-  }
-
-  /**
-   * Sets up infinite scroll by watching when the sentinel element comes into view.
-   * Only triggers when NOT in search mode.
-   */
-  ngAfterViewInit() {
-    if (!this.scrollSentinel?.nativeElement) return;
-
-    const observer = new IntersectionObserver((entries) => {
-      // only trigger infinite scroll when not searching
-      if (entries[0].isIntersecting && !this.isInSearchMode()) {
-        this.loadMorePokemon();
-      }
-    }, {
-      threshold: 0.1 // trigger when 10% of sentinel is visible
-    });
-
-    observer.observe(this.scrollSentinel.nativeElement);
-  }
-
-  /**
-   * Cleanup - prevents memory leaks by completing subscriptions.
-   */
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
-
-  /**
-   * Shows loading state only on initial load (not during search or pagination).
-   */
   protected readonly isLoading = computed(() =>
-    this.allPokemon().length === 0 && !this.isLoadingMore() && !this.isInSearchMode()
+    this.allPokemon()?.length === 0 && this.pagination.loading()
   );
 
-  /**
-   * Navigates to the detail page for a specific Pokemon.
-   */
-  navigateToDetails(id: string | number) {
-    this.router.navigateByUrl(`catalogo/${id}`);
+  private sentinelAttached = false;
+
+  constructor(){
+    effect(() => {
+      const list = this.pokemonList();
+      if(list && list.length > 0){
+        untracked(() => {
+        this.pagination.setPokemonList(list, 20);
+        this.pokemonSearch.setPokemonList(this.allPokemon());
+        })
+      }
+    })
+  };
+
+  ngAfterViewInit(): void{
+    setTimeout(() => {
+    if(this.scrollSentinel?.nativeElement && !this.sentinelAttached){
+      console.log("initializing scroll")
+      this.pagination.initScroll(this.scrollSentinel.nativeElement);
+      this.sentinelAttached = true;
+    } else{
+      console.error('Sentinel not found');
+    }
+    }, 0);
   }
 
-  /**
-   * Clears the search input and returns to full catalog view.
-   */
-  protected clearSearch() {
-    this.searchControl.setValue('');
+  ngOnDestroy(): void {
+      this.pagination.disconnect();
   }
+
+  navigateToDetails(id: string | number): void {
+    this.router.navigateByUrl(`catalogo/${id}`);
+  }
+onSearch(term: string){
+    this.pokemonSearch.search(term);
+  }
+
 }

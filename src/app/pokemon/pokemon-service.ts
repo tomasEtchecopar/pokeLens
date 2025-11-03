@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, of } from 'rxjs';
-import { NamedAPIResourceList } from './pokemon-models';
+import { NamedAPIResourceList} from './pokemon-models';
 import { Pokemon } from './pokemon-models';
 import { catchError, map } from 'rxjs';
 
@@ -22,6 +22,15 @@ export class PokemonService {
   getPokemonList(limit: number = 20, offset: number = 0){
     const url = `${this.baseURL}/pokemon?limit=${limit}&offset=${offset}`;
     return this.http.get<NamedAPIResourceList>(url);
+  }
+  
+  /**
+   * Function to fetch the resource for all pokemon
+   * @returns NamedApiResource[]
+   */
+  getAllPokemon(){
+    return this.http.get<NamedAPIResourceList>(`${this.baseURL}/pokemon?limit=9999`)
+    .pipe(map(res => res.results))
   }
 
   /**
