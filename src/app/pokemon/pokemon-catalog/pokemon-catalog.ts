@@ -30,6 +30,7 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>; 
 
   protected readonly searchResults = this.pokemonSearch.results;
+  protected readonly hasSearchResults = this.pokemonSearch.hasResults;
 
   protected readonly pokemonList = computed<NamedAPIResource[]>(() => {
     const search = this.searchResults();
