@@ -27,6 +27,10 @@ export class PokemonCatalogSearch {
     return filteredResults; 
   });
 
+  readonly hasResults = computed(() => {
+    return this.results().length>0;
+  })
+
   setPokemonList(list: NamedAPIResource[]): void{
     this.allPokemon.set(list ?? []);
   }
