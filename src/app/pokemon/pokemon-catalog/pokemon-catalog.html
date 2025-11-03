@@ -12,7 +12,7 @@
     <p>Cargando Pokemons...</p>
     }@else {
     <div class="grid">
-        @for (pokemonResource of loadedPokemon(); track pokemonResource){
+        @for (pokemonResource of displayedPokemon(); track pokemonResource){
         <app-pokemon-card [pokemonResource]="pokemonResource"></app-pokemon-card>
         <!-- passes a namedAPIResource with name and url of each pokemon-->
         }

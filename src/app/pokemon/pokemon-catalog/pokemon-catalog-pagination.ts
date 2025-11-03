@@ -1,11 +1,12 @@
 import { Injectable, signal } from '@angular/core';
 import { NamedAPIResource } from '../pokemon-models';
 import { computed } from '@angular/core';
+import { NgZone } from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PokmeonCatalogPagination {
+export class PokemonCatalogPagination {
   private readonly pokemonList = signal<NamedAPIResource[]>([]);
   private readonly loadedPokemon = signal<NamedAPIResource[]>([])
 
@@ -16,6 +17,8 @@ export class PokmeonCatalogPagination {
 
   readonly displayedPokemon = computed(() => this.loadedPokemon());
   readonly isLoading = signal(false);
+  
+  constructor(private readonly ngZone: NgZone){}
 
   setPokemonList(list: NamedAPIResource[], pageSize: number = 20): void{
     this.pokemonList.set(list ?? []);
@@ -43,8 +46,10 @@ export class PokmeonCatalogPagination {
     const nextChunk = list.slice(offset, offset + this.pageSize);
     this.loadedPokemon.set([...this.loadedPokemon(), ...nextChunk]);
     this.offset.set(offset + nextChunk.length);
-    this.hasMore.set(this.offset() < this.pokemonList.length);
+    this.hasMore.set(this.offset() < this.pokemonList().length);
 
     this.isLoading.set(false);
   }
+
+
 }

@@ -1,13 +1,13 @@
 import { TestBed } from '@angular/core/testing';
 
-import { PokmeonCatalogPagination } from './pokmeon-catalog-pagination';
+import { PokemonCatalogPagination} from './pokemon-catalog-pagination';
 
 describe('PokmeonCatalogPagination', () => {
-  let service: PokmeonCatalogPagination;
+  let service: PokemonCatalogPagination;
 
   beforeEach(() => {
     TestBed.configureTestingModule({});
-    service = TestBed.inject(PokmeonCatalogPagination);
+    service = TestBed.inject(PokemonCatalogPagination);
   });
 
   it('should be created', () => {
