@@ -43,42 +43,43 @@ export class PokemonCatalog {
   private readonly router = inject(Router); // for navigating to Pokemon details
   private readonly pokemonSearch = inject(PokemonCatalogSearch);
 
-  protected readonly allPokemon = toSignal(this.service.getAllPokemon());
+  protected readonly allPokemon = toSignal(this.service.getAllPokemon(), {initialValue : [] as NamedAPIResource[]});
 
   // infinite scroll detection
   @ViewChild('scrollSentinel') scrollSentinel?: ElementRef; // invisible element at bottom of list
 
   protected readonly searchResults = this.pokemonSearch.results;
   // pagination state
-  private readonly pageSize = 20; // how many Pokemon to fetch per batch
-  private offset = signal(0); // current position in the full Pokemon list
-  protected readonly hasMore = signal(true); // whether there are more Pokemon to load
-  protected readonly isLoadingMore = signal(false); // loading indicator for pagination
 
   //all pokemon available to display
   protected readonly loadedPokemon = computed<NamedAPIResource[]>(() => {
-    const term = (this.pokemonSearch.searchTerm?.() ?? '').trim();
-    if (term) return this.searchResults();
-    
-    const list = this.allPokemon() as unknown as NamedAPIResource[] ?? [];
-    return list;
-  })
+    const search = this.searchResults();
+    if(search && search.length >0){
+      return search;
+    }
+    return this.allPokemon();
+  });
 
 
-
-  /**
-   * Shows loading state on initial 
-   */
   protected readonly isLoading = computed(() =>
-    this.loadedPokemon().length === 0 && !this.isLoadingMore() 
+    this.loadedPokemon()?.length === 0 
   );
 
-  /**
-   * Navigates to the detail page for a specific Pokemon.
-   */
+
+  constructor(){
+    effect(() => {
+      const list = this.allPokemon();
+      if(list && list.length > 0){
+        this.pokemonSearch.setPokemonList(list);
+      }
+    })
+  }
   navigateToDetails(id: string | number): void {
     this.router.navigateByUrl(`catalogo/${id}`);
   }
 
+  onSearch(term: string){
+    this.pokemonSearch.search(term)
+  }
 
 }

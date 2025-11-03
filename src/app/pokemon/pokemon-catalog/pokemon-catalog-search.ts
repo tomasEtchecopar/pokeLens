@@ -20,13 +20,15 @@ export class PokemonCatalogSearch {
   readonly results = computed(() => {
     const term = this.searchTerm().trim().toLowerCase();
     if(!term) return this.allPokemon();
-    return this.allPokemon().filter(p =>
+
+    const filteredResults = this.allPokemon().filter(p =>
       p.name.toLowerCase().includes(term)
     );
+    return filteredResults; 
   });
 
   setPokemonList(list: NamedAPIResource[]): void{
-    this.allPokemon.set(list);
+    this.allPokemon.set(list ?? []);
   }
 
   search(term: string): void{
