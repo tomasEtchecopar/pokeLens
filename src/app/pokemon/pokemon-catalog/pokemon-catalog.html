@@ -3,8 +3,9 @@
 
 <!--     SEARCH BAR -->
     <div class="search-section">
-        <app-search-bar placeholder="Buscar pokemon... " ></app-search-bar>
+        <app-search-bar placeholder="Buscar pokemon... " (searchUpdate)="onSearch($event)" ></app-search-bar>
     </div>
+
 
 
 
@@ -13,10 +14,9 @@
     }@else {
     <div class="grid">
         @for (pokemonResource of displayedPokemon(); track pokemonResource){
-        <app-pokemon-card [pokemonResource]="pokemonResource"></app-pokemon-card>
+        <app-pokemon-card [pokemonResource]="pokemonResource" (click)="navigateToDetails(pokemonResource.name)"></app-pokemon-card>
         <!-- passes a namedAPIResource with name and url of each pokemon-->
         }
-        <div #scrollSentinel class="scroll-sentinel"></div>
 
         @if (pagination.loading()) {
             <div class="loading">Cargando mas Pokemon...</div>
@@ -24,4 +24,5 @@
     </div>
 
 }
+    <div #scrollSentinel class="scroll-sentine"></div>
 </div>

@@ -60,10 +60,15 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   };
 
   ngAfterViewInit(): void{
+    setTimeout(() => {
     if(this.scrollSentinel?.nativeElement && !this.sentinelAttached){
+      console.log("initializing scroll")
       this.pagination.initScroll(this.scrollSentinel.nativeElement);
       this.sentinelAttached = true;
+    } else{
+      console.error('Sentinel not found');
     }
+    }, 0);
   }
 
   ngOnDestroy(): void {
