@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, untracked, ViewChild } from '@angular/core';
 import { PokemonService } from '../pokemon-service';
 import { inject } from '@angular/core';
 import { computed } from '@angular/core';
@@ -11,7 +11,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { PokemonCatalogSearch } from './pokemon-catalog-search';
 import { SearchBar } from "../../search-bar/search-bar";
 import { PokemonCatalogPagination} from './pokemon-catalog-pagination';
-import { AfterViewInit } from '@angular/core';
 
 @Component({
   selector: 'app-pokemon-catalog',
@@ -19,16 +18,16 @@ import { AfterViewInit } from '@angular/core';
   templateUrl: './pokemon-catalog.html',
   styleUrl: './pokemon-catalog.css'
 })
-export class PokemonCatalog {
+export class PokemonCatalog implements AfterViewInit, OnDestroy{
 
   private readonly service = inject(PokemonService); 
   private readonly router = inject(Router);
   private readonly pokemonSearch = inject(PokemonCatalogSearch);
-  private readonly pagination = inject(PokemonCatalogPagination)
+  protected readonly pagination = inject(PokemonCatalogPagination)
 
   protected readonly allPokemon = toSignal(this.service.getAllPokemon(), {initialValue : [] as NamedAPIResource[]});
 
-  @ViewChild('scrollSentinel' ) scrollSentinel?: ElementRef<HTMLElement>; 
+  @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>; 
 
   protected readonly searchResults = this.pokemonSearch.results;
 
@@ -43,30 +42,39 @@ export class PokemonCatalog {
   readonly displayedPokemon = this.pagination.displayedPokemon;
 
   protected readonly isLoading = computed(() =>
-    this.allPokemon()?.length === 0 
+    this.allPokemon()?.length === 0 && this.pagination.loading()
   );
 
+  private sentinelAttached = false;
 
   constructor(){
     effect(() => {
-      const list = this.allPokemon();
+      const list = this.pokemonList();
       if(list && list.length > 0){
-        this.pagination.setPokemonList(list);
-        this.pokemonSearch.setPokemonList(list);
+        untracked(() => {
+        this.pagination.setPokemonList(list, 20);
+        this.pokemonSearch.setPokemonList(this.allPokemon());
+        })
       }
     })
+  };
+
+  ngAfterViewInit(): void{
+    if(this.scrollSentinel?.nativeElement && !this.sentinelAttached){
+      this.pagination.initScroll(this.scrollSentinel.nativeElement);
+      this.sentinelAttached = true;
+    }
+  }
+
+  ngOnDestroy(): void {
+      this.pagination.disconnect();
   }
 
   navigateToDetails(id: string | number): void {
     this.router.navigateByUrl(`catalogo/${id}`);
   }
-
-  onSearch(term: string){
-    this.pokemonSearch.search(term)
-    this.pagination.setPokemonList(this.pokemonSearch.results());
+onSearch(term: string){
+    this.pokemonSearch.search(term);
   }
-
- 
-  
 
 }
