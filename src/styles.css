@@ -6,7 +6,6 @@
 }
 
 :root {
-  color-scheme: light; /* dont want to bother with dark mode */
   --primary-color: #ffd700;
   --secondary-color: #ff6347;
   --background: #f5f5f5;
