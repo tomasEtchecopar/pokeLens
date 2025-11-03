@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { signal } from '@angular/core';
 import { computed } from '@angular/core';
-import { NamedAPIResource } from '../pokemon-models';
+import { NamedAPIResource } from '../../pokemon-models';
 
 @Injectable({
   providedIn: 'root'

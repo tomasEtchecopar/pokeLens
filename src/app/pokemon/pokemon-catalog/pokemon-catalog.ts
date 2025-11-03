@@ -8,9 +8,9 @@ import { Router } from '@angular/router';
 import { PokemonCard } from '../pokemon-card/pokemon-card';
 import { NamedAPIResource } from '../pokemon-models';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { PokemonCatalogSearch } from './pokemon-catalog-search';
+import { PokemonCatalogSearch } from './search/pokemon-catalog-search';
 import { SearchBar } from "../../search-bar/search-bar";
-import { PokemonCatalogPagination} from './pokemon-catalog-pagination';
+import { PokemonCatalogPagination } from './pagination/pokemon-catalog-pagination';
 
 @Component({
   selector: 'app-pokemon-catalog',
