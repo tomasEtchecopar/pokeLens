@@ -70,7 +70,7 @@ export class PokemonCatalogPagination {
       this.observer = new IntersectionObserver(entries => {
         for(const e of entries){
           if(e.isIntersecting){
-            console.log("Scroll limit reached; loading more pokemon...");
+            console.log("Scroll limit reached");
             this.ngZone.run(() => this.loadMore());
           }
         }

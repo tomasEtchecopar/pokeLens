@@ -27,11 +27,7 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   private readonly pokemonSearch = inject(PokemonCatalogSearch);
   protected readonly pagination = inject(PokemonCatalogPagination)
 
-  protected readonly allPokemon = toSignal(this.service.getAllPokemon().pipe(
-    switchMap(resourceList => forkJoin(
-      resourceList.map(r => this.service.getPokemonByName(r.name))
-    ))
-  ), {initialValue : [] as Pokemon[]});
+  protected readonly allPokemon = toSignal(this.service.getAllPokemon(), {initialValue : [] as Pokemon[]});
 
 
   @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>; 

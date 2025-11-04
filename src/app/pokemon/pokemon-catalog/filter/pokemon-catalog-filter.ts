@@ -1,12 +1,13 @@
 import { Injectable, signal } from '@angular/core';
-import { NamedAPIResource } from '../../pokemon-models';
 import { filterType } from './pokemon-filters';
+import { Pokemon } from '../../pokemon-models';
 
 @Injectable({
   providedIn: 'root'
 })
+// Service that manages the pokemon list; search, pagination and ordering are done over it
 export class PokemonCatalogFilter {
-  /* private readonly filteredPokemon; */
+  private readonly filteredPokemon = signal<Pokemon[]>;
 
   private readonly filterType = signal<filterType>('all');
   
@@ -15,6 +16,10 @@ export class PokemonCatalogFilter {
   }
 
   getFilteredList(){
+    switch(this.filterType()){
+      case 'all':
+
+    }
     
   }
 }
