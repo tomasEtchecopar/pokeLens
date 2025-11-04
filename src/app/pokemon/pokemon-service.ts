@@ -33,6 +33,10 @@ export class PokemonService {
     .pipe(map(res => res.results))
   }
 
+  /**
+   * Function to get all Pokemon as objects
+   * @returns Pokemon[]
+   */
   getAllPokemon(){
     return this.getAllPokemonResource().pipe(
       switchMap(resourceList => forkJoin(

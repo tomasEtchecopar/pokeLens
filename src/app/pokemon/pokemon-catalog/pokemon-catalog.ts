@@ -7,12 +7,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { PokemonCard } from '../pokemon-card/pokemon-card';
-import { NamedAPIResource } from '../pokemon-models';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { PokemonCatalogSearch } from './search/pokemon-catalog-search';
 import { SearchBar } from "../../search-bar/search-bar";
 import { PokemonCatalogPagination } from './pagination/pokemon-catalog-pagination';
-import { forkJoin, switchMap } from 'rxjs';
+import { PokemonFilterService } from './filter/pokemon-filter-service';
 
 @Component({
   selector: 'app-pokemon-catalog',
@@ -23,11 +21,13 @@ import { forkJoin, switchMap } from 'rxjs';
 export class PokemonCatalog implements AfterViewInit, OnDestroy{
 
   private readonly service = inject(PokemonService); 
+  private readonly filtering = inject(PokemonFilterService);
   private readonly router = inject(Router);
   private readonly pokemonSearch = inject(PokemonCatalogSearch);
   protected readonly pagination = inject(PokemonCatalogPagination)
 
-  protected readonly allPokemon = toSignal(this.service.getAllPokemon(), {initialValue : [] as Pokemon[]});
+  //protected readonly allPokemon = toSignal(this.service.getAllPokemon(), {initialValue : [] as Pokemon[]});
+  protected readonly allPokemon = this.filtering.filteredPokemon;
 
 
   @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>; 

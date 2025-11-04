@@ -82,3 +82,8 @@ export interface PokemonType {
     slot: number;
     type: NamedAPIResource;
 }
+export type filterType
+= 'all' | 'elementalType' | 'generation' | 'region' |  'weight' | 'height'
+
+export type elementalType
+= 'normal' | 'fire' | 'water' | 'electric' | 'grass' | 'ice' | 'fighting' | 'poison' | 'ground' | 'flying' | 'psychic' | 'bug'| 'rock' | 'ghost' | 'dragon' | 'dark' | 'steel' | 'fairy'
