@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, untracked, ViewChild } from '@angular/core';
 import { PokemonService } from '../pokemon-service';
+import { Pokemon } from '../pokemon-models';
 import { inject } from '@angular/core';
 import { computed } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -11,6 +12,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { PokemonCatalogSearch } from './search/pokemon-catalog-search';
 import { SearchBar } from "../../search-bar/search-bar";
 import { PokemonCatalogPagination } from './pagination/pokemon-catalog-pagination';
+import { forkJoin, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon-catalog',
@@ -25,7 +27,12 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   private readonly pokemonSearch = inject(PokemonCatalogSearch);
   protected readonly pagination = inject(PokemonCatalogPagination)
 
-  protected readonly allPokemon = toSignal(this.service.getAllPokemon(), {initialValue : [] as NamedAPIResource[]});
+  protected readonly allPokemon = toSignal(this.service.getAllPokemon().pipe(
+    switchMap(resourceList => forkJoin(
+      resourceList.map(r => this.service.getPokemonByName(r.name))
+    ))
+  ), {initialValue : [] as Pokemon[]});
+
 
   @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>; 
 

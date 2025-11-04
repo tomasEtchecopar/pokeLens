@@ -6,9 +6,11 @@ import { filterType } from './pokemon-filter-type';
   providedIn: 'root'
 })
 export class PokemonCatalogFilter {
-  private readonly allPokemon = signal<NamedAPIResource[]>;
   private readonly filteredPokemon;
 
   private readonly filterType = signal<filterType>
   
+  setFilter(type:filterType){
+    this.filterType.set(type);
+  }
 }

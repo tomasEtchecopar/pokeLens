@@ -33,6 +33,5 @@ export class PokemonCard {
 
   protected readonly isLoading = computed(() => this.pokemonResource() === undefined);
   
-  // Use imported translateType function
   protected translateType = translateType;
 }
