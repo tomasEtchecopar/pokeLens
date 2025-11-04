@@ -1,11 +1,7 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
 import { PokemonService } from '../pokemon-service';
-import { NamedAPIResource, Pokemon } from '../pokemon-models';
+import { Pokemon } from '../pokemon-models';
 import { NgOptimizedImage, TitleCasePipe } from '@angular/common';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { switchMap } from 'rxjs';
-import { PokeImgPipe } from '../poke-img-pipe';
 import { translateType } from '../pokemon-helpers';
 
 /**
@@ -15,7 +11,7 @@ import { translateType } from '../pokemon-helpers';
  */
 @Component({
   selector: 'app-pokemon-card',
-  imports: [TitleCasePipe, PokeImgPipe, NgOptimizedImage],
+  imports: [TitleCasePipe, NgOptimizedImage],
   templateUrl: './pokemon-card.html',
   styleUrl: './pokemon-card.css'
 })
