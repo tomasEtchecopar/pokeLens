@@ -24,7 +24,7 @@ export class PokemonFilterService{
 
     switch(type){
       case 'all':
-        console.log("getting pokemons of all types")
+        console.log("getting pokemons of all types", list as Pokemon[])
         return list;
       default:
         console.log("getting pokemons of type " + type)

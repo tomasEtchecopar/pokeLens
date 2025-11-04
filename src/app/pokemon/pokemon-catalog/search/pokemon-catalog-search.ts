@@ -19,6 +19,7 @@ export class PokemonCatalogSearch {
    * filtered search results
    */
   readonly results = computed(() => {
+    console.log("setting search service: ", this.allPokemon() as Pokemon[]);
     const term = this.searchTerm().trim().toLowerCase();
     if(!term) return this.allPokemon();
 

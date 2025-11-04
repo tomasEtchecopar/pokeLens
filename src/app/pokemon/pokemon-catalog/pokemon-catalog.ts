@@ -19,46 +19,61 @@ import { PokemonFilterService } from './filter/pokemon-filter-service';
   styleUrl: './pokemon-catalog.css'
 })
 export class PokemonCatalog implements AfterViewInit, OnDestroy{
-
-  private readonly service = inject(PokemonService); 
-  private readonly filtering = inject(PokemonFilterService);
+  /**
+   * Sets up infinite scroll
+   */
+  @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>; 
+  
   private readonly router = inject(Router);
+
+  /**
+   * This is where we get our pokemon list from
+   */
+  private readonly filtering = inject(PokemonFilterService);
+
+  /**
+   * This is where we perform searchs upon the list from the service above
+   */
   private readonly pokemonSearch = inject(PokemonCatalogSearch);
+
+  /**
+   * Used to paginate pokemons to make use of infinite scroll
+   */
   protected readonly pagination = inject(PokemonCatalogPagination)
 
-  //protected readonly allPokemon = toSignal(this.service.getAllPokemon(), {initialValue : [] as Pokemon[]});
+  /**
+   * List of pokemons to work from; already filtered
+   */
   protected readonly allPokemon = this.filtering.filteredPokemon;
 
+  /**
+   * Search results from the list above; full list in case of no results
+   */
+  protected readonly pokemonList = this.pokemonSearch.results;
 
-  @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>; 
-
-  protected readonly searchResults = this.pokemonSearch.results;
+  /**
+   * Boolean signal telling if the search has results
+   */
   protected readonly hasSearchResults = this.pokemonSearch.hasResults;
-
-  protected readonly pokemonList = computed<Pokemon[]>(() => {
-    const search = this.searchResults();
-    if(search && search.length >0){
-      return search;
-    }
-    return this.allPokemon();
-  });
-
+  /**
+   * Paginated list from the seach results
+   */
   readonly displayedPokemon = this.pagination.displayedPokemon;
 
   protected readonly isLoading = computed(() =>
     this.allPokemon()?.length === 0 
   );
 
+  //dont really know what its for but infinite scroll uses it
   private sentinelAttached = false;
 
   constructor(){
     effect(() => {
-      const list = this.pokemonList();
-      if(list && list.length > 0){
-        untracked(() => {
-        this.pagination.setPokemonList(list, 20);
-        this.pokemonSearch.setPokemonList(this.allPokemon());
-        })
+      const list = this.allPokemon();
+      if(list && list.length) this.pokemonSearch.setPokemonList(list); //setting up search
+      const searchResults = this.pokemonList();
+      if(searchResults && searchResults.length){
+        untracked(() => this.pagination.setPokemonList(list, 20)) //setting up pagination
       }
     })
   };
