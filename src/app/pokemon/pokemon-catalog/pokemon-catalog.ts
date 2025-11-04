@@ -50,7 +50,7 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   readonly displayedPokemon = this.pagination.displayedPokemon;
 
   protected readonly isLoading = computed(() =>
-    this.allPokemon()?.length === 0 && this.pagination.loading()
+    this.allPokemon()?.length === 0 
   );
 
   private sentinelAttached = false;
