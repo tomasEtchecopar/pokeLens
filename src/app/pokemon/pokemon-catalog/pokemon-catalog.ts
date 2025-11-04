@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, untracked, ViewChild } from '@angular/core';
 import { PokemonService } from '../pokemon-service';
-import { Pokemon } from '../pokemon-models';
+import { Pokemon } from '../models/pokemon-models';
 import { inject } from '@angular/core';
 import { computed } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';

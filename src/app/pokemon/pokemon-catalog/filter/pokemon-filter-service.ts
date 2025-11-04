@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Pokemon, filterType } from '../../pokemon-models';
+import { Pokemon, filterType } from '../../models/pokemon-models';
 import { PokemonService } from '../../pokemon-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 

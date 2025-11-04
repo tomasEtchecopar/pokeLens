@@ -1,8 +1,8 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, Observable, of, switchMap } from 'rxjs';
-import { NamedAPIResourceList} from './pokemon-models';
-import { Pokemon } from './pokemon-models';
+import { NamedAPIResourceList} from './models/pokemon-models';
+import { Pokemon } from './models/pokemon-models';
 import { catchError, map } from 'rxjs';
 
 /**
@@ -72,6 +72,13 @@ export class PokemonService {
     return this.http.get<Pokemon>(url);
   }
 
+  getTypes(){
+    return this.http.get<{results: {name: string}[]}>(`${this.baseURL}/type`).pipe(
+      map(res => res.results
+        .map(t => t.name)
+      )
+    )
+  }
 
 }
 
