@@ -39,7 +39,7 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   protected readonly searchResults = this.pokemonSearch.results;
   protected readonly hasSearchResults = this.pokemonSearch.hasResults;
 
-  protected readonly pokemonList = computed<NamedAPIResource[]>(() => {
+  protected readonly pokemonList = computed<Pokemon[]>(() => {
     const search = this.searchResults();
     if(search && search.length >0){
       return search;

@@ -17,7 +17,7 @@
     }@else {
     <div class="grid">
         @for (pokemonResource of displayedPokemon(); track pokemonResource){
-        <app-pokemon-card [pokemonResource]="pokemonResource" (click)="navigateToDetails(pokemonResource.name)"></app-pokemon-card>
+        <app-pokemon-card [pokemon]="pokemonResource" (click)="navigateToDetails(pokemonResource.name)"></app-pokemon-card>
         <!-- passes a namedAPIResource with name and url of each pokemon-->
         }
 

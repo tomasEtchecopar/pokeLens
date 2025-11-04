@@ -23,15 +23,10 @@ export class PokemonCard {
 
   private service = inject(PokemonService);
 
-  readonly pokemonResource = input.required<NamedAPIResource>();
+  readonly pokemon= input.required<Pokemon>();
 
-  readonly pokemon = toSignal(
-    toObservable(this.pokemonResource).pipe(
-      switchMap(resource => this.service.getPokemonByName(resource.name))
-    )
-  );
 
-  protected readonly isLoading = computed(() => this.pokemonResource() === undefined);
+  protected readonly isLoading = computed(() => this.pokemon() === undefined);
   
   protected translateType = translateType;
 }

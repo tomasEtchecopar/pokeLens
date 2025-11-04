@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { signal } from '@angular/core';
 import { computed } from '@angular/core';
+import { Pokemon } from '../../pokemon-models';
 import { NamedAPIResource } from '../../pokemon-models';
 
 @Injectable({
@@ -10,7 +11,7 @@ export class PokemonCatalogSearch {
   /**
    * Pokemon list to search from
    */
-  private readonly allPokemon = signal<NamedAPIResource[]>([]);
+  private readonly allPokemon = signal<Pokemon[]>([]);
 
   readonly searchTerm = signal('');
 
@@ -31,7 +32,7 @@ export class PokemonCatalogSearch {
     return this.results().length>0;
   })
 
-  setPokemonList(list: NamedAPIResource[]): void{
+  setPokemonList(list: Pokemon[]): void{
     this.allPokemon.set(list ?? []);
   }
 

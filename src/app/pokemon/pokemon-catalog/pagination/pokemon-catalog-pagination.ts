@@ -2,13 +2,14 @@ import { Injectable, signal } from '@angular/core';
 import { NamedAPIResource } from '../../pokemon-models';
 import { computed } from '@angular/core';
 import { NgZone } from '@angular/core';
+import { Pokemon } from '../../pokemon-models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PokemonCatalogPagination {
-  private readonly pokemonList = signal<NamedAPIResource[]>([]);
-  private readonly loadedPokemon = signal<NamedAPIResource[]>([])
+  private readonly pokemonList = signal<Pokemon[]>([]);
+  private readonly loadedPokemon = signal<Pokemon[]>([])
 
   private pageSize = 20;
 
@@ -25,7 +26,7 @@ export class PokemonCatalogPagination {
 
   constructor(private readonly ngZone: NgZone){}
 
-  setPokemonList(list: NamedAPIResource[], pageSize: number = 20): void{
+  setPokemonList(list: Pokemon[], pageSize: number = 20): void{
     console.log("setting pagination list");
     this.pokemonList.set(list ?? []);
     this.pageSize = pageSize;
@@ -45,7 +46,7 @@ export class PokemonCatalogPagination {
     console.log("loadmoreifneeded");
     const list = this.pokemonList();
     const offset = this.offset();
-    console.log(list as NamedAPIResource[]);
+    console.log(list as Pokemon[]);
 
     if(offset>=list.length){
       this.hasMore.set(false);
@@ -55,7 +56,7 @@ export class PokemonCatalogPagination {
 
 
     const nextChunk = list.slice(offset, offset + this.pageSize);
-    console.log(nextChunk as NamedAPIResource[]);
+    console.log(nextChunk as Pokemon[]);
     console.log(this.pageSize + offset);
     this.loadedPokemon.set([...this.loadedPokemon(), ...nextChunk]);
     this.offset.set(offset + nextChunk.length);
