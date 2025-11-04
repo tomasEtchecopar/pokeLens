@@ -27,7 +27,7 @@ export class PokemonCatalogPagination {
   constructor(private readonly ngZone: NgZone){}
 
   setPokemonList(list: Pokemon[], pageSize: number = 20): void{
-    console.log("setting pagination list");
+    console.log("setting pokemon list");
     this.pokemonList.set(list ?? []);
     this.pageSize = pageSize;
 
@@ -43,10 +43,9 @@ export class PokemonCatalogPagination {
     this.isLoading.set(true);
 
     setTimeout(() => {
-    console.log("loadmoreifneeded");
+    console.log("loading more pokemon...");
     const list = this.pokemonList();
     const offset = this.offset();
-    console.log(list as Pokemon[]);
 
     if(offset>=list.length){
       this.hasMore.set(false);
@@ -56,9 +55,9 @@ export class PokemonCatalogPagination {
 
 
     const nextChunk = list.slice(offset, offset + this.pageSize);
-    console.log(nextChunk as Pokemon[]);
-    console.log(this.pageSize + offset);
+    console.log("Loading pokemons: ", nextChunk as Pokemon[]);
     this.loadedPokemon.set([...this.loadedPokemon(), ...nextChunk]);
+    console.log("Loaded pokemons: ", this.loadedPokemon() as Pokemon[]);
     this.offset.set(offset + nextChunk.length);
     this.hasMore.set(this.offset() < this.pokemonList().length);
 
@@ -71,7 +70,7 @@ export class PokemonCatalogPagination {
       this.observer = new IntersectionObserver(entries => {
         for(const e of entries){
           if(e.isIntersecting){
-            console.log("daojiadsjio");
+            console.log("Scroll limit reached; loading more pokemon...");
             this.ngZone.run(() => this.loadMore());
           }
         }
