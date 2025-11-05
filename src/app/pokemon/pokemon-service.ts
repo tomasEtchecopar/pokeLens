@@ -30,7 +30,7 @@ export class PokemonService {
    * @returns NamedApiResource[]
    */
   getAllPokemonResource(){
-    return this.http.get<NamedAPIResourceList>(`${this.baseURL}/pokemon?limit=9999`)
+    return this.http.get<NamedAPIResourceList>(`${this.baseURL}/pokemon?limit=1500`)
     .pipe(map(res => res.results))
   }
 
