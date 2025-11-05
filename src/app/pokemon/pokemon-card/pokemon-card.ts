@@ -2,7 +2,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import { PokemonService } from '../pokemon-service';
 import { Pokemon } from '../models/pokemon-models';
 import { NgOptimizedImage, TitleCasePipe } from '@angular/common';
-import { translateType } from '../pokemon-helpers';
+import { translateType } from '../models/pokemon-helpers';
 
 /**
  * Card component that displays a single Pokemon.

@@ -1,5 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Pokemon, filterType } from '../../models/pokemon-models';
+import { Pokemon } from '../../models/pokemon-models';
+import { FilterType } from '../../models/pokemon-filters';
 import { PokemonService } from '../../pokemon-service';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -12,9 +13,9 @@ export class PokemonFilterService{
   private readonly service = inject(PokemonService);
   private readonly allPokemon = toSignal(this.service.getAllPokemon(), {initialValue: [] as Pokemon[]});
 
-  private readonly filterType = signal<filterType>('all');
+  private readonly filterType = signal<FilterType>;
   
-  setFilter(type:filterType){
+  setFilter(type:FilterType){
     this.filterType.set(type);
   }
 
