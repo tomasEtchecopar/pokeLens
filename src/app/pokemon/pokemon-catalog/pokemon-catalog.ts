@@ -1,60 +1,80 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, untracked, ViewChild } from '@angular/core';
-import { PokemonService } from '../pokemon-service';
 import { inject } from '@angular/core';
 import { computed } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { effect } from '@angular/core';
 import { Router } from '@angular/router';
 import { PokemonCard } from '../pokemon-card/pokemon-card';
-import { NamedAPIResource } from '../pokemon-models';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { PokemonCatalogSearch } from './pokemon-catalog-search';
+import { PokemonCatalogSearch } from './search/pokemon-catalog-search';
 import { SearchBar } from "../../search-bar/search-bar";
-import { PokemonCatalogPagination} from './pokemon-catalog-pagination';
+import { PokemonCatalogPagination } from './pagination/pokemon-catalog-pagination';
+import { PokemonFilterService } from './filter/pokemon-filter-service';
+import { PokemonFilterDropdown } from "../pokemon-filter-dropdown/pokemon-filter-dropdown";
+import { FilterOptions } from '../models/pokemon-filters';
+import { signal } from '@angular/core';
 
 @Component({
   selector: 'app-pokemon-catalog',
-  imports: [PokemonCard, ReactiveFormsModule, SearchBar],
+  imports: [ReactiveFormsModule, PokemonCard, SearchBar, PokemonFilterDropdown],
   templateUrl: './pokemon-catalog.html',
   styleUrl: './pokemon-catalog.css'
 })
 export class PokemonCatalog implements AfterViewInit, OnDestroy{
-
-  private readonly service = inject(PokemonService); 
+  /**
+   * Sets up infinite scroll
+   */
+  @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>; 
+  
   private readonly router = inject(Router);
+
+  /**
+   * This is where we get our pokemon list from
+   */
+  private readonly filtering = inject(PokemonFilterService);
+
+  /**
+   * This is where we perform searchs upon the list from the service above
+   */
   private readonly pokemonSearch = inject(PokemonCatalogSearch);
+
+  /**
+   * Used to paginate pokemons to make use of infinite scroll
+   */
   protected readonly pagination = inject(PokemonCatalogPagination)
 
-  protected readonly allPokemon = toSignal(this.service.getAllPokemon(), {initialValue : [] as NamedAPIResource[]});
+  /**
+   * List of pokemons to work from; already filtered
+   */
+  protected readonly allPokemon = this.filtering.filteredPokemon;
 
-  @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>; 
+  /**
+   * Search results from the list above; full list in case of no results/input
+   */
+  protected readonly pokemonList = this.pokemonSearch.results;
 
-  protected readonly searchResults = this.pokemonSearch.results;
-
-  protected readonly pokemonList = computed<NamedAPIResource[]>(() => {
-    const search = this.searchResults();
-    if(search && search.length >0){
-      return search;
-    }
-    return this.allPokemon();
-  });
-
+  /**
+   * Boolean signal telling if the search has results
+   */
+  protected readonly hasSearchResults = this.pokemonSearch.hasResults;
+  /**
+   * Paginated list from the seach results
+   */
   readonly displayedPokemon = this.pagination.displayedPokemon;
 
   protected readonly isLoading = computed(() =>
-    this.allPokemon()?.length === 0 && this.pagination.loading()
+    this.allPokemon()?.length === 0 
   );
 
+  //dont really know what its for but infinite scroll uses it
   private sentinelAttached = false;
 
   constructor(){
     effect(() => {
-      const list = this.pokemonList();
-      if(list && list.length > 0){
-        untracked(() => {
-        this.pagination.setPokemonList(list, 20);
-        this.pokemonSearch.setPokemonList(this.allPokemon());
-        })
+      const list = this.allPokemon();
+      if(list && list.length) this.pokemonSearch.setPokemonList(list); //setting up search
+      const searchResults = this.pokemonList();
+      if(searchResults && searchResults.length){
+        untracked(() => this.pagination.setPokemonList(searchResults, 50)) //setting up pagination
       }
     })
   };
@@ -78,8 +98,20 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   navigateToDetails(id: string | number): void {
     this.router.navigateByUrl(`catalogo/${id}`);
   }
-onSearch(term: string){
+  
+  onSearch(term: string){
     this.pokemonSearch.search(term);
   }
 
+  applyFilters(filters: FilterOptions){
+    console.log("detected event on filter buttons");
+    this.filtering.updateFilters(filters);
+  }
+
+  //filter menu toggle; dont know where else to put it
+  filtersOpen = signal(false);
+
+  toggleFilters() {
+    this.filtersOpen.set(!this.filtersOpen());
+  }
 }

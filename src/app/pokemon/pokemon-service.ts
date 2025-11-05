@@ -1,9 +1,10 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { NamedAPIResourceList} from './pokemon-models';
-import { Pokemon } from './pokemon-models';
-import { catchError, map } from 'rxjs';
+import { forkJoin,  switchMap } from 'rxjs';
+import { NamedAPIResourceList, NamedAPIResource} from './models/pokemon-models';
+import { Pokemon, PokemonSpecies, Generation } from './models/pokemon-models';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs';
 
 /**
  * Service that talks to the PokeAPI
@@ -28,9 +29,21 @@ export class PokemonService {
    * Function to fetch the resource for all pokemon
    * @returns NamedApiResource[]
    */
-  getAllPokemon(){
+  getAllPokemonResource(){
     return this.http.get<NamedAPIResourceList>(`${this.baseURL}/pokemon?limit=9999`)
     .pipe(map(res => res.results))
+  }
+
+  /**
+   * Function to get all Pokemon as objects
+   * @returns Pokemon[]
+   */
+  getAllPokemon(){
+    return this.getAllPokemonResource().pipe(
+      switchMap(resourceList => forkJoin(
+        resourceList.map(r => this.getPokemonWithGen(r.name))
+      ))
+    )
   }
 
   /**
@@ -60,49 +73,60 @@ export class PokemonService {
     return this.http.get<Pokemon>(url);
   }
 
-    /**
-   * Searches Pokemon by name or id from a large list
-   * @param term Search term to filter Pokemon names
-   * @param maxResults Maximum number of results to return
-   * @returns an Observable of NamedAPIResources
-   */
-  searchPokemon(term: string, maxResults: number = 20): Observable<NamedAPIResourceList> {
-    const termTrimmed = term.trim();
-    if (!termTrimmed) {
-      return of({ count: 0, next: null, previous: null, results: [] });
-    }
-
-    const isNumericSearch = /^\d+$/.test(termTrimmed); //use of regex to check if the term is numeric
-
-    if(isNumericSearch){
-      return this.getPokemonByID(parseInt(termTrimmed)).pipe( //passing the string as int and mapping return as a NamedAPIResource
-        map(pokemon =>({
-          count: 1,
-          next: null,
-          previous: null,
-          results: [{
-            name: pokemon.name,
-            url: `${this.baseURL}/pokemon/${pokemon.id}/`
-          }]
-        }))
-      );
-    } 
-    // Get a large list and filter client-side (PokeAPI doesn't have search endpoint)
-    return this.http.get<NamedAPIResourceList>(`${this.baseURL}/pokemon?limit=1000`).pipe(
-      map(response => {
-        const filtered = response.results.filter(pokemon =>
-          pokemon.name.toLowerCase().includes(term.toLowerCase())
-        );
-        
-        return {
-          count: filtered.length,
-          next: null,
-          previous: null,
-          results: filtered.slice(0, maxResults)
-        };
-      }),
-      catchError(() => of({ count: 0, next: null, previous: null, results: [] }))
-    );
+  getPokemonWithGen(name: string): Observable<Pokemon>{
+    return this.getPokemonByName(name).pipe(
+    switchMap(pokemon => 
+      this.getPokemonSpecies(pokemon.species.url).pipe(
+        switchMap(species => 
+          this.getGeneration(species.generation.url).pipe(
+            map(generation => ({
+              ...pokemon,
+              generation: species.generation.name,
+              region: generation.main_region.name
+            }))
+          )
+        )
+      )
+    )
+  );
   }
+
+  /**
+ * Get Pokemon Species data
+ * @param url Species URL
+ * @returns PokemonSpecies
+ */
+private getPokemonSpecies(url: string) {
+  return this.http.get<PokemonSpecies>(url);
+}
+
+/**
+ * Get Generation data
+ * @param url Generation URL
+ * @returns Generation
+ */
+private getGeneration(url: string) {
+  return this.http.get<Generation>(url);
+}
+  getTypes(){
+    return this.http.get<{results: {name: string}[]}>(`${this.baseURL}/type`).pipe(
+      map(res => res.results
+        .map(t => t.name)
+      )
+    )
+  }
+
+  getGenerations(){
+    return this.http.get<{results : {name: string}[]}>(`${this.baseURL}/generation`).pipe(
+      map(res =>res.results.map(g => g.name))
+    )
+  }
+
+  getRegions(){
+    return this.http.get<{results: {name: string}[]}>(`${this.baseURL}/region`).pipe(
+      map(res => res.results.map(r => r.name))
+    )
+  }
+
 }
 

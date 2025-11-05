@@ -1,14 +1,15 @@
 import { Injectable, signal } from '@angular/core';
-import { NamedAPIResource } from '../pokemon-models';
+import { NamedAPIResource } from '../../models/pokemon-models';
 import { computed } from '@angular/core';
 import { NgZone } from '@angular/core';
+import { Pokemon } from '../../models/pokemon-models';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PokemonCatalogPagination {
-  private readonly pokemonList = signal<NamedAPIResource[]>([]);
-  private readonly loadedPokemon = signal<NamedAPIResource[]>([])
+  private readonly pokemonList = signal<Pokemon[]>([]);
+  private readonly loadedPokemon = signal<Pokemon[]>([])
 
   private pageSize = 20;
 
@@ -25,8 +26,8 @@ export class PokemonCatalogPagination {
 
   constructor(private readonly ngZone: NgZone){}
 
-  setPokemonList(list: NamedAPIResource[], pageSize: number = 20): void{
-    console.log("setting pagination list");
+  setPokemonList(list: Pokemon[], pageSize: number = 20): void{
+    console.log("raw list reached pagination component: ", list);
     this.pokemonList.set(list ?? []);
     this.pageSize = pageSize;
 
@@ -42,10 +43,9 @@ export class PokemonCatalogPagination {
     this.isLoading.set(true);
 
     setTimeout(() => {
-    console.log("loadmoreifneeded");
+    console.log("loading more pokemon...");
     const list = this.pokemonList();
     const offset = this.offset();
-    console.log(list as NamedAPIResource[]);
 
     if(offset>=list.length){
       this.hasMore.set(false);
@@ -55,9 +55,9 @@ export class PokemonCatalogPagination {
 
 
     const nextChunk = list.slice(offset, offset + this.pageSize);
-    console.log(nextChunk as NamedAPIResource[]);
-    console.log(this.pageSize + offset);
+    console.log("Loading pokemons: ", nextChunk as Pokemon[]);
     this.loadedPokemon.set([...this.loadedPokemon(), ...nextChunk]);
+    console.log("Loaded pokemons: ", this.loadedPokemon() as Pokemon[]);
     this.offset.set(offset + nextChunk.length);
     this.hasMore.set(this.offset() < this.pokemonList().length);
 
@@ -70,7 +70,7 @@ export class PokemonCatalogPagination {
       this.observer = new IntersectionObserver(entries => {
         for(const e of entries){
           if(e.isIntersecting){
-            console.log("daojiadsjio");
+            console.log("Scroll limit reached");
             this.ngZone.run(() => this.loadMore());
           }
         }
