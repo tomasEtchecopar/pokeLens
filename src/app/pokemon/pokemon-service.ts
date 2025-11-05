@@ -1,8 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin,  switchMap } from 'rxjs';
-import { NamedAPIResourceList} from './models/pokemon-models';
-import { Pokemon } from './models/pokemon-models';
+import { NamedAPIResourceList, NamedAPIResource} from './models/pokemon-models';
+import { Pokemon, PokemonSpecies, Generation } from './models/pokemon-models';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs';
 
 /**
@@ -40,7 +41,7 @@ export class PokemonService {
   getAllPokemon(){
     return this.getAllPokemonResource().pipe(
       switchMap(resourceList => forkJoin(
-        resourceList.map(r => this.getPokemonByName(r.name))
+        resourceList.map(r => this.getPokemonWithGen(r.name))
       ))
     )
   }
@@ -72,6 +73,41 @@ export class PokemonService {
     return this.http.get<Pokemon>(url);
   }
 
+  getPokemonWithGen(name: string): Observable<Pokemon>{
+    return this.getPokemonByName(name).pipe(
+    switchMap(pokemon => 
+      this.getPokemonSpecies(pokemon.species.url).pipe(
+        switchMap(species => 
+          this.getGeneration(species.generation.url).pipe(
+            map(generation => ({
+              ...pokemon,
+              generation: species.generation.name,
+              region: generation.main_region.name
+            }))
+          )
+        )
+      )
+    )
+  );
+  }
+
+  /**
+ * Get Pokemon Species data
+ * @param url Species URL
+ * @returns PokemonSpecies
+ */
+private getPokemonSpecies(url: string) {
+  return this.http.get<PokemonSpecies>(url);
+}
+
+/**
+ * Get Generation data
+ * @param url Generation URL
+ * @returns Generation
+ */
+private getGeneration(url: string) {
+  return this.http.get<Generation>(url);
+}
   getTypes(){
     return this.http.get<{results: {name: string}[]}>(`${this.baseURL}/type`).pipe(
       map(res => res.results

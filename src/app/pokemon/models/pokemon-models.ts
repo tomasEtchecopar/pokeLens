@@ -30,11 +30,21 @@ export interface Pokemon {
     species: NamedAPIResource;
     stats: PokemonStat[];
     types: PokemonType[];
+    generation?: string;
+    region?: string; 
 }
 
-export interface NamedAPIResource {
+//necessary for getting generation and region
+export interface PokemonSpecies {
+    id: number;
     name: string;
-    url: string;
+    generation: NamedAPIResource
+}
+
+export interface Generation {
+    id: number;
+    name: string; 
+    main_region: NamedAPIResource; 
 }
 
 export interface PokemonAbility {

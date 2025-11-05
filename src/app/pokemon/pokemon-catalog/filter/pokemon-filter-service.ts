@@ -33,6 +33,16 @@ export class PokemonFilterService{
     if(f.type){
       list=list.filter(p => p.types.some(t => t.type.name === f.type))
     }
+    if (f.generation) {
+      list = list.filter(p => p.generation === f.generation);
+    }
+    if(f.region){
+      list=list.filter(p => p.region ===f.region);
+    }
+    if (f.minHeight !== undefined) list = list.filter(p => p.height >= f.minHeight!);
+    if (f.maxHeight !== undefined) list = list.filter(p => p.height <= f.maxHeight!);
+    if (f.minWeight !== undefined) list = list.filter(p => p.weight >= f.minWeight!);
+    if (f.maxWeight !== undefined) list = list.filter(p => p.weight <= f.maxWeight!)
 
     return list;
   }
