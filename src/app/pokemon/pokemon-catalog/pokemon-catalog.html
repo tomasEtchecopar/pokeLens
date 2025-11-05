@@ -1,13 +1,13 @@
 <div class="catalog">
     <h1>PokeLens</h1>
 
-<!--     SEARCH BAR -->
+    <!--     SEARCH BAR -->
     <div class="search-section">
-            <app-search-bar placeholder="Buscar pokemon..." (searchUpdate)="onSearch($event)" ></app-search-bar>
-            @if (!hasSearchResults() && !isLoading()) {
-                <p>No se encontraron resultados...</p>
-            }
-            <app-pokemon-filter-dropdown (filterUpdate)="applyFilters($event)"></app-pokemon-filter-dropdown>
+        <app-search-bar placeholder="Buscar pokemon..." (searchUpdate)="onSearch($event)"></app-search-bar>
+        @if (!hasSearchResults() && !isLoading()) {
+        <p>No se encontraron resultados...</p>
+        }
+        <app-pokemon-filter-dropdown (filterUpdate)="applyFilters($event)"></app-pokemon-filter-dropdown>
     </div>
 
 
@@ -18,15 +18,16 @@
     }@else {
     <div class="grid">
         @for (pokemonResource of displayedPokemon(); track pokemonResource){
-        <app-pokemon-card [pokemon]="pokemonResource" (click)="navigateToDetails(pokemonResource.name)"></app-pokemon-card>
+        <app-pokemon-card [pokemon]="pokemonResource"
+            (click)="navigateToDetails(pokemonResource.name)"></app-pokemon-card>
         <!-- passes a namedAPIResource with name and url of each pokemon-->
         }
 
         @if (pagination.loading()) {
-            <div class="loading">Cargando mas Pokemon...</div>
+        <div class="loading">Cargando mas Pokemon...</div>
         }
     </div>
 
-}
+    }
     <div #scrollSentinel class="scroll-sentine"></div>
 </div>

@@ -7,24 +7,24 @@
  */
 export function translateType(typeName: string): string {
   const typeTranslations: { [key: string]: string } = {
-    'normal': 'normal',
-    'fire': 'fuego',
-    'water': 'agua',
-    'electric': 'eléctrico',
-    'grass': 'planta',
-    'ice': 'hielo',
-    'fighting': 'lucha',
-    'poison': 'veneno',
-    'ground': 'tierra',
-    'flying': 'volador',
-    'psychic': 'psíquico',
-    'bug': 'bicho',
-    'rock': 'roca',
-    'ghost': 'fantasma',
-    'dragon': 'dragón',
-    'dark': 'siniestro',
-    'steel': 'acero',
-    'fairy': 'hada'
+    'normal': 'Normal',
+    'fire': 'Fuego',
+    'water': 'Agua',
+    'electric': 'Eléctrico',
+    'grass': 'Planta',
+    'ice': 'Hielo',
+    'fighting': 'Lucha',
+    'poison': 'Veneno',
+    'ground': 'Tierra',
+    'flying': 'Volador',
+    'psychic': 'Psíquico',
+    'bug': 'Bicho',
+    'rock': 'Roca',
+    'ghost': 'Fantasma',
+    'dragon': 'Dragón',
+    'dark': 'Siniestro',
+    'steel': 'Acero',
+    'fairy': 'Hada'
   };
   return typeTranslations[typeName.toLowerCase()] || typeName;
 }

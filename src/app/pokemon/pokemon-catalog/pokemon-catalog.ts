@@ -1,6 +1,4 @@
 import { AfterViewInit, Component, ElementRef, OnDestroy, untracked, ViewChild } from '@angular/core';
-import { PokemonService } from '../pokemon-service';
-import { Pokemon } from '../models/pokemon-models';
 import { inject } from '@angular/core';
 import { computed } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -12,7 +10,8 @@ import { SearchBar } from "../../search-bar/search-bar";
 import { PokemonCatalogPagination } from './pagination/pokemon-catalog-pagination';
 import { PokemonFilterService } from './filter/pokemon-filter-service';
 import { PokemonFilterDropdown } from "../pokemon-filter-dropdown/pokemon-filter-dropdown";
-import { FilterOption, FilterOptions } from '../models/pokemon-filters';
+import { FilterOptions } from '../models/pokemon-filters';
+import { signal } from '@angular/core';
 
 @Component({
   selector: 'app-pokemon-catalog',
@@ -109,4 +108,10 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
     this.filtering.updateFilters(filters);
   }
 
+  //filter menu toggle; dont know where else to put it
+  filtersOpen = signal(false);
+
+  toggleFilters() {
+    this.filtersOpen.set(!this.filtersOpen());
+  }
 }
