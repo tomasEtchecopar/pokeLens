@@ -9,6 +9,7 @@ import { translateType } from '../models/pokemon-helpers';
  */
 @Component({
   selector: 'app-pokemon-card',
+  standalone: true,
   imports: [TitleCasePipe, NgOptimizedImage],
   templateUrl: './pokemon-card.html',
   styleUrl: './pokemon-card.css'

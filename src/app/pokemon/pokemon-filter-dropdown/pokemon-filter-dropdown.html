@@ -1,1 +1,50 @@
-<p>pokemon-filter-dropdown works!</p>
+<div class="multi-filter">
+  <div class="filter-row">
+    <div class="filter-item">
+      <label>Tipo</label>
+      <select [(ngModel)]="selectedType" (ngModelChange)="onChange()">
+        <option value="">Todos los tipos</option>
+        @for (type of types(); track type.value) {
+          <option [value]="type.value">{{ type.label }}</option>
+        }
+      </select>
+    </div>
+    <div class="filter-item">
+      <label>Generación</label>
+      <select [(ngModel)]="selectedGeneration" (ngModelChange)="onChange()">
+        <option value="">Todas</option>
+        @for (gen of generations(); track gen.value) {
+          <option [value]="gen.value">{{ gen.label }}</option>
+        }
+      </select>
+    </div>
+    <div class="filter-item">
+      <label>Región</label>
+      <select [(ngModel)]="selectedRegion" (ngModelChange)="onChange()">
+        <option value="">Todas</option>
+        @for (region of regions(); track region.value) {
+          <option [value]="region.value">{{ region.label }}</option>
+        }
+      </select>
+    </div>
+  </div>
+  <div class="filter-row">
+    <div class="filter-item range">
+      <label>Altura (dm)</label>
+      <div class="range-inputs">
+        <input type="number" placeholder="Mín" [(ngModel)]="minHeight" (ngModelChange)="onChange()">
+        <span>—</span>
+        <input type="number" placeholder="Máx" [(ngModel)]="maxHeight" (ngModelChange)="onChange()">
+      </div>
+    </div>
+    <div class="filter-item range">
+      <label>Peso (hg)</label>
+      <div class="range-inputs">
+        <input type="number" placeholder="Mín" [(ngModel)]="minWeight" (ngModelChange)="onChange()">
+        <span>—</span>
+        <input type="number" placeholder="Máx" [(ngModel)]="maxWeight" (ngModelChange)="onChange()">
+      </div>
+    </div>
+  </div>
+  <button class="clear-btn" (click)="clear()">Limpiar filtros</button>
+</div>

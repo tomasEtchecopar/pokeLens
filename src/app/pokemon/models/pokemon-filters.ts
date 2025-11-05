@@ -1,10 +1,10 @@
-export interface FilterType{
+export interface FilterOptions{
     type?: PokemonType;
     generation?: PokemonGeneration;
     region?: PokemonRegion;
     minHeight?: number;
     maxHeight?: number;
-    mixWeight?: number;
+    minWeight?: number;
     maxWeight?: number;
 }
 

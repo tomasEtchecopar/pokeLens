@@ -11,10 +11,12 @@ import { PokemonCatalogSearch } from './search/pokemon-catalog-search';
 import { SearchBar } from "../../search-bar/search-bar";
 import { PokemonCatalogPagination } from './pagination/pokemon-catalog-pagination';
 import { PokemonFilterService } from './filter/pokemon-filter-service';
+import { PokemonFilterDropdown } from "../pokemon-filter-dropdown/pokemon-filter-dropdown";
+import { FilterOption, FilterOptions } from '../models/pokemon-filters';
 
 @Component({
   selector: 'app-pokemon-catalog',
-  imports: [PokemonCard, ReactiveFormsModule, SearchBar],
+  imports: [ReactiveFormsModule, PokemonCard, SearchBar, PokemonFilterDropdown],
   templateUrl: './pokemon-catalog.html',
   styleUrl: './pokemon-catalog.css'
 })
@@ -97,8 +99,14 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   navigateToDetails(id: string | number): void {
     this.router.navigateByUrl(`catalogo/${id}`);
   }
-onSearch(term: string){
+  
+  onSearch(term: string){
     this.pokemonSearch.search(term);
+  }
+
+  applyFilters(filters: FilterOptions){
+    console.log("filters button pressed");
+    this.filtering.updateFilters(filters);
   }
 
 }

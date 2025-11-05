@@ -10,6 +10,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-search-bar',
+  standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './search-bar.html',
   styleUrl: './search-bar.css',

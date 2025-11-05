@@ -86,5 +86,11 @@ export class PokemonService {
     )
   }
 
+  getRegions(){
+    return this.http.get<{results: {name: string}[]}>(`${this.baseURL}/region`).pipe(
+      map(res => res.results.map(r => r.name))
+    )
+  }
+
 }
 

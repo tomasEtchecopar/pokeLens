@@ -1,13 +1,62 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { FilterType } from '../models/pokemon-filters';
+import { Component } from '@angular/core';
+import { FilterOptions, PokemonGeneration, PokemonRegion, PokemonType } from '../models/pokemon-filters';
+import { PokemonFiltersTranslation} from './pokemon-filters-translation';
+import { inject } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { model } from '@angular/core';
+import { output } from '@angular/core';
 
 @Component({
   selector: 'app-pokemon-filter-dropdown',
-  imports: [],
+  standalone:true,
+  imports: [FormsModule],
   templateUrl: './pokemon-filter-dropdown.html',
   styleUrl: './pokemon-filter-dropdown.css',
 })
 export class PokemonFilterDropdown {
-  @Output() filterChanged = new EventEmitter<FilterType>()
+  private readonly filtersTransaltions = inject(PokemonFiltersTranslation);
+  filterUpdate= output<FilterOptions>();
+
+selectedType = model<string>('');
+  selectedGeneration = model<string>('');
+  selectedRegion = model<string>('');
+  minHeight = model<number | null>(null);
+  maxHeight = model<number | null>(null);
+  minWeight = model<number | null>(null);
+  maxWeight = model<number | null>(null);
+
+  protected types = this.filtersTransaltions.types;
+  protected generations = this.filtersTransaltions.generations;
+  protected regions = this.filtersTransaltions.regions;
+
+  private emit(){
+    const filters: FilterOptions= {
+      type: this.selectedType() as PokemonType || undefined,
+      generation: this.selectedGeneration() as PokemonGeneration || undefined,
+      region: this.selectedRegion() as PokemonRegion || undefined,
+      minHeight: this.minHeight() ?? undefined,
+      maxHeight: this.maxHeight() ?? undefined,
+      minWeight: this.minWeight() ?? undefined,
+      maxWeight: this.maxWeight() ?? undefined,
+    };
+
+    this.filterUpdate.emit(filters);
+  }
+
+  protected onChange = () => {
+    console.log('changes detected; emitting...');
+    this.emit();
+  }
+
+  clear(){
+    this.selectedType.set('');
+    this.selectedGeneration.set('');
+    this.selectedRegion.set('');
+    this.minHeight.set(null);
+    this.maxHeight.set(null);
+    this.minWeight.set(null);
+    this.maxWeight.set(null);
+    this.emit();
+  }
 
 }
