@@ -49,7 +49,7 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   protected readonly allPokemon = this.filtering.filteredPokemon;
 
   /**
-   * Search results from the list above; full list in case of no results
+   * Search results from the list above; full list in case of no results/input
    */
   protected readonly pokemonList = this.pokemonSearch.results;
 
@@ -75,7 +75,7 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
       if(list && list.length) this.pokemonSearch.setPokemonList(list); //setting up search
       const searchResults = this.pokemonList();
       if(searchResults && searchResults.length){
-        untracked(() => this.pagination.setPokemonList(list, 20)) //setting up pagination
+        untracked(() => this.pagination.setPokemonList(searchResults, 50)) //setting up pagination
       }
     })
   };
@@ -105,7 +105,7 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   }
 
   applyFilters(filters: FilterOptions){
-    console.log("filters button pressed");
+    console.log("detected event on filter buttons");
     this.filtering.updateFilters(filters);
   }
 
