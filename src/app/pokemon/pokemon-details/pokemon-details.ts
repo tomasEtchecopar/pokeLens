@@ -1,11 +1,10 @@
-import { Component, inject } from '@angular/core';
-import { Pokemon } from '../models/pokemon-models';
+import { Component, inject, linkedSignal } from '@angular/core';
 import { computed } from '@angular/core';
-import { input } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute} from '@angular/router';
 import { DecimalPipe, TitleCasePipe } from '@angular/common';
 import { PokemonCard } from '../pokemon-card/pokemon-card';
 import { PokemonService } from '../pokemon-service';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -15,10 +14,10 @@ import { PokemonService } from '../pokemon-service';
 })
 export class PokemonDetails {
   private readonly service = inject(PokemonService);
-  private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly pokemonName = this.route.snapshot.paramMap.get('name');
 
-  readonly pokemon = input.required<Pokemon>();
+  protected readonly pokemon= toSignal(this.service.getPokemon(this.pokemonName!));
 
   protected readonly isLoading = computed(() => this.pokemon() === undefined);
 }

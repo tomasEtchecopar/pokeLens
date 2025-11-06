@@ -27,7 +27,7 @@ export class PokemonCatalogPagination {
   constructor(private readonly ngZone: NgZone){}
 
   setPokemonList(list: Pokemon[], pageSize: number = 20): void{
-    console.log("raw list reached pagination component: ", list);
+    console.log("raw list: ", list);
     this.pokemonList.set(list ?? []);
     this.pageSize = pageSize;
 

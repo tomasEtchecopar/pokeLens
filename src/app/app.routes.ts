@@ -13,7 +13,7 @@ export const routes: Routes = [
         title: 'Catalogo Pokemon'
     },
     {
-        path: 'catalogo/:id', component: PokemonDetails, //aca va PokemonDetails (SEBA)
+        path: 'catalogo/:name', component: PokemonDetails, //aca va PokemonDetails (SEBA)
         title: 'Detalles de Pokémon' //eventualmente cambiar a nombre de pokemon
     },
     {

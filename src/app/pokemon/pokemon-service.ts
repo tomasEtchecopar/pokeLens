@@ -100,6 +100,7 @@ export class PokemonService {
    * @returns Pokemon
    */
   getPokemon(nameOrId: string): Observable<Pokemon> {
+    console.log("getting pokemon: " + nameOrId);
     return this.getPokemonByName(nameOrId).pipe(
       switchMap(pokemon =>
         this.getPokemonSpecies(pokemon.species.url).pipe(
