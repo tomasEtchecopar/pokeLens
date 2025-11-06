@@ -108,10 +108,5 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
     this.filtering.updateFilters(filters);
   }
 
-  //filter menu toggle; dont know where else to put it
-  filtersOpen = signal(false);
 
-  toggleFilters() {
-    this.filtersOpen.set(!this.filtersOpen());
-  }
 }
