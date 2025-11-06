@@ -1,4 +1,3 @@
-/* Pokedex Screen Styles - Retro Edition */
 .pokedex-screen {
   width: 100%;
   height: 240px;
@@ -101,7 +100,9 @@
 }
 
 .screen-header {
-  text-align: right;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   border-bottom: 2px solid #333;
   padding-bottom: 0.15rem;
   margin-bottom: 0.15rem;
@@ -109,6 +110,12 @@
 }
 
 .poke-number {
+  color: #2c2c2c;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 0.85rem;
+}
+.poke-region {
   color: #2c2c2c;
   font-family: 'Courier New', monospace;
   font-weight: bold;
