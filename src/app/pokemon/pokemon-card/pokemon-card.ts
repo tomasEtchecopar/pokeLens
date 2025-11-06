@@ -16,8 +16,6 @@ import { translateType } from '../models/pokemon-helpers';
 })
 export class PokemonCard {
 
-  private service = inject(PokemonService);
-
   readonly pokemon= input.required<Pokemon>();
 
 
