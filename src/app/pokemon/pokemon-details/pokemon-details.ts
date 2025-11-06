@@ -5,6 +5,7 @@ import { input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DecimalPipe, TitleCasePipe } from '@angular/common';
 import { PokemonCard } from '../pokemon-card/pokemon-card';
+import { PokemonService } from '../pokemon-service';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -13,6 +14,7 @@ import { PokemonCard } from '../pokemon-card/pokemon-card';
   styleUrl: './pokemon-details.css'
 })
 export class PokemonDetails {
+  private readonly service = inject(PokemonService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
 
