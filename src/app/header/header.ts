@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLinkActive } from "@angular/router";
+import { Router, RouterLinkActive, RouterLinkWithHref } from "@angular/router";
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.html',
   styleUrl: './header.css',
-  imports: [RouterLinkActive],
+  imports: [RouterLinkActive, RouterLinkWithHref],
 })
 export class Header {
   private readonly router = inject(Router);
@@ -15,5 +15,11 @@ export class Header {
   }
   goToLogIn(){
     this.router.navigateByUrl('logIn');
+  }
+  goToCatalogue(){
+    this.router.navigateByUrl('vault');
+  }
+  goToMain(){
+    this.router.navigateByUrl('catalogo')
   }
 }

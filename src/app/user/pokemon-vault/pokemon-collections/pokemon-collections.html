@@ -1,0 +1,9 @@
+<form [formGroup]="form" (ngSubmit)="buildCollection()">
+  <div class="form-field">
+    <label for="name">Nombre del pokemon</label>
+    <input type="text" id="name" formControlName="name">
+  </div>
+
+  <button type="submit">Submit</button>
+</form>
+

@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { PokemonCatalog } from './pokemon/pokemon-catalog/pokemon-catalog';
 import { LogIn } from './user/log-in/log-in';
 import { SignIn } from './user/sign-in/sign-in';
+import { PokemonCollections } from './user/pokemon-vault/pokemon-collections/pokemon-collections';
 
 export const routes: Routes = [
     {
@@ -22,6 +23,10 @@ export const routes: Routes = [
     {
         path: 'signIn', component: SignIn,
         title: 'Sign In'
+    },
+    {
+        path:'vault', component: PokemonCollections,
+        title: 'Vault'
     },
     {
         path: '**', redirectTo: 'catalogo'
