@@ -44,18 +44,26 @@
 }
 
 .catalog h1 {
-  color: white;
-  font-size: 3.5rem;
-  font-weight: 900;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  font-size: 2.2rem;
   text-align: center;
-  margin: 1rem 0;
-  padding: 0 1rem;
-  text-shadow: 3px 3px 0px #2c2c2c, 4px 4px 8px rgba(0, 0, 0, 0.6);
-  letter-spacing: 4px;
-  font-family: 'Courier New', monospace;
   text-transform: uppercase;
+  letter-spacing: 3px;
+  padding: 2rem 1rem 1rem;
+  margin: 0 auto;
+  text-shadow:
+    2px 2px 0 #111,
+    4px 4px 0 #111;
+  background: #d43030;
+  display: inline-block;
+  border: 3px solid #000;
+  border-radius: 6px;
+  box-shadow: 0 0 12px rgba(0,0,0,0.8);
+    position: relative;
+  left: 50%;
+  transform: translateX(-50%);
 }
-
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
