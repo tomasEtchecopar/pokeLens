@@ -1,7 +1,6 @@
 <div class="catalog">
     <h1>PokeLens</h1>
 
-    <!--     SEARCH BAR -->
     <div class="search-section">
         <app-search-bar placeholder="Buscar pokemon..." (searchUpdate)="onSearch($event)"></app-search-bar>
         @if (!hasSearchResults() && !isLoading()) {
@@ -20,7 +19,6 @@
         @for (pokemonResource of displayedPokemon(); track pokemonResource){
         <app-pokemon-card [pokemon]="pokemonResource"
             (click)="navigateToDetails(pokemonResource.name)"></app-pokemon-card>
-        <!-- passes a namedAPIResource with name and url of each pokemon-->
         }
 
         @if (pagination.loading()) {

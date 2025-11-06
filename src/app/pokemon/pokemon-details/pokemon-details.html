@@ -1,8 +1,9 @@
-@let p = pokemon();
+@let p = this.pokemon();
 
+@if (p){
 <div class="details-root">
     <div class="details-header">
-        <h1>{{ p.name | titlecase }}</h1>
+        <h1>{{ p!.name | titlecase }}</h1>
         <span class="poke-number">#{{ p.id }}</span>
     </div>
 
@@ -76,3 +77,6 @@
         </div>
     </div>
 </div>
+}@else {
+    <p>No se encontro el pokemon</p>
+}
