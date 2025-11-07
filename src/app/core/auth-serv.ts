@@ -1,5 +1,5 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { User } from '../user-model';
+import { User } from '../user/user-model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { map } from 'rxjs/internal/operators/map';
 import { tap } from 'rxjs/internal/operators/tap';
