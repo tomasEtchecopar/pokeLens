@@ -1,4 +1,4 @@
-import { User } from '../user-model';
+import { User } from '../user/user-model';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 
