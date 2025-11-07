@@ -6,4 +6,6 @@ export interface User {
   password: string,
   pokemonCatalogues?: [],
   pokemonTeams?: []
+  pokemonId?: number;
+  avatarUrl?: string;
 }
