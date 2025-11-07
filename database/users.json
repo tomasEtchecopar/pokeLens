@@ -1,11 +1,41 @@
 {
   "users": [
+    
     {
-      "id": "3b88",
-      "username": "wado wado",
-      "age": 27,
-      "mail": "waowado@gmail.com",
-      "password": "123456"
+      "id": "e2a0",
+      "username": "adrian",
+      "age": 31,
+      "mail": "adriannggonzalez@gmail.com",
+      "password": "123456",
+      "pokemonId": 304,
+      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/304.png"
+    },
+    {
+      "id": "08a1",
+      "username": "asd",
+      "age": 8,
+      "mail": "asd",
+      "password": "asd",
+      "pokemonId": 533,
+      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/533.png"
+    },
+    {
+      "id": "d243",
+      "username": "asd22",
+      "age": 8,
+      "mail": "dasdasdasd",
+      "password": "asd",
+      "pokemonId": 353,
+      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/353.png"
+    },
+    {
+      "id": "2e40",
+      "username": "adad",
+      "age": 8,
+      "mail": "adadad",
+      "password": "asd",
+      "pokemonId": 35,
+      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/35.png"
     }
   ]
 }
