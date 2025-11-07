@@ -1,5 +1,5 @@
 import { Component, computed, inject, input } from '@angular/core';
-import { PokemonService } from '../pokemon-service';
+import { PokeApiService } from '../pokeapi-service';
 import { Pokemon } from '../models/pokemon-models';
 import { NgOptimizedImage, TitleCasePipe } from '@angular/common';
 import { translateType } from '../models/pokemon-helpers';
