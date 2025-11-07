@@ -3,6 +3,7 @@ import { Pokemon } from '../../models/pokemon-models';
 import { FilterOptions } from '../../models/pokemon-filters';
 import { PokemonService } from '../../pokemon-service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { PokemonListService } from '../../pokemon-list-service';
 
 
 @Injectable({
@@ -10,8 +11,10 @@ import { toSignal } from '@angular/core/rxjs-interop';
 })
 // Service that manages the pokemon list; search, pagination and ordering are done over it
 export class PokemonFilterService{
-  private readonly service = inject(PokemonService);
-  private readonly allPokemon = toSignal(this.service.getAllPokemon(), {initialValue: [] as Pokemon[]});
+
+  private readonly pokemonListService = inject(PokemonListService);
+
+  readonly allPokemon = this.pokemonListService.allPokemon;
 
   private readonly filters = signal<FilterOptions>({});
 
