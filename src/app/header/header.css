@@ -116,3 +116,41 @@
     font-size: 0.85rem;
   }
 }
+
+/* --- Ajustes para el avatar --- */
+.btn-header.avatar-btn {
+  padding: 0 !important;         
+  line-height: 0 !important;     
+  width: 46px !important;
+  height: 46px !important;
+  border-radius: 50% !important;
+  overflow: hidden !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.btn-header.avatar-btn .avatar {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  border-radius: 50% !important;
+  display: block !important;
+  max-width: none !important;     
+}
+
+.btn-header.avatar-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 0 #0a0a0a;
+}
+.btn-header.avatar-btn:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 0 #0a0a0a;
+}
+
+@media (max-width: 480px) {
+  .btn-header.avatar-btn {
+    width: 40px !important;
+    height: 40px !important;
+  }
+}

@@ -1,5 +1,6 @@
-import { Component, inject } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLinkActive } from "@angular/router";
+import { AuthServ } from '../core/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -9,14 +10,32 @@ import { Router, RouterLinkActive } from "@angular/router";
 })
 export class Header {
   private readonly router = inject(Router);
+  private readonly auth = inject(AuthServ);
 
-  goToSignIn(){
+  readonly user = computed(() => this.auth.activeUser());
+
+
+  goToSignIn() {
     this.router.navigateByUrl('signIn');
   }
-  goToLogIn(){
+  goToLogIn() {
     this.router.navigateByUrl('logIn');
   }
-  goToCatalog(){
+  goToCatalog() {
     this.router.navigateByUrl('catalog');
   }
+
+  goToProfile() {
+    this.router.navigateByUrl('/perfil'); // asegurate de tener esta ruta
+  }
+
+  logOut() {
+    this.auth.logOut();
+    this.router.navigateByUrl('/login');
+  }
+  setDefaultAvatar(event: Event) {
+    const img = event.target as HTMLImageElement;
+    img.src = 'assets/avatars/default.jpg';
+  }
+
 }

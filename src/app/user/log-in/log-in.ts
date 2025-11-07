@@ -1,11 +1,11 @@
 import { Component, inject } from '@angular/core';
-import { AuthServ } from './auth-serv';
-import { FormBuilder, Validators } from '@angular/forms';
+import { AuthServ } from '../../core/auth.service';
+import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-log-in',
-  imports: [],
+  imports: [ReactiveFormsModule],
   templateUrl: './log-in.html',
   styleUrl: './log-in.css',
 })
@@ -27,11 +27,17 @@ export class LogIn {
     }
 
     const { username, password } = this.form.getRawValue();
-    this.auth.login(username, password)
 
-    if (this.auth.isLoggedIn()) {
-      this.router.navigate(['/catalog']);
-    }
+    // SUSCRIBIRSE y recién ahí navegar
+    this.auth.login(username, password).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/catalogo');   
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Usuario o contraseña incorrectos');
+      }
+    });
   }
 
 }
