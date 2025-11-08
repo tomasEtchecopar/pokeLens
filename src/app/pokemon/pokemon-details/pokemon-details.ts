@@ -1,14 +1,15 @@
 import { Component, inject, linkedSignal } from '@angular/core';
 import { computed } from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
-import { DecimalPipe, TitleCasePipe } from '@angular/common';
+import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { PokemonCard } from '../pokemon-card/pokemon-card';
 import { PokeApiService } from '../pokeapi-service';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { translateType } from '../models/pokemon-helpers';
 
 @Component({
   selector: 'app-pokemon-details',
-  imports: [TitleCasePipe, PokemonCard, DecimalPipe],
+  imports: [TitleCasePipe, PokemonCard, DecimalPipe, NgClass],
   templateUrl: './pokemon-details.html',
   styleUrl: './pokemon-details.css'
 })
@@ -20,4 +21,6 @@ export class PokemonDetails {
   protected readonly pokemon= toSignal(this.service.getPokemon(this.pokemonName!));
 
   protected readonly isLoading = computed(() => this.pokemon() === undefined);
+  
+  protected translateType = translateType;
 }
