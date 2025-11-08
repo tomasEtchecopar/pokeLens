@@ -1,5 +1,9 @@
 @let p = this.pokemon();
 
+@if(this.isLoading()){
+<p>Cargando Pokemon...</p>
+}@else {
+
 @if (p){
 <div class="details-root">
     <div class="details-header">
@@ -78,5 +82,6 @@
     </div>
 </div>
 }@else {
-    <p>No se encontro el pokemon</p>
+<p>No se encontro el pokemon</p>
+}
 }
