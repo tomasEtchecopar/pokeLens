@@ -9,22 +9,24 @@ import { computed } from '@angular/core';
 export class DailyPokemonService {
   private readonly pokeListService = inject(PokemonListService);
 
+  //generates index based on current date
   readonly pokemonOfTheDay = computed(() => {
     const allPokemon = this.pokeListService.allPokemon();
     if(allPokemon.length === 0) return null;
 
-    const today = new Date().toISOString().split('T')[0];
-    const seed = this.hashString(today);
+    const today = new Date().toISOString().split('T')[0]; //yyy-mm-dd
+    const seed = this.hashString(today); 
     const index = seed % allPokemon.length;
 
     return allPokemon[index];
   });
 
+  //converts string to consistent numeric hash 
   private hashString(str: string): number{
     let hash = 0;
     for(let i = 0; i<str.length;i++){
-      hash =((hash << 5) - hash) + str.charCodeAt(i);
-      hash= hash & hash;
+      hash = hash * 31+ str.charCodeAt(i);
+      hash= hash | 0;
     }
     return Math.abs(hash);
   }
