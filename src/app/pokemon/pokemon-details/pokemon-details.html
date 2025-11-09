@@ -1,82 +1,115 @@
 @let p = this.pokemon();
 
-@if (p){
-<div class="details-root">
-    <div class="details-header">
-        <h1>{{ p!.name | titlecase }}</h1>
-        <span class="poke-number">#{{ p.id }}</span>
-    </div>
+@if(this.isLoading()){
+    <p>Cargando Pokemon...</p>
+}@else {
 
-    <div class="details-layout">
-        <!-- Tarjeta reutilizada -->
-        <app-pokemon-card [pokemon]="p"></app-pokemon-card>
+    @if (p){
+    <div class="details-root">
+        <div class="details-header">
+            <h1>{{ p!.name | titlecase }}</h1>
+            <span class="poke-number">#{{ p.id }}</span>
+        </div>
 
-        <div class="details-info">
-            <!-- Badges -->
-            <div class="badges-row">
-                <span class="badge generation">{{ p.generation }}</span>
-                <span class="badge region">{{ p.region }}</span>
-                @for (t of p.types; track t.type.name) {
-                <span class="badge">{{ t.type.name | titlecase }}</span>
-                }
-            </div>
+        <div class="details-layout">
+            <app-pokemon-card [pokemon]="p"></app-pokemon-card>
 
-            <div class="metrics">
-                <div class="metric">
-                    <label>Altura</label>
-                    {{ (p.height / 10) | number:'1.1-1' }} m
+            <div class="details-info">
+                <div class="badges-row">
+                    <span class="badge generation">{{ p.generation }}</span>
+                    <span class="badge region">{{ p.region }}</span>
+                    @for (t of p.types; track t.type.name) {
+                    <span class="badge type-{{ t.type.name }}">{{ translateType(t.type.name) | titlecase }}</span>
+                    }
                 </div>
-                <div class="metric">
-                    <label>Peso</label>
-                    {{ (p.weight / 10) | number:'1.1-1' }} kg
+
+                <div class="metrics">
+                    <div class="metric">
+                        <label>Altura</label>
+                        {{ (p.height / 10) | number:'1.1-1' }} m
+                    </div>
+                    <div class="metric">
+                        <label>Peso</label>
+                        {{ (p.weight / 10) | number:'1.1-1' }} kg
+                    </div>
+                    <div class="metric">
+                        <label>Experiencia base</label>
+                        {{ p.base_experience }}
+                    </div>
                 </div>
-                <div class="metric">
-                    <label>Experiencia base</label>
-                    {{ p.base_experience }}
-                </div>
-            </div>
 
-            <div class="section">
-                <h3>Habilidades</h3>
-                <ul>
-                    @for (a of p.abilities; track a.ability.name) {
-                    <li>{{ a.ability.name | titlecase }}</li>
-                    }
-                </ul>
-            </div>
+<div class="section stats-section">
+  <h3>Estadísticas</h3>
+  <ul>
+    @for (s of p.stats; track s.stat.name) {
+<li>
+  <span class="stat-name">{{ s.stat.name | titlecase }}</span>
+  <span class="stat-value">{{ s.base_stat }}</span>
+  <div class="stat-bar">
+    <div
+      class="stat-bar-fill"
+      [ngClass]="{
+        'low': s.base_stat < 80,
+        'mid': s.base_stat >= 80 && s.base_stat < 150,
+        'high': s.base_stat >= 150
+      }"
+      [style.width.%]="s.base_stat / 2"
+    ></div>
+  </div>
+</li>
 
-            <div class="section">
-                <h3>Estadísticas</h3>
-                <ul>
-                    @for (s of p.stats; track s.stat.name) {
-                    <li>
-                        <span class="stat-name">{{ s.stat.name | titlecase }}</span>
-                        <span class="stat-value">{{ s.base_stat }}</span>
-                    </li>
-                    }
-                </ul>
-            </div>
+    }
+  </ul>
+</div>
 
-            <div class="section">
-                <h3>Sprites</h3>
-                <div class="sprites-grid">
-                    @if (p.sprites.front_default) {
-                    <img [src]="p.sprites.front_default" alt="Frente">
-                    }
-                    @if (p.sprites.back_default) {
-                    <img [src]="p.sprites.back_default" alt="Espalda">
-                    }
-                    @if (p.sprites.front_shiny) {
-                    <img [src]="p.sprites.front_shiny" alt="Frente shiny">
-                    }
-                    @if (p.sprites.back_shiny) {
-                    <img [src]="p.sprites.back_shiny" alt="Espalda shiny">
-                    }
+<!-- Habilidades -->
+<div class="section abilities-section">
+  <h3>Habilidades</h3>
+  <div class="abilities-row">
+    @for (a of p.abilities; track a.ability.name) {
+      <span class="ability-badge" [ngClass]="a.is_hidden ? 'hidden' : 'normal'">
+        {{ a.ability.name | titlecase }}
+        @if(a.is_hidden) { <small>(Oculta)</small> }
+      </span>
+    }
+  </div>
+</div>
+
+                <div class="section">
+                    <h3>Sprites</h3>
+                    <div class="sprites-sets">
+                        <div class="sprites-group">
+                            <div class="sprites-group-header">
+                                <span>Normal</span>
+                            </div>
+                            <div class="sprites-grid sprites-normal">
+                                @if (p.sprites.front_default) {
+                                <img [src]="p.sprites.front_default" alt="Frente">
+                                }
+                                @if (p.sprites.back_default) {
+                                <img [src]="p.sprites.back_default" alt="Espalda">
+                                }
+                            </div>
+                        </div>
+                        <div class="sprites-group">
+                            <div class="sprites-group-header">
+                                <span>Shiny</span>
+                            </div>
+                            <div class="sprites-grid sprites-shiny">
+                                @if (p.sprites.front_shiny) {
+                                <img [src]="p.sprites.front_shiny" alt="Frente shiny">
+                                }
+                                @if (p.sprites.back_shiny) {
+                                <img [src]="p.sprites.back_shiny" alt="Espalda shiny">
+                                }
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-}@else {
-    <p>No se encontro el pokemon</p>
+        }@else {
+            <p>No se encontro el pokemon</p>
+            }
 }
