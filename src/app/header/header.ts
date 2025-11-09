@@ -26,16 +26,16 @@ export class Header {
   }
 
   goToProfile() {
-    this.router.navigateByUrl('/perfil'); // asegurate de tener esta ruta
+    this.router.navigateByUrl('/profile'); 
   }
 
   logOut() {
     this.auth.logOut();
-    this.router.navigateByUrl('/login');
+    this.router.navigateByUrl('/catalog');
   }
   setDefaultAvatar(event: Event) {
-    const img = event.target as HTMLImageElement;
-    img.src = 'assets/avatars/default.jpg';
-  }
+  const img = event.target as HTMLImageElement;
+  img.src = 'default.png';
+}
 
 }

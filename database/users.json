@@ -1,41 +1,39 @@
 {
   "users": [
-    
     {
       "id": "e2a0",
-      "username": "adrian",
+      "username": "adrian gonzalez",
       "age": 31,
       "mail": "adriannggonzalez@gmail.com",
       "password": "123456",
+      "pokemonId": 5,
+      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/5.png"
+    },
+    {
+      "id": "fd0c",
+      "username": "adrian22",
+      "age": 22,
+      "mail": "sadasd",
+      "password": "1234",
       "pokemonId": 304,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/304.png"
     },
     {
-      "id": "08a1",
-      "username": "asd",
-      "age": 8,
-      "mail": "asd",
-      "password": "asd",
-      "pokemonId": 533,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/533.png"
-    },
-    {
-      "id": "d243",
-      "username": "asd22",
-      "age": 8,
-      "mail": "dasdasdasd",
-      "password": "asd",
-      "pokemonId": 353,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/353.png"
-    },
-    {
-      "id": "2e40",
-      "username": "adad",
-      "age": 8,
-      "mail": "adadad",
-      "password": "asd",
-      "pokemonId": 35,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/35.png"
+      "id": "85f6",
+      "username": "Jessica Petroli",
+      "age": 31,
+      "mail": "jessy@gmail.com",
+      "password": "1234",
+      "pokemonId": 7,
+      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png"
+    },{
+      "id": "84f6",
+      "username": "prueba",
+      "age": 31,
+      "mail": "prueba@gmail.com",
+      "password": "1234",
+      "pokemonId": null,
+      "avatarUrl": "public/default.png"
     }
   ]
 }

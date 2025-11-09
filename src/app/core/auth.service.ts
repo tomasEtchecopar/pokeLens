@@ -27,7 +27,9 @@ export class AuthServ {
       map(users => users[0] ?? null),
       tap(user => {
         if (!user) throw new Error('Credenciales inválidas');
+
         this.activeUser.set(user);
+        localStorage.setItem('activeUser', JSON.stringify(user));
       }),
       map(() => void 0)
     );
@@ -35,8 +37,19 @@ export class AuthServ {
 
   logOut() {
     this.activeUser.set(undefined);
-  }
+      localStorage.removeItem('activeUser');
 
+  }
+  restoreSession() {
+    const data = localStorage.getItem('activeUser');
+    if (!data) return;
+    try {
+      const user = JSON.parse(data) as User;
+      this.activeUser.set(user);
+    } catch {
+      localStorage.removeItem('activeUser');
+    }
+  }
 
 
 }
