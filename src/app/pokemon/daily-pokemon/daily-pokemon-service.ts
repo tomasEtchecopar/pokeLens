@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { PokemonListService } from './pokemon-list-service';
+import { PokemonListService } from '../pokemon-list-service';
 import { inject } from '@angular/core';
 import { computed } from '@angular/core';
 
