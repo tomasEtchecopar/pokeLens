@@ -6,12 +6,11 @@
   <div class="header-buttons">
     @if (user(); as currentUser) {
     <!-- Botón de avatar  -->
-     <button class="btn-header avatar-btn" (click)="goToProfile()" aria-label="Perfil">
-      <img [src]="currentUser.avatarUrl || 'assets/avatars/default.jpg'" alt="Perfil" class="avatar"
+    <button class="btn-header avatar-btn" (click)="goToProfile()" aria-label="Perfil">
+      <img [src]="currentUser.avatarUrl || 'default.png'" alt="Perfil" class="avatar"
         (error)="setDefaultAvatar($event)" />
     </button>
 
-    
     <button class="btn-header" (click)="logOut()">Salir</button>
     } @else {
     <button class="btn-header" routerLink="/logIn" routerLinkActive="active" (click)="goToLogIn()">Log In</button>

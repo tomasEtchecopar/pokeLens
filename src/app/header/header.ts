@@ -34,8 +34,8 @@ export class Header {
     this.router.navigateByUrl('/catalog');
   }
   setDefaultAvatar(event: Event) {
-    const img = event.target as HTMLImageElement;
-    img.src = 'assets/avatars/default.jpg';
-  }
+  const img = event.target as HTMLImageElement;
+  img.src = 'default.png';
+}
 
 }

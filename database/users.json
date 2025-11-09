@@ -26,6 +26,14 @@
       "password": "1234",
       "pokemonId": 7,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/7.png"
+    },{
+      "id": "84f6",
+      "username": "prueba",
+      "age": 31,
+      "mail": "prueba@gmail.com",
+      "password": "1234",
+      "pokemonId": null,
+      "avatarUrl": "public/default.png"
     }
   ]
 }

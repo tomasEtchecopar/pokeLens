@@ -22,4 +22,9 @@ export class Profile {
   backToCatalog() { this.router.navigateByUrl('/catalogo'); }
   edit() { this.isEditing.set(true); }
   cancelEdit() { this.isEditing.set(false); }
+
+  setDefaultAvatar(event: Event) {
+    const img = event.target as HTMLImageElement;
+    img.src = 'default.png';
+  }
 }
