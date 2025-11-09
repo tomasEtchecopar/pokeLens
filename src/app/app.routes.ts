@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
-import { PokemonCatalog } from './pokemon/pokemon-catalog/pokemon-catalog';
 import { LogIn } from './user/log-in/log-in';
+import { PokemonCatalog } from './pages/pokemon-catalog/pokemon-catalog';
 import { SignIn } from './user/sign-in/sign-in';
-import { PokemonDetails } from './pokemon/pokemon-details/pokemon-details';
 import { Profile } from './user/profile/profile';
+import { PokemonDetails } from './pages/pokemon-details/pokemon-details';
 
 export const routes: Routes = [
     {

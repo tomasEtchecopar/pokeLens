@@ -2,10 +2,10 @@ import { Component, inject, linkedSignal } from '@angular/core';
 import { computed } from '@angular/core';
 import { ActivatedRoute} from '@angular/router';
 import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
-import { PokemonCard } from '../pokemon-card/pokemon-card';
-import { PokeApiService } from '../pokeapi-service';
+import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
 import { toSignal } from '@angular/core/rxjs-interop';
-import { translateType } from '../models/pokemon-helpers';
+import { PokeApiService } from '../../pokemon/pokeapi-service';
+import { translateType } from '../../pokemon/models/pokemon-helpers';
 
 @Component({
   selector: 'app-pokemon-details',
