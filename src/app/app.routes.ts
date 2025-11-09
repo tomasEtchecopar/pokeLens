@@ -4,10 +4,14 @@ import { PokemonCatalog } from './pages/pokemon-catalog/pokemon-catalog';
 import { SignIn } from './user/sign-in/sign-in';
 import { Profile } from './user/profile/profile';
 import { PokemonDetails } from './pages/pokemon-details/pokemon-details';
+import { HomePage } from './pages/home-page/home-page';
 
 export const routes: Routes = [
     {
-        path: '', redirectTo: 'catalogo', pathMatch: 'full'
+        path: '', redirectTo: 'home', pathMatch: 'full'
+    },{
+        path: 'home', component: HomePage,
+        title: 'Inicio'
     },
     {
         path: 'catalogo', component: PokemonCatalog,

@@ -1,0 +1,14 @@
+<div class="home-container">
+    <img src="poke-lens-logo.png" alt="PokeLens" class="logo"/>
+
+    <div class="featured-section">
+        <h2>POKEMON DEL DIA</h2>
+        @if(pokemonOfTheDay(); as p){
+            <div class="pokemon-featured">
+                <app-pokemon-card [pokemon]="p"></app-pokemon-card>
+            </div>
+        }
+    </div>
+
+
+</div>
