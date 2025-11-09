@@ -5,8 +5,8 @@
 
   <div class="header-buttons">
     @if (user(); as currentUser) {
-    <!-- Botón de avatar (misma estética de tus botones) -->
-    <button class="btn-header avatar-btn" (click)="goToProfile()" aria-label="Perfil">
+    <!-- Botón de avatar  -->
+     <button class="btn-header avatar-btn" (click)="goToProfile()" aria-label="Perfil">
       <img [src]="currentUser.avatarUrl || 'assets/avatars/default.jpg'" alt="Perfil" class="avatar"
         (error)="setDefaultAvatar($event)" />
     </button>
