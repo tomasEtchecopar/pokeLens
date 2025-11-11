@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PokemonListService } from '../pokemon-list-service';
 import { inject } from '@angular/core';
 import { computed } from '@angular/core';
+import { Pokemon } from '../models/pokemon-models';
 
 @Injectable({
   providedIn: 'root'
@@ -11,14 +12,19 @@ export class DailyPokemonService {
 
   //generates index based on current date
   readonly pokemonOfTheDay = computed(() => {
-    const allPokemon = this.pokeListService.allPokemon();
+    const allPokemon = this.pokeListService.allPokemonResource();
     if(allPokemon.length === 0) return null;
 
     const today = new Date().toISOString().split('T')[0]; //yyy-mm-dd
     const seed = this.hashString(today); 
     const index = seed % allPokemon.length;
 
-    return allPokemon[index];
+    const pokemon = this.pokeListService.allPokemon()[index];
+    if(pokemon){
+      return pokemon;
+    }else{
+    return allPokemon[index] as unknown as Pokemon;
+    }
   });
 
   //converts string to consistent numeric hash 
