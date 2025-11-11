@@ -21,6 +21,7 @@ export interface Pokemon {
     weight: number; // hectograms
     base_experience: number;
 
+    moves: PokemonMove[];
     abilities: PokemonAbility[];
     forms: NamedAPIResource[];
     game_indices: PokemonGameIndex[];

@@ -1,1 +1,11 @@
-<p>log-in works!</p>
+<form [formGroup]="form" (ngSubmit)="logIn()">
+    <div class='form-field'>
+        <label for="username">Nombre de usuario</label>
+        <input formControlName="username" placeholder="Ash Ketchum">
+    </div>
+    <div class="form-field">
+        <label for="password">Contraseña</label>
+        <input formControlName="password" type="password" placeholder="Contraseña">
+    </div>
+    <button  type="submit">Iniciar sesión</button>
+</form>

@@ -1,0 +1,12 @@
+npx json-server --watch database/users.json --port 3000 
+
+git pull:
+git branch
+git checkout tu-branch
+git pull origin tu-branch
+--------------------------
+git push:
+git add .
+git commit -m "Progreso: agrega componente perfil (a medias)"
+git push origin tu-branch
+--------------------------

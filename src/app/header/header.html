@@ -1,12 +1,20 @@
 <div class="header-container">
-  <a class="logo-link" routerLink="/catalogo" routerLinkActive="active" (click)="goToCatalog()">
-    <img src="poke-lens-logo.png" alt="Catalogo" class="logo">
+  <a class="logo-link" routerLink="/home" routerLinkActive="active" (click)="goToHome()">
+    <img src="poke-lens-logo.png" alt="Inicio" class="logo" />
   </a>
 
   <div class="header-buttons">
+    @if (user(); as currentUser) {
+    <!-- Botón de avatar  -->
+    <button class="btn-header avatar-btn" (click)="goToProfile()" aria-label="Perfil">
+      <img [src]="currentUser.avatarUrl || 'default.png'" alt="Perfil" class="avatar"
+        (error)="setDefaultAvatar($event)" />
+    </button>
+
+    <button class="btn-header" (click)="logOut()">Salir</button>
+    } @else {
     <button class="btn-header" routerLink="/logIn" routerLinkActive="active" (click)="goToLogIn()">Log In</button>
     <button class="btn-header" routerLink="/signIn" routerLinkActive="active" (click)="goToSignIn()">Sign In</button>
-    <button class="btn-header" routerLink="/vault" routerLinkActive="active" (click)="goToCatalogue()">Catalogues</button>
-    <button class="btn-header" routerLink="/catalogo" routerLinkActive="active" (click)="goToMain()">Go Back</button>
+    }
   </div>
 </div>

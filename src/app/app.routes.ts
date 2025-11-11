@@ -1,20 +1,24 @@
 import { Routes } from '@angular/router';
-import { PokemonCatalog } from './pokemon/pokemon-catalog/pokemon-catalog';
 import { LogIn } from './user/log-in/log-in';
+import { PokemonCatalog } from './pages/pokemon-catalog/pokemon-catalog';
 import { SignIn } from './user/sign-in/sign-in';
-import { PokemonDetails } from './pokemon/pokemon-details/pokemon-details';
-import { PokemonCollections } from './user/pokemon-vault/pokemon-collections/pokemon-collections';
+import { Profile } from './user/profile/profile';
+import { PokemonDetails } from './pages/pokemon-details/pokemon-details';
+import { HomePage } from './pages/home-page/home-page';
 
 export const routes: Routes = [
     {
-        path: '', redirectTo: 'catalogo', pathMatch: 'full'
+        path: '', redirectTo: 'home', pathMatch: 'full'
+    },{
+        path: 'home', component: HomePage,
+        title: 'Inicio'
     },
     {
         path: 'catalogo', component: PokemonCatalog,
         title: 'Catalogo Pokemon'
     },
     {
-        path: 'catalogo/:name', component: PokemonDetails,
+        path: 'catalogo/:name', component: PokemonDetails, 
         title: 'Detalles de Pokémon' //eventualmente cambiar a nombre de pokemon
     },
     {
@@ -26,8 +30,13 @@ export const routes: Routes = [
         title: 'Sign In'
     },
     {
-        path:'vault', component: PokemonCollections,
-        title: 'Vault'
+        path: 'profile', component: Profile,
+        title: 'Perfil de Usuario'
+         
+    },
+    {
+        path:'edit-profile', component: Profile,
+        title: 'Editar Perfil de Usuario'
     },
     {
         path: '**', redirectTo: 'catalogo'

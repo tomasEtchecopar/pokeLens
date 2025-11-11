@@ -12,7 +12,7 @@ import { map } from 'rxjs';
  * Handles all the HTTP calls to get Pokemon data - lists, by name, or by URL
  */
 @Injectable({ providedIn: 'root' })
-export class PokemonService {
+export class PokeApiService {
   private readonly baseURL = "https://pokeapi.co/api/v2";
   private readonly http = inject(HttpClient);
 

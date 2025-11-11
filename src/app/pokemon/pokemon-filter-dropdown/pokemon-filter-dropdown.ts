@@ -14,7 +14,7 @@ import { output } from '@angular/core';
   styleUrl: './pokemon-filter-dropdown.css',
 })
 export class PokemonFilterDropdown {
-  private readonly filtersTransaltions = inject(PokemonFiltersTranslation);
+  private readonly filtersTranslations= inject(PokemonFiltersTranslation);
   filterUpdate= output<FilterOptions>();
 
 selectedType = model<string>('');
@@ -25,19 +25,19 @@ selectedType = model<string>('');
   minWeight = model<number | null>(null);
   maxWeight = model<number | null>(null);
 
-  protected types = this.filtersTransaltions.types;
-  protected generations = this.filtersTransaltions.generations;
-  protected regions = this.filtersTransaltions.regions;
+  protected types = this.filtersTranslations.types;
+  protected generations = this.filtersTranslations.generations;
+  protected regions = this.filtersTranslations.regions;
 
   private emit(){
     const filters: FilterOptions= {
       type: this.selectedType() as PokemonType || undefined,
       generation: this.selectedGeneration() as PokemonGeneration || undefined,
       region: this.selectedRegion() as PokemonRegion || undefined,
-      minHeight: this.minHeight() ?? undefined,
-      maxHeight: this.maxHeight() ?? undefined,
-      minWeight: this.minWeight() ?? undefined,
-      maxWeight: this.maxWeight() ?? undefined,
+      minHeight: (this.minHeight() ?? undefined) !== undefined ? this.minHeight()! / 10 : undefined,
+      maxHeight: (this.maxHeight() ?? undefined) !== undefined ? this.maxHeight()! / 10 : undefined,
+      minWeight: (this.minWeight() ?? undefined) !== undefined ? this.minWeight()! * 10 : undefined,
+      maxWeight: (this.maxWeight() ?? undefined) !== undefined ? this.maxWeight()! * 10 : undefined,
     };
 
     this.filterUpdate.emit(filters);

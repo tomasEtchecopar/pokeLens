@@ -1,0 +1,35 @@
+<div class="father">
+
+    @if (!isEditing()) {
+    <div class="child">
+        <h2>Perfil de Usuario</h2>
+
+        @if (usuario(); as u) {
+        <div class="profile-row">
+            <img [src]="u.avatarUrl || 'default.png'" alt="avatar" class="avatar-lg"
+                (error)="setDefaultAvatar($event)" />
+            <div>
+                <p><strong>Usuario:</strong> {{ u.username }}</p>
+                <p><strong>Email:</strong> {{ u.mail }}</p>
+                <p><strong>Edad:</strong> {{ u.age }}</p>
+            </div>
+        </div>
+
+        <div class="actions">
+            <button class="btn" (click)="isEditing.set(true)">Editar perfil</button>
+            <button class="btn" (click)="backToCatalog()">Volver al catálogo</button>
+        </div>
+        } @else {
+        <p>No hay usuario activo. Iniciá sesión.</p>
+        }
+    </div>
+    } @else {
+    <!-- Reutilizo el formulario del SignIn para editar -->
+    <app-sign-in [client]="usuario()" [(isEditing)]="isEditing"></app-sign-in>
+
+    <div class="actions">
+        <button class="btn" (click)="isEditing.set(false)">Cancelar</button>
+    </div>
+    }
+
+</div>
