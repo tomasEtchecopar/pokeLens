@@ -30,15 +30,15 @@ export function translateType(typeName: string): string {
 }
 export function translateGeneration(generationName: string): string {
   const generationTranslations: { [key: string]: string } = {
-    'generation-i': 'Generación I',
-    'generation-ii': 'Generación II',
-    'generation-iii': 'Generación III',
-    'generation-iv': 'Generación IV',
-    'generation-v': 'Generación V',
-    'generation-vi': 'Generación VI',
-    'generation-vii': 'Generación VII',
-    'generation-viii': 'Generación VIII',
-    'generation-ix': 'Generación IX'
+    'generation-i': 'Generación 1',
+    'generation-ii': 'Generación 2',
+    'generation-iii': 'Generación 3',
+    'generation-iv': 'Generación 4',
+    'generation-v': 'Generación 5',
+    'generation-vi': 'Generación 6',
+    'generation-vii': 'Generación 7',
+    'generation-viii': 'Generación 8',
+    'generation-ix': 'Generación 9'
   };
   return generationTranslations[generationName.toLowerCase()] || generationName;
 }

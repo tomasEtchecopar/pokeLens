@@ -3,10 +3,11 @@ import { PokemonCatalog } from "../pokemon-catalog/pokemon-catalog";
 import { DailyPokemonService } from '../../pokemon/daily-pokemon/daily-pokemon-service';
 import { inject } from '@angular/core';
 import { PokemonCard } from "../../pokemon/pokemon-card/pokemon-card";
+import { RouterLink, RouterLinkActive } from "@angular/router";
 
 @Component({
   selector: 'app-home-page',
-  imports: [PokemonCard],
+  imports: [PokemonCard, RouterLink, RouterLinkActive],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css',
 })

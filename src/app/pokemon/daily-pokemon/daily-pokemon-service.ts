@@ -11,14 +11,19 @@ export class DailyPokemonService {
 
   //generates index based on current date
   readonly pokemonOfTheDay = computed(() => {
-    const allPokemon = this.pokeListService.allPokemon();
+    const allPokemon = this.pokeListService.allPokemonResource();
     if(allPokemon.length === 0) return null;
 
     const today = new Date().toISOString().split('T')[0]; //yyy-mm-dd
     const seed = this.hashString(today); 
     const index = seed % allPokemon.length;
 
+    const pokemon = this.pokeListService.allPokemon()[index];
+    if(pokemon){
+      return pokemon;
+    }else{
     return allPokemon[index];
+    }
   });
 
   //converts string to consistent numeric hash 
