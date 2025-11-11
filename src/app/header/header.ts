@@ -26,7 +26,11 @@ export class Header {
   }
 
   goToProfile() {
-    this.router.navigateByUrl('/profile'); 
+    this.router.navigateByUrl('/profile');
+  }
+
+  goToVault(){
+    this.router.navigateByUrl('/vault');
   }
 
   logOut() {
