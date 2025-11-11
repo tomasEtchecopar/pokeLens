@@ -102,23 +102,30 @@ form > button {
   box-shadow: 0 1px 0 #8a2020;
 }
 
-/* Reset button variant */
-.btn-vault[type="reset"] {
-  background: #6c757d;
-  box-shadow: 0 3px 0 #495057;
-}
-
-.btn-vault[type="reset"]:hover {
-  background: #5a6268;
-  box-shadow: 0 3px 0 #3a3f44;
-}
-
-.btn-vault[type="reset"]:active {
-  box-shadow: 0 1px 0 #3a3f44;
-}
-
 .btn-vault:disabled {
   background: #666;
   cursor: not-allowed;
   box-shadow: 0 3px 0 #444;
+}
+
+.btn-vault-back {
+  width: 100%;
+  padding: 0.875rem;
+  margin-bottom: 0.75rem;
+  background: #7a7a7a;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
+  box-shadow: 0 3px 0 #a02a2a;
+}
+
+.btn-vault-back:hover {
+  background: #2b2b2b;
 }
