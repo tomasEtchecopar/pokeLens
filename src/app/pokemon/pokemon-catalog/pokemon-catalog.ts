@@ -95,8 +95,8 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
       this.pagination.disconnect();
   }
 
-  navigateToDetails(id: string | number): void {
-    this.router.navigateByUrl(`catalogo/${id}`);
+  navigateToDetails(name: string): void {
+    this.router.navigateByUrl(`catalogo/${name}`);
   }
   
   onSearch(term: string){
@@ -108,10 +108,5 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
     this.filtering.updateFilters(filters);
   }
 
-  //filter menu toggle; dont know where else to put it
-  filtersOpen = signal(false);
 
-  toggleFilters() {
-    this.filtersOpen.set(!this.filtersOpen());
-  }
 }

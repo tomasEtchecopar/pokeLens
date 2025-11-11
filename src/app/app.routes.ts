@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { PokemonCatalog } from './pokemon/pokemon-catalog/pokemon-catalog';
 import { LogIn } from './user/log-in/log-in';
 import { SignIn } from './user/sign-in/sign-in';
+import { PokemonDetails } from './pokemon/pokemon-details/pokemon-details';
 import { PokemonCollections } from './user/pokemon-vault/pokemon-collections/pokemon-collections';
 
 export const routes: Routes = [
@@ -13,7 +14,7 @@ export const routes: Routes = [
         title: 'Catalogo Pokemon'
     },
     {
-        path: 'catalogo/:id', component: PokemonCatalog, //aca va PokemonDetails (SEBA)
+        path: 'catalogo/:name', component: PokemonDetails,
         title: 'Detalles de Pokémon' //eventualmente cambiar a nombre de pokemon
     },
     {

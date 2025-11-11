@@ -16,10 +16,7 @@ export class Header {
   goToLogIn(){
     this.router.navigateByUrl('logIn');
   }
-  goToCatalogue(){
-    this.router.navigateByUrl('vault');
-  }
-  goToMain(){
-    this.router.navigateByUrl('catalogo')
+  goToCatalog(){
+    this.router.navigateByUrl('catalog');
   }
 }
