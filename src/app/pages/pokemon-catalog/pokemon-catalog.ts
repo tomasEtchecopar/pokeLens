@@ -23,8 +23,6 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
    * Sets up infinite scroll
    */
   @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>; 
-  
-  private readonly router = inject(Router);
 
   /**
    * This is where we get our pokemon list from
@@ -94,10 +92,7 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
       this.pagination.disconnect();
   }
 
-  navigateToDetails(name: string): void {
-    this.router.navigateByUrl(`catalogo/${name}`);
-  }
-  
+   
   onSearch(term: string){
     this.pokemonSearch.search(term);
   }

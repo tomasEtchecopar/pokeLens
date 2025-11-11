@@ -5,7 +5,7 @@
             <p>Cargando...</p>
         </div>
     }@else if(pokemon){
-        <div class="screen-bezel">
+        <div class="screen-bezel" (click)="navigateToDetails(pokemon.name)">
             <div class="screen-left">
                 <div class="lcd-screen">
                     <div class="sprite-container">
