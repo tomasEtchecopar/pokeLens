@@ -1,7 +1,8 @@
 export interface pokemonVault {
-  idPokemon: string | number,
-  name: string,
-  nickname?: string,
-  moves?: string[],
-  nature?: string
+  arrayId: number,
+  idPokemon: string | number | undefined,
+  name: string | undefined,
+  nickname?: string | undefined,
+  moves?: string[] | undefined,
+  nature?: string | undefined
 }
