@@ -1,5 +1,5 @@
 import { Pokemon } from "../../pokemon/models/pokemon-models";
-import { pokemonVault } from "./pokemon-collections/collection-model";
+import { pokemonVault } from "../../pages/pokemon-collections/collection-model";
 
 export function mapPokemonToVault(pokemon: Pokemon): pokemonVault {
   return {
