@@ -5,6 +5,7 @@ import { SignIn } from './user/sign-in/sign-in';
 import { Profile } from './user/profile/profile';
 import { PokemonDetails } from './pages/pokemon-details/pokemon-details';
 import { HomePage } from './pages/home-page/home-page';
+import { PokemonCollections } from './pages/pokemon-collections/pokemon-collections';
 
 export const routes: Routes = [
     {
@@ -18,7 +19,7 @@ export const routes: Routes = [
         title: 'Catalogo Pokemon'
     },
     {
-        path: 'catalogo/:name', component: PokemonDetails, 
+        path: 'catalogo/:name', component: PokemonDetails,
         title: 'Detalles de Pokémon' //eventualmente cambiar a nombre de pokemon
     },
     {
@@ -32,11 +33,15 @@ export const routes: Routes = [
     {
         path: 'profile', component: Profile,
         title: 'Perfil de Usuario'
-         
+
     },
     {
         path:'edit-profile', component: Profile,
         title: 'Editar Perfil de Usuario'
+    },
+    {
+        path:'vault', component: PokemonCollections,
+        title:'Pokemon Vault'
     },
     {
         path: '**', redirectTo: 'catalogo'
