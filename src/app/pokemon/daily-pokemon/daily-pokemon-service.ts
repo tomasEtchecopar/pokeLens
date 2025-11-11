@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { PokemonListService } from '../pokemon-list-service';
 import { inject } from '@angular/core';
 import { computed } from '@angular/core';
+import { Pokemon } from '../models/pokemon-models';
 
 @Injectable({
   providedIn: 'root'
@@ -22,7 +23,7 @@ export class DailyPokemonService {
     if(pokemon){
       return pokemon;
     }else{
-    return allPokemon[index];
+    return allPokemon[index] as unknown as Pokemon;
     }
   });
 
