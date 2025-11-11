@@ -18,20 +18,11 @@ export class PokemonCollections {
     name: ['', Validators.required]
   })
 
-  searchPokemon(name: string){
-    return this.pkmService.getPokemonByName(name);
-  }
-
   addToCollection(array: Array<Pokemon>){
   }
 
   buildCollection(){
     const collection: Pokemon[] = [];
-    const pkm = this.searchPokemon(this.form.getRawValue().name);
-
-    pkm.forEach(value => {
-      console.log(collection.push(value));
-    })
 
     console.log(collection[0]);
 
