@@ -11,10 +11,13 @@
         (error)="setDefaultAvatar($event)" />
     </button>
 
+    <button class="btn-header" routerLink="/vault" routerLinkActive="active" (click)="goToVault()">Vault</button>
+
     <button class="btn-header" (click)="logOut()">Salir</button>
     } @else {
     <button class="btn-header" routerLink="/logIn" routerLinkActive="active" (click)="goToLogIn()">Log In</button>
     <button class="btn-header" routerLink="/signIn" routerLinkActive="active" (click)="goToSignIn()">Sign In</button>
+    <button class="btn-header" routerLink="/catalogo" routerLinkActive="active" (click)="goToHome()">Go Back</button>
     }
   </div>
 </div>

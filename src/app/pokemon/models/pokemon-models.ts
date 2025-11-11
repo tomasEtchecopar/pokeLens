@@ -32,7 +32,7 @@ export interface Pokemon {
     stats: PokemonStat[];
     types: PokemonType[];
     generation?: string;
-    region?: string; 
+    region?: string;
 }
 
 //necessary for getting generation and region
@@ -44,8 +44,8 @@ export interface PokemonSpecies {
 
 export interface Generation {
     id: number;
-    name: string; 
-    main_region: NamedAPIResource; 
+    name: string;
+    main_region: NamedAPIResource;
 }
 
 export interface PokemonAbility {

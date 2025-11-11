@@ -12,7 +12,7 @@ import { RouterLink, RouterLinkActive } from "@angular/router";
   styleUrl: './home-page.css',
 })
 export class HomePage {
-  private readonly dailyPokemonService = inject(DailyPokemonService); 
+  private readonly dailyPokemonService = inject(DailyPokemonService);
 
   readonly pokemonOfTheDay = this.dailyPokemonService.pokemonOfTheDay;
 }
