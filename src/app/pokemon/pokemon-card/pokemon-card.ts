@@ -19,7 +19,6 @@ export class PokemonCard {
   readonly pokemon= input.required<Pokemon>();
 
 
-  protected readonly isLoading = computed(() => this.pokemon() === undefined);
   
   protected translateType = translateType;
 
