@@ -1,9 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { Pokemon } from '../../models/pokemon-models';
-import { FilterOptions } from '../../models/pokemon-filters';
-import { PokeApiService } from '../../pokeapi-service';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { PokemonListService } from '../../pokemon-list-service';
+import { PokemonListService } from '../../../pokemon/pokemon-list-service';
+import { Pokemon } from '../../../pokemon/models/pokemon-models';
+import { FilterOptions } from '../../../pokemon/models/pokemon-filters';
 
 
 @Injectable({

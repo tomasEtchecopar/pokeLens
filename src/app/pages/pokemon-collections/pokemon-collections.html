@@ -1,0 +1,17 @@
+<header class="header-buttons">
+
+</header>
+
+<form [formGroup]="form" (ngSubmit)="addCollection()">
+  <div class="form-field">
+    <label for="name">Nombre del pokemon</label>
+    <input type="text" id="name" formControlName="name">
+  </div>
+  <div class="form-field">
+    <label for="isMega">Is Mega Version?</label>
+    <input type="checkbox" id="isMega" formControlName="isMega">
+  </div>
+  <button class="btn-vault" type="submit">Submit</button>
+  <button class="btn-vault-back" routerLink="/vault" routerLinkActive="active" (click)="backToCatalog()">Go back</button>
+</form>
+

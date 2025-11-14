@@ -1,6 +1,6 @@
 <div class="header-container">
-  <a class="logo-link" routerLink="/catalogo" routerLinkActive="active" (click)="goToCatalog()">
-    <img src="poke-lens-logo.png" alt="Catalogo" class="logo" />
+  <a class="logo-link" routerLink="/home" routerLinkActive="active" (click)="goToHome()">
+    <img src="poke-lens-logo.png" alt="Inicio" class="logo" />
   </a>
 
   <div class="header-buttons">
@@ -10,6 +10,8 @@
       <img [src]="currentUser.avatarUrl || 'default.png'" alt="Perfil" class="avatar"
         (error)="setDefaultAvatar($event)" />
     </button>
+
+    <button class="btn-header" routerLink="/vault" routerLinkActive="active" (click)="goToVault()">Vault</button>
 
     <button class="btn-header" (click)="logOut()">Salir</button>
     } @else {

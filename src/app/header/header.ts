@@ -21,12 +21,16 @@ export class Header {
   goToLogIn() {
     this.router.navigateByUrl('logIn');
   }
-  goToCatalog() {
-    this.router.navigateByUrl('catalog');
+  goToHome() {
+    this.router.navigateByUrl('home');
   }
 
   goToProfile() {
-    this.router.navigateByUrl('/profile'); 
+    this.router.navigateByUrl('/profile');
+  }
+
+  goToVault(){
+    this.router.navigateByUrl('/vault');
   }
 
   logOut() {

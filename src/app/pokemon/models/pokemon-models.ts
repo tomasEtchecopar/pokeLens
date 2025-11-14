@@ -21,6 +21,7 @@ export interface Pokemon {
     weight: number; // hectograms
     base_experience: number;
 
+    moves: PokemonMove[];
     abilities: PokemonAbility[];
     forms: NamedAPIResource[];
     game_indices: PokemonGameIndex[];
@@ -31,7 +32,7 @@ export interface Pokemon {
     stats: PokemonStat[];
     types: PokemonType[];
     generation?: string;
-    region?: string; 
+    region?: string;
 }
 
 //necessary for getting generation and region
@@ -43,8 +44,8 @@ export interface PokemonSpecies {
 
 export interface Generation {
     id: number;
-    name: string; 
-    main_region: NamedAPIResource; 
+    name: string;
+    main_region: NamedAPIResource;
 }
 
 export interface PokemonAbility {

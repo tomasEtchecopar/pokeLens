@@ -1,0 +1,21 @@
+<div class="home-container">
+    <img src="poke-lens-logo.png" alt="PokeLens" class="logo"/>
+    <p class="subtitle">Bienvenido a PokeLens, una wiki y gestor de equipos Pokémon.</p>
+
+    <div class="featured-section">
+        <h2>POKEMON DEL DIA</h2>
+        @if(pokemonOfTheDay(); as p){
+            <div class="pokemon-featured">
+                <app-pokemon-card [pokemon]="p"></app-pokemon-card>
+            </div>
+        }
+    </div>
+
+    <div class="navigation-section">
+        <div class="catalog-button">
+            <button routerLink="/catalog" routerLinkActive="active">ir al catalogo</button>
+        </div>
+    </div>
+
+
+</div>

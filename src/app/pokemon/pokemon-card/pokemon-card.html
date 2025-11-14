@@ -1,15 +1,11 @@
 <div class="pokedex-screen">
         @let pokemon = this.pokemon();
-        @if(isLoading()){
-        <div class="loading-screen">
-            <p>Cargando...</p>
-        </div>
-    }@else if(pokemon){
-        <div class="screen-bezel">
+      @if(pokemon){
+        <div class="screen-bezel" (click)="navigateToDetails(pokemon.name)">
             <div class="screen-left">
                 <div class="lcd-screen">
                     <div class="sprite-container">
-                        <img width="200" height="200" [ngSrc]="pokemon.sprites.front_default!" alt="{{pokemon.name}}">
+                        <img width="200" height="200" [src]="pokemon.sprites.front_default!" alt="{{pokemon.name}}">
                     </div>
                 </div>
             </div>
@@ -21,7 +17,7 @@
                     </div>
                     <h2>{{ pokemon.name | titlecase }}</h2>
                     <div class="types">
-                        @for (type of pokemon.types; track type.type.name) {
+                        @for (type of pokemon.types; track type.slot) {
                             <span class="type type-{{ type.type.name }}">{{ translateType(type.type.name) | titlecase }}</span>
                         }
                     </div>
