@@ -9,7 +9,7 @@
 
   <div class="form-field">
     <label for="age">Edad</label>
-    <input type="number" id="age" formControlName="age" min="10" placeholder="25">
+    <input type="number" id="age" formControlName="age" min="8" placeholder="25">
     @if (form.get('age')?.invalid && form.get('age')?.touched) {
     <small>La edad es requerida</small>
     }

@@ -1,8 +1,8 @@
-import { Component, computed,  inject,  input } from '@angular/core';
+import { Component,  inject,  input } from '@angular/core';
 import { Pokemon } from '../models/pokemon-models';
-import { NgOptimizedImage, TitleCasePipe } from '@angular/common';
+import {  TitleCasePipe } from '@angular/common';
 import { translateType } from '../models/pokemon-helpers';
-import { Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { Router } from "@angular/router";
 
 /**
  * Card component that displays a single Pokemon.

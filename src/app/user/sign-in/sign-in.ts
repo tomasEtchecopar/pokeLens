@@ -55,7 +55,7 @@ export class SignIn implements OnInit {
 
     this.form.controls.mail.valueChanges
       .pipe(
-        debounceTime(350),
+        debounceTime(400),
         distinctUntilChanged(),
         switchMap(raw => {
           const ctrl = this.form.controls.mail;
@@ -146,11 +146,12 @@ export class SignIn implements OnInit {
           alert('Usuario registrado');
           this.auth.activeUser.set(createdUser);
           localStorage.setItem('activeUser', JSON.stringify(createdUser));
-          return this.router.navigateByUrl('/catalogo')
 
           this.form.reset({ username: '', age: 8, mail: '', password: '' });
           this.emailTaken = false;
           this.usernameTaken = false;
+          return this.router.navigateByUrl('/catalogo')
+
         },
         error: (err) => {
           console.error(err);

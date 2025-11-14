@@ -44,9 +44,45 @@ export class PointsService {
     return this.http.put<User>(`${this.baseUrl}/${user.id}`, updated).pipe(tap(() => {
       alert('Se le asignaron +10 Puntos por su ingreso diario!')
     }))
-
-
-
   }
 
+  /**
+   * Método GENÉRICO: sumar puntos por cualquier acción.
+   *
+   * @param user   Usuario actual
+   * @param amount Cantidad de puntos
+   * @param reason (opcional) Texto del motivo ("+10 puntos por crear una lista")
+   */
+  addPoints(user: User, amount: number, reason?: string): Observable<User> {
+    if (!user.id) return of(user);
+
+    const updated: User = {
+      ...user,
+      points: (user.points ?? 0) + amount
+    };
+
+    return this.http.put<User>(`${this.baseUrl}/${user.id}`, updated).pipe(
+      tap(() => {
+        if (reason) {
+          alert(`${reason}`);
+        }
+      })
+    );
+  }
 }
+//Aplicacion
+/* const user = this.auth.activeUser();
+
+  if (!user) return;
+  
+  this.points.addPoints(
+    user,
+    10,
+    '+10 puntos por agregar un Pokémon a tu colección'
+  ).subscribe(updatedUser => {
+
+    // actualizar usuario activo
+    this.auth.activeUser.set(updatedUser);
+    localStorage.setItem('activeUser', JSON.stringify(updatedUser));
+  });
+}*/
