@@ -8,4 +8,6 @@ export interface User {
   pokemonTeams?: []
   pokemonId?: number;
   avatarUrl?: string;
+  points? : number;
+  lastLoginDate? : string;
 }

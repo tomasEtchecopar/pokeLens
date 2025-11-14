@@ -1,67 +1,13 @@
 {
   "users": [
     {
-      "id": "6ec9",
-      "username": "adrian",
-      "age": 31,
-      "mail": "adriannggonzalez@gmail.com",
-      "password": "123456",
-      "pokemonId": 304,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/304.png"
-    },
-    {
-      "id": "f14d",
-      "username": "jessica",
-      "age": 31,
-      "mail": "asdasdas@gmail.com",
-      "password": "1234",
-      "pokemonId": 171,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/171.png"
-    },
-    {
-      "id": "296b",
-      "username": "jessica p",
-      "age": 31,
-      "mail": "asdas@gmail.com",
-      "password": "1234",
-      "pokemonId": 820,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/820.png"
-    },
-    {
-      "id": "a1b4",
-      "username": "jessica 333",
-      "age": 31,
-      "mail": "adriannggonzalez2222@gmail.com",
-      "password": "1234",
-      "pokemonId": 746,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/746.png"
-    },
-    {
-      "id": "0220",
-      "username": "adrian231",
-      "age": 23,
-      "mail": "adriannggonzalez2222222@gmail.com",
-      "password": "123456",
-      "pokemonId": 477,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/477.png"
-    },
-    {
-      "id": "ec2c",
-      "username": "ad4356",
-      "age": 31,
-      "mail": "ad1111riannggonzalez@gmail.com",
-      "password": "123456",
-      "pokemonId": 310,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/310.png"
-    },
-    {
-      "id": "6f62",
-      "username": "ad4356333",
-      "age": 33,
-      "mail": "adrian3333nggonzalez@gmail.com",
-      "password": "123456",
-      "pokemonId": 35,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/35.png"
+      "id": "asdf",
+      "username": "ash",
+      "password": "pikachu",
+      "mail": "ash@poke.com",
+      "age": 12,
+      "points": 20,
+      "lastLoginDate": "2025-11-14T14:07:11.427Z"
     }
   ]
 }
