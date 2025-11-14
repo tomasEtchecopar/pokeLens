@@ -31,6 +31,7 @@ export class LogIn {
     // SUSCRIBIRSE y recién ahí navegar
     this.auth.login(username, password).subscribe({
       next: () => {
+        console.log('Logueado correctamente')
         this.router.navigateByUrl('/catalogo');   
       },
       error: (err) => {

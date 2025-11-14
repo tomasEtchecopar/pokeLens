@@ -1,7 +1,7 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../user/user-model';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { map, tap } from 'rxjs';
+import { catchError, map, of, tap } from 'rxjs';
 
 
 
@@ -15,6 +15,25 @@ export class AuthServ {
 
   public readonly activeUser = signal<User | undefined>(undefined)
   public readonly isLoggedIn = computed(() => this.activeUser() !== undefined);
+
+
+existsEmail(email: string) {
+    return this.http
+      .get<User[]>(this.baseUrl, { params: { mail: email } })
+      .pipe(
+        map(arr => arr.length > 0),
+        catchError(() => of(false))
+      );
+  }
+
+  existsUsername(username: string) {
+    return this.http
+      .get<User[]>(this.baseUrl, { params: { username } })
+      .pipe(
+        map(arr => arr.length > 0),
+        catchError(() => of(false))
+      );
+  }
 
 
   login(username: string, password: string) {

@@ -3,6 +3,13 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../user-model';
 import { UserClient } from '../../core/sign-in.service';
 import { AuthServ } from '../../core/auth.service';
+import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+import { routes } from '../../app.routes';
+import { Router } from '@angular/router';
+
+const emailPatter = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+
 
 @Component({
   selector: 'app-sign-in',
@@ -15,14 +22,23 @@ export class SignIn implements OnInit {
   private readonly users: UserClient = inject(UserClient);
   private readonly formBuilder = inject(FormBuilder);
   private readonly auth = inject(AuthServ);
+  private readonly router = inject(Router)
   //Inputs
   readonly isEditing = model<boolean>(false);
   readonly client = input<User>();
+  //Variables
+  protected emailTaken = false;
+  protected usernameTaken = false;
+
+
 
   protected readonly form = this.formBuilder.nonNullable.group({
     username: ['', Validators.required],
     age: [8, [Validators.required, Validators.min(8)]],
-    mail: ['', Validators.required],
+    mail: this.formBuilder.nonNullable.control(
+      '',
+      { validators: [Validators.required, Validators.email, Validators.pattern(emailPatter)], updateOn: 'blur' }
+    ),
     password: ['', Validators.required]
   });
 
@@ -37,32 +53,85 @@ export class SignIn implements OnInit {
         password: u.password ?? ''
       });
     }
+
+    this.form.controls.mail.valueChanges
+      .pipe(
+        debounceTime(350),
+        distinctUntilChanged(),
+        switchMap(raw => {
+          const ctrl = this.form.controls.mail;
+          const value = (raw ?? '').trim().toLowerCase();
+
+          // 1) Si está vacío o inválido, NO consultar y limpiar flag
+          if (!value || ctrl.invalid) {
+            this.emailTaken = false;
+            return of(false);
+          }
+
+          // 2) Si estoy editando y no cambió el mail, NO consultar
+          const current = this.client();
+          if (this.isEditing() && current?.mail?.trim().toLowerCase() === value) {
+            this.emailTaken = false;
+            return of(false);
+          }
+
+          // 3) Recién acá consulto al server
+          return this.auth.existsEmail(value);
+        })
+      )
+      .subscribe(exists => {
+        this.emailTaken = exists;
+      });
+
+    // USERNAME
+    this.form.controls.username.valueChanges
+      .pipe(
+        debounceTime(400),
+        distinctUntilChanged(),
+        switchMap(username => username?.trim()
+          ? this.auth.existsUsername(username.trim())
+          : of(false)
+        )
+      )
+      .subscribe(exists => {
+        const current = this.client();
+        if (this.isEditing() && current?.username) {
+          const newVal = (this.form.controls.username.value ?? '').trim().toLowerCase();
+          const oldVal = current.username.trim().toLowerCase();
+          this.usernameTaken = exists && newVal !== oldVal;
+        } else {
+          this.usernameTaken = exists;
+        }
+      });
+
   }
 
 
 
 
   onSubmit() {
-    if (this.form.invalid) { alert('El formulario es inválido.');return;}
+    if (this.form.invalid) { this.form.markAllAsTouched(); alert('El formulario es inválido.'); return; }
+    if (this.emailTaken) { alert('Ese email ya está registrado.'); return; }
+    if (this.usernameTaken) { alert('Ese usuario ya existe.'); return; }
 
     const datosUser = this.form.getRawValue();
 
     //  EDITAR PERFIL
     if (this.isEditing()) {
       const current = this.client();
-      if (!current?.id) {alert('No se encontró el usuario a editar');return;}
+      if (!current?.id) { alert('No se encontró el usuario a editar'); return; }
 
       const updated: User = { ...current, ...datosUser, id: current.id };
 
-      this.users.updateUser(updated, current.id).subscribe({ 
-       // sincronizar sesión para que header/profile se actualicen
+      this.users.updateUser(updated, current.id).subscribe({
+        // sincronizar sesión para que header/profile se actualicen
         next: (res) => {
           this.auth.activeUser.set(res);
           localStorage.setItem('activeUser', JSON.stringify(res));
           alert('Perfil actualizado');
           this.isEditing.set(false);
         },
-        error: (err) => { console.error(err); alert('No se pudo actualizar el perfil');}
+        error: (err) => { console.error(err); alert('No se pudo actualizar el perfil'); }
       });
 
     } else {
@@ -74,9 +143,15 @@ export class SignIn implements OnInit {
       const newUser: User = { ...datosUser, pokemonId, avatarUrl };
 
       this.users.addUser(newUser).subscribe({
-        next: () => {
+        next: (createdUser) => {
           alert('Usuario registrado');
+          this.auth.activeUser.set(createdUser);
+          localStorage.setItem('activeUser', JSON.stringify(createdUser));
+          return this.router.navigateByUrl('/catalogo')
+
           this.form.reset({ username: '', age: 8, mail: '', password: '' });
+          this.emailTaken = false;
+          this.usernameTaken = false;
         },
         error: (err) => {
           console.error(err);
