@@ -10,7 +10,7 @@ import { Router, RouterLink, RouterLinkActive } from "@angular/router";
 @Component({
   selector: 'app-pokemon-card',
   standalone: true,
-  imports: [TitleCasePipe, NgOptimizedImage, RouterLink, RouterLinkActive],
+  imports: [TitleCasePipe],
   templateUrl: './pokemon-card.html',
   styleUrl: './pokemon-card.css'
 })
@@ -19,7 +19,7 @@ export class PokemonCard {
   readonly pokemon= input.required<Pokemon>();
 
 
-  
+
   protected translateType = translateType;
 
   navigateToDetails(name: string): void {

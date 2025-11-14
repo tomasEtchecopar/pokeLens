@@ -6,7 +6,7 @@ export interface User {
   age: number,
   mail: string,
   password: string,
-  pokemonCatalogues?: pokemonVault[],
+  pokemonVault?: pokemonVault[],
   pokemonTeams?: pokemonVault[]
   pokemonId?: number;
   avatarUrl?: string;

@@ -5,7 +5,6 @@ import { UserClient } from '../../core/sign-in.service';
 import { AuthServ } from '../../core/auth.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
-import { routes } from '../../app.routes';
 import { Router } from '@angular/router';
 
 const emailPatter = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
@@ -135,7 +134,7 @@ export class SignIn implements OnInit {
       });
 
     } else {
-      //  REGISTRO 
+      //  REGISTRO
       const usernameKey = datosUser.username.trim().toLowerCase();
       const pokemonId = this.hashToPokemonId(usernameKey);
       const avatarUrl = this.pokemonArtworkUrl(pokemonId);

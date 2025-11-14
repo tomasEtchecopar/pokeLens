@@ -8,6 +8,15 @@
       "age": 12,
       "points": 20,
       "lastLoginDate": "2025-11-14T14:07:11.427Z"
+    },
+    {
+      "id": "43d4",
+      "username": "hola",
+      "age": 23,
+      "mail": "123@gmail.com",
+      "password": "123",
+      "pokemonId": 131,
+      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/131.png"
     }
   ]
 }
