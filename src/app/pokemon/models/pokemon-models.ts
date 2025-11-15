@@ -33,6 +33,8 @@ export interface Pokemon {
     types: PokemonType[];
     generation?: string;
     region?: string;
+
+    evolution_line?: string[];
 }
 
 //necessary for getting generation and region

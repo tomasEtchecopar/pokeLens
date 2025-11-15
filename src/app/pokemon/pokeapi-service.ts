@@ -36,7 +36,7 @@ export class PokeApiService {
       .pipe(map(res => res.results))
   }
   /**
-   * 
+   *
    * @param name of pokemon
    * @returns pokemon
    */
@@ -60,7 +60,8 @@ export class PokeApiService {
   private getGeneration(url: string) {
     return this.http.get<Generation>(url);
   }
-  getTypes() {
+
+  getAvailableTypes() {
     return this.http.get<{ results: { name: string }[] }>(`${this.baseURL}/type`).pipe(
       map(res => res.results
         .map(t => t.name)
@@ -68,13 +69,13 @@ export class PokeApiService {
     )
   }
 
-  getGenerations() {
+  getAvailableGenerations() {
     return this.http.get<{ results: { name: string }[] }>(`${this.baseURL}/generation`).pipe(
       map(res => res.results.map(g => g.name))
     )
   }
 
-  getRegions() {
+  getAvailableRegions() {
     return this.http.get<{ results: { name: string }[] }>(`${this.baseURL}/region`).pipe(
       map(res => res.results.map(r => r.name))
     )
