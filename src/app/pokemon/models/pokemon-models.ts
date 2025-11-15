@@ -37,11 +37,38 @@ export interface Pokemon {
     evolution_line?: string[];
 }
 
-//necessary for getting generation and region
+//necessary for getting generation, region and evo chain
 export interface PokemonSpecies {
     id: number;
     name: string;
-    generation: NamedAPIResource
+    generation: NamedAPIResource;
+    evolution_chain: string; //url
+}
+
+export interface EvolutionChain{
+  id: number;
+  baby_trigger_item: NamedAPIResource; // the item that a pokemon would be holding when mating that triggers the egg hatching a baby pokemon instead of a basic one
+  chain: EvolutionChainLink; //base chain link object. each link references the next pokemon in the natural evolutiokn order
+}
+
+export interface EvolutionChainLink{
+  is_baby: boolean; //would only be true on the base link
+  species: NamedAPIResource;
+  evolution_details: EvolutionDetail[];
+  evolves_to: EvolutionChainLink;
+}
+
+export interface EvolutionDetail{
+  item: NamedAPIResource; //item required to trigger evolution
+  trigger: NamedAPIResource;
+  gender: number;
+  min_level: number;
+}
+
+export interface EvolutionTrigger{
+  id: number;
+  name: string;
+  pokemon_specis: NamedAPIResource;
 }
 
 export interface Generation {
