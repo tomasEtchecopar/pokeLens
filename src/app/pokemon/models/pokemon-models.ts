@@ -4,6 +4,10 @@ export interface NamedAPIResource {
     url: string;  // Resource URL
 }
 
+export interface APIResource{
+  url: string;
+}
+
 /** A paginated list of named resources from the PokeAPI */
 export interface NamedAPIResourceList {
     count: number;                   // Total resources
@@ -42,7 +46,7 @@ export interface PokemonSpecies {
     id: number;
     name: string;
     generation: NamedAPIResource;
-    evolution_chain: string; //url
+    evolution_chain: APIResource; //url
 }
 
 export interface EvolutionChain{
@@ -55,7 +59,7 @@ export interface EvolutionChainLink{
   is_baby: boolean; //would only be true on the base link
   species: NamedAPIResource;
   evolution_details: EvolutionDetail[];
-  evolves_to: EvolutionChainLink;
+  evolves_to: EvolutionChainLink[];
 }
 
 export interface EvolutionDetail{
