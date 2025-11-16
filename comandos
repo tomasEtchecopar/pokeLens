@@ -1,9 +1,10 @@
 npx json-server --watch database/users.json --port 3000 
 
-git pull:
-git branch
-git checkout tu-branch
-git pull origin tu-branch
+git checkout main
+git pull
+git checkout feature/login
+git merge main
+
 --------------------------
 git push:
 git add .

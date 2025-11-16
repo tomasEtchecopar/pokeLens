@@ -21,15 +21,15 @@
 
     @if (form.get('mail')?.touched) {
     @if (form.get('mail')?.hasError('required')) {
-      <small>El e-mail es obligatorio</small>
+    <small>El e-mail es obligatorio</small>
     }
     @if (form.get('mail')?.hasError('email') || form.get('mail')?.hasError('pattern')) {
-      <small>Formato de e-mail inválido</small>
+    <small>Formato de e-mail inválido</small>
     }
     @if (form.get('mail')?.valid && emailTaken) {
-      <small>Ese e-mail ya está registrado</small>
+    <small>Ese e-mail ya está registrado</small>
     }
-  }
+    }
 
 
 
@@ -46,5 +46,7 @@
 
   <button class="btn-signIn" type="submit">Ingresar Datos</button>
   <button class="btn-signIn" type="reset">Borrar campos</button>
+  <button class="btn-signIn" type="button" (click)="isEditing.set(false)">Cancelar</button>
+
 
 </form>

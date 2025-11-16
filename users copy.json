@@ -8,8 +8,8 @@
       "password": "pikachu",
       "pokemonId": 25,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-      "points": 373,
-      "lastLoginDate": "2025-11-16T00:45:25.268Z",
+      "points": 170,
+      "lastLoginDate": "2025-11-16T00:34:24.848Z",
       "pokemonVault": [
         {
           "arrayId": 0,
@@ -43,6 +43,25 @@
             "razor-leaf"
           ],
           "nature": "Calm"
+        },
+        {
+          "arrayId": 3,
+          "idPokemon": 7,
+          "name": "Squirtle",
+          "moves": [
+            "water-gun",
+            "bite"
+          ],
+          "nature": "Bold"
+        },
+        {
+          "arrayId": 4,
+          "idPokemon": 133,
+          "name": "Eevee",
+          "moves": [
+            "quick-attack"
+          ],
+          "nature": "Hasty"
         }
       ],
       "pokemonTeams": [],
@@ -71,66 +90,6 @@
           "amount": 10,
           "reason": "Inicio de sesión diario",
           "date": "2025-11-16T00:34:24.848Z"
-        },
-        {
-          "amount": 10,
-          "reason": "Inicio de sesión diario (+10 puntos)",
-          "date": "2025-11-16T00:44:36.168Z"
-        },
-        {
-          "amount": 50,
-          "reason": "Estamos probando el sistema",
-          "date": "2025-11-16T01:56:44.270Z"
-        },
-        {
-          "amount": 50,
-          "reason": "Estamos probando el sistema",
-          "date": "2025-11-16T01:56:55.076Z"
-        },
-        {
-          "amount": 50,
-          "reason": "Estamos probando el sistema",
-          "date": "2025-11-16T01:57:52.533Z"
-        },
-        {
-          "amount": 14,
-          "reason": "Estamos probando el sistema",
-          "date": "2025-11-16T01:58:14.349Z"
-        },
-        {
-          "amount": 1,
-          "reason": "Estamos probando el sistema",
-          "date": "2025-11-16T01:58:17.503Z"
-        },
-        {
-          "amount": 7,
-          "reason": "Estamos probando el sistema",
-          "date": "2025-11-16T01:58:19.930Z"
-        },
-        {
-          "amount": 20,
-          "reason": "Estamos probando el sistema",
-          "date": "2025-11-16T01:58:47.952Z"
-        },
-        {
-          "amount": 17,
-          "reason": "Estamos probando el sistema",
-          "date": "2025-11-16T01:58:50.088Z"
-        },
-        {
-          "amount": 15,
-          "reason": "Estamos probando el sistema",
-          "date": "2025-11-16T01:58:51.551Z"
-        },
-        {
-          "amount": 10,
-          "reason": "Estamos probando el sistema",
-          "date": "2025-11-16T01:58:54.088Z"
-        },
-        {
-          "amount": 4,
-          "reason": "Estamos probando el sistema",
-          "date": "2025-11-16T01:58:58.880Z"
         }
       ]
     },

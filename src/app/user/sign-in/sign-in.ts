@@ -6,6 +6,8 @@ import { AuthServ } from '../../core/auth.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
+import { PointsService } from '../../core/points.service';
+import { PokeApiService } from '../../pokemon/pokeapi-service';
 
 const emailPatter = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
@@ -21,7 +23,10 @@ export class SignIn implements OnInit {
   private readonly users: UserClient = inject(UserClient);
   private readonly formBuilder = inject(FormBuilder);
   private readonly auth = inject(AuthServ);
-  private readonly router = inject(Router)
+  private readonly router = inject(Router);
+  private readonly pokeService = inject(PokeApiService)
+  private readonly points = inject(PointsService)
+
   //Inputs
   readonly isEditing = model<boolean>(false);
   readonly client = input<User>();
@@ -106,8 +111,6 @@ export class SignIn implements OnInit {
   }
 
 
-
-
   onSubmit() {
     if (this.form.invalid) { this.form.markAllAsTouched(); alert('El formulario es inválido.'); return; }
     if (this.emailTaken) { alert('Ese email ya está registrado.'); return; }
@@ -130,53 +133,49 @@ export class SignIn implements OnInit {
           alert('Perfil actualizado');
           this.isEditing.set(false);
         },
-        error: (err) => { console.error(err); alert('No se pudo actualizar el perfil'); }
-      });
-
-    } else {
-      //  REGISTRO
-      const usernameKey = datosUser.username.trim().toLowerCase();
-      const pokemonId = this.hashToPokemonId(usernameKey);
-      const avatarUrl = this.pokemonArtworkUrl(pokemonId);
-
-      const newUser: User = { ...datosUser, pokemonId, avatarUrl };
-
-      this.users.addUser(newUser).subscribe({
-        next: (createdUser) => {
-          alert('Usuario registrado');
-          this.auth.activeUser.set(createdUser);
-          localStorage.setItem('activeUser', JSON.stringify(createdUser));
-
-          this.form.reset({ username: '', age: 8, mail: '', password: '' });
-          this.emailTaken = false;
-          this.usernameTaken = false;
-          return this.router.navigateByUrl('/catalogo')
-
-        },
         error: (err) => {
-          console.error(err);
-          alert('No se pudo registrar el usuario');
+          console.error(err); alert('No se pudo actualizar el perfil');
         }
       });
     }
-  }
+    else {
+      //  REGISTRO
+      const usernameKey = datosUser.username.trim().toLowerCase();
+      const pokemonId = this.pokeService.hashToPokemonId(usernameKey); //genero un hash con el nombre de usuario lo que me da un ID 
+      const avatarUrl = this.pokeService.pokemonArtworkUrl(pokemonId); //Consigo el avatar para el usuario
+      const puntos = this.points.randomPoints() //Genero los puntos de bienvenida
 
+      //Inicializo las variables ? que no se ingresan por formulario en 0 ;
+      const newUser: User = {
+        ...datosUser, pokemonId, avatarUrl, points: puntos,
+        lastLoginDate: new Date().toISOString(),
+        pokemonVault: [],
+        pokemonTeams: [],
+        pointsHistory : []
+      };
 
-  /** Mapear username -> pokemonId (fijo) */
-  private hashToPokemonId(text: string, max = 1025): number {
-    let h = 0;
-    for (let i = 0; i < text.length; i++) {
-      h = ((h << 5) - h) + text.charCodeAt(i) | 0;
+      this.users.addUser(newUser).
+        subscribe({
+          next: (createdUser) => {
+
+            alert(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
+            this.auth.activeUser.set(createdUser);
+            localStorage.setItem('activeUser', JSON.stringify(createdUser));
+
+            this.form.reset({ username: '', age: 8, mail: '', password: '' });
+            this.emailTaken = false;
+            this.usernameTaken = false;
+            return this.router.navigateByUrl('/catalogo')
+
+          },
+          error: (err) => {
+            console.error(err);
+            alert('No se pudo registrar el usuario');
+          }
+        });
     }
-    h = Math.abs(h);
-    return (h % max) + 1; // 1..max
   }
 
-  private pokemonArtworkUrl(id: number): string {
-    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
-  }
-  //Genera un ID de Pokémon aleatorio para el avatar del usuario
-  randomPokemonId(max = 1025) {
-    return Math.floor(Math.random() * max) + 1;
-  }
+
+
 }

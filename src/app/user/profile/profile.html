@@ -5,20 +5,73 @@
         <h2>Perfil de Usuario</h2>
 
         @if (usuario(); as u) {
+
         <div class="profile-row">
             <img [src]="u.avatarUrl || 'default.png'" alt="avatar" class="avatar-lg"
                 (error)="setDefaultAvatar($event)" />
             <div>
-                <p><strong>Usuario:</strong> {{ u.username }}</p>
+                <p><strong>UserName:</strong> {{ u.username }}</p>
                 <p><strong>Email:</strong> {{ u.mail }}</p>
-                <p><strong>Edad:</strong> {{ u.age }}</p>
+                <p><strong>Edad:</strong> {{ u.age }} años</p>
+                <p><strong>Puntos:</strong> {{ u.points }} PokePoints </p>
+                <p><strong>Último Ingreso:</strong> {{ u.lastLoginDate | date:'dd/MM/yyyy HH:mm:ss' }}</p>
             </div>
         </div>
 
         <div class="actions">
             <button class="btn" (click)="isEditing.set(true)">Editar perfil</button>
             <button class="btn" (click)="backToCatalog()">Volver al catálogo</button>
+            <button class="btn" (click)="metodoPruebaSumarPuntos()" >Boton para probar asignar puntos</button>
         </div>
+        <br>
+        <br>
+        <h2>Colecciones</h2>
+        <div class="colection-row">
+            @let pokemon = u.pokemonVault;
+
+            @if (pokemon?.length) {
+            <button class="btn-clear" (click)="clearCollection()">🗑️</button>
+
+            <div class="vault-grid">
+                @for (p of pokemon; track p.arrayId) {
+                <div class="vault-item">
+
+                    <button class="pokeball-btn" (click)="deletePokemon(p.arrayId)">
+                        <div class="pokeball">
+                            <div class="pokeball-top"></div>
+                            <div class="pokeball-bottom"></div>
+                            <div class="pokeball-center"></div>
+                        </div>
+                    </button>
+                    <img class="vault-img" [src]="pokemonArtworkUrl(p.idPokemon)"
+                        [alt]="p.nickname || p.name || 'Pokemon'" />
+                    <span class="vault-name">
+                        {{ p.nickname || p.name || ('#' + p.idPokemon) }}
+                    </span>
+                </div>
+                }
+            </div>
+            <div>
+                <p><strong>Promedio de poder:</strong> {{ averagePower() }}</p>
+            </div>
+            } @else {
+            <p>No tenés Pokémon en tu baúl todavía.</p>
+            }
+        </div>
+        <br>
+        <h3>Historial de puntos</h3>
+        <ul class="points-list">
+            @if (history().length === 0) {
+            <li>No hay movimientos aún.</li>
+            } @else {
+            @for (ev of history(); track ev.date) {
+            <li>
+                +{{ ev.amount }} — {{ ev.reason }} —
+                {{ ev.date | date:'dd/MM/yyyy HH:mm' }}
+            </li>
+            }
+            }
+        </ul>
         } @else {
         <p>No hay usuario activo. Iniciá sesión.</p>
         }
@@ -26,10 +79,6 @@
     } @else {
     <!-- Reutilizo el formulario del SignIn para editar -->
     <app-sign-in [client]="usuario()" [(isEditing)]="isEditing"></app-sign-in>
-
-    <div class="actions">
-        <button class="btn" (click)="isEditing.set(false)">Cancelar</button>
-    </div>
     }
 
 </div>

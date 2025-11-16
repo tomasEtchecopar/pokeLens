@@ -4,8 +4,6 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, map, of, tap, switchMap } from 'rxjs';
 import { PointsService } from './points.service';
 
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -13,9 +11,7 @@ export class AuthServ {
 
   private readonly http = inject(HttpClient);
   private readonly baseUrl = 'http://localhost:3000/users';
-
   private readonly points = inject(PointsService);
-
   public readonly activeUser = signal<User | undefined>(undefined)
   public readonly isLoggedIn = computed(() => this.activeUser() !== undefined);
 
@@ -36,7 +32,6 @@ export class AuthServ {
         catchError(() => of(false))
       );
   }
-
 
   login(username: string, password: string) {
     const params = new HttpParams()
@@ -59,7 +54,6 @@ export class AuthServ {
         this.activeUser.set(updatedUser);
         localStorage.setItem('activeUser', JSON.stringify(updatedUser));
       }),
-      // para que el componente de login reciba void y solo le importe éxito / error
       map(() => void 0)
     );
   }
@@ -79,6 +73,4 @@ export class AuthServ {
       localStorage.removeItem('activeUser');
     }
   }
-
-
 }

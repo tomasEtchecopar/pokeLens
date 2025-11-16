@@ -118,5 +118,35 @@ export class PokeApiService {
     );
   }
 
+
+  /** Mapear username -> pokemonId (fijo) */
+  hashToPokemonId(text: string, max = 1025): number {
+    let h = 0;
+    for (let i = 0; i < text.length; i++) {
+      h = ((h << 5) - h) + text.charCodeAt(i) | 0;
+    }
+    h = Math.abs(h);
+    return (h % max) + 1; // 1..max
+  }
+  //obtengo la sprite del pokemon segun el id generado
+  pokemonArtworkUrl(id: number | string | undefined): string {
+    if (!id) return 'default.png';
+
+    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
+  }
+
+
+  //Genera un ID de Pokémon aleatorio para el avatar del usuario
+  randomPokemonId(max = 1025) {
+    return Math.floor(Math.random() * max) + 1;
+  }
+
+  //Calcular el poder de una coleccion
+  //pokeApi devuelve un array, con reduce ya soluciona
+  calcularPoder(stats: any[]): number {
+  return stats.reduce((total, s) => total + s.base_stat, 0);
+}
+
+
 }
 

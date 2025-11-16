@@ -1,9 +1,170 @@
-.father { padding: 1rem; }
-.child { background: #fff; border-radius: 8px; padding: 1rem; }
+.father {
+    padding: 1rem;
+}
 
-.profile-row { display: flex; align-items: center; gap: 1rem; }
-.avatar-lg { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; }
+.child {
+    background: #fff;
+    border-radius: 8px;
+    padding: 1rem;
+}
 
-.actions { margin-top: 1rem; display: flex; gap: 0.5rem; }
-.btn { background:#2c2c2c; color:#fff; border:2px solid #1a1a1a; padding:0.4rem 0.8rem; cursor:pointer; }
-.btn:hover { background:#1a1a1a; }
+.profile-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.avatar-lg {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.actions {
+    margin-top: 1rem;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.btn {
+    background: #2c2c2c;
+    color: #fff;
+    border: 2px solid #1a1a1a;
+    padding: 0.4rem 0.8rem;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background: #1a1a1a;
+}
+
+.vault-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-top: 0.5rem;
+}
+
+.vault-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80px;
+    text-align: center;
+    padding: 0.5rem;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.12);
+}
+
+.vault-img {
+    width: 64px;
+    height: 64px;
+    object-fit: contain;
+    margin-bottom: 0.25rem;
+}
+
+.vault-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #333;
+}
+
+.colection-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+/* ==== CONTENEDOR DEL BOTÓN ==== */
+.pokeball-btn {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 5;
+}
+
+
+.pokeball {
+    position: relative;
+    width: 24px;
+    height: 24px;
+    transition: transform 0.2s ease;
+}
+
+.pokeball-btn:hover .pokeball {
+    transform: scale(1.15);
+}
+
+.pokeball-top {
+    width: 100%;
+    height: 50%;
+    background: #ff1c1c;
+    border-top-left-radius: 50%;
+    border-top-right-radius: 50%;
+    border: 1px solid #000;
+    transition: transform 0.25s ease;
+    transform-origin: bottom;
+}
+
+.pokeball-bottom {
+    width: 100%;
+    height: 50%;
+    background: white;
+    border-bottom-left-radius: 50%;
+    border-bottom-right-radius: 50%;
+    border: 1px solid #000;
+}
+
+.pokeball-center {
+    position: absolute;
+    top: 35%;
+    left: 35%;
+    width: 9px;
+    height: 9px;
+    background: white;
+    border-radius: 50%;
+    border: 2px solid #000;
+    z-index: 10;
+}
+
+.pokeball-btn:hover .pokeball-top {
+    transform: rotateX(200deg);
+}
+
+.btn-clear {
+    background: #b50000;
+    color: white;
+    width: 28px;
+    height: 28px;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+    transition: 0.15s ease;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+}
+
+.btn-clear:hover {
+    background: #ff0000;
+    transform: scale(1.1);
+}
+
+.btn-clear:active {
+    transform: scale(0.95);
+}

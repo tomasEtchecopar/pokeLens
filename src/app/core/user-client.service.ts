@@ -31,7 +31,7 @@ export class UserClient {
   return this.getUserById(userId).pipe(
     switchMap(usuario => {
       const vault = usuario.pokemonVault ?? [];
-      const nextId = vault.length ? Math.max(...vault.map(p => p.arrayId)) + 1 : 1;
+      const nextId = vault.length ? Math.max(...vault.map(p => p.arrayId)) + 1 : 0;
       const updatedVault = [...vault, { ...nuevoPokemon, arrayId: nextId }];
       return this.http.patch<User>(`${this.baseUrl}/${userId}`, { pokemonVault: updatedVault });
     })
