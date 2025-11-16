@@ -47,16 +47,14 @@
   box-shadow: 0 0 8px rgba(0,0,0,0.6);
 }
 
-/* Layout */
-.details-layout {
-  display: grid;
-  grid-template-columns: 360px 1fr;
-  gap: 1rem;
-  align-items: start;
+/* Pokemon Card centrada arriba */
+.pokemon-card-center {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 1rem;
 }
 
-/* Reused card container tweak to fit details */
-.details-layout app-pokemon-card {
+.pokemon-card-center app-pokemon-card {
   width: 100%;
   max-width: 360px;
   display: block;
@@ -64,7 +62,91 @@
   box-shadow: 4px 4px 0 #1a1a1a;
 }
 
-/* Info column */
+/* Layout principal: 3 columnas */
+.details-layout {
+  display: grid;
+  grid-template-columns: 1fr 480px;
+  gap: 1rem;
+  align-items: start;
+}
+
+/* Columna izquierda: Evoluciones verticales */
+.evolution-section {
+  background: linear-gradient(180deg,#343434,#2c2c2c);
+  border: 2px solid #1a1a1a;
+  padding: 0.75rem;
+  box-shadow: inset 1px 1px 0 #4a4a4a;
+  min-height: 100%;
+  overflow: hidden;
+}
+
+.evolution-section h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 0.85rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffd700;
+  text-align: center;
+}
+
+.evolution-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+  width: 100%;
+}
+
+.evolution-card {
+  width: 100%;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.evolution-card app-pokemon-card {
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  border: 2px solid #1a1a1a;
+  box-shadow: 3px 3px 0 #1a1a1a;
+  box-sizing: border-box;
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Forzar que el contenido interno de la card se ajuste */
+.evolution-card app-pokemon-card::ng-deep .card-root,
+.evolution-card app-pokemon-card > * {
+  max-width: 100%;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+
+/* Escalar las cards de evolución */
+.evolution-card app-pokemon-card {
+  transform: scale(0.85);
+  transform-origin: center;
+  margin: -1rem 0;
+}
+
+/* Flecha entre evoluciones */
+.evolution-card:not(:last-child)::after {
+  content: '▼';
+  position: absolute;
+  bottom: -0.75rem;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.5rem;
+  color: #ffd700;
+  text-shadow: 2px 2px 0 #111;
+  z-index: 10;
+}
+
+/* Info column (derecha) */
 .details-info {
   background: linear-gradient(180deg,#343434,#2c2c2c);
   border: 2px solid #1a1a1a;
@@ -263,7 +345,6 @@
   transform: translate(1px, 1px);
 }
 
-
 /* Container for the two groups */
 .sprites-sets {
   display: flex;
@@ -343,16 +424,6 @@
   opacity: 0.6;
 }
 
-/* Small devices: stack groups */
-@media (max-width: 640px) {
-  .sprites-sets {
-    flex-direction: column;
-  }
-
-  .sprites-group { min-width: auto; }
-}
-
-
 /* Hover */
 .details-root .badge:hover,
 .details-root .metric:hover,
@@ -368,11 +439,23 @@
     grid-template-columns: 1fr;
   }
 
-  .details-layout app-pokemon-card {
-    max-width: none;
+  .evolution-section {
+    order: 2;
+  }
+
+  .details-info {
+    order: 1;
   }
 
   .details-header h1 { font-size: 1.1rem; }
+}
+
+@media (max-width: 640px) {
+  .sprites-sets {
+    flex-direction: column;
+  }
+
+  .sprites-group { min-width: auto; }
 }
 
 @media (max-width: 480px) {
