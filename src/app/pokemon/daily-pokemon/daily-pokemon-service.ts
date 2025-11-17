@@ -27,7 +27,7 @@ export class DailyPokemonService {
     if(allPokemon.length === 0) return null;
 
     const today = new Date().toISOString().split('T')[0]; //yyy-mm-dd
-    const seed = this.hashString(`${today}|${this.salt}`); 
+    const seed = this.hashString(`${today}|${this.salt}`);
     const rng = this.mulberry32(seed);
     const index = Math.floor(rng() * allPokemon.length);
 
@@ -39,7 +39,7 @@ export class DailyPokemonService {
     }
   });
 
-  //converts string to consistent numeric hash 
+  //converts string to consistent numeric hash
   private hashString(str: string): number{
     let hash = 0;
     for(let i = 0; i<str.length;i++){
@@ -48,5 +48,5 @@ export class DailyPokemonService {
     }
     return Math.abs(hash);
   }
-  
+
 }

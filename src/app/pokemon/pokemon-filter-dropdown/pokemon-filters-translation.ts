@@ -14,7 +14,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class PokemonFiltersTranslation {
   private readonly service = inject(PokeApiService);
 
-  readonly types = toSignal(this.service.getTypes().pipe(
+  readonly types = toSignal(this.service.getAvailableTypes().pipe(
     map(types =>
       types
       .map(name => ({
@@ -25,7 +25,7 @@ export class PokemonFiltersTranslation {
     )
   ));
 
-  readonly generations = toSignal(this.service.getGenerations().pipe(
+  readonly generations = toSignal(this.service.getAvailableGenerations().pipe(
     map(generations =>
       generations
       .map(name =>({
@@ -36,7 +36,7 @@ export class PokemonFiltersTranslation {
     )
   ));
 
-  readonly regions = toSignal(this.service.getRegions().pipe(
+  readonly regions = toSignal(this.service.getAvailableRegions().pipe(
     map(regions =>
       regions
       .map(name =>({

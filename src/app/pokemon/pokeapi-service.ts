@@ -1,7 +1,8 @@
 import { Injectable, inject } from '@angular/core';
+import { EvolutionChainLink } from './models/pokemon-models';
 import { HttpClient } from '@angular/common/http';
 import { forkJoin, switchMap } from 'rxjs';
-import { NamedAPIResourceList } from './models/pokemon-models';
+import { NamedAPIResourceList, EvolutionChain} from './models/pokemon-models';
 import { Pokemon, PokemonSpecies, Generation } from './models/pokemon-models';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs';
@@ -36,7 +37,7 @@ export class PokeApiService {
       .pipe(map(res => res.results))
   }
   /**
-   * 
+   *
    * @param name of pokemon
    * @returns pokemon
    */
@@ -60,7 +61,8 @@ export class PokeApiService {
   private getGeneration(url: string) {
     return this.http.get<Generation>(url);
   }
-  getTypes() {
+
+  getAvailableTypes() {
     return this.http.get<{ results: { name: string }[] }>(`${this.baseURL}/type`).pipe(
       map(res => res.results
         .map(t => t.name)
@@ -68,13 +70,13 @@ export class PokeApiService {
     )
   }
 
-  getGenerations() {
+  getAvailableGenerations() {
     return this.http.get<{ results: { name: string }[] }>(`${this.baseURL}/generation`).pipe(
       map(res => res.results.map(g => g.name))
     )
   }
 
-  getRegions() {
+  getAvailableRegions() {
     return this.http.get<{ results: { name: string }[] }>(`${this.baseURL}/region`).pipe(
       map(res => res.results.map(r => r.name))
     )
@@ -105,11 +107,15 @@ export class PokeApiService {
       switchMap(pokemon =>
         this.getPokemonSpecies(pokemon.species.url).pipe(
           switchMap(species =>
-            this.getGeneration(species.generation.url).pipe(
-              map(generation => ({
+            forkJoin({
+              generation: this.getGeneration(species.generation.url),
+              evolutionChain: this.http.get<any>(species.evolution_chain.url)
+            }).pipe(
+              map(({ generation, evolutionChain})=>({
                 ...pokemon,
                 generation: species.generation.name,
-                region: generation.main_region.name
+                region: generation.main_region.name,
+                evolution_line: this.extractEvolutionNames(evolutionChain)
               }))
             )
           )
@@ -118,6 +124,7 @@ export class PokeApiService {
     );
   }
 
+<<<<<<< HEAD
 
   /** Mapear username -> pokemonId (fijo) */
   hashToPokemonId(text: string, max = 1025): number {
@@ -148,5 +155,27 @@ export class PokeApiService {
 }
 
 
+=======
+  private extractEvolutionNames(chain: EvolutionChain){
+    const names: string[] = [];
+
+    function iterateEvolutionNodes(node: EvolutionChainLink){
+      if(!node || !node.species || !node.species.name){
+        return;
+      }
+      names.push(node.species.name);
+      if(node.evolves_to){
+        node.evolves_to.forEach(evolution => {
+          iterateEvolutionNodes(evolution);
+        })
+      }
+    }
+
+    iterateEvolutionNodes(chain.chain);
+    return names;
+
+  }
+
+>>>>>>> main
 }
 
