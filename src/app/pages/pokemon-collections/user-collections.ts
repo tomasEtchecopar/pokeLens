@@ -1,10 +1,10 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthServ } from '../../../core/auth.service';
-import { UserClient } from '../../../core/sign-in.service';
-import { PokemonListService } from '../../../pokemon/pokemon-list-service';
-import { PokemonCard } from '../../../pokemon/pokemon-card/pokemon-card';
-import { Pokemon } from '../../../pokemon/models/pokemon-models';
+import { AuthServ } from '../../core/auth.service';
+import { UserClient } from '../../core/sign-in.service';
+import { PokemonListService } from '../../pokemon/pokemon-list-service';
+import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
+import { Pokemon } from '../../pokemon/models/pokemon-models';
 
 
 
@@ -80,7 +80,7 @@ export class UserCollections {
   }
 
   backToProfile() {
-    this.router.navigateByUrl('/profile'); 
+    this.router.navigateByUrl('/profile');
   }
 
   // Busca el Pokémon completo para la card

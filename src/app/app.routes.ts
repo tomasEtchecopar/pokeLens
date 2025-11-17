@@ -6,7 +6,7 @@ import { Profile } from './user/profile/profile';
 import { PokemonDetails } from './pages/pokemon-details/pokemon-details';
 import { HomePage } from './pages/home-page/home-page';
 import { Contact } from './pages/contact/contact';
-import { UserCollections } from './user/profile/user-collections/user-collections';
+import { UserCollections } from './pages/pokemon-collections/user-collections';
 import { PokemonQuiz } from './pages/pokemon-quiz/pokemon-quiz';
 
 export const routes: Routes = [
