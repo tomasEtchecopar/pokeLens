@@ -8,8 +8,8 @@
       "password": "pikachu",
       "pokemonId": 25,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-      "points": 376,
-      "lastLoginDate": "2025-11-17T03:29:45.988Z",
+      "points": 385,
+      "lastLoginDate": "2025-11-17T03:59:54.593Z",
       "pointsHistory": [
         {
           "amount": 50,
@@ -40,6 +40,11 @@
           "amount": 13,
           "reason": "Estamos probando el sistema",
           "date": "2025-11-17T03:29:56.408Z"
+        },
+        {
+          "amount": 9,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T05:02:16.990Z"
         }
       ],
       "pokemonVault": [
