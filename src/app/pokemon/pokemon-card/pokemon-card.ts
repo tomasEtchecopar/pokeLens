@@ -1,8 +1,10 @@
 import { Component,  inject,  input } from '@angular/core';
 import { Pokemon } from '../models/pokemon-models';
 import {  TitleCasePipe } from '@angular/common';
+import { signal } from '@angular/core';
 import { translateType } from '../models/pokemon-helpers';
 import { Router } from "@angular/router";
+import { AddPokemonModal } from '../../pages/pokemon-collections/add-pokemon-modal';
 
 /**
  * Card component that displays a single Pokemon.
@@ -10,7 +12,7 @@ import { Router } from "@angular/router";
 @Component({
   selector: 'app-pokemon-card',
   standalone: true,
-  imports: [TitleCasePipe],
+  imports: [TitleCasePipe, AddPokemonModal],
   templateUrl: './pokemon-card.html',
   styleUrl: './pokemon-card.css'
 })
@@ -24,5 +26,25 @@ export class PokemonCard {
 
   navigateToDetails(name: string): void {
     this.router.navigateByUrl(`details/${name}`);
+  }
+ // Nuevo: control del modal
+  showCaptureModal = signal(false);
+
+  // Nuevo: mostrar/ocultar botón de captura
+  showCaptureButton = input(true);
+
+  openCaptureModal(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.showCaptureModal.set(true);
+  }
+
+  closeCaptureModal() {
+    this.showCaptureModal.set(false);
+  }
+
+  onPokemonCaptured() {
+    this.showCaptureModal.set(false);
+    // Opcional: emitir evento o mostrar notificación
   }
 }

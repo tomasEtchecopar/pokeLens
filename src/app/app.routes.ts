@@ -42,10 +42,6 @@ export const routes: Routes = [
         title: 'Editar Perfil de Usuario'
     },
     {
-        path: 'vault', component: PokemonCollections,
-        title: 'Pokemon Vault'
-    },
-    {
         path: 'collections', component: UserCollections,
         title: 'Mis Colecciones'
     },
