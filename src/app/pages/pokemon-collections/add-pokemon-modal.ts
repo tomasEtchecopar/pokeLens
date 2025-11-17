@@ -14,7 +14,7 @@ import { UserClient } from '../../core/user-client.service';
       <div class="modal-overlay" (click)="close()">
         <div class="modal-content" (click)="$event.stopPropagation()">
           <div class="modal-header">
-            <h3>Añadir {{ pokemon()?.name }} a colección</h3>
+            <h3>Añadir {{ pokemon().name }} a colección</h3>
             <button class="close-btn" (click)="close()">✕</button>
           </div>
 
@@ -25,11 +25,16 @@ import { UserClient } from '../../core/user-client.service';
               <div class="form-group">
                 <label for="collection">Colección:</label>
                 <select id="collection" [(ngModel)]="selectedCollection">
-                  @for (col of collections(); let i = $index; track i) {
-                    <option [value]="i + 1">Colección {{ i + 1 }} ({{ col.length }} Pokémon)</option>
-                  }
-                  <option [value]="collections().length + 1">+ Nueva colección</option>
-                </select>
+  @for (col of collections(); let i = $index; track i) {
+    <option [value]="i + 1">
+      {{ getCollectionName(i) }} ({{ col.length }} Pokémon)
+    </option>
+  }
+  <option [value]="collections().length + 1">
+    + Nueva colección
+  </option>
+</select>
+
               </div>
 
               <div class="form-group">
@@ -38,7 +43,7 @@ import { UserClient } from '../../core/user-client.service';
                   type="text"
                   id="nickname"
                   [(ngModel)]="nickname"
-                  [placeholder]="pokemon()?.name"
+                  [placeholder]="pokemon().name"
                   maxlength="20"
                 >
               </div>
@@ -250,12 +255,12 @@ export class AddPokemonModal {
 
   constructor() {
     // Cargar colecciones cuando se abre el modal
-    effect(() =>{
+    effect(() => {
       if (this.auth.activeUser()?.pokemonVault) {
         this.collections.set(this.auth.activeUser()!.pokemonVault!);
       }
     })
-    };
+  };
 
 
   close() {
@@ -308,4 +313,15 @@ export class AddPokemonModal {
         }
       });
   }
+  getCollectionName(index: number): string {
+    const user = this.usuario();
+    const names = user?.collectionNames;
+    const stored = names?.[index];
+
+    if (stored && stored.trim().length > 0) {
+      return stored.trim();
+    }
+    return `Colección ${index + 1}`;
+  }
+
 }

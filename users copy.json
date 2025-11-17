@@ -2,14 +2,14 @@
   "users": [
     {
       "id": "u001",
-      "username": "trainer1",
+      "username": "ash",
       "age": 20,
       "mail": "trainer1@example.com",
-      "password": "password123",
+      "password": "pikachu",
       "pokemonId": 25,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-      "points": 350,
-      "lastLoginDate": "2025-11-17T03:11:53.862Z",
+      "points": 427,
+      "lastLoginDate": "2025-11-17T03:59:54.593Z",
       "pointsHistory": [
         {
           "amount": 50,
@@ -25,6 +25,46 @@
           "amount": 200,
           "reason": "Inicio de sesión diario",
           "date": "2025-11-17T08:45:00.000Z"
+        },
+        {
+          "amount": 11,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T03:28:17.526Z"
+        },
+        {
+          "amount": 2,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T03:28:20.368Z"
+        },
+        {
+          "amount": 13,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T03:29:56.408Z"
+        },
+        {
+          "amount": 9,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T05:02:16.990Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-17T05:27:53.239Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-17T05:43:19.255Z"
+        },
+        {
+          "amount": 14,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T05:47:27.220Z"
+        },
+        {
+          "amount": 18,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T05:47:29.106Z"
         }
       ],
       "pokemonVault": [
@@ -33,91 +73,61 @@
             "arrayId": 0,
             "idPokemon": 1,
             "name": "bulbasaur",
-            "moves": [
-              "tackle",
-              "vine-whip"
-            ]
+            "moves": ["tackle", "vine-whip"]
           },
           {
             "arrayId": 1,
             "idPokemon": 2,
             "name": "ivysaur",
-            "moves": [
-              "razor-leaf",
-              "tackle"
-            ]
+            "moves": ["razor-leaf", "tackle"]
           },
           {
             "arrayId": 2,
             "idPokemon": 3,
             "name": "venusaur",
-            "moves": [
-              "solar-beam",
-              "tackle"
-            ]
+            "moves": ["solar-beam", "tackle"]
           },
           {
             "arrayId": 3,
             "idPokemon": 4,
             "name": "charmander",
-            "moves": [
-              "ember",
-              "scratch"
-            ]
+            "moves": ["ember", "scratch"]
           },
           {
             "arrayId": 4,
             "idPokemon": 5,
             "name": "charmeleon",
-            "moves": [
-              "flamethrower",
-              "scratch"
-            ]
+            "moves": ["flamethrower", "scratch"]
           },
           {
             "arrayId": 5,
             "idPokemon": 6,
             "name": "charizard",
-            "moves": [
-              "fly",
-              "flamethrower"
-            ]
+            "moves": ["fly", "flamethrower"]
           },
           {
             "arrayId": 6,
             "idPokemon": 7,
             "name": "squirtle",
-            "moves": [
-              "water-gun",
-              "tackle"
-            ]
+            "moves": ["water-gun", "tackle"]
           },
           {
             "arrayId": 7,
             "idPokemon": 8,
             "name": "wartortle",
-            "moves": [
-              "water-gun",
-              "bite"
-            ]
+            "moves": ["water-gun", "bite"]
           },
           {
             "arrayId": 8,
             "idPokemon": 9,
             "name": "blastoise",
-            "moves": [
-              "hydro-pump",
-              "bite"
-            ]
+            "moves": ["hydro-pump", "bite"]
           },
           {
             "arrayId": 9,
             "idPokemon": 25,
             "name": "pikachu",
-            "moves": [
-              "thunderbolt",
-              "quick-attack"
-            ]
+            "moves": ["thunderbolt", "quick-attack"]
           }
         ],
         [
@@ -125,90 +135,61 @@
             "arrayId": 0,
             "idPokemon": 52,
             "name": "meowth",
-            "moves": [
-              "scratch",
-              "bite"
-            ]
+            "moves": ["scratch", "bite"]
           },
           {
             "arrayId": 1,
             "idPokemon": 53,
             "name": "persian",
-            "moves": [
-              "slash",
-              "scratch"
-            ]
+            "moves": ["slash", "scratch"]
           },
           {
             "arrayId": 2,
             "idPokemon": 39,
             "name": "jigglypuff",
-            "moves": [
-              "sing",
-              "pound"
-            ]
+            "moves": ["sing", "pound"]
           },
           {
             "arrayId": 3,
             "idPokemon": 94,
             "name": "gengar",
-            "moves": [
-              "shadow-ball",
-              "hypnosis"
-            ]
+            "moves": ["shadow-ball", "hypnosis"]
           },
           {
             "arrayId": 4,
             "idPokemon": 92,
             "name": "gastly",
-            "moves": [
-              "lick",
-              "night-shade"
-            ]
+            "moves": ["lick", "night-shade"]
           },
           {
             "arrayId": 5,
             "idPokemon": 93,
             "name": "haunter",
-            "moves": [
-              "shadow-punch",
-              "night-shade"
-            ]
+            "moves": ["shadow-punch", "night-shade"]
           },
           {
             "arrayId": 6,
             "idPokemon": 63,
             "name": "abra",
-            "moves": [
-              "teleport"
-            ]
+            "moves": ["teleport"]
           },
           {
             "arrayId": 7,
             "idPokemon": 64,
             "name": "kadabra",
-            "moves": [
-              "psybeam",
-              "confusion"
-            ]
+            "moves": ["psybeam", "confusion"]
           },
           {
             "arrayId": 8,
             "idPokemon": 65,
             "name": "alakazam",
-            "moves": [
-              "psychic",
-              "confusion"
-            ]
+            "moves": ["psychic", "confusion"]
           },
           {
             "arrayId": 9,
             "idPokemon": 37,
             "name": "vulpix",
-            "moves": [
-              "ember",
-              "quick-attack"
-            ]
+            "moves": ["ember", "quick-attack"]
           }
         ],
         [
@@ -216,92 +197,83 @@
             "arrayId": 0,
             "idPokemon": 133,
             "name": "eevee",
-            "moves": [
-              "quick-attack"
-            ]
+            "moves": ["quick-attack"]
           },
           {
             "arrayId": 1,
             "idPokemon": 134,
             "name": "vaporeon",
-            "moves": [
-              "water-gun",
-              "bite"
-            ]
+            "moves": ["water-gun", "bite"]
           },
           {
             "arrayId": 2,
             "idPokemon": 135,
             "name": "jolteon",
-            "moves": [
-              "thunderbolt",
-              "quick-attack"
-            ]
+            "moves": ["thunderbolt", "quick-attack"]
           },
           {
             "arrayId": 3,
             "idPokemon": 136,
             "name": "flareon",
-            "moves": [
-              "ember",
-              "bite"
-            ]
+            "moves": ["ember", "bite"]
           },
           {
             "arrayId": 4,
             "idPokemon": 196,
             "name": "espeon",
-            "moves": [
-              "psybeam",
-              "quick-attack"
-            ]
+            "moves": ["psybeam", "quick-attack"]
           },
           {
             "arrayId": 5,
             "idPokemon": 197,
             "name": "umbreon",
-            "moves": [
-              "dark-pulse",
-              "tackle"
-            ]
+            "moves": ["dark-pulse", "tackle"]
           },
           {
             "arrayId": 6,
             "idPokemon": 700,
             "name": "sylveon",
-            "moves": [
-              "moonblast",
-              "quick-attack"
-            ]
+            "moves": ["moonblast", "quick-attack"]
           },
           {
             "arrayId": 7,
             "idPokemon": 470,
             "name": "leafeon",
-            "moves": [
-              "leaf-blade",
-              "quick-attack"
-            ]
+            "moves": ["leaf-blade", "quick-attack"]
           },
           {
             "arrayId": 8,
             "idPokemon": 471,
             "name": "glaceon",
-            "moves": [
-              "ice-shard",
-              "quick-attack"
-            ]
+            "moves": ["ice-shard", "quick-attack"]
           },
           {
             "arrayId": 9,
             "idPokemon": 700,
             "name": "sylveon",
-            "moves": [
-              "fairy-wind"
-            ]
+            "moves": ["fairy-wind"]
           }
         ]
+      ],
+      "collectionNames": [
+        "Planta",
+        "Gatos",
+        "Peluditos"
       ]
+    },
+    {
+      "id": "u002",
+      "username": "noseeeee",
+      "age": 222,
+      "mail": "hola@a123123.con",
+      "password": "123",
+      "pokemonId": 284,
+      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/284.png",
+      "points": 2,
+      "lastLoginDate": "2025-11-17T04:41:16.967Z",
+      "pokemonVault": [],
+      "collectionNames": [],
+      "pointsHistory": []
     }
   ]
 }

@@ -1,6 +1,6 @@
 .collections-page {
   padding: 1rem;
-  padding-top: 120px; 
+  padding-top: 120px;
 }
 
 .header-row {
@@ -27,7 +27,7 @@
   border-radius: 8px;
   padding: 0.75rem 1rem;
   margin-bottom: 1rem;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
 }
 
 .collection-header {
@@ -158,4 +158,26 @@
 
 .pokeball-btn:hover .pokeball-top {
   transform: rotateX(200deg);
+}
+
+.collection-title {
+  cursor: text;
+  display: flex;
+  align-items: center;
+}
+
+.collection-name {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.collection-name-input {
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  min-width: 180px;
+  box-sizing: border-box;
 }

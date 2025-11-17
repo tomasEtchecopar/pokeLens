@@ -22,6 +22,8 @@ export class UserCollections {
   private readonly pkmList = inject(PokemonListService);
   private readonly router = inject(Router);
 
+  editingIndex = signal<number | null>(null);
+  editingName = signal<string>('');
   // Usuario activo
   usuario = computed(() => this.auth.activeUser());
 
@@ -136,4 +138,61 @@ export class UserCollections {
       error: () => alert('Error al eliminar la colección'),
     });
   }
+
+  getCollectionName(index: number): string {
+    const user = this.usuario();
+    const names = user?.collectionNames;
+    const stored = names?.[index];
+
+    if (stored && stored.trim().length > 0) {
+      return stored.trim();
+    }
+
+    // fallback si no tiene nombre
+    return `Colección ${index + 1}`;
+  }
+
+  startEditingName(index: number) {
+    const current = this.getCollectionName(index);
+    this.editingIndex.set(index);
+    this.editingName.set(current);
+  }
+
+  onNameInput(event: Event) {
+    const value = (event.target as HTMLInputElement).value;
+    this.editingName.set(value);
+  }
+
+  saveCollectionName(index: number) {
+    const user = this.usuario();
+    if (!user || !user.id) {
+      this.editingIndex.set(null);
+      return;
+    }
+
+    const raw = this.editingName().trim();
+    const finalName = raw || `Colección ${index + 1}`;
+
+    const existing = user.collectionNames ?? [];
+    const updatedNames = [...existing];
+    updatedNames[index] = finalName;
+
+    const updatedUser = {
+      ...user,
+      collectionNames: updatedNames
+    };
+
+    this.userClient.updateUser(updatedUser, user.id).subscribe({
+      next: (res) => {
+        this.auth.activeUser.set(res);
+        localStorage.setItem('activeUser', JSON.stringify(res));
+        this.editingIndex.set(null);
+      },
+      error: () => {
+        alert('Error al guardar el nombre de la colección');
+        this.editingIndex.set(null);
+      }
+    });
+  }
+
 }

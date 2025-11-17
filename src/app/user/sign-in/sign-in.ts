@@ -150,6 +150,7 @@ export class SignIn implements OnInit {
         ...datosUser, pokemonId, avatarUrl, points: puntos,
         lastLoginDate: new Date().toISOString(),
         pokemonVault: [],
+        collectionNames: [],
         pointsHistory : []
       };
 

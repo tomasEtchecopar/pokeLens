@@ -72,7 +72,7 @@ export class Profile {
 
     const gained = this.points.randomPoints();
 
-    this.points.addPoints(user, gained, `Prueba: se otorgaron ${gained} puntos`)
+    this.points.addPoints(user, gained, `Prueba: se otorgaron ${gained} puntos`,undefined)
       .subscribe(updatedUser => {
 
         const event: PointEvent = {
