@@ -3,17 +3,16 @@ import { pokemonVault } from "../pages/pokemon-collections/collection-model";
 export interface PointEvent {
   amount: number;
   reason: string;
-  date: string; 
+  date: string;
 }
 
 export interface User {
-  id?: string,
-  username: string,
-  age: number,
-  mail: string,
-  password: string,
-  pokemonVault?: pokemonVault[],
-  pokemonTeams?: pokemonVault[],
+  id?: string;
+  username: string;
+  age: number;
+  mail: string;
+  password: string;
+  pokemonVault?: pokemonVault[][];
   pokemonId?: number;
   avatarUrl?: string;
   points?: number;

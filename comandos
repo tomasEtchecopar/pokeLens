@@ -8,6 +8,6 @@ git merge main
 --------------------------
 git push:
 git add .
-git commit -m "Progreso: agrega componente perfil (a medias)"
-git push origin tu-branch
+git commit -m ""
+git push origin feature/login
 --------------------------

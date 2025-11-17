@@ -76,7 +76,7 @@ export class PointsService {
 
   /**
    * Método GENÉRICO: sumar puntos por cualquier acción.
-   *AUN SIN IMPLEMENTAR
+   * AUN SIN IMPLEMENTAR REALMENTE (si en pruebas)
    * @param user   Usuario actual
    * @param amount Cantidad de puntos
    * @param reason (opcional) Texto del motivo ("+10 puntos por crear una lista")
@@ -99,7 +99,8 @@ export class PointsService {
   }
 
   /**
-   *Registra un evento que sume puntos, AUN SIN IMPLEMENTAR
+   *Registra un evento que sume puntos, 
+      * AUN SIN IMPLEMENTAR REALMENTE (si en pruebas)
    * @param user   Usuario actual
    * @param event   pointsHistory?: PointEvent[];
    */

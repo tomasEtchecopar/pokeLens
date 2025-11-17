@@ -1,3 +1,7 @@
+.form-body{
+  padding-top:  120px;
+}
+
 form {
   max-width: 450px;
   margin: 3rem auto;

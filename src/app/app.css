@@ -1,3 +1,17 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* 👈 el body NO scrollea */
+}
+
+
 header {
   background: #d43030;
   padding: 1rem 2rem;
@@ -51,3 +65,43 @@ footer p {
   }
 }
 
+html,
+body {
+  height: 100%;
+  margin: 0;
+}
+
+:root {
+  --footer-height: 70px;
+  --header-height: 80px;
+}
+
+app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: var(--header-height);
+  z-index: 1000;
+}
+
+.layout-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--footer-height);
+  z-index: 1000;
+}
+
+.layout-content {
+  position: absolute;
+  top: var(--header-height);
+  bottom: var(--footer-height);
+  left: 0;
+  right: 0;
+  overflow-y: auto;
+  /* 👈 el scroll está acá */
+  overflow-x: hidden;
+  padding: 1rem;
+}

@@ -15,28 +15,61 @@ export class UserClient {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = "http://localhost:3000/users"
 
-  getUserById(id: string): Observable<User>{
+  getUserById(id: string): Observable<User> {
     return this.http.get<User>(`${this.baseUrl}/${id}`);
   }
 
-  addUser(user: User): Observable<User>{
+  addUser(user: User): Observable<User> {
     return this.http.post<User>(this.baseUrl, user);
   }
 
-  updateUser(user: User, id: string | number): Observable<User>{
+  updateUser(user: User, id: string | number): Observable<User> {
     return this.http.put<User>(`${this.baseUrl}/${id}`, user)
   }
 
-  addPokemonToVault(userId: string, nuevoPokemon: pokemonVault): Observable<User> {
-  return this.getUserById(userId).pipe(
-    switchMap(usuario => {
-      const vault = usuario.pokemonVault ?? [];
-      const nextId = vault.length ? Math.max(...vault.map(p => p.arrayId)) + 1 : 0;
-      const updatedVault = [...vault, { ...nuevoPokemon, arrayId: nextId }];
-      return this.http.patch<User>(`${this.baseUrl}/${userId}`, { pokemonVault: updatedVault });
-    })
-  );
-}
+addPokemonToVault(
+    userId: string,
+    nuevoPokemon: pokemonVault,
+    collectionNumber: number
+  ): Observable<User> {
+    return this.getUserById(userId).pipe(
+      switchMap(usuario => {
+        // aseguramos array externo
+        const vaults: pokemonVault[][] = usuario.pokemonVault ?? [];
+
+        // colección 1 -> índice 0, colección 2 -> índice 1, etc.
+        const index = Math.max(collectionNumber - 1, 0);
+
+        // si no existe esa colección, creamos las que falten vacías
+        while (vaults.length <= index) {
+          vaults.push([]);
+        }
+
+        const targetCollection = vaults[index];
+
+        // calcular próximo arrayId dentro DE ESA colección
+        const nextId = targetCollection.length
+          ? Math.max(...targetCollection.map(p => p.arrayId ?? 0)) + 1
+          : 0;
+
+        const updatedCollection = [
+          ...targetCollection,
+          { ...nuevoPokemon, arrayId: nextId }
+        ];
+
+        // reconstruimos el array de colecciones
+        const updatedVaults = vaults.map((col, i) =>
+          i === index ? updatedCollection : col
+        );
+
+        // PATCH solo del campo pokemonVault
+        return this.http.patch<User>(`${this.baseUrl}/${userId}`, {
+          pokemonVault: updatedVaults
+        });
+      })
+    );
+  }
+
 
 
 }

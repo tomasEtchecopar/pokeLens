@@ -19,6 +19,7 @@
   image-rendering: pixelated;
   filter: drop-shadow(4px 4px 0px #000);
   margin-bottom: 2rem;
+  padding-top: 120px;
 }
 
 .subtitle {

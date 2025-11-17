@@ -1,0 +1,42 @@
+<div class="form-body">
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate>
+        <h2 class="form-title">Contacto</h2>
+
+        <div class="form-field">
+            <label for="name">Nombre</label>
+            <input id="name" type="text" formControlName="name" placeholder="Ash Ketchum" />
+            @if(form.controls['name'].touched && form.controls['name'].invalid) {
+            <small>Ingresá al menos 3 caracteres.</small>
+            }
+        </div>
+
+        <div class="form-field">
+            <label for="email">Email</label>
+            <input id="email" type="email" formControlName="email" placeholder="ash@pokemail.com" />
+            @if(form.controls['email'].touched && form.controls['email'].invalid) {
+            <small>Ingresá un email válido.</small>
+            }
+        </div>
+
+        <div class="form-field">
+            <label for="subject">Asunto</label>
+            <input id="subject" type="text" formControlName="subject" placeholder="Sugerencia, bug, consulta…" />
+            @if(form.controls['subject'].touched && form.controls['subject'].invalid) {
+            <small>El asunto es obligatorio (máx. 100 caracteres).</small>
+            }
+        </div>
+
+        <div class="form-field">
+            <label for="message">Mensaje</label>
+            <textarea id="message" rows="4" formControlName="message"
+                placeholder="Contanos en qué te podemos ayudar..."></textarea>
+            @if(form.controls['message'].touched && form.controls['message'].invalid) {
+            <small>Escribí al menos 10 caracteres.</small>
+            }
+        </div>
+
+        <button type="submit" class="btn-signIn">
+            Enviar mensaje
+        </button>
+    </form>
+</div>

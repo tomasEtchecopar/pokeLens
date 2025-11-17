@@ -1,4 +1,7 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
+<div class="form-body">
+
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="form-field">
     <label for="username">Nombre y Apellido</label>
     <input type="text" id="username" formControlName="username" placeholder="Ash Ketchum">
@@ -50,3 +53,6 @@
 
 
 </form>
+</div>
+
+

@@ -1,61 +1,71 @@
 import { Component, inject } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
-import { PokemonListService } from '../../pokemon/pokemon-list-service';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { pokemonVault } from './collection-model';
+
+import { PokemonListService } from '../../pokemon/pokemon-list-service';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { UserClient } from '../../core/user-client.service';
-import { User } from '../../user/user-model';
-
-
+import { pokemonVault } from './collection-model';
 
 @Component({
   selector: 'app-pokemon-collections',
+  standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './pokemon-collections.html',
   styleUrl: './pokemon-collections.css',
 })
 export class PokemonCollections {
   private readonly pkmList = inject(PokemonListService);
-  private readonly FormBuilder = inject(FormBuilder);
+  private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
-  private readonly userService = inject(UserClient)
+  private readonly userService = inject(UserClient);
 
-  protected readonly form = this.FormBuilder.nonNullable.group({
+  protected readonly form = this.fb.nonNullable.group({
     name: ['', Validators.required],
-    isMega: [false]
-  })
+    isMega: [false],
+  });
 
   backToCatalog() {
     this.router.navigateByUrl('/catalogo');
   }
 
-  checkMegaEvolved(allPokemon: Pokemon[]){
-      if(!this.form.getRawValue().isMega){
-        return allPokemon.find(p => p.name == this.form.getRawValue().name);
-      }else{
-        return allPokemon.find(p => p.name == this.form.getRawValue().name.concat("-mega"));
-      }
+  checkMegaEvolved(allPokemon: Pokemon[]) {
+    const { name, isMega } = this.form.getRawValue();
+
+    if (!isMega) {
+      return allPokemon.find(p => p.name === name);
+    } else {
+      // ojo: esto asume que el nombre de la mega en la API es "name-mega"
+      return allPokemon.find(p => p.name === name.concat('-mega'));
+    }
   }
 
   addCollection() {
     const allPokemon = this.pkmList.allPokemon();
+    const pokemon = this.checkMegaEvolved(allPokemon);
 
-    this.userService.getUserById("a7c8").subscribe((usuario: User) => {
-      const vaultedPkm: pokemonVault[] = usuario.pokemonVault ?? []; // Initializes the array if it's not already initialized in the json
+    if (!pokemon) {
+      alert('No se encontró el Pokémon seleccionado.');
+      return;
+    }
 
-      const nextId = vaultedPkm.length ? Math.max(...vaultedPkm.map(p => p.arrayId)) + 1 : 1; // Calculates the next ID based on the maximum length of the array
+    const nuevo: pokemonVault = {
+      arrayId: 0, // se pisará en el service con el nextId correcto
+      idPokemon: pokemon.id,
+      name: pokemon.name,
+      moves: pokemon.moves?.map(m => m.move.name) || [],
+      // si tu interfaz pokemonVault tiene más campos (nature, nickname, etc),
+      // podés completarlos acá
+    };
 
+    // 👉 Colección 1 (si no existe, se crea sola en el servicio)
+    const collectionNumber = 1;
 
-      const pokemon = this.checkMegaEvolved(allPokemon); // Checks if the User selected that it is a mega evolved pokemon (needs more security for a pokemon without a mega)
-
-      this.userService.addPokemonToVault("a7c8", {
-        arrayId: nextId,
-        idPokemon: pokemon?.id,
-        name: pokemon?.name,
-        moves: pokemon?.moves?.map(m => m.move.name) || []
-      }).subscribe(() => console.log('✅ Pokémon agregado sin sobrescribir'));
-
-    });
+    this.userService
+      .addPokemonToVault('a7c8', nuevo, collectionNumber)
+      .subscribe({
+        next: () => console.log('✅ Pokémon agregado sin sobrescribir'),
+        error: () => alert('Error al agregar el Pokémon a la colección'),
+      });
   }
 }

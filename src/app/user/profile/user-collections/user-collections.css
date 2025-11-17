@@ -1,0 +1,161 @@
+.collections-page {
+  padding: 1rem;
+  padding-top: 120px; 
+}
+
+.header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  background: #2c2c2c;
+  color: #fff;
+  border: 2px solid #1a1a1a;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background: #1a1a1a;
+}
+
+.collection-block {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+
+.collection-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.avg-power {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #222;
+  background: #f0f0f0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+.btn-delete-collection {
+  background: #b50000;
+  color: #fff;
+  border: none;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.btn-delete-collection:hover {
+  background: #ff0000;
+}
+
+/* Scroll horizontal por colección */
+.collection-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.5rem;
+}
+
+/* Fila horizontal de cards */
+.vault-grid {
+  display: flex;
+  flex-wrap: nowrap;
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.vault-card-wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+/* Nombre debajo de la card */
+.vault-name {
+  margin-top: 0.4rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333;
+  text-align: center;
+}
+
+/* ==== BOTÓN POKEBOLA PARA BORRAR POKÉMON ==== */
+.pokeball-btn {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+.pokeball {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  transition: transform 0.2s ease;
+}
+
+.pokeball-btn:hover .pokeball {
+  transform: scale(1.15);
+}
+
+.pokeball-top {
+  width: 100%;
+  height: 50%;
+  background: #ff1c1c;
+  border-top-left-radius: 50%;
+  border-top-right-radius: 50%;
+  border: 1px solid #000;
+  transition: transform 0.25s ease;
+  transform-origin: bottom;
+}
+
+.pokeball-bottom {
+  width: 100%;
+  height: 50%;
+  background: #ffffff;
+  border-bottom-left-radius: 50%;
+  border-bottom-right-radius: 50%;
+  border: 1px solid #000;
+}
+
+.pokeball-center {
+  position: absolute;
+  top: 35%;
+  left: 35%;
+  width: 9px;
+  height: 9px;
+  background: #ffffff;
+  border-radius: 50%;
+  border: 2px solid #000;
+  z-index: 10;
+}
+
+.pokeball-btn:hover .pokeball-top {
+  transform: rotateX(200deg);
+}

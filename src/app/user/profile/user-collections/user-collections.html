@@ -1,0 +1,65 @@
+<div class="collections-page">
+
+  <div class="header-row">
+    <h2>Mis colecciones</h2>
+    <button class="btn" (click)="backToProfile()">Volver al perfil</button>
+  </div>
+
+  @if (usuario(); as u) {
+
+    @if (collections().length) {
+
+      @for (col of collections(); let i = $index; track i) {
+
+        <section class="collection-block">
+          <div class="collection-header">
+            <h3>Colección {{ i + 1 }}</h3>
+            <p class="avg-power">
+              <strong>Poder promedio:</strong>
+              {{ collectionAverages()[i] || 0 }}
+            </p>
+            <button class="btn-delete-collection"
+                    (click)="deleteCollection(i)"
+                    title="Eliminar colección completa">
+              🗑️ Eliminar colección
+            </button>
+          </div>
+
+          <div class="collection-scroll">
+            <div class="vault-grid">
+
+              @for (entry of col; track entry.arrayId) {
+
+                @if (getPokemonForCard(entry.idPokemon); as pkm) {
+
+                  <div class="vault-card-wrapper">
+
+                    <!-- Botón Pokébola para eliminar el Pokémon -->
+                    <button class="pokeball-btn"
+                            (click)="deletePokemon(i, entry.arrayId!)"
+                            title="Quitar Pokémon de la colección">
+                      <div class="pokeball">
+                        <div class="pokeball-top"></div>
+                        <div class="pokeball-bottom"></div>
+                        <div class="pokeball-center"></div>
+                      </div>
+                    </button>
+
+                    <!-- Card reutilizada -->
+                    <app-pokemon-card [pokemon]="pkm"></app-pokemon-card>
+                  </div>
+                }
+              }
+            </div>
+          </div>
+        </section>
+      }
+    } @else {
+      <p>No tenés colecciones todavía.</p>
+    }
+
+  } @else {
+    <p>No hay usuario activo. Iniciá sesión.</p>
+  }
+
+</div>
