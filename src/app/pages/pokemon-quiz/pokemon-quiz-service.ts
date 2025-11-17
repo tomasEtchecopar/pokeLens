@@ -1,8 +1,9 @@
+import { PokemonListService } from './../../pokemon/pokemon-list-service';
 import { Injectable, signal, computed } from '@angular/core';
 import { inject } from '@angular/core';
-import { PokemonListService } from '../../pokemon/pokemon-list-service';
-import { PokeApiService } from '../../pokemon/pokeapi-service';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
+import { PokeApiService } from '../../pokemon/pokeapi-service';
+
 
 export interface QuizQuestion {
   pokemon: Pokemon;
@@ -55,6 +56,12 @@ export class PokemonQuizService {
    * Genera una nueva pregunta del quiz
    */
   generateQuestion(): void {
+    // Resetea el estado INMEDIATAMENTE
+    this.hasAnswered.set(false);
+    this.selectedAnswer.set(null);
+    this.isCorrect.set(null);
+    this.currentQuestion.set(null); // Limpia la pregunta anterior
+
     const allResources = this.pokeListService.allPokemonResource();
 
     if (allResources.length === 0) {
@@ -64,9 +71,6 @@ export class PokemonQuizService {
     }
 
     this.isLoading.set(true);
-    this.hasAnswered.set(false);
-    this.selectedAnswer.set(null);
-    this.isCorrect.set(null);
 
     // Selecciona un pokemon aleatorio
     const randomIndex = Math.floor(Math.random() * allResources.length);

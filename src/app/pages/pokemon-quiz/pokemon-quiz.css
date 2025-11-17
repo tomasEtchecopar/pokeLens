@@ -121,18 +121,29 @@
   border-radius: 50%;
   box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .image-container img {
   width: 160px;
   height: 160px;
   image-rendering: pixelated;
-  transition: filter 0.5s ease;
+  position: relative;
+  z-index: 1;
 }
 
-.image-container img.silhouette {
-  filter: brightness(0) drop-shadow(0 0 8px #000);
+/* Capa negra que oculta la imagen */
+.silhouette-overlay {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 160px;
+  height: 160px;
+  background: #000;
+  z-index: 10;
+  pointer-events: none;
+  filter: drop-shadow(0 0 12px #000);
 }
 
 .pokemon-display.revealed .image-container {

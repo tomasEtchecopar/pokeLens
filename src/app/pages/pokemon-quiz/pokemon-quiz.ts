@@ -1,11 +1,11 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { TitleCasePipe } from '@angular/common';
+import { NgStyle, TitleCasePipe } from '@angular/common';
 import { PokemonQuizService } from './pokemon-quiz-service';
 
 @Component({
   selector: 'app-pokemon-quiz',
   standalone: true,
-  imports: [TitleCasePipe],
+  imports: [TitleCasePipe, NgStyle],
   templateUrl: './pokemon-quiz.html',
   styleUrl: './pokemon-quiz.css'
 })
