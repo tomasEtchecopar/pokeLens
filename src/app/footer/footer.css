@@ -97,3 +97,9 @@
   transform: translateY(2px);
   box-shadow: 0 2px 0 #7b1f1f;
 }
+
+.logo-img {
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+}

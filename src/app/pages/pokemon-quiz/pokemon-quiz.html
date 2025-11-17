@@ -1,99 +1,101 @@
-<div class="quiz-root">
-  <div class="quiz-header">
-    <h1>¿Quién es ese Pokémon?</h1>
+<div class="quiz-page">
+  <div class="quiz-root">
+    <div class="quiz-header">
+      <h1>¿Quién es ese Pokémon?</h1>
 
-    <div class="stats-bar">
-      <div class="stat-item">
-        <span class="stat-label">Correctas</span>
-        <span class="stat-value correct">{{ quizService.stats().correct }}</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Incorrectas</span>
-        <span class="stat-value incorrect">{{ quizService.stats().incorrect }}</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Racha</span>
-        <span class="stat-value streak">{{ quizService.stats().streak }}🔥</span>
-      </div>
-      <div class="stat-item">
-        <span class="stat-label">Precisión</span>
-        <span class="stat-value accuracy">{{ quizService.accuracy() }}%</span>
+      <div class="stats-bar">
+        <div class="stat-item">
+          <span class="stat-label">Correctas</span>
+          <span class="stat-value correct">{{ quizService.stats().correct }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Incorrectas</span>
+          <span class="stat-value incorrect">{{ quizService.stats().incorrect }}</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Racha</span>
+          <span class="stat-value streak">{{ quizService.stats().streak }}🔥</span>
+        </div>
+        <div class="stat-item">
+          <span class="stat-label">Precisión</span>
+          <span class="stat-value accuracy">{{ quizService.accuracy() }}%</span>
+        </div>
       </div>
     </div>
-  </div>
 
-  @if(quizService.isLoading()) {
-    <div class="loading-state">
-      <div class="pokeball-spinner"></div>
-      <p>Cargando pregunta...</p>
-    </div>
-  } @else if(quizService.currentQuestion()) {
-    @let question = quizService.currentQuestion()!;
+    @if(quizService.isLoading()) {
+      <div class="loading-state">
+        <div class="pokeball-spinner"></div>
+        <p>Cargando pregunta...</p>
+      </div>
+    } @else if(quizService.currentQuestion()) {
+      @let question = quizService.currentQuestion()!;
 
-    <div class="quiz-content">
-      <!-- Imagen del Pokemon -->
-      <div class="pokemon-display" [class.revealed]="quizService.hasAnswered()">
-        <div class="image-container">
-          @if(question.pokemon.sprites.front_default) {
-            <img
-              [src]="question.pokemon.sprites.front_default"
-              [alt]="question.pokemon.name"
-              [ngStyle]="{'filter': quizService.hasAnswered() ? 'none' : 'brightness(0) drop-shadow(0 0 8px #000)'}"
-            >
+      <div class="quiz-content">
+        <!-- Imagen del Pokemon -->
+        <div class="pokemon-display" [class.revealed]="quizService.hasAnswered()">
+          <div class="image-container">
+            @if(question.pokemon.sprites.front_default) {
+              <img
+                [src]="question.pokemon.sprites.front_default"
+                [alt]="question.pokemon.name"
+                [ngStyle]="{'filter': quizService.hasAnswered() ? 'none' : 'brightness(0) drop-shadow(0 0 8px #000)'}"
+              >
+            }
+          </div>
+
+          <!-- Pista: Número de Pokemon -->
+          @if(!quizService.hasAnswered()) {
+            <div class="hint">
+              <span class="hint-label">Pista:</span>
+              <span class="hint-value">#{{ question.pokemon.id }}</span>
+            </div>
           }
         </div>
 
-        <!-- Pista: Número de Pokemon -->
-        @if(!quizService.hasAnswered()) {
-          <div class="hint">
-            <span class="hint-label">Pista:</span>
-            <span class="hint-value">#{{ question.pokemon.id }}</span>
+        <!-- Resultado -->
+        @if(quizService.hasAnswered()) {
+          <div class="result-banner" [class.correct]="quizService.isCorrect()" [class.incorrect]="!quizService.isCorrect()">
+            @if(quizService.isCorrect()) {
+              <span class="result-icon">✓</span>
+              <span class="result-text">¡Correcto! Es {{ question.correctAnswer | titlecase }}</span>
+            } @else {
+              <span class="result-icon">✗</span>
+              <span class="result-text">Incorrecto. Era {{ question.correctAnswer | titlecase }}</span>
+            }
           </div>
         }
-      </div>
 
-      <!-- Resultado -->
-      @if(quizService.hasAnswered()) {
-        <div class="result-banner" [class.correct]="quizService.isCorrect()" [class.incorrect]="!quizService.isCorrect()">
-          @if(quizService.isCorrect()) {
-            <span class="result-icon">✓</span>
-            <span class="result-text">¡Correcto! Es {{ question.correctAnswer | titlecase }}</span>
-          } @else {
-            <span class="result-icon">✗</span>
-            <span class="result-text">Incorrecto. Era {{ question.correctAnswer | titlecase }}</span>
+        <!-- Opciones -->
+        <div class="options-grid">
+          @for(option of question.options; track option) {
+            <button
+              class="option-button"
+              [class.selected]="quizService.selectedAnswer() === option"
+              [class.correct]="quizService.hasAnswered() && option === question.correctAnswer"
+              [class.incorrect]="quizService.hasAnswered() && quizService.selectedAnswer() === option && option !== question.correctAnswer"
+              [disabled]="quizService.hasAnswered()"
+              (click)="selectAnswer(option)"
+            >
+              {{ option | titlecase }}
+            </button>
           }
         </div>
-      }
 
-      <!-- Opciones -->
-      <div class="options-grid">
-        @for(option of question.options; track option) {
-          <button
-            class="option-button"
-            [class.selected]="quizService.selectedAnswer() === option"
-            [class.correct]="quizService.hasAnswered() && option === question.correctAnswer"
-            [class.incorrect]="quizService.hasAnswered() && quizService.selectedAnswer() === option && option !== question.correctAnswer"
-            [disabled]="quizService.hasAnswered()"
-            (click)="selectAnswer(option)"
-          >
-            {{ option | titlecase }}
+        <!-- Botón siguiente pregunta -->
+        @if(quizService.hasAnswered()) {
+          <button class="next-button" (click)="nextQuestion()">
+            Siguiente Pregunta →
           </button>
         }
       </div>
+    }
 
-      <!-- Botón siguiente pregunta -->
-      @if(quizService.hasAnswered()) {
-        <button class="next-button" (click)="nextQuestion()">
-          Siguiente Pregunta →
-        </button>
-      }
+    <!-- Botón reiniciar -->
+    <div class="quiz-footer">
+      <button class="reset-button" (click)="resetQuiz()">
+        Reiniciar Estadísticas
+      </button>
     </div>
-  }
-
-  <!-- Botón reiniciar -->
-  <div class="quiz-footer">
-    <button class="reset-button" (click)="resetQuiz()">
-      Reiniciar Estadísticas
-    </button>
   </div>
 </div>

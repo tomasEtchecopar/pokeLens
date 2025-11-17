@@ -13,6 +13,7 @@ export interface User {
   mail: string;
   password: string;
   pokemonVault?: pokemonVault[][];
+  collectionNames?:string[];
   pokemonId?: number;
   avatarUrl?: string;
   points?: number;

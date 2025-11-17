@@ -8,8 +8,8 @@
       "password": "pikachu",
       "pokemonId": 25,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-      "points": 385,
-      "lastLoginDate": "2025-11-17T03:59:54.593Z",
+      "points": 427,
+      "lastLoginDate": "2025-11-17T06:39:08.728Z",
       "pointsHistory": [
         {
           "amount": 50,
@@ -45,6 +45,26 @@
           "amount": 9,
           "reason": "Estamos probando el sistema",
           "date": "2025-11-17T05:02:16.990Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-17T05:27:53.239Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-17T05:43:19.255Z"
+        },
+        {
+          "amount": 14,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T05:47:27.220Z"
+        },
+        {
+          "amount": 18,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T05:47:29.106Z"
         }
       ],
       "pokemonVault": [
@@ -319,12 +339,22 @@
             "moves": [
               "fairy-wind"
             ]
+          },
+          {
+            "arrayId": 10,
+            "idPokemon": 58,
+            "name": "growlithe"
           }
         ]
+      ],
+      "collectionNames": [
+        "Planta",
+        "Gatos",
+        "Peluditos"
       ]
     },
     {
-      "id": "903e",
+      "id": "u002",
       "username": "noseeeee",
       "age": 222,
       "mail": "hola@a123123.con",
@@ -334,6 +364,7 @@
       "points": 2,
       "lastLoginDate": "2025-11-17T04:41:16.967Z",
       "pokemonVault": [],
+      "collectionNames": [],
       "pointsHistory": []
     }
   ]

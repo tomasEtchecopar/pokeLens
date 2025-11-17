@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { PointEvent, User } from '../user/user-model';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { not } from 'rxjs/internal/util/not';
 
 
 @Injectable({
@@ -33,70 +34,87 @@ export class PointsService {
   */
   awardLoginPoints(user: User): Observable<User> {
 
-  if (!user.id) return of(user);
+    if (!user.id) return of(user);
 
-  const today = new Date();
-  const last = user.lastLoginDate ? new Date(user.lastLoginDate) : null;
+    const today = new Date();
+    const last = user.lastLoginDate ? new Date(user.lastLoginDate) : null;
 
-  const isSameDay =
-    last &&
-    last.getFullYear() === today.getFullYear() &&
-    last.getMonth() === today.getMonth() &&
-    last.getDate() === today.getDate();
+    const isSameDay =
+      last &&
+      last.getFullYear() === today.getFullYear() &&
+      last.getMonth() === today.getMonth() &&
+      last.getDate() === today.getDate();
 
-  // No suma puntos y actualiza lastLoginDate
-  if (isSameDay) {
-    const updated: User = {
-      ...user,
-      lastLoginDate: today.toISOString()
+    // No suma puntos y actualiza lastLoginDate
+    if (isSameDay) {
+      const updated: User = {
+        ...user,
+        lastLoginDate: today.toISOString()
+      };
+      return this.http.put<User>(`${this.baseUrl}/${user.id}`, updated);
+    }
+
+    // Sumamos +10 puntos por login diario
+    const event: PointEvent = {
+      amount: 10,
+      reason: 'Inicio de sesión diario',
+      date: today.toISOString()
     };
-    return this.http.put<User>(`${this.baseUrl}/${user.id}`, updated);
+
+    const updatedWithPoints: User = {
+      ...user,
+      points: (user.points ?? 0) + 10,
+      lastLoginDate: today.toISOString(),
+      pointsHistory: [...(user.pointsHistory ?? []), event]
+    };
+
+    return this.http.put<User>(`${this.baseUrl}/${user.id}`, updatedWithPoints).pipe(
+      tap(() => alert('Se le asignaron +10 Puntos por su ingreso diario!'))
+    );
   }
-
-  // Sumamos +10 puntos por login diario
-  const event: PointEvent = {
-    amount: 10,
-    reason: 'Inicio de sesión diario',
-    date: today.toISOString()
-  };
-
-  const updatedWithPoints: User = {
-    ...user,
-    points: (user.points ?? 0) + 10,
-    lastLoginDate: today.toISOString(),
-    pointsHistory: [...(user.pointsHistory ?? []), event]
-  };
-
-  return this.http.put<User>(`${this.baseUrl}/${user.id}`, updatedWithPoints).pipe(
-    tap(() => alert('Se le asignaron +10 Puntos por su ingreso diario!'))
-  );
-}
 
 
 
   /**
    * Método GENÉRICO: sumar puntos por cualquier acción.
-   * AUN SIN IMPLEMENTAR REALMENTE (si en pruebas)
    * @param user   Usuario actual
    * @param amount Cantidad de puntos
    * @param reason (opcional) Texto del motivo ("+10 puntos por crear una lista")
+   * @param reason2 (opcional) Para que no genere un alerta, pero se registre el motivo de los puntos
+   * ambos reason pueden ser undefined, si se desea un alert se debe pasar en reason, sino en reason2
    */
-  addPoints(user: User, amount: number, reason?: string): Observable<User> {
-    if (!user.id) return of(user);
+addPoints(user: User, amount: number, reason?: string, reason2?: string): Observable<User> {
+  if (!user.id) return of(user);
 
-    const updated: User = {
-      ...user,
-      points: (user.points ?? 0) + amount
-    };
+  const updated: User = {
+    ...user,
+    points: (user.points ?? 0) + amount
+  };
 
-    return this.http.put<User>(`${this.baseUrl}/${user.id}`, updated).pipe(
-      tap(() => {
-        if (reason) {
-          alert(`${reason}`);
-        }
-      })
-    );
+  if (reason) {
+    return this.alertAddPoints(updated, user.id, reason);
+  } else {
+    return this.notAlertAddPoints(updated, user.id, reason2 ?? '');
   }
+}
+
+alertAddPoints(user: User, id: string, reason: string): Observable<User> {
+  return this.http.put<User>(`${this.baseUrl}/${id}`, user).pipe(
+    tap(() => {
+      alert(reason);
+    })
+  );
+}
+
+notAlertAddPoints(user: User, id: string, reason2: string): Observable<User> {
+  return this.http.put<User>(`${this.baseUrl}/${id}`, user).pipe(
+    tap((updatedUser) => {
+      console.log(`Puntos actualizados (${reason2}) — total: ${updatedUser.points}`);
+    })
+  );
+}
+
+
 
   /**
    *Registra un evento que sume puntos, 
