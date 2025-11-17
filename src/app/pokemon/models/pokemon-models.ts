@@ -25,6 +25,8 @@ export interface Pokemon {
     weight: number; // hectograms
     base_experience: number;
 
+    cries?: PokemonCries;
+
     moves: PokemonMove[];
     abilities: PokemonAbility[];
     forms: NamedAPIResource[];
@@ -125,4 +127,9 @@ export interface PokemonStat {
 export interface PokemonType {
     slot: number;
     type: NamedAPIResource;
+}
+
+export interface PokemonCries{
+  latest: string;
+  legacy: string;
 }
