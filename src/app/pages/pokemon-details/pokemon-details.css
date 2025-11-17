@@ -47,6 +47,79 @@
   box-shadow: 0 0 8px rgba(0,0,0,0.6);
 }
 
+/* Botón Catálogo */
+.catalog-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background: linear-gradient(180deg, #3a3a3a, #2d2d2d);
+  border: 3px solid #1a1a1a;
+  box-shadow:
+    inset 1px 1px 0 #4a4a4a,
+    3px 3px 0 #111;
+  color: #ffd700;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  font-family: 'Press Start 2P', monospace;
+  transition: all 0.1s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.catalog-button:hover {
+  background: linear-gradient(180deg, #4a4a4a, #3d3d3d);
+  transform: translate(1px, 1px);
+  box-shadow:
+    inset 1px 1px 0 #5a5a5a,
+    2px 2px 0 #111;
+}
+
+.catalog-button:active {
+  transform: translate(2px, 2px);
+  box-shadow:
+    inset 1px 1px 0 #2a2a2a,
+    1px 1px 0 #111;
+}
+
+/* Flecha pixel art */
+.arrow-pixel {
+  width: 12px;
+  height: 12px;
+  position: relative;
+  display: inline-block;
+}
+
+.arrow-pixel::before,
+.arrow-pixel::after {
+  content: '';
+  position: absolute;
+  background: #ffd700;
+}
+
+/* Forma de flecha hacia la izquierda en pixel art */
+.arrow-pixel::before {
+  width: 6px;
+  height: 2px;
+  top: 5px;
+  left: 0;
+  box-shadow:
+    0 -2px 0 #ffd700,
+    0 2px 0 #ffd700,
+    2px -4px 0 #ffd700,
+    2px 4px 0 #ffd700;
+}
+
+.arrow-pixel::after {
+  width: 8px;
+  height: 2px;
+  top: 5px;
+  right: 0;
+}
+
 /* Pokemon Card centrada arriba */
 .pokemon-card-center {
   display: flex;
@@ -473,6 +546,17 @@
   .details-header h1 {
     font-size: 1rem;
     letter-spacing: 1px;
+  }
+
+  .catalog-button {
+    font-size: 0.65rem;
+    padding: 0.4rem 0.6rem;
+    gap: 0.4rem;
+  }
+
+  .arrow-pixel {
+    width: 10px;
+    height: 10px;
   }
 
   .metrics { gap: 0.4rem; }

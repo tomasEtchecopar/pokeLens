@@ -5,6 +5,12 @@
 @if (p){
 <div class="details-root">
   <div class="details-header">
+
+    <a routerLink="/catalogo" class="catalog-button">
+      <div class="arrow-pixel"></div>
+      <span>CATALOGO</span>
+    </a>
+
     <h1>{{ p!.name | titlecase }}</h1>
     <span class="poke-number">#{{ p.id }}</span>
   </div>

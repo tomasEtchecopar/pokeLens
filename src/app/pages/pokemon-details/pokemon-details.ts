@@ -1,6 +1,6 @@
 import { Component, inject, linkedSignal } from '@angular/core';
 import { computed } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
 import { toSignal } from '@angular/core/rxjs-interop';
@@ -13,7 +13,7 @@ import { forkJoin, switchMap } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon-details',
-  imports: [TitleCasePipe, PokemonCard, DecimalPipe, NgClass],
+  imports: [TitleCasePipe, PokemonCard, DecimalPipe, NgClass, RouterLink],
   templateUrl: './pokemon-details.html',
   styleUrl: './pokemon-details.css'
 })
