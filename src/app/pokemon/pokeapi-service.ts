@@ -124,7 +124,6 @@ export class PokeApiService {
     );
   }
 
-<<<<<<< HEAD
 
   /** Mapear username -> pokemonId (fijo) */
   hashToPokemonId(text: string, max = 1025): number {
@@ -155,7 +154,6 @@ export class PokeApiService {
 }
 
 
-=======
   private extractEvolutionNames(chain: EvolutionChain){
     const names: string[] = [];
 
@@ -176,6 +174,5 @@ export class PokeApiService {
 
   }
 
->>>>>>> main
 }
 
