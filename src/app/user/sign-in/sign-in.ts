@@ -38,7 +38,7 @@ export class SignIn implements OnInit {
 
   protected readonly form = this.formBuilder.nonNullable.group({
     username: ['', Validators.required],
-    age: [8, [Validators.required, Validators.min(8)]],
+    age: [0, [Validators.required, Validators.min(8)]],
     mail: this.formBuilder.nonNullable.control(
       '',
       { validators: [Validators.required, Validators.email, Validators.pattern(emailPatter)], updateOn: 'blur' }
@@ -141,7 +141,7 @@ export class SignIn implements OnInit {
     else {
       //  REGISTRO
       const usernameKey = datosUser.username.trim().toLowerCase();
-      const pokemonId = this.pokeService.hashToPokemonId(usernameKey); //genero un hash con el nombre de usuario lo que me da un ID 
+      const pokemonId = this.pokeService.hashToPokemonId(usernameKey); //genero un hash con el nombre de usuario lo que me da un ID
       const avatarUrl = this.pokeService.pokemonArtworkUrl(pokemonId); //Consigo el avatar para el usuario
       const puntos = this.points.randomPoints() //Genero los puntos de bienvenida
 
@@ -162,7 +162,7 @@ export class SignIn implements OnInit {
             this.auth.activeUser.set(createdUser);
             localStorage.setItem('activeUser', JSON.stringify(createdUser));
 
-            this.form.reset({ username: '', age: 8, mail: '', password: '' });
+            this.form.reset({ username: '', age: undefined, mail: '', password: '' });
             this.emailTaken = false;
             this.usernameTaken = false;
             return this.router.navigateByUrl('/catalogo')
