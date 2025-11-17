@@ -1,51 +1,52 @@
+<!-- pokemon-card.html -->
 <div class="pokedex-screen">
-        @let pokemon = this.pokemon();
-      @if(pokemon){
-        <div class="screen-bezel" (click)="navigateToDetails(pokemon.name)">
-            <div class="screen-left">
-                <div class="lcd-screen">
-                    <div class="sprite-container">
-                        <img width="200" height="200" [src]="pokemon.sprites.front_default!" alt="{{pokemon.name}}">
-                    </div>
-                </div>
-            </div>
-            <div class="screen-right">
-                <div class="data-screen">
-                    <div class="screen-header">
-                        <span class="poke-region">{{pokemon.region | titlecase}}</span>
-                        <span class="poke-number">#{{ pokemon.id.toString().padStart(3, '0') }}</span>
-                    </div>
-                    <h2>{{ pokemon.name | titlecase }}</h2>
-                    <div class="types">
-                        @for (type of pokemon.types; track type.slot) {
-                            <span class="type type-{{ type.type.name }}">{{ translateType(type.type.name) | titlecase }}</span>
-                        }
-                    </div>
-                    <div class="info">
-                        <div class="info-row">
-                            <span>ALT</span>
-                            <span>{{ pokemon.height / 10 }}m</span>
-                        </div>
-                        <div class="info-row">
-                            <span>PESO</span>
-                            <span>{{ pokemon.weight / 10 }}kg</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  @let pokemon = this.pokemon();
+  @if(pokemon){
+  <div class="screen-bezel" (click)="navigateToDetails(pokemon.name)">
+    <div class="screen-left">
+      <div class="lcd-screen">
+        <div class="sprite-container">
+          <img width="200" height="200" [src]="pokemon.sprites.front_default!" alt="{{pokemon.name}}">
         </div>
-    }
-    @if(showCaptureButton()) {
-  <button class="capture-btn" (click)="openCaptureModal($event)" title="Capturar Pokémon">
-    <span class="pokeball-icon">⚪</span>
-  </button>
-}
+      </div>
+    </div>
+    <div class="screen-right">
+      <div class="data-screen">
+        <div class="screen-header">
+          <app-pokemon-cry-button [pokemon]="pokemon"></app-pokemon-cry-button>
+          <span class="poke-region">{{pokemon.region | titlecase}}</span>
+          <span class="poke-number">#{{ pokemon.id.toString().padStart(3, '0') }}</span>
+        </div>
+        <h2>{{ pokemon.name | titlecase }}</h2>
+        <div class="types">
+          @for (type of pokemon.types; track type.slot) {
+          <span class="type type-{{ type.type.name }}">{{ translateType(type.type.name) | titlecase }}</span>
+          }
+        </div>
+        <div class="info">
+          <div class="info-row">
+            <span>ALT</span>
+            <span>{{ pokemon.height / 10 }}m</span>
+          </div>
+          <div class="info-row">
+            <span>PESO</span>
+            <span>{{ pokemon.weight / 10 }}kg</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<!-- Modal -->
-<app-add-pokemon-modal
-  [pokemon]="pokemon"
-  [isOpen]="showCaptureModal()"
-  (closed)="closeCaptureModal()"
-  (captured)="onPokemonCaptured()"
-/>
+  @if(showCaptureButton()) {
+  <button class="capture-btn" (click)="openCaptureModal($event)" title="Capturar Pokémon">
+    +
+  </button>
+  }
+  }
 </div>
+
+<!-- Modal FUERA del pokedex-screen -->
+@if(pokemon) {
+<app-add-pokemon-modal [pokemon]="pokemon" [isOpen]="showCaptureModal()" (closed)="closeCaptureModal()"
+  (captured)="onPokemonCaptured()" />
+}

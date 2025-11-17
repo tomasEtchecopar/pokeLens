@@ -5,6 +5,7 @@ import { signal } from '@angular/core';
 import { translateType } from '../models/pokemon-helpers';
 import { Router } from "@angular/router";
 import { AddPokemonModal } from '../../pages/pokemon-collections/add-pokemon-modal';
+import { PokemonCryButton } from './pokemon-cry-button';
 
 /**
  * Card component that displays a single Pokemon.
@@ -12,7 +13,7 @@ import { AddPokemonModal } from '../../pages/pokemon-collections/add-pokemon-mod
 @Component({
   selector: 'app-pokemon-card',
   standalone: true,
-  imports: [TitleCasePipe, AddPokemonModal],
+  imports: [TitleCasePipe, AddPokemonModal, PokemonCryButton],
   templateUrl: './pokemon-card.html',
   styleUrl: './pokemon-card.css'
 })
