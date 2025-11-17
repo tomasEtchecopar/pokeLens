@@ -329,7 +329,13 @@
       "points": 2,
       "lastLoginDate": "2025-11-17T04:41:16.967Z",
       "pokemonVault": [
-        [],
+        [
+          {
+            "arrayId": 0,
+            "idPokemon": 414,
+            "name": "mothim"
+          }
+        ],
         [
           {
             "arrayId": 0,
@@ -342,6 +348,16 @@
             "idPokemon": 2,
             "name": "ivysaur",
             "nickname": "ivi2"
+          },
+          {
+            "arrayId": 2,
+            "idPokemon": 2,
+            "name": "ivysaur"
+          },
+          {
+            "arrayId": 3,
+            "idPokemon": 2,
+            "name": "ivysaur"
           }
         ]
       ],

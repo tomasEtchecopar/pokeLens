@@ -11,7 +11,6 @@
   box-sizing: border-box;
 }
 
-
 /* Logo */
 .logo {
   width: 280px;
@@ -37,7 +36,6 @@
   margin: -1rem 0 2rem 0;
   max-width: 600px;
 }
-
 
 /* Featured Section */
 .featured-section {
@@ -83,24 +81,93 @@
 .navigation-section {
   margin-top: 2rem;
   text-align: center;
+  width: 100%;
+  max-width: 600px;
 }
 
-.catalog-button button {
+.nav-buttons {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Botones de navegación */
+.catalog-button,
+.quiz-button {
   font-family: 'Press Start 2P', monospace;
-  background: #d43030;
   color: #fff;
   border: 3px solid #000;
-  box-shadow: 3px 3px 0px #111;
+  box-shadow: inset 1px 1px 0px rgba(255,255,255,0.1),
+              4px 4px 0px #111;
   padding: 1rem 2rem;
   text-transform: uppercase;
   letter-spacing: 2px;
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 200px;
+  justify-content: center;
 }
 
-.catalog-button button:hover {
+.button-icon {
+  font-size: 1.5rem;
+  filter: drop-shadow(2px 2px 0px #000);
+}
+
+.button-text {
+  font-size: 0.9rem;
+}
+
+/* Catálogo button - Rojo */
+.catalog-button {
+  background: linear-gradient(180deg, #d43030, #b82828);
+}
+
+.catalog-button:hover {
+  background: linear-gradient(180deg, #e64040, #c83030);
   transform: translate(2px, 2px);
-  box-shadow: 1px 1px 0px #111;
+  box-shadow: inset 1px 1px 0px rgba(255,255,255,0.2),
+              2px 2px 0px #111;
+}
+
+.catalog-button:active {
+  transform: translate(3px, 3px);
+  box-shadow: inset 1px 1px 0px rgba(0,0,0,0.3),
+              1px 1px 0px #111;
+}
+
+/* Quiz button - Dorado */
+.quiz-button {
+  background: linear-gradient(180deg, #ffd700, #f59e0b);
+}
+
+.quiz-button:hover {
+  background: linear-gradient(180deg, #fbbf24, #f59e0b);
+  transform: translate(2px, 2px);
+  box-shadow: inset 1px 1px 0px rgba(255,255,255,0.2),
+              2px 2px 0px #111;
+}
+
+.quiz-button:active {
+  transform: translate(3px, 3px);
+  box-shadow: inset 1px 1px 0px rgba(0,0,0,0.3),
+              1px 1px 0px #111;
+}
+
+/* Estado activo (cuando está en la ruta) */
+.catalog-button.active {
+  box-shadow: inset 2px 2px 0px rgba(0,0,0,0.4),
+              2px 2px 0px #111;
+  transform: translate(2px, 2px);
+}
+
+.quiz-button.active {
+  box-shadow: inset 2px 2px 0px rgba(0,0,0,0.4),
+              2px 2px 0px #111;
+  transform: translate(2px, 2px);
 }
 
 /* Responsive */
@@ -109,12 +176,54 @@
     width: 200px;
   }
 
+  .subtitle {
+    font-size: 0.75rem;
+    padding: 0.6rem 0.8rem;
+  }
+
   .featured-section {
     max-width: 90%;
   }
 
-  .catalog-button button {
+  .featured-section h2 {
+    font-size: 1.2rem;
+    padding: 0.4rem 0.8rem;
+  }
+
+  .nav-buttons {
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+    max-width: 300px;
+  }
+
+  .catalog-button,
+  .quiz-button {
     padding: 0.8rem 1.5rem;
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    min-width: 100%;
+  }
+
+  .button-icon {
+    font-size: 1.2rem;
+  }
+
+  .button-text {
+    font-size: 0.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo {
+    width: 150px;
+  }
+
+  .subtitle {
+    font-size: 0.65rem;
+  }
+
+  .featured-section h2 {
+    font-size: 1rem;
+    letter-spacing: 1px;
   }
 }
