@@ -15,7 +15,7 @@ export class UserClient {
   private readonly http = inject(HttpClient);
   private readonly baseUrl = "http://localhost:3000/users"
 
-  getUserById(id: string): Observable<User>{
+  getUserById(id: string | undefined): Observable<User>{
     return this.http.get<User>(`${this.baseUrl}/${id}`);
   }
 
@@ -27,16 +27,19 @@ export class UserClient {
     return this.http.put<User>(`${this.baseUrl}/${id}`, user)
   }
 
-  addPokemonToVault(userId: string, nuevoPokemon: pokemonVault): Observable<User> {
-  return this.getUserById(userId).pipe(
-    switchMap(usuario => {
-      const vault = usuario.pokemonVault ?? [];
-      const nextId = vault.length ? Math.max(...vault.map(p => p.arrayId)) + 1 : 1;
-      const updatedVault = [...vault, { ...nuevoPokemon, arrayId: nextId }];
-      return this.http.patch<User>(`${this.baseUrl}/${userId}`, { pokemonVault: updatedVault });
-    })
-  );
-}
+  addPokemonToVault(userId: string | undefined, nuevoPokemon: pokemonVault): Observable<User> {
+    return this.getUserById(userId).pipe(
+      switchMap(usuario => {
+        const vault = usuario.pokemonVault ?? [];
+        const nextId = vault.length ? Math.max(...vault.map(p => p.arrayId)) + 1 : 1;
+        const updatedVault = [...vault, { ...nuevoPokemon, arrayId: nextId }];
+        return this.http.patch<User>(`${this.baseUrl}/${userId}`, { pokemonVault: updatedVault });
+      })
+    );
+  }
 
+  /*getVault(userId: string | undefined): Observable<pokemonVault[]>{
+    return this.http.get(`${this.baseUrl}/${userId}`)
+  }*/
 
 }

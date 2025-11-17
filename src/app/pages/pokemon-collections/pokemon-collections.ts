@@ -1,3 +1,4 @@
+import { AuthServ } from './../../core/auth.service';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from "@angular/forms";
 import { PokemonListService } from '../../pokemon/pokemon-list-service';
@@ -19,7 +20,8 @@ export class PokemonCollections {
   private readonly pkmList = inject(PokemonListService);
   private readonly FormBuilder = inject(FormBuilder);
   private readonly router = inject(Router);
-  private readonly userService = inject(UserClient)
+  private readonly userService = inject(UserClient);
+  private readonly auth = inject(AuthServ);
 
   protected readonly form = this.FormBuilder.nonNullable.group({
     name: ['', Validators.required],
@@ -40,22 +42,23 @@ export class PokemonCollections {
 
   addCollection() {
     const allPokemon = this.pkmList.allPokemon();
+    const activeUserId = this.auth.activeUser()?.id;
 
-    this.userService.getUserById("a7c8").subscribe((usuario: User) => {
+    this.userService.getUserById(activeUserId).subscribe((usuario: User) => {
       const vaultedPkm: pokemonVault[] = usuario.pokemonVault ?? []; // Initializes the array if it's not already initialized in the json
 
       const nextId = vaultedPkm.length ? Math.max(...vaultedPkm.map(p => p.arrayId)) + 1 : 1; // Calculates the next ID based on the maximum length of the array
 
-
       const pokemon = this.checkMegaEvolved(allPokemon); // Checks if the User selected that it is a mega evolved pokemon (needs more security for a pokemon without a mega)
 
-      this.userService.addPokemonToVault("a7c8", {
-        arrayId: nextId,
-        idPokemon: pokemon?.id,
-        name: pokemon?.name,
-        moves: pokemon?.moves?.map(m => m.move.name) || []
-      }).subscribe(() => console.log('✅ Pokémon agregado sin sobrescribir'));
-
+      if(pokemon){
+        this.userService.addPokemonToVault(activeUserId, {
+          arrayId: nextId,
+          idPokemon: pokemon?.id,
+          name: pokemon?.name,
+          moves: pokemon?.moves?.map(m => m.move.name) || []
+      }).subscribe(() => alert('Pokémon agregado!'));
+      }
     });
   }
 }
