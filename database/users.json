@@ -322,6 +322,19 @@
           }
         ]
       ]
+    },
+    {
+      "id": "903e",
+      "username": "noseeeee",
+      "age": 222,
+      "mail": "hola@a123123.con",
+      "password": "123",
+      "pokemonId": 284,
+      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/284.png",
+      "points": 2,
+      "lastLoginDate": "2025-11-17T04:41:16.967Z",
+      "pokemonVault": [],
+      "pointsHistory": []
     }
   ]
 }

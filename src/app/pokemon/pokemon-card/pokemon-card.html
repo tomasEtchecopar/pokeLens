@@ -35,4 +35,17 @@
             </div>
         </div>
     }
+    @if(showCaptureButton()) {
+  <button class="capture-btn" (click)="openCaptureModal($event)" title="Capturar Pokémon">
+    <span class="pokeball-icon">⚪</span>
+  </button>
+}
+
+<!-- Modal -->
+<app-add-pokemon-modal
+  [pokemon]="pokemon"
+  [isOpen]="showCaptureModal()"
+  (closed)="closeCaptureModal()"
+  (captured)="onPokemonCaptured()"
+/>
 </div>

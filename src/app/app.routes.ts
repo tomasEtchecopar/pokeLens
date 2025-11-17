@@ -5,9 +5,9 @@ import { SignIn } from './user/sign-in/sign-in';
 import { Profile } from './user/profile/profile';
 import { PokemonDetails } from './pages/pokemon-details/pokemon-details';
 import { HomePage } from './pages/home-page/home-page';
-import { PokemonCollections } from './pages/pokemon-collections/pokemon-collections';
 import { Contact } from './pages/contact/contact';
-import { UserCollections } from './user/profile/user-collections/user-collections';
+import { UserCollections } from './pages/pokemon-collections/user-collections';
+import { PokemonQuiz } from './pages/pokemon-quiz/pokemon-quiz';
 
 export const routes: Routes = [
     {
@@ -42,10 +42,6 @@ export const routes: Routes = [
         title: 'Editar Perfil de Usuario'
     },
     {
-        path: 'vault', component: PokemonCollections,
-        title: 'Pokemon Vault'
-    },
-    {
         path: 'collections', component: UserCollections,
         title: 'Mis Colecciones'
     },
@@ -53,6 +49,9 @@ export const routes: Routes = [
     {
         path: 'contact', component: Contact,
         title: 'Contacto'
+    },{
+      path: 'quiz', component: PokemonQuiz,
+      title: 'Quiz Pokemon'
     },
     {
         path: '**', redirectTo: 'catalogo'
