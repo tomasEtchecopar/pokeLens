@@ -121,53 +121,67 @@
 }
 
 /* Catálogo button - Rojo */
-.catalog-button {
-  background: linear-gradient(180deg, #d43030, #b82828);
-}
-
-.catalog-button:hover {
-  background: linear-gradient(180deg, #e64040, #c83030);
-  transform: translate(2px, 2px);
-  box-shadow: inset 1px 1px 0px rgba(255,255,255,0.2),
-              2px 2px 0px #111;
-}
-
-.catalog-button:active {
-  transform: translate(3px, 3px);
-  box-shadow: inset 1px 1px 0px rgba(0,0,0,0.3),
-              1px 1px 0px #111;
-}
-
-/* Quiz button - Dorado */
+/* Botones de navegación — estilo coherente con .btn-header del header */
+.catalog-button,
 .quiz-button {
-  background: linear-gradient(180deg, #ffd700, #f59e0b);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+
+  min-width: 260px;            /* MÁS GRANDES */
+  padding: 1.2rem 2rem;        /* BOLDE, COMPACTO RETRO */
+
+  font-family: 'Press Start 2P', monospace; /* Estética retro real */
+  font-size: 1rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-weight: 700;
+
+  border: 6px solid #000;      /* BORDE GRUESO */
+  box-shadow: 6px 6px 0 #111;  /* SOMBRA RETRO EN BLOQUE */
+
+  cursor: pointer;
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
+/* Colores sólidos en lugar de degradados */
+.catalog-button {
+  background: #d43030;   /* Rojo intenso */
+  color: #fff;
+}
+
+.quiz-button {
+  background: #ffd700;   /* Dorado */
+  color: #000;           /* Texto negro para contraste */
+}
+
+/* Hover retro */
+.catalog-button:hover,
 .quiz-button:hover {
-  background: linear-gradient(180deg, #fbbf24, #f59e0b);
-  transform: translate(2px, 2px);
-  box-shadow: inset 1px 1px 0px rgba(255,255,255,0.2),
-              2px 2px 0px #111;
-}
-
-.quiz-button:active {
   transform: translate(3px, 3px);
-  box-shadow: inset 1px 1px 0px rgba(0,0,0,0.3),
-              1px 1px 0px #111;
+  box-shadow: 3px 3px 0 #000;
 }
 
-/* Estado activo (cuando está en la ruta) */
-.catalog-button.active {
-  box-shadow: inset 2px 2px 0px rgba(0,0,0,0.4),
-              2px 2px 0px #111;
-  transform: translate(2px, 2px);
+/* Active (presionado) */
+.catalog-button:active,
+.quiz-button:active {
+  transform: translate(5px, 5px);
+  box-shadow: 1px 1px 0 #000;
 }
 
+/* Estado activo por routerLinkActive */
+.catalog-button.active,
 .quiz-button.active {
-  box-shadow: inset 2px 2px 0px rgba(0,0,0,0.4),
-              2px 2px 0px #111;
-  transform: translate(2px, 2px);
+  transform: translate(3px, 3px);
+  box-shadow: inset 3px 3px 0 rgba(0,0,0,0.4), 3px 3px 0 #000;
 }
+
+
+.button-text {
+  font-size: 0.9rem; /* Ajustado para que no se coma padding */
+}
+
 
 /* Responsive */
 @media (max-width: 768px) {
@@ -189,27 +203,15 @@
     padding: 0.4rem 0.8rem;
   }
 
-  .nav-buttons {
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-    max-width: 300px;
-  }
-
   .catalog-button,
   .quiz-button {
-    padding: 0.8rem 1.5rem;
-    font-size: 0.75rem;
     min-width: 100%;
+    padding: 1rem;
+    font-size: 0.85rem;
+    box-shadow: 4px 4px 0 #000;
+    border-width: 5px;
   }
 
-  .button-icon {
-    font-size: 1.2rem;
-  }
-
-  .button-text {
-    font-size: 0.75rem;
-  }
 }
 
 @media (max-width: 480px) {
