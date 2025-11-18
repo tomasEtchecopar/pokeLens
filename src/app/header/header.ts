@@ -1,6 +1,7 @@
 import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLinkActive } from "@angular/router";
 import { AuthServ } from '../core/auth.service';
+import { PokemonQuizService } from '../pages/pokemon-quiz/pokemon-quiz-service';
 
 @Component({
   selector: 'app-header',
@@ -11,6 +12,7 @@ import { AuthServ } from '../core/auth.service';
 export class Header {
   private readonly router = inject(Router);
   private readonly auth = inject(AuthServ);
+  private readonly quiz = inject(PokemonQuizService)
 
   readonly user = computed(() => this.auth.activeUser());
 
@@ -36,6 +38,7 @@ export class Header {
   logOut() {
     this.auth.logOut();
     this.router.navigateByUrl('/catalog');
+    this.quiz.resetStats();
   }
   setDefaultAvatar(event: Event) {
   const img = event.target as HTMLImageElement;

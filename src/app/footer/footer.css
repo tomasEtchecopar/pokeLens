@@ -1,12 +1,25 @@
 .footer-bar {
-  background: #d43030;
-  padding: 1rem 2rem;
+  height: 50px;
+  max-height: 75px;
+  padding: 0 2rem;
+
+  background: #d4303060;
   border-top: 6px solid #2c2c2c;
-  box-shadow: inset 0 2px 0px #b82424, 0 -4px 0px #1a1a1a;
+  box-shadow: inset 0 2px 0px #b824245e, 0 -4px 0px #1a1a1a;
+
   display: flex;
   justify-content: space-between;
   align-items: center;
+
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  z-index: 90;
+
 }
+
+
 
 .footer-left,
 .footer-center,
@@ -41,8 +54,9 @@
 .contact-btn {
   background: #2c2c2c;
   color: white;
-  border: 3px solid #1a1a1a;
-  padding: 0.5rem 1rem;
+  border: 2px solid #1a1a1a;
+  padding: 0.3rem 0.7rem;
+  font-size: 1rem;
   font-family: 'Courier New', monospace;
   font-weight: bold;
   text-transform: uppercase;
@@ -51,6 +65,8 @@
   transition: all 0.2s;
   box-shadow: 0 2px 0 #1a1a1a;
 }
+
+
 
 .repo-btn:hover,
 .contact-btn:hover {
@@ -75,4 +91,38 @@
   .footer-center {
     order: -1;
   }
+}
+
+/*Boton para volver arriba*/
+.scroll-top-btn {
+  position: absolute;
+  right: 1rem;          /* pegado al borde derecho */
+  bottom: 100%;         /* ← esto lo pone encima del footer */
+  transform: translateY(-8px);  /* lo separa visualmente */
+  
+  background: #2c2c2c;
+  color: white;
+  border: 2px solid #1a1a1a;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.9rem;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  cursor: pointer;
+  letter-spacing: 1px;
+  box-shadow: 0 2px 0 #1a1a1a;
+  transition: all 0.2s;
+  line-height: 1;
+  border-radius: 6px;
+  z-index: 999;         /* encima del footer */
+}
+
+.scroll-top-btn:hover {
+  background: #1a1a1a;
+  transform: translateY(-12px);  /* sube más al hover */
+  box-shadow: 0 4px 0 #0a0a0a;
+}
+
+.scroll-top-btn:active {
+  transform: translateY(-6px);
+  box-shadow: 0 1px 0 #0a0a0a;
 }

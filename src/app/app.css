@@ -46,6 +46,8 @@ main {
   min-height: calc(100vh - 200px);
 
   padding: 0;
+  padding-bottom: 80px;
+  /* 75px del footer + 5px de margen */
 
 }
 

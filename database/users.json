@@ -8,8 +8,8 @@
       "password": "pikachu",
       "pokemonId": 25,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-      "points": 587,
-      "lastLoginDate": "2025-11-18T06:32:18.819Z",
+      "points": 620,
+      "lastLoginDate": "2025-11-18T19:24:12.139Z",
       "pointsHistory": [
         {
           "amount": 50,
@@ -80,6 +80,191 @@
           "amount": 10,
           "reason": "Inicio de sesión diario",
           "date": "2025-11-18T05:27:07.250Z"
+        },
+        {
+          "amount": 4,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-18T18:14:01.948Z"
+        },
+        {
+          "amount": 14,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-18T18:15:59.688Z"
+        },
+        {
+          "amount": 50,
+          "reason": "Registro inicial",
+          "date": "2025-11-10T10:00:00.000Z"
+        },
+        {
+          "amount": 100,
+          "reason": "Colección completada",
+          "date": "2025-11-12T18:00:00.000Z"
+        },
+        {
+          "amount": 200,
+          "reason": "Inicio de sesión diario",
+          "date": "2025-11-17T08:45:00.000Z"
+        },
+        {
+          "amount": 11,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T03:28:17.526Z"
+        },
+        {
+          "amount": 2,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T03:28:20.368Z"
+        },
+        {
+          "amount": 13,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T03:29:56.408Z"
+        },
+        {
+          "amount": 9,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T05:02:16.990Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-17T05:27:53.239Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-17T05:43:19.255Z"
+        },
+        {
+          "amount": 14,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T05:47:27.220Z"
+        },
+        {
+          "amount": 18,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T05:47:29.106Z"
+        },
+        {
+          "amount": 50,
+          "reason": "Puntos por crear colección semanal",
+          "date": "2025-11-18T02:04:15.554Z"
+        },
+        {
+          "amount": 50,
+          "reason": "Puntos por crear colección semanal",
+          "date": "2025-11-18T02:10:43.168Z"
+        },
+        {
+          "amount": 10,
+          "reason": "Inicio de sesión diario",
+          "date": "2025-11-18T05:27:07.250Z"
+        },
+        {
+          "amount": 4,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-18T18:14:01.948Z"
+        },
+        {
+          "amount": 14,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-18T18:15:59.688Z"
+        },
+        {
+          "amount": 50,
+          "reason": "Registro inicial",
+          "date": "2025-11-10T10:00:00.000Z"
+        },
+        {
+          "amount": 100,
+          "reason": "Colección completada",
+          "date": "2025-11-12T18:00:00.000Z"
+        },
+        {
+          "amount": 200,
+          "reason": "Inicio de sesión diario",
+          "date": "2025-11-17T08:45:00.000Z"
+        },
+        {
+          "amount": 11,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T03:28:17.526Z"
+        },
+        {
+          "amount": 2,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T03:28:20.368Z"
+        },
+        {
+          "amount": 13,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T03:29:56.408Z"
+        },
+        {
+          "amount": 9,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T05:02:16.990Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-17T05:27:53.239Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-17T05:43:19.255Z"
+        },
+        {
+          "amount": 14,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T05:47:27.220Z"
+        },
+        {
+          "amount": 18,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-17T05:47:29.106Z"
+        },
+        {
+          "amount": 50,
+          "reason": "Puntos por crear colección semanal",
+          "date": "2025-11-18T02:04:15.554Z"
+        },
+        {
+          "amount": 50,
+          "reason": "Puntos por crear colección semanal",
+          "date": "2025-11-18T02:10:43.168Z"
+        },
+        {
+          "amount": 10,
+          "reason": "Inicio de sesión diario",
+          "date": "2025-11-18T05:27:07.250Z"
+        },
+        {
+          "amount": 4,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-18T18:14:01.948Z"
+        },
+        {
+          "amount": 14,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-18T18:15:59.688Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-18T18:41:23.820Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-18T18:41:39.478Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-18T19:24:06.024Z"
         }
       ],
       "pokemonVault": [
@@ -96,16 +281,20 @@
             "idPokemon": 18,
             "name": "pidgeot",
             "nickname": "pichoto"
-          },
+          }
+        ],
+        [
           {
-            "arrayId": 1,
-            "idPokemon": 16,
-            "name": "pidgey"
+            "arrayId": 0,
+            "idPokemon": 291,
+            "name": "ninjask",
+            "nickname": "sdasdasd"
           }
         ]
       ],
       "collectionNames": [
         "insectos",
+        "Voladores",
         "Voladores"
       ],
       "lastCreateCollection": "2025-11-18T02:10:43.168Z"

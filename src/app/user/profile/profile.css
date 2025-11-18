@@ -45,3 +45,51 @@
   margin-top: 0.75rem;
   padding-left: 1.25rem;
 }
+
+/*Tabla de puntos*/
+.points-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-family: 'Courier New', monospace;
+  background: #2c2c2c;
+  color: white;
+  border: 2px solid #1a1a1a;
+}
+.points-table thead tr th {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+
+.points-table th {
+  background: #d43030;
+  padding: 0.5rem;
+  border-bottom: 3px solid #1a1a1a;
+  text-align: left;
+  font-weight: bold;
+}
+
+.points-table td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #444;
+}
+
+.points-table tr:hover {
+  background: #1a1a1a;
+}
+
+.empty-row {
+  text-align: center;
+  font-style: italic;
+  opacity: 0.8;
+}
+.points-scroll {
+  max-height: 250px;       /* Ajustá la altura que quieras */
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 2px solid #1a1a1a;
+  margin-top: 1rem;
+  background: #2c2c2c;
+}

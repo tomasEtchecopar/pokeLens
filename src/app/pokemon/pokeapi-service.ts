@@ -1,12 +1,9 @@
 import { Injectable, inject } from '@angular/core';
 import { EvolutionChainLink } from './models/pokemon-models';
 import { HttpClient } from '@angular/common/http';
-import { forkJoin, switchMap } from 'rxjs';
-import { NamedAPIResourceList, EvolutionChain} from './models/pokemon-models';
+import { NamedAPIResourceList, EvolutionChain } from './models/pokemon-models';
 import { Pokemon, PokemonSpecies, Generation } from './models/pokemon-models';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs';
-
+import { Observable, forkJoin, from, of, switchMap, mergeMap, catchError, toArray, filter, map } from 'rxjs';
 
 /**
  * Service that talks to the PokeAPI
@@ -87,13 +84,29 @@ export class PokeApiService {
    * Function to get all Pokemon as objects
    * @returns Pokemon[]
    */
-  getAllPokemon() {
-    return this.getAllPokemonResource().pipe(
-      switchMap(resourceList => forkJoin(
-        resourceList.map(r => this.getPokemon(r.name))
-      ))
-    )
+  getAllPokemon(limit = 2000) {
+    return this.http
+      .get<NamedAPIResourceList>(`${this.baseURL}/pokemon?limit=${limit}`)
+      .pipe(
+        switchMap(res =>
+          from(res.results).pipe(
+            mergeMap(
+              r =>
+                this.getPokemon(r.name).pipe(
+                  catchError(err => {
+                    console.warn('Error cargando', r.name, err);
+                    return of(null);
+                  })
+                ),
+              300
+            ),
+            filter((p): p is Pokemon => p !== null),
+            toArray()
+          )
+        )
+      );
   }
+
 
 
   /**
@@ -111,7 +124,7 @@ export class PokeApiService {
               generation: this.getGeneration(species.generation.url),
               evolutionChain: this.http.get<any>(species.evolution_chain.url)
             }).pipe(
-              map(({ generation, evolutionChain})=>({
+              map(({ generation, evolutionChain }) => ({
                 ...pokemon,
                 generation: species.generation.name,
                 region: generation.main_region.name,
@@ -150,19 +163,19 @@ export class PokeApiService {
   //Calcular el poder de una coleccion
   //pokeApi devuelve un array, con reduce ya soluciona
   calcularPoder(stats: any[]): number {
-  return stats.reduce((total, s) => total + s.base_stat, 0);
-}
+    return stats.reduce((total, s) => total + s.base_stat, 0);
+  }
 
 
-  private extractEvolutionNames(chain: EvolutionChain){
+  private extractEvolutionNames(chain: EvolutionChain) {
     const names: string[] = [];
 
-    function iterateEvolutionNodes(node: EvolutionChainLink){
-      if(!node || !node.species || !node.species.name){
+    function iterateEvolutionNodes(node: EvolutionChainLink) {
+      if (!node || !node.species || !node.species.name) {
         return;
       }
       names.push(node.species.name);
-      if(node.evolves_to){
+      if (node.evolves_to) {
         node.evolves_to.forEach(evolution => {
           iterateEvolutionNodes(evolution);
         })

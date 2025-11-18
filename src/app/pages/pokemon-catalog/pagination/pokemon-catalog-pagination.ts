@@ -1,6 +1,5 @@
 import { Injectable, signal } from '@angular/core';
 import { computed } from '@angular/core';
-import { NamedAPIResource } from '../../../pokemon/models/pokemon-models';
 import { NgZone } from '@angular/core';
 import { Pokemon } from '../../../pokemon/models/pokemon-models';
 

@@ -51,7 +51,7 @@ export class Profile {
 
   //Carga los últimos 10 eventos de puntos
   loadHistory(id: string) {
-    this.points.getHistory(id, 10).subscribe(history => {
+    this.points.getHistory(id, Infinity).subscribe(history => {
       this.history.set(history);
     });
   }
