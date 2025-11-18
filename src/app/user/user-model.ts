@@ -17,6 +17,7 @@ export interface User {
   pokemonId?: number;
   avatarUrl?: string;
   points?: number;
-  lastLoginDate?: string;
+  lastLoginDate?: string ;
+  lastCreateCollection?: string | null;
   pointsHistory?: PointEvent[];
 }

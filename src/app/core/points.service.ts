@@ -3,7 +3,6 @@ import { inject, Injectable } from '@angular/core';
 import { PointEvent, User } from '../user/user-model';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
-import { not } from 'rxjs/internal/util/not';
 
 
 @Injectable({

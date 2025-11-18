@@ -13,27 +13,27 @@
 
   <section class="collection-block">
     <div class="collection-header">
-      <div class="collection-title" (click)="startEditingName(i)">
-        @if (editingIndex() === i) {
-        <input class="collection-name-input" [value]="editingName()" (input)="onNameInput($event)"
-          (blur)="saveCollectionName(i)" (keydown.enter)="saveCollectionName(i)">
-        } @else {
-        <h3 class="collection-name">
-          {{ getCollectionName(i) }}
-        </h3>
-        }
-      </div>
+
+      <!-- Nombre editable -->
+      @if (editingIndex() === i) {
+      <input class="collection-name-input" type="text" [ngModel]="editingName()"
+        (ngModelChange)="editingName.set($event)" (blur)="saveCollectionName(i)" (keyup.enter)="saveCollectionName(i)"
+        autofocus />
+      } @else {
+      <h3 class="collection-title" (click)="startEditingName(i)">
+        {{ getCollectionName(i) }}
+      </h3>
+      }
 
       <p class="avg-power">
         <strong>Poder promedio:</strong>
-        {{ collectionAverages()?.[i] || 0 }}
+        {{ collectionAverages()[i] || 0 }}
       </p>
 
       <button class="btn-delete-collection" (click)="deleteCollection(i)" title="Eliminar colección completa">
-        🗑️ Eliminar colección
+        Eliminar colección
       </button>
     </div>
-
 
     <div class="collection-scroll">
       <div class="vault-grid">
@@ -43,8 +43,6 @@
         @if (getPokemonForCard(entry.idPokemon); as pkm) {
 
         <div class="vault-card-wrapper">
-
-          <!-- Botón Pokébola para eliminar el Pokémon -->
           <button class="pokeball-btn" (click)="deletePokemon(i, entry.arrayId!)"
             title="Quitar Pokémon de la colección">
             <div class="pokeball">
@@ -54,8 +52,8 @@
             </div>
           </button>
 
-          <!-- Card reutilizada -->
           <app-pokemon-card [pokemon]="pkm"></app-pokemon-card>
+          <p>Apodo : {{entry.nickname}} </p>
         </div>
         }
         }

@@ -4,6 +4,8 @@ import { FormsModule } from '@angular/forms';
 import { AuthServ } from '../../core/auth.service';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { UserClient } from '../../core/user-client.service';
+import { PointsService } from '../../core/points.service';
+import { PointEvent, User } from '../../user/user-model';
 
 @Component({
   selector: 'app-add-pokemon-modal',
@@ -24,7 +26,12 @@ import { UserClient } from '../../core/user-client.service';
             } @else {
               <div class="form-group">
                 <label for="collection">Colección:</label>
-                <select id="collection" [(ngModel)]="selectedCollection">
+               
+            <!--Mostramos los nombres de las colecciones  -->              
+<select
+  id="collection"
+  [ngModel]="selectedCollection()"
+  (ngModelChange)="selectedCollection.set(+$event)">
   @for (col of collections(); let i = $index; track i) {
     <option [value]="i + 1">
       {{ getCollectionName(i) }} ({{ col.length }} Pokémon)
@@ -34,6 +41,24 @@ import { UserClient } from '../../core/user-client.service';
     + Nueva colección
   </option>
 </select>
+            <!--Si elegimos una nueva, se habilita el input  -->              
+
+@if (isCreatingNewCollection()) {
+  <div class="form-group">
+    <label for="newCollectionName">Nombre de la nueva colección:</label>
+    <input
+      id="newCollectionName"
+      type="text"
+      maxlength="20"
+      [ngModel]="newCollectionName()"                
+      (ngModelChange)="newCollectionName.set($event)" 
+      placeholder="Ej: Equipo Fuego"
+    >
+  </div>
+}
+
+
+
 
               </div>
 
@@ -234,6 +259,9 @@ import { UserClient } from '../../core/user-client.service';
 export class AddPokemonModal {
   private readonly auth = inject(AuthServ);
   private readonly userClient = inject(UserClient);
+  private readonly points = inject(PointsService);
+  newCollectionName = signal('');
+
 
   // Inputs
   pokemon = input.required<Pokemon>();
@@ -261,16 +289,50 @@ export class AddPokemonModal {
       }
     })
   };
+  //Metodo para calcular los dias que pasaron entre la ultima creacion de una coleccion 
+  private daysBetween(a: string, b: string): number {
+    const msA = new Date(a).getTime();
+    const msB = new Date(b).getTime();
+    return (msB - msA) / (1000 * 60 * 60 * 24);
+  }
 
+  private shouldRewardWeeklyCollection(user: User, isNewCollection: boolean, nowIso: string): boolean {
+    if (!isNewCollection) return false; // solo premiamos una nueva colección
+
+    if (!user.lastCreateCollection) {
+      // Nunca se premió una colección y es la  primera vez
+      return true;
+    }
+
+    const diffDays = this.daysBetween(user.lastCreateCollection, nowIso);
+    return diffDays >= 7; // 7 días o más
+  }
 
   close() {
     this.nickname.set('');
     this.errorMessage.set('');
     this.selectedCollection.set(1);
+    this.newCollectionName.set('');
     this.closed.emit();
   }
 
+
+  
+  /**
+   * Intenta capturar el Pokémon seleccionado y agregarlo a la coleccion elegida.
+   *
+   * Flujo general:
+   * 1. Valida que haya usuario logueado y Pokémon valido.
+   * 2. Controla:
+   *    - que la colección no tenga más de 6 Pokémon,
+   *    - que el Pokémon no esté repetido en esa coleccion,
+   *    - que si es una coleccion nueva, tenga nombre.
+   * 3. Llama al backend para agregar el Pokémon a la coleccion.
+   * 4. Si corresponde, otorga puntos por crear una colección semanal y registra el evento.
+   * 5. Actualiza el usuario activo en memoria y en localStorage.
+   */
   capturePokemon() {
+    // Usuario logueado actual (signal) y Pokémon que llega por input
     const user = this.usuario();
     const pkm = this.pokemon();
 
@@ -283,29 +345,137 @@ export class AddPokemonModal {
       this.errorMessage.set('Pokémon no válido');
       return;
     }
+    //------------------------------------------------------------------------------
+    // Sector donde se controla la cantidad de pokemones en el array
+    const matrix = this.collections();              // Matriz de colecciones: pokemonVault[][]
+    const selectedIndex = this.selectedCollection() - 1; //indice de la coleccion elegida
+
+    const currentCount = matrix[selectedIndex]?.length ?? 0; //calcula los pokemones en la coleccion
+
+    if (currentCount >= 6) {
+      this.errorMessage.set('Esta colección ya tiene 6 Pokémon (límite máximo).');
+      return;
+    }
+    //------------------------------------------------------------------------------
+    // Evitar Pokémon duplicado en la misma colección
+    const selectedCollectionEntries = matrix[selectedIndex] ?? [];
+
+    const alreadyInCollection = selectedCollectionEntries.some(//verificamos el id en el array
+      entry => entry.idPokemon === pkm.id
+    );
+
+    if (alreadyInCollection) {
+      this.errorMessage.set('Este Pokémon ya está en esta colección.');
+      return;
+    }
+    //------------------------------------------------------------------------------
 
     this.isLoading.set(true);
     this.errorMessage.set('');
 
+    //Este es el objeto que se agregara al array de Pokemones
     const pokemonData: pokemonVault = {
-      arrayId: 0, // Se asignará automáticamente
+      arrayId: 0, // se asigna en el service
       idPokemon: pkm.id,
       name: pkm.name,
       nickname: this.nickname().trim() || undefined
     };
 
-    this.userClient.addPokemonToVault(user.id, pokemonData, this.selectedCollection())
+
+    const pointsCollection = 50; //puntos a dar por la creacion de la coleccion
+    const nowIso = new Date().toISOString(); //Fecha y hora actual
+
+    // Indica si el usuario seleccionó la opción "+ Nueva colección"
+    const isNewCollection = this.isCreatingNewCollection();
+
+    // si es una colección nueva, se le pide ingresar un nombre
+    if (isNewCollection) {
+      const name = this.newCollectionName().trim();
+      if (!name) {
+        this.errorMessage.set('Ingresá un nombre para la nueva colección.');
+        this.isLoading.set(false);
+        return;
+      }
+    }
+
+    // Llamada al backend para agregar el pokémon a la coleccion del usuario
+    this.userClient
+      .addPokemonToVault(user.id, pokemonData, this.selectedCollection())
       .subscribe({
         next: (updatedUser) => {
-          // Actualizar usuario en auth y localStorage
-          this.auth.activeUser.set(updatedUser);
-          localStorage.setItem('activeUser', JSON.stringify(updatedUser));
+          // Usuario devuelto por el backend luego de agregar el pokémon
+          let userWithCollections: User = updatedUser;
 
+          // Si se creo una coleccion nueva, agregamos el nombre al array de nombres
+          if (isNewCollection) {
+            const names = [...(updatedUser.collectionNames ?? [])];
+            const name = this.newCollectionName().trim();
+
+            names.push(name);
+
+            userWithCollections = {
+              ...updatedUser,
+              collectionNames: names
+            };
+            // Limpiamos el input del nombre de colección para futuras capturas
+            this.newCollectionName.set('');
+          }
+
+          // Aca se chequea si corresponde dar el bonus semanal por crear coleccion
+          const giveWeeklyBonus = this.shouldRewardWeeklyCollection(
+            userWithCollections,
+            isNewCollection,
+            nowIso
+          );
+
+          if (giveWeeklyBonus) {
+            // Actualizamos la fecha de última creación de colección
+            const updatedUserWithDate: User = {
+              ...userWithCollections,
+              lastCreateCollection: nowIso
+            };
+
+            // Sumamos puntos por la colección semanal
+            this.points
+              .addPoints(
+                updatedUserWithDate,
+                pointsCollection,
+                'Sumaste puntos por crear tu colección semanal!'
+              )
+              .subscribe(userWithPoints => {
+                const event: PointEvent = {
+                  amount: pointsCollection,
+                  reason: 'Puntos por crear colección semanal',
+                  date: nowIso
+                };
+
+                // Registramos el evento en el historial de puntos
+                this.points.addHistory(userWithPoints, event)
+                  .subscribe(finalUser => {
+                    this.auth.activeUser.set(finalUser);
+                    localStorage.setItem('activeUser', JSON.stringify(finalUser));
+                  });
+              });
+
+          } else {
+            // Si no hay bonus semanal, igual persistimos el usuario con las colecciones/nombres actualizados
+            this.userClient.updateUser(userWithCollections, userWithCollections.id!).subscribe({
+              next: (savedUser) => {
+                this.auth.activeUser.set(savedUser);
+                localStorage.setItem('activeUser', JSON.stringify(savedUser));
+              },
+              error: (err) => {
+                console.error('Error actualizando usuario con nombres de coleccion', err);
+              }
+            });
+          }
+          // Fin del proceso de captura
           this.isLoading.set(false);
           this.captured.emit();
           this.close();
           alert(`¡${pkm.name} capturado exitosamente!`);
-        },
+        }
+        ,
         error: (error) => {
           console.error('Error al capturar Pokémon:', error);
           this.errorMessage.set('Error al capturar el Pokémon');
@@ -313,6 +483,13 @@ export class AddPokemonModal {
         }
       });
   }
+
+
+  isCreatingNewCollection(): boolean {
+    // si seleccionó el value "length + 1", es la opción "+ Nueva colección"
+    return this.selectedCollection() === this.collections().length + 1;
+  }
+
   getCollectionName(index: number): string {
     const user = this.usuario();
     const names = user?.collectionNames;

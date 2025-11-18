@@ -149,9 +149,10 @@ export class SignIn implements OnInit {
       const newUser: User = {
         ...datosUser, pokemonId, avatarUrl, points: puntos,
         lastLoginDate: new Date().toISOString(),
+        lastCreateCollection: null,
         pokemonVault: [],
         collectionNames: [],
-        pointsHistory : []
+        pointsHistory: []
       };
 
       this.users.addUser(newUser).
