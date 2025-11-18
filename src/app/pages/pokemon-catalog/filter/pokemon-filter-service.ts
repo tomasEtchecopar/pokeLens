@@ -18,10 +18,12 @@ export class PokemonFilterService{
 
   readonly filteredPokemon = computed(() => this.applyFilters());
 
+  readonly currentFilters = computed(() => this.filters());
+
   updateFilters(filters: FilterOptions){
     this.filters.set(filters);
   }
-  
+
   clearFilters(){
     this.filters.set({});
   }

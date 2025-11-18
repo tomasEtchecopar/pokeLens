@@ -6,7 +6,7 @@
         @if (!hasSearchResults() && !isLoading()) {
         <p>No se encontraron resultados...</p>
         }
-        <app-pokemon-filter-dropdown (filterUpdate)="applyFilters($event)"></app-pokemon-filter-dropdown>
+        <app-pokemon-filter-dropdown [currentFilters]="currentFilters()"(filterUpdate)="applyFilters($event)"></app-pokemon-filter-dropdown>
     </div>
 
 

@@ -11,6 +11,7 @@ import { PokemonFilterService } from './filter/pokemon-filter-service';
 import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
 import { PokemonFilterDropdown } from '../../pokemon/pokemon-filter-dropdown/pokemon-filter-dropdown';
 import { FilterOptions } from '../../pokemon/models/pokemon-filters';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-pokemon-catalog',
@@ -22,7 +23,7 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   /**
    * Sets up infinite scroll
    */
-  @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>; 
+  @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>;
 
   /**
    * This is where we get our pokemon list from
@@ -43,6 +44,7 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
    * List of pokemons to work from; already filtered
    */
   protected readonly allPokemon = this.filtering.filteredPokemon;
+  protected readonly currentFilters = this.filtering.currentFilters;
 
   /**
    * Search results from the list above; full list in case of no results/input
@@ -59,7 +61,7 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   readonly displayedPokemon = this.pagination.displayedPokemon;
 
   protected readonly isLoading = computed(() =>
-    this.allPokemon()?.length === 0 
+    this.allPokemon()?.length === 0
   );
 
   //dont really know what its for but infinite scroll uses it
@@ -92,7 +94,7 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
       this.pagination.disconnect();
   }
 
-   
+
   onSearch(term: string){
     this.pokemonSearch.search(term);
   }
