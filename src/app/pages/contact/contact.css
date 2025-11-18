@@ -1,8 +1,3 @@
-/* Para que no lo tape el header */
-.form-body {
-    padding-top: 120px;
-}
-
 /* Caja principal del formulario */
 form {
     max-width: 500px;

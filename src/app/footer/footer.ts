@@ -9,12 +9,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './footer.css',
 })
 export class Footer {
-  scrollToTop() {
-    window.scrollTo({
-      top: 0,
-      behavior: 'smooth'
-    });
+  goToRepo(){
+    window.open('https://github.com/tomasEtchecopar/pokeLens', '_blank');
   }
-
 
 }
