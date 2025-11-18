@@ -7,6 +7,7 @@ import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { User } from '../../user/user-model';
 import { FormsModule } from '@angular/forms';
+import { platformBrowser } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-user-collections',
@@ -19,7 +20,7 @@ export class UserCollections {
 
   private readonly auth = inject(AuthServ);
   private readonly userClient = inject(UserClient);
-  private readonly pkmList = inject(PokemonListService);
+  readonly pkmList = inject(PokemonListService);
   private readonly router = inject(Router);
 
   // edición de nombre
@@ -105,14 +106,6 @@ export class UserCollections {
 
   backToProfile() {
     this.router.navigateByUrl('/profile');
-  }
-
-  // Busca el Pokémon completo para la card
-  getPokemonForCard(id: number | string | undefined): Pokemon | undefined {
-    if (id == null) return undefined;
-    const idNum = Number(id);
-    const all = this.pkmList.allPokemon();
-    return all.find(p => p.id === idNum);
   }
 
 
@@ -260,7 +253,7 @@ export class UserCollections {
     const updatedNames = [...existing];
 
     /**
-     *Con este metodo aseguramos que si hay carrera de tiempos entre componentes, 
+     *Con este metodo aseguramos que si hay carrera de tiempos entre componentes,
      *la coleccion tenga al menos un nombre generico
      *ya que el array de nombres esta directamente relacionado con cada array interno del Vaul[]
      */

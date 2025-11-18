@@ -20,6 +20,7 @@ import { PokemonCryButton } from './pokemon-cry-button';
 export class PokemonCard {
   private readonly router = inject(Router);
   readonly pokemon= input.required<Pokemon>();
+  readonly nickname = input<string>();
 
 
 

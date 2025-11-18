@@ -123,6 +123,51 @@
       "pokemonVault": [],
       "collectionNames": [],
       "pointsHistory": []
+    },
+    {
+      "id": "d34f",
+      "username": "asd",
+      "age": 123,
+      "mail": "asdasd@awsd.ads",
+      "password": "asd",
+      "pokemonId": 533,
+      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/533.png",
+      "points": 50,
+      "lastLoginDate": "2025-11-18T15:23:41.171Z",
+      "lastCreateCollection": "2025-11-18T15:23:49.899Z",
+      "pokemonVault": [
+        [
+          {
+            "arrayId": 0,
+            "idPokemon": 2,
+            "name": "ivysaur"
+          },
+          {
+            "arrayId": 1,
+            "idPokemon": 291,
+            "name": "ninjask"
+          }
+        ],
+        [
+          {
+            "arrayId": 0,
+            "idPokemon": 291,
+            "name": "ninjask",
+            "nickname": "holaaaa"
+          }
+        ]
+      ],
+      "collectionNames": [
+        "col1",
+        "asd"
+      ],
+      "pointsHistory": [
+        {
+          "amount": 50,
+          "reason": "Puntos por crear colección semanal",
+          "date": "2025-11-18T15:23:49.899Z"
+        }
+      ]
     }
   ]
 }

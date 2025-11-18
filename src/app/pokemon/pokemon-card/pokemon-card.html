@@ -17,7 +17,12 @@
           <span class="poke-region">{{pokemon.region | titlecase}}</span>
           <span class="poke-number">#{{ pokemon.id.toString().padStart(3, '0') }}</span>
         </div>
+        @if(nickname()) {
+        <h2>{{ nickname() | titlecase }}</h2>
+        <p class="original-name">{{ pokemon.name | titlecase }}</p>
+        } @else {
         <h2>{{ pokemon.name | titlecase }}</h2>
+        }
         <div class="types">
           @for (type of pokemon.types; track type.slot) {
           <span class="type type-{{ type.type.name }}">{{ translateType(type.type.name) | titlecase }}</span>

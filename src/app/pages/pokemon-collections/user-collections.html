@@ -40,7 +40,7 @@
 
         @for (entry of col; track entry.arrayId) {
 
-        @if (getPokemonForCard(entry.idPokemon); as pkm) {
+        @if (pkmList.getPokemonFromMemory(entry.idPokemon); as pkm) {
 
         <div class="vault-card-wrapper">
           <button class="pokeball-btn" (click)="deletePokemon(i, entry.arrayId!)"
@@ -52,8 +52,7 @@
             </div>
           </button>
 
-          <app-pokemon-card [pokemon]="pkm"></app-pokemon-card>
-          <p>Apodo : {{entry.nickname}} </p>
+          <app-pokemon-card [pokemon]="pkm" [nickname]="entry.nickname!"></app-pokemon-card>
         </div>
         }
         }
@@ -62,7 +61,7 @@
   </section>
   }
   } @else {
-  <p>No tenés colecciones todavía.</p>
+  <p>No hay colecciones guardadas...</p>
   }
 
   } @else {
