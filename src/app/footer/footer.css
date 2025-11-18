@@ -3,9 +3,9 @@
   max-height: 75px;
   padding: 0 2rem;
 
-  background: #d4303060;
-  border-top: 6px solid #2c2c2c;
-  box-shadow: inset 0 2px 0px #b824245e, 0 -4px 0px #1a1a1a;
+  background: #271c1c9d;
+  /*border-top: 6px solid #2c2c2c;*/
+ /* box-shadow: inset 0 2px 0px #b824245e, 0 -4px 0px #1a1a1a;*/
 
   display: flex;
   justify-content: space-between;
