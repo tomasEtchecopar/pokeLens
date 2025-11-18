@@ -1,183 +1,323 @@
+/* Collections Page - Retro Pokédex Style */
 .collections-page {
+  width: 100%;
+  max-width: 1200px;
+  margin: 2rem auto;
   padding: 1rem;
-  padding-top: 120px;
+  background: linear-gradient(180deg, #2c2c2c 0%, #262626 100%);
+  border: 4px solid #5f0b0b;
+  box-shadow:
+    inset 2px 2px 0 #3a3a3a,
+    6px 6px 0 #1a1a1a;
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  box-sizing: border-box;
 }
 
+/* Header */
 .header-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 1rem;
+  padding: 0.75rem 1rem;
+  border-bottom: 3px solid rgba(0, 0, 0, 0.6);
+  background: linear-gradient(90deg, #3a3a3a, #2c2c2c);
+  margin-bottom: 1.5rem;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.header-row h2 {
+  margin: 0;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.4rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #9dbc9b;
+  text-shadow: 2px 2px 0 #111;
 }
 
 .btn {
   background: #2c2c2c;
-  color: #fff;
   border: 2px solid #1a1a1a;
-  padding: 0.4rem 0.8rem;
+  color: #9dbc9b;
+  padding: 0.6rem 1.25rem;
+  font-weight: 900;
+  text-transform: uppercase;
   cursor: pointer;
+  transition: all 0.1s ease;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  font-family: 'Courier New', monospace;
+  box-shadow: 2px 2px 0 #1a1a1a;
 }
 
 .btn:hover {
-  background: #1a1a1a;
+  background: #3a3a3a;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #1a1a1a;
 }
 
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 #1a1a1a;
+}
+
+/* Collection Block */
 .collection-block {
-  background: #ffffff;
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
-  margin-bottom: 1rem;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  background: #3a3a3a;
+  border: 3px solid #1a1a1a;
+  margin-bottom: 1.5rem;
+  box-shadow:
+    inset 1px 1px 0 #4a4a4a,
+    3px 3px 0 #1a1a1a;
 }
 
+/* Collection Header */
 .collection-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
+  gap: 1rem;
+  padding: 0.75rem 1rem;
+  background: #2c2c2c;
+  border-bottom: 2px solid #1a1a1a;
+  flex-wrap: wrap;
+}
+
+.collection-title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: #9dbc9b;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: color 0.2s ease;
+  padding: 0.25rem;
+}
+
+.collection-title:hover {
+  color: #b0d0ae;
+  text-decoration: underline;
+}
+
+.collection-name-input {
+  background: #1a1a1a;
+  border: 2px solid #9dbc9b;
+  color: #9dbc9b;
+  padding: 0.4rem 0.6rem;
+  font-size: 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 1px;
+  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.5);
+}
+
+.collection-name-input:focus {
+  outline: none;
+  box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.5), 0 0 0 2px #9dbc9b;
 }
 
 .avg-power {
   margin: 0;
-  font-size: 0.9rem;
-  color: #222;
-  background: #f0f0f0;
-  padding: 0.25rem 0.5rem;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+  padding: 0.4rem 0.8rem;
+  background: #1a1a1a;
+  border: 2px solid #3a3a3a;
+  font-size: 0.85rem;
+  color: #fff;
+  font-weight: 700;
+  box-shadow: 2px 2px 0 #111;
+}
+
+.avg-power strong {
+  color: #9dbc9b;
+  margin-right: 0.5rem;
 }
 
 .btn-delete-collection {
-  background: #b50000;
+  margin-left: auto;
+  background: #5f0b0b;
+  border: 2px solid #1a1a1a;
   color: #fff;
-  border: none;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
+  padding: 0.5rem 1rem;
+  font-weight: 900;
+  text-transform: uppercase;
   cursor: pointer;
-  font-size: 0.85rem;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.25rem;
+  transition: all 0.1s ease;
+  font-size: 0.8rem;
+  letter-spacing: 1px;
+  font-family: 'Courier New', monospace;
+  box-shadow: 2px 2px 0 #1a1a1a;
 }
 
 .btn-delete-collection:hover {
-  background: #ff0000;
+  background: #7f0f0f;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #1a1a1a;
 }
 
-/* Scroll horizontal por colección */
+.btn-delete-collection:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 #1a1a1a;
+  background: #3f0505;
+}
+
+/* Collection Scroll Container */
 .collection-scroll {
+  padding: 1rem;
+  background: #2c2c2c;
   overflow-x: auto;
-  overflow-y: hidden;
-  padding-bottom: 0.5rem;
 }
 
-/* Fila horizontal de cards */
+/* Vault Grid */
 .vault-grid {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: 1rem;
-  align-items: stretch;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 1.5rem;
+  min-width: min-content;
 }
 
+/* Vault Card Wrapper */
 .vault-card-wrapper {
   position: relative;
   display: flex;
-  flex-direction: column;
-  align-items: stretch;
+  justify-content: center;
 }
 
-/* Nombre debajo de la card */
-.vault-name {
-  margin-top: 0.4rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #333;
-  text-align: center;
-}
-
-/* ==== BOTÓN POKEBOLA PARA BORRAR POKÉMON ==== */
+/* Pokeball Delete Button */
 .pokeball-btn {
   position: absolute;
-  top: 8px;
-  right: 8px;
-  padding: 0;
-  border: none;
-  background: transparent;
+  top: -8px;
+  right: -8px;
+  width: 36px;
+  height: 36px;
+  background: #5f0b0b;
+  border: 2px solid #1a1a1a;
+  border-radius: 50%;
   cursor: pointer;
-  width: 28px;
-  height: 28px;
+  transition: all 0.1s ease;
+  z-index: 10;
+  box-shadow: 2px 2px 0 #1a1a1a;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 5;
 }
 
+.pokeball-btn:hover {
+  background: #7f0f0f;
+  transform: scale(1.1);
+  box-shadow: 3px 3px 0 #1a1a1a;
+}
+
+.pokeball-btn:active {
+  transform: scale(0.95);
+  box-shadow: 1px 1px 0 #1a1a1a;
+}
+
+/* Pokeball Icon */
 .pokeball {
+  width: 20px;
+  height: 20px;
   position: relative;
-  width: 24px;
-  height: 24px;
-  transition: transform 0.2s ease;
-}
-
-.pokeball-btn:hover .pokeball {
-  transform: scale(1.15);
+  border-radius: 50%;
+  overflow: hidden;
 }
 
 .pokeball-top {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 50%;
-  background: #ff1c1c;
-  border-top-left-radius: 50%;
-  border-top-right-radius: 50%;
-  border: 1px solid #000;
-  transition: transform 0.25s ease;
-  transform-origin: bottom;
+  background: #fff;
 }
 
 .pokeball-bottom {
+  position: absolute;
+  bottom: 0;
+  left: 0;
   width: 100%;
   height: 50%;
-  background: #ffffff;
-  border-bottom-left-radius: 50%;
-  border-bottom-right-radius: 50%;
-  border: 1px solid #000;
+  background: #fff;
 }
 
 .pokeball-center {
   position: absolute;
-  top: 35%;
-  left: 35%;
-  width: 9px;
-  height: 9px;
-  background: #ffffff;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 8px;
+  height: 8px;
+  background: #fff;
+  border: 2px solid #1a1a1a;
   border-radius: 50%;
-  border: 2px solid #000;
-  z-index: 10;
+  z-index: 1;
 }
 
-.pokeball-btn:hover .pokeball-top {
-  transform: rotateX(200deg);
-}
-
-.collection-title {
-  cursor: text;
-  display: flex;
-  align-items: center;
-}
-
-.collection-name {
-  margin: 0;
-  font-size: 1.05rem;
+/* Empty State */
+.collections-page > p {
+  padding: 3rem 2rem;
+  text-align: center;
+  color: #9dbc9b;
+  font-size: 1.1rem;
   font-weight: 700;
+  background: #2c2c2c;
+  border: 2px solid #1a1a1a;
+  box-shadow: 2px 2px 0 #1a1a1a;
+  margin: 2rem 0;
 }
 
-.collection-name-input {
-  font-size: 1rem;
-  font-weight: 600;
-  padding: 0.2rem 0.4rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  min-width: 180px;
-  box-sizing: border-box;
+/* Responsive */
+@media (max-width: 920px) {
+  .collections-page {
+    padding: 0.75rem;
+    margin: 1rem;
+  }
+
+  .header-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .header-row h2 {
+    font-size: 1.1rem;
+    text-align: center;
+  }
+
+  .collection-header {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-delete-collection {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .vault-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .header-row h2 {
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+  }
+
+  .btn {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+  }
+
+  .collection-title {
+    font-size: 0.95rem;
+  }
+
+  .avg-power {
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+  }
 }

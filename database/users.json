@@ -138,11 +138,6 @@
       "pokemonVault": [
         [
           {
-            "arrayId": 0,
-            "idPokemon": 2,
-            "name": "ivysaur"
-          },
-          {
             "arrayId": 1,
             "idPokemon": 291,
             "name": "ninjask"
