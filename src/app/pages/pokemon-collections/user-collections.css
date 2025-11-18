@@ -33,14 +33,14 @@
   font-size: 1.4rem;
   text-transform: uppercase;
   letter-spacing: 2px;
-  color: #9dbc9b;
+  color: #FFF;
   text-shadow: 2px 2px 0 #111;
 }
 
 .btn {
   background: #2c2c2c;
   border: 2px solid #1a1a1a;
-  color: #9dbc9b;
+  color: #FFF;
   padding: 0.6rem 1.25rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -89,7 +89,7 @@
   font-size: 1.1rem;
   font-weight: 900;
   text-transform: uppercase;
-  color: #9dbc9b;
+  color: #FFF;
   cursor: pointer;
   letter-spacing: 1px;
   transition: color 0.2s ease;

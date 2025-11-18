@@ -136,13 +136,7 @@
       "lastLoginDate": "2025-11-18T15:23:41.171Z",
       "lastCreateCollection": "2025-11-18T15:23:49.899Z",
       "pokemonVault": [
-        [
-          {
-            "arrayId": 1,
-            "idPokemon": 291,
-            "name": "ninjask"
-          }
-        ],
+        [],
         [
           {
             "arrayId": 0,
