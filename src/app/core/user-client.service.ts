@@ -2,7 +2,7 @@ import { Observable, switchMap } from 'rxjs';
 import { User } from '../user/user-model';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { pokemonVault } from '../pages/pokemon-collections/collection-model';
+import { pokemonVault } from '../pages/profile/pokemon-collections/collection-model';
 
 
 

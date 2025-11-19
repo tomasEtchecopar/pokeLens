@@ -1,4 +1,4 @@
-import { pokemonVault } from "../pages/pokemon-collections/collection-model";
+import { pokemonVault } from "../pages/profile/pokemon-collections/collection-model";
 
 export interface PointEvent {
   amount: number;

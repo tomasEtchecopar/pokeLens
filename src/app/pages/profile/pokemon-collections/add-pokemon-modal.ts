@@ -1,11 +1,11 @@
 import { pokemonVault } from './collection-model';
 import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthServ } from '../../core/auth.service';
-import { Pokemon } from '../../pokemon/models/pokemon-models';
-import { UserClient } from '../../core/user-client.service';
-import { PointsService } from '../../core/points.service';
-import { PointEvent, User } from '../../user/user-model';
+import { AuthServ } from '../../../core/auth.service';
+import { Pokemon } from '../../../pokemon/models/pokemon-models';
+import { UserClient } from '../../../core/user-client.service';
+import { PointsService } from '../../../core/points.service';
+import { PointEvent, User } from '../../../user/user-model';
 
 @Component({
   selector: 'app-add-pokemon-modal',

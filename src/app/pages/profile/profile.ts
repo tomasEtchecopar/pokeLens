@@ -4,8 +4,8 @@ import { DatePipe } from '@angular/common';
 
 import { AuthServ } from '../../core/auth.service';
 import { PointsService } from '../../core/points.service';
-import { PointEvent } from '../user-model';
-import { SignIn } from '../sign-in/sign-in';
+import { PointEvent } from '../../user/user-model';
+import { SignIn } from '../../user/sign-in/sign-in';
 
 @Component({
   selector: 'app-profile',

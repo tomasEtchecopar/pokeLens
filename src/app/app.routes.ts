@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
-import { LogIn } from './user/log-in/log-in';
+import { LogIn } from './pages/log-in/log-in';
 import { PokemonCatalog } from './pages/pokemon-catalog/pokemon-catalog';
-import { SignIn } from './user/sign-in/sign-in';
-import { Profile } from './user/profile/profile';
+import { SignIn } from './pages/sign-in/sign-in';
+import { Profile } from './pages/profile/profile';
 import { PokemonDetails } from './pages/pokemon-details/pokemon-details';
 import { HomePage } from './pages/home-page/home-page';
 import { Contact } from './pages/contact/contact';
-import { UserCollections } from './pages/pokemon-collections/user-collections';
+import { UserCollections } from './pages/profile/pokemon-collections/user-collections';
 import { PokemonQuiz } from './pages/pokemon-quiz/pokemon-quiz';
 
 export const routes: Routes = [

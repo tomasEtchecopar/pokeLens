@@ -11,7 +11,7 @@ import { signal } from '@angular/core';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { translateGeneration, translateType } from '../../pokemon/models/pokemon-helpers';
 import { forkJoin, switchMap } from 'rxjs';
-import { PokemonFilterService } from '../pokemon-catalog/filter/pokemon-filter-service';
+import { PokemonFilterService } from '../pokemon-catalog/pokemon-filter-dropdown/pokemon-filter-service';
 
 @Component({
   selector: 'app-pokemon-details',

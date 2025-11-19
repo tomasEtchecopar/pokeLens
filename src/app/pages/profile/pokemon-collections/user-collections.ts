@@ -1,11 +1,11 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthServ } from '../../core/auth.service';
-import { UserClient } from '../../core/sign-in.service';
-import { PokemonListService } from '../../pokemon/pokemon-list-service';
-import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
-import { Pokemon } from '../../pokemon/models/pokemon-models';
-import { User } from '../../user/user-model';
+import { AuthServ } from '../../../core/auth.service';
+import { UserClient } from '../../../core/sign-in.service';
+import { PokemonListService } from '../../../pokemon/pokemon-list-service';
+import { PokemonCard } from '../../../pokemon/pokemon-card/pokemon-card';
+import { Pokemon } from '../../../pokemon/models/pokemon-models';
+import { User } from '../../../user/user-model';
 import { FormsModule } from '@angular/forms';
 import { platformBrowser } from '@angular/platform-browser';
 

@@ -4,7 +4,7 @@ import {  TitleCasePipe } from '@angular/common';
 import { signal } from '@angular/core';
 import { translateType } from '../models/pokemon-helpers';
 import { Router } from "@angular/router";
-import { AddPokemonModal } from '../../pages/pokemon-collections/add-pokemon-modal';
+import { AddPokemonModal } from '../../pages/profile/pokemon-collections/add-pokemon-modal';
 import { PokemonCryButton } from './pokemon-cry-button';
 
 /**

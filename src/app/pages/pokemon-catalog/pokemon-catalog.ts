@@ -4,12 +4,12 @@ import { computed } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
 import { effect } from '@angular/core';
 import { Router } from '@angular/router';
-import { PokemonCatalogSearch } from './search/pokemon-catalog-search';
-import { SearchBar } from "../../search-bar/search-bar";
+import { PokemonCatalogSearch } from './search-bar/pokemon-catalog-search';
+import { SearchBar } from "./search-bar/search-bar";
 import { PokemonCatalogPagination } from './pagination/pokemon-catalog-pagination';
-import { PokemonFilterService } from './filter/pokemon-filter-service';
+import { PokemonFilterService } from './pokemon-filter-dropdown/pokemon-filter-service';
 import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
-import { PokemonFilterDropdown } from '../../pokemon/pokemon-filter-dropdown/pokemon-filter-dropdown';
+import { PokemonFilterDropdown } from './pokemon-filter-dropdown/pokemon-filter-dropdown';
 import { FilterOptions } from '../../pokemon/models/pokemon-filters';
 import { filter } from 'rxjs';
 
