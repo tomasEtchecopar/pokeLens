@@ -1,4 +1,5 @@
-import { Component, inject, linkedSignal } from '@angular/core';
+import { Component, inject} from '@angular/core';
+import { FilterOptions } from '../../pokemon/models/pokemon-filters';
 import { computed } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
@@ -10,6 +11,7 @@ import { signal } from '@angular/core';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { translateGeneration, translateType } from '../../pokemon/models/pokemon-helpers';
 import { forkJoin, switchMap } from 'rxjs';
+import { PokemonFilterService } from '../pokemon-catalog/filter/pokemon-filter-service';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -21,6 +23,7 @@ export class PokemonDetails {
   private readonly service = inject(PokeApiService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly filterService = inject(PokemonFilterService);
   private readonly routeParams = toSignal(this.route.paramMap);
   private readonly pokemonName = computed(() => this.routeParams()?.get('name') ?? '');
 
@@ -64,4 +67,67 @@ export class PokemonDetails {
 
 
 
+  private buildFilterForType(type?: string): FilterOptions {
+  return {
+    type: (type ?? undefined) as any,
+    generation: undefined,
+    region: undefined,
+    minHeight: undefined,
+    maxHeight: undefined,
+    minWeight: undefined,
+    maxWeight: undefined
+  };
+}
+
+onTypeClick(ev: MouseEvent, typeName: string | undefined) {
+  ev.stopPropagation();
+  if (!typeName) return;
+
+  const normalized = typeName.toString().toLowerCase(); // coincide con tus types
+  const filters: FilterOptions = this.buildFilterForType(normalized);
+
+  // reemplaza filtros (tal como hace tu API updateFilters)
+  this.filterService.updateFilters(filters);
+
+  // navegar al catálogo (sin query params)
+  this.router.navigateByUrl('/catalogo');
+}
+
+onRegionClick(ev: MouseEvent, region: string | undefined) {
+  ev.stopPropagation();
+  if (!region) return;
+
+  const normalized = region.toString().toLowerCase();
+  const filters: FilterOptions = {
+    type: undefined,
+    generation: undefined,
+    region: normalized as any,
+    minHeight: undefined,
+    maxHeight: undefined,
+    minWeight: undefined,
+    maxWeight: undefined
+  };
+
+  this.filterService.updateFilters(filters);
+  this.router.navigateByUrl('/catalogo');
+}
+
+onGenerationClick(ev: MouseEvent, generation: string | number | undefined) {
+  ev.stopPropagation();
+  if (generation === undefined || generation === null) return;
+
+  const normalized = generation.toString();
+  const filters: FilterOptions = {
+    type: undefined,
+    generation: normalized as any,
+    region: undefined,
+    minHeight: undefined,
+    maxHeight: undefined,
+    minWeight: undefined,
+    maxWeight: undefined
+  };
+
+  this.filterService.updateFilters(filters);
+  this.router.navigateByUrl('/catalogo');
+}
 }

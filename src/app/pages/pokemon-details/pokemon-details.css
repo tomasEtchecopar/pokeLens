@@ -501,9 +501,14 @@
 .details-root .badge:hover,
 .details-root .metric:hover,
 .details-root .section ul li:hover {
+
   transform: translate(1px,1px);
   box-shadow: 1px 1px 0 #111;
   transition: transform 0.08s linear;
+}
+
+.details-root .badge:hover{
+  cursor: pointer;
 }
 
 /* Responsive */
