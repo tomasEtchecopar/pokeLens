@@ -1,5 +1,5 @@
 import { Component, computed, inject } from '@angular/core';
-import { Router, RouterLinkActive } from "@angular/router";
+import { Router, RouterLinkActive, RouterLinkWithHref } from "@angular/router";
 import { AuthServ } from '../core/auth.service';
 import { PokemonQuizService } from '../pages/pokemon-quiz/pokemon-quiz-service';
 
@@ -7,7 +7,7 @@ import { PokemonQuizService } from '../pages/pokemon-quiz/pokemon-quiz-service';
   selector: 'app-header',
   templateUrl: './header.html',
   styleUrl: './header.css',
-  imports: [RouterLinkActive],
+  imports: [RouterLinkActive, RouterLinkWithHref],
 })
 export class Header {
   private readonly router = inject(Router);
@@ -33,6 +33,19 @@ export class Header {
 
   goToCollections(){
     this.router.navigateByUrl('collections');
+  }
+
+  goToCatalog(){
+    this.router.navigateByUrl('/catalog')
+  }
+
+isAlreadyInCatalog(): boolean {
+  const path = this.router.url.split('?')[0].split('#')[0]; // quita query/fragment
+  return path === '/catalog' || path.startsWith('/details/');
+}
+
+  isAlreadyInCollections(): boolean{
+    return this.router.url === '/collections'
   }
 
   logOut() {

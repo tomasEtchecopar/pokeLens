@@ -18,7 +18,7 @@ export const routes: Routes = [
         title: 'Inicio'
     },
     {
-        path: 'catalogo', component: PokemonCatalog,
+        path: 'catalog', component: PokemonCatalog,
         title: 'Catalogo Pokemon'
     },
     {

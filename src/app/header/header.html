@@ -1,9 +1,14 @@
 <div class="header-container">
+
+  <div class="header-left">
+    <button class="btn-header" routerLink="/catalog" routerLinkActive="active" click="goToCatalog()" [disabled]="isAlreadyInCatalog()">Catálogo</button>
+  </div>
+
   <a class="logo-link" routerLink="/home" routerLinkActive="active" (click)="goToHome()">
     <img src="poke-lens-logo.png" alt="Inicio" class="logo" />
   </a>
 
-  <div class="header-buttons">
+  <div class="header-right">
     @if (user(); as currentUser) {
     <!-- Botón de avatar  -->
     <button class="btn-header avatar-btn" (click)="goToProfile()" aria-label="Perfil">
@@ -11,7 +16,7 @@
         (error)="setDefaultAvatar($event)" />
     </button>
 
-    <button class="btn-header" routerLink="/vault" routerLinkActive="active" (click)="goToCollections()">Equipos</button>
+    <button class="btn-header" routerLink="/vault" routerLinkActive="active" (click)="goToCollections()" [disabled]="isAlreadyInCollections()">Equipos</button>
 
     <button class="btn-header" (click)="logOut()">Salir</button>
     } @else {

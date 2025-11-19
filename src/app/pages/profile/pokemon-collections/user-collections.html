@@ -30,6 +30,10 @@
         {{ collectionAverages()[i] || 0 }}
       </p>
 
+      <p class="team-length">
+        <strong>{{col.length}}/6</strong>
+      </p>
+
       <button class="btn-delete-collection" (click)="deleteCollection(i)" title="Eliminar equipo completa">
         Eliminar equipo
       </button>
@@ -52,21 +56,26 @@
 
         @if (pkmList.getPokemonFromMemory(entry.idPokemon); as pkm) {
 
-        <div class="vault-card-wrapper">
-          <button class="pokeball-btn" (click)="deletePokemon(i, entry.arrayId!)"
-            title="Quitar Pokémon de la equipo">
-            <div class="pokeball">
-              <div class="pokeball-top"></div>
-              <div class="pokeball-bottom"></div>
-              <div class="pokeball-center"></div>
-            </div>
-          </button>
+<div class="vault-card-wrapper">
+  <!-- Botón eliminar con cruz -->
+  <button
+    class="pokeball-btn"
+    (click)="deletePokemon(i, entry.arrayId!)"
+    title="Quitar Pokémon del equipo"
+    aria-label="Eliminar Pokémon">
+  </button>
 
-          <app-pokemon-card [pokemon]="pkm" [nickname]="entry.nickname!"></app-pokemon-card>
-<button class="edit-nickname-btn" title="Editar apodo" (click)="editNickname(i, entry.arrayId!)">
-  ✎
-</button>
-        </div>
+  <!-- Botón editar nickname -->
+  <button
+    class="edit-nickname-btn"
+    title="Editar apodo"
+    (click)="editNickname(i, entry.arrayId!)"
+    aria-label="Editar apodo">
+    ✎
+  </button>
+
+  <app-pokemon-card [pokemon]="pkm" [nickname]="entry.nickname!"></app-pokemon-card>
+</div>
         }
         }
       }
