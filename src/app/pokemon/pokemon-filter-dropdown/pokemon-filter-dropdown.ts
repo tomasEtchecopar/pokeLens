@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { FilterOptions, PokemonGeneration, PokemonRegion, PokemonType } from '../models/pokemon-filters';
-import { PokemonFiltersTranslation} from './pokemon-filters-translation';
+import { PokemonFiltersTranslation } from './pokemon-filters-translation';
 import { inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { model } from '@angular/core';
@@ -8,16 +8,16 @@ import { output } from '@angular/core';
 
 @Component({
   selector: 'app-pokemon-filter-dropdown',
-  standalone:true,
+  standalone: true,
   imports: [FormsModule],
   templateUrl: './pokemon-filter-dropdown.html',
   styleUrl: './pokemon-filter-dropdown.css',
 })
 export class PokemonFilterDropdown {
-  private readonly filtersTranslations= inject(PokemonFiltersTranslation);
-  filterUpdate= output<FilterOptions>();
+  private readonly filtersTranslations = inject(PokemonFiltersTranslation);
+  filterUpdate = output<FilterOptions>();
 
-selectedType = model<string>('');
+  selectedType = model<string>('');
   selectedGeneration = model<string>('');
   selectedRegion = model<string>('');
   minHeight = model<number | null>(null);
@@ -28,9 +28,13 @@ selectedType = model<string>('');
   protected types = this.filtersTranslations.types;
   protected generations = this.filtersTranslations.generations;
   protected regions = this.filtersTranslations.regions;
+  filtersOpen = signal(false);
 
-  private emit(){
-    const filters: FilterOptions= {
+  toggleFilters() {
+    this.filtersOpen.set(!this.filtersOpen());
+  }
+  private emit() {
+    const filters: FilterOptions = {
       type: this.selectedType() as PokemonType || undefined,
       generation: this.selectedGeneration() as PokemonGeneration || undefined,
       region: this.selectedRegion() as PokemonRegion || undefined,
@@ -48,7 +52,7 @@ selectedType = model<string>('');
     this.emit();
   }
 
-  clear(){
+  clear() {
     this.selectedType.set('');
     this.selectedGeneration.set('');
     this.selectedRegion.set('');
