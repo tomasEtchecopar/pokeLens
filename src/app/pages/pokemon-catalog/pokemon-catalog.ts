@@ -9,7 +9,7 @@ import { SearchBar } from "../../search-bar/search-bar";
 import { PokemonCatalogPagination } from './pagination/pokemon-catalog-pagination';
 import { PokemonFilterService } from './filter/pokemon-filter-service';
 import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
-import { PokemonFilterDropdown } from '../../pokemon/pokemon-filter-dropdown/pokemon-filter-dropdown';
+import { PokemonFilterDropdown } from './pokemon-filter-dropdown/pokemon-filter-dropdown';
 import { FilterOptions } from '../../pokemon/models/pokemon-filters';
 import { filter } from 'rxjs';
 

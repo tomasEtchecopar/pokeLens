@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { PokeApiService } from '../pokeapi-service';
-import { translateGeneration, translateRegion, translateType } from '../models/pokemon-helpers';
+import { PokeApiService } from '../../../pokemon/pokeapi-service';
+import { translateGeneration, translateRegion, translateType } from '../../../pokemon/models/pokemon-helpers';
 import { map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 
