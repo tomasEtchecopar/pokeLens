@@ -38,7 +38,7 @@
 }
 
 .screen-left {
-  flex: 0 0 50%;
+  flex: 110 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -48,6 +48,7 @@
 }
 
 .lcd-screen {
+  flex: 1 1 auto;
   width: 100%;
   height: 100%;
   background: #9dbc9b;
@@ -61,8 +62,8 @@
 }
 
 .sprite-container {
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -79,13 +80,14 @@
 }
 
 .screen-right {
-  flex: 0 0 50%;
+  flex: 1 1 50%;
   padding: 0.75rem;
   min-width: 0;
   overflow: hidden;
 }
 
 .data-screen {
+  flex: 1 1 auto;
   width: 100%;
   height: 100%;
   background: #8b8680;
@@ -268,6 +270,7 @@ h2 {
 @media (max-width: 768px) {
   .pokedex-screen {
     padding: 8px;
+    height: 420px;
   }
 
   .screen-bezel {
