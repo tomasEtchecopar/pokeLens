@@ -256,6 +256,53 @@
   z-index: 1;
 }
 
+.edit-nickname-btn {
+    position: absolute;
+  top: -8px;
+  right: 36px;
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;            /* ajustar */
+  line-height: 1;
+  background: #ffffff;
+  border: 3px solid #1a1a1a;
+  box-shadow: 2px 2px 0 #1a1a1a;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  image-rendering: auto;      /* NO pixelado */
+  font-family: 'Press Start 2P', monospace;
+}
+.edit-nickname-btn .icon {
+  width: 16px;
+  height: 16px;
+  image-rendering: pixelated;
+}
+.edit-nickname-btn:hover {
+  transform: translate(1px,1px) scale(1.03);
+  box-shadow: 1px 1px 0 #111;
+}
+.edit-nickname-btn:active {
+  transform: translate(2px,2px) scale(.98);
+  box-shadow: 0 0 0 #111;
+}
+
+
+.edit-nickname-btn .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+
 /* Empty State */
 .collections-page > p {
   padding: 3rem 2rem;

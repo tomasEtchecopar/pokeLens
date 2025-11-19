@@ -127,24 +127,78 @@ export class UserCollections {
     const user = this.usuario();
     if (!user || !user.id) return;
 
-    const vault = user.pokemonVault ?? [];
-    if (collectionIndex < 0 || collectionIndex >= vault.length) return;
+    if(confirm('Seguro que desea eliminar al Pokemon de la coleccion?')){
+      const vault = user.pokemonVault ?? [];
+      if (collectionIndex < 0 || collectionIndex >= vault.length) return;
 
-    const updatedCollection = vault[collectionIndex].filter(p => p.arrayId !== arrayId);
-    const updatedVault = vault.map((col, i) =>
-      i === collectionIndex ? updatedCollection : col
-    );
+      const updatedCollection = vault[collectionIndex].filter(p => p.arrayId !== arrayId);
+      const updatedVault = vault.map((col, i) =>
+        i === collectionIndex ? updatedCollection : col
+      );
 
-    const updatedUser: User = { ...user, pokemonVault: updatedVault };
+      const updatedUser: User = { ...user, pokemonVault: updatedVault };
 
-    this.userClient.updateUser(updatedUser, user.id).subscribe({
-      next: (res) => {
-        this.auth.activeUser.set(res);
-        localStorage.setItem('activeUser', JSON.stringify(res));
-      },
-      error: () => alert('Error al eliminar el Pokémon de la colección'),
-    });
+      this.userClient.updateUser(updatedUser, user.id).subscribe({
+        next: (res) => {
+          this.auth.activeUser.set(res);
+          localStorage.setItem('activeUser', JSON.stringify(res));
+        },
+        error: () => alert('Error al eliminar el Pokémon de la colección'),
+      });
   }
+  }
+
+editNickname(collectionIndex: number, arrayId: number, newNickname?: string) {
+  const user = this.usuario();
+  if (!user || !user.id) return;
+
+  const vault = user.pokemonVault ?? [];
+  if (collectionIndex < 0 || collectionIndex >= vault.length) return;
+
+  const collection = vault[collectionIndex] ?? [];
+  const entryIndex = collection.findIndex(e => e.arrayId === arrayId);
+  if (entryIndex === -1) return;
+
+  // Obtener apodo: si viene por parámetro lo usamos, si no pedimos con prompt()
+  let nickname: string | null | undefined = typeof newNickname === 'string'
+    ? newNickname
+    : prompt('Nuevo apodo para el Pokémon:', collection[entryIndex].nickname ?? '');
+
+  // Si el usuario canceló el prompt, termina sin cambios
+  if (nickname === null) return;
+
+  // Limpiar y validar
+  nickname = (nickname ?? '').trim();
+  if (nickname.length > 32) nickname = nickname.slice(0, 32); // límite razonable
+
+  // Si quedó vacío, lo removemos (undefined) para mantener consistencia
+  const finalNickname = nickname.length > 0 ? nickname : undefined;
+
+  // Construir colección actualizada (no mutamos objetos originales)
+  const updatedEntry = { ...collection[entryIndex], nickname: finalNickname };
+  const updatedCollection = [...collection];
+  updatedCollection[entryIndex] = updatedEntry;
+
+  // Reconstruir el vault completo
+  const updatedVault = vault.map((col, i) => (i === collectionIndex ? updatedCollection : col));
+
+  const updatedUser: User = {
+    ...user,
+    pokemonVault: updatedVault
+  };
+
+  // Persistir en backend y actualizar activeUser / localStorage
+  this.userClient.updateUser(updatedUser, user.id).subscribe({
+    next: (res) => {
+      this.auth.activeUser.set(res);
+      localStorage.setItem('activeUser', JSON.stringify(res));
+    },
+    error: (err) => {
+      console.error('Error al editar apodo', err);
+      alert('Error al editar el apodo del Pokémon');
+    }
+  });
+}
 
   /**
    * Elimina una coleccion completa del usuario.

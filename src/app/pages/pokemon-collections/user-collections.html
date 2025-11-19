@@ -38,6 +38,7 @@
     <div class="collection-scroll">
       <div class="vault-grid">
 
+        @if(col.length>0){
         @for (entry of col; track entry.arrayId) {
 
         @if (pkmList.getPokemonFromMemory(entry.idPokemon); as pkm) {
@@ -53,9 +54,15 @@
           </button>
 
           <app-pokemon-card [pokemon]="pkm" [nickname]="entry.nickname!"></app-pokemon-card>
+<button class="edit-nickname-btn" title="Editar apodo" (click)="editNickname(i, entry.arrayId!)">
+  ✎
+</button>
         </div>
         }
         }
+      }@else {
+        <p>No hay pokemon en la coleccion...</p>
+      }
       </div>
     </div>
   </section>
