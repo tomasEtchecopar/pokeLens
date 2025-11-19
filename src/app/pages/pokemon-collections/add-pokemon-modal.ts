@@ -26,8 +26,8 @@ import { PointEvent, User } from '../../user/user-model';
             } @else {
               <div class="form-group">
                 <label for="collection">Colección:</label>
-               
-            <!--Mostramos los nombres de las colecciones  -->              
+
+            <!--Mostramos los nombres de las colecciones  -->
 <select
   id="collection"
   [ngModel]="selectedCollection()"
@@ -41,7 +41,7 @@ import { PointEvent, User } from '../../user/user-model';
     + Nueva colección
   </option>
 </select>
-            <!--Si elegimos una nueva, se habilita el input  -->              
+            <!--Si elegimos una nueva, se habilita el input  -->
 
 @if (isCreatingNewCollection()) {
   <div class="form-group">
@@ -50,15 +50,12 @@ import { PointEvent, User } from '../../user/user-model';
       id="newCollectionName"
       type="text"
       maxlength="20"
-      [ngModel]="newCollectionName()"                
-      (ngModelChange)="newCollectionName.set($event)" 
+      [ngModel]="newCollectionName()"
+      (ngModelChange)="newCollectionName.set($event)"
       placeholder="Ej: Equipo Fuego"
     >
   </div>
 }
-
-
-
 
               </div>
 
@@ -170,6 +167,7 @@ import { PointEvent, User } from '../../user/user-model';
     }
 
     .form-group {
+    margin-top: 1rem;
       margin-bottom: 1.5rem;
     }
 
@@ -289,7 +287,7 @@ export class AddPokemonModal {
       }
     })
   };
-  //Metodo para calcular los dias que pasaron entre la ultima creacion de una coleccion 
+  //Metodo para calcular los dias que pasaron entre la ultima creacion de una coleccion
   private daysBetween(a: string, b: string): number {
     const msA = new Date(a).getTime();
     const msB = new Date(b).getTime();
@@ -317,7 +315,7 @@ export class AddPokemonModal {
   }
 
 
-  
+
   /**
    * Intenta capturar el Pokémon seleccionado y agregarlo a la coleccion elegida.
    *
