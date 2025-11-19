@@ -168,7 +168,6 @@ h2 {
   box-shadow: 1px 1px 0px #1a1a1a;
 }
 
-/* Type-specific colors - Retro Pixel Style */
 .type-fire { background: #ff6b35; }
 .type-water { background: #3b88c3; }
 .type-grass { background: #4aad4e; }
@@ -210,7 +209,6 @@ h2 {
   opacity: 0.6;
 }
 
-/* Loading State */
 .loading-screen {
   background: linear-gradient(to bottom, #84b8b8, #6b9898);
   border: 3px solid #1a1a1a;
@@ -266,7 +264,6 @@ h2 {
   background: #3a8d3e;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .pokedex-screen {
     padding: 8px;

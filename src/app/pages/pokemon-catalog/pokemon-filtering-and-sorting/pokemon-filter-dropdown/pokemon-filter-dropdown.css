@@ -1,4 +1,3 @@
-/* Botón que abre/cierra el panel */
 .filters-toggle {
   width: 100%;
   background: #2c2c2c;
@@ -25,7 +24,6 @@
   transform: rotate(180deg);
 }
 
-/* Acordeón del panel */
 .filters-panel {
   overflow: hidden;
   max-height: 0;
@@ -36,10 +34,9 @@
   max-height: 900px;
 }
 
-/* Contenedor interno del panel */
 .multi-filter {
   background: #1a1a1a;
-  border: 3px solid #c51717;
+  border: 3px solid #5f0b0b;
   padding: 8px;
   box-sizing: border-box;
   image-rendering: pixelated;
@@ -49,31 +46,27 @@
   color: white;
 }
 
-/* Filas del formulario */
 .filter-row {
   display: grid;
   gap: 1rem;
   margin-bottom: 1.5rem;
+  margin-top: 0.5rem;
 }
 
-/* Fila 1: tipo / generación / región */
 .multi-filter .filter-row:nth-of-type(1) {
   grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
-/* Fila 2: altura / peso */
 .multi-filter .filter-row:nth-of-type(2) {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-/* Mobile */
 @media (max-width: 768px) {
   .multi-filter .filter-row {
     grid-template-columns: 1fr;
   }
 }
 
-/* Items de cada filtro */
 .filter-item {
   display: flex;
   flex-direction: column;
@@ -81,24 +74,22 @@
   min-width: 0;
 }
 
-/* Etiquetas */
 .filter-item label {
   font-family: 'Press Start 2P', monospace;
   font-weight: 700;
   font-size: 0.75rem;
-  color: #ffd700;
+  color: #FFF;
   text-transform: uppercase;
   letter-spacing: 1.5px;
 }
 
-/* Selects */
 .filter-item select {
   padding: 0.875rem 1rem;
   font-size: 0.95rem;
   font-family: 'Courier New', monospace;
   font-weight: 100;
   background: #252525;
-  color: white;
+  color: #FFF;
   border: 2px solid #000;
   outline: none;
   cursor: pointer;
@@ -121,7 +112,6 @@
   box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
 }
 
-/* Inputs de rango */
 .range-inputs {
   display: flex;
   align-items: center;
@@ -138,7 +128,6 @@
   background: #252525;
   color: white;
   border: 2px solid #444;
-  border-radius: 6px;
   outline: none;
   transition: all 0.3s ease;
   box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
@@ -160,7 +149,6 @@
   font-weight: 700;
 }
 
-/* Botón de limpiar */
 .clear-btn {
   background: #2c2c2c;
   color: white;
@@ -187,7 +175,6 @@
   box-shadow: 0 1px 0 #0a0a0a;
 }
 
-/* Quitar flechas de input number */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;

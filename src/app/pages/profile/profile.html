@@ -66,12 +66,8 @@
 
   </div>
   } @else {
-  <!-- Reutilizo el formulario del SignIn para editar -->
   <app-sign-in [client]="usuario()" [(isEditing)]="isEditing"></app-sign-in>
   }
 
 </div>
-<!-- Modal de avatar -->
-<div class="avatar-modal" (click)="closeAvatar()" [class.open]="isAvatarOpen">
-  <img [src]="usuario()?.avatarUrl || 'default.png'" alt="avatar grande">
-</div>
+

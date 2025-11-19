@@ -1,12 +1,12 @@
 @let p = this.pokemon();
+
 @if(this.isLoading()){
 <p>Cargando Pokemon...</p>
-}@else {
-@if (p){
+}@else if (p){
 <div class="details-root">
   <div class="details-header">
 
-    <a routerLink="/catalogo" class="catalog-button">
+    <a routerLink="/catalog" class="catalog-button">
       <div class="arrow-pixel"></div>
       <span>CATALOGO</span>
     </a>
@@ -15,14 +15,11 @@
     <span class="poke-number">#{{ p.id }}</span>
   </div>
 
-  <!-- Card del Pokemon centrada arriba -->
   <div class="pokemon-card-center">
     <app-pokemon-card [pokemon]="p"></app-pokemon-card>
   </div>
 
-  <!-- Layout: Evoluciones (izquierda) | Detalles (derecha) -->
   <div class="details-layout">
-    <!-- Columna izquierda: Evoluciones verticales -->
     @if (evolutionPokemons() && evolutionPokemons().length>0) {
     <div class="section evolution-section">
       <h3>Evoluciones</h3>
@@ -36,29 +33,25 @@
     </div>
     }
 
-    <!-- Columna derecha: Estadísticas y detalles -->
     <div class="details-info">
-<div class="badges-row">
-  <span class="badge generation"
-        (click)="onGenerationClick($event, p.generation)"
-        title="Ver pokémons de la generación {{ translateGeneration(p.generation!) }}">
-    {{ translateGeneration(p.generation!) }}
-  </span>
+      <div class="badges-row">
+        <span class="badge generation" (click)="onGenerationClick($event, p.generation)"
+          title="Ver pokémons de la generación {{ translateGeneration(p.generation!) }}">
+          {{ translateGeneration(p.generation!) }}
+        </span>
 
-  <span class="badge region"
-        (click)="onRegionClick($event, p.region)"
-        title="Ver pokémons de la región {{ p.region | titlecase }}">
-    {{ p.region | titlecase }}
-  </span>
+        <span class="badge region" (click)="onRegionClick($event, p.region)"
+          title="Ver pokémons de la región {{ p.region | titlecase }}">
+          {{ p.region | titlecase }}
+        </span>
 
-  @for (t of p.types; track t.type.name) {
-    <span class="badge type-{{ t.type.name }}"
-          (click)="onTypeClick($event, t.type.name)"
+        @for (t of p.types; track t.type.name) {
+        <span class="badge type-{{ t.type.name }}" (click)="onTypeClick($event, t.type.name)"
           title="Ver pokémons tipo {{ translateType(t.type.name) | titlecase }}">
-      {{ translateType(t.type.name) | titlecase }}
-    </span>
-  }
-</div>
+          {{ translateType(t.type.name) | titlecase }}
+        </span>
+        }
+      </div>
 
       <div class="metrics">
         <div class="metric">
@@ -94,7 +87,6 @@
         </ul>
       </div>
 
-      <!-- Habilidades -->
       <div class="section abilities-section">
         <h3>Habilidades</h3>
         <div class="abilities-row">
@@ -143,5 +135,4 @@
 </div>
 }@else {
 <p>No se encontro el pokemon</p>
-}
 }

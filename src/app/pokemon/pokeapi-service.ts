@@ -6,24 +6,14 @@ import { Pokemon, PokemonSpecies, Generation } from './models/pokemon-models';
 import { Observable, forkJoin, from, of, switchMap, mergeMap, catchError, toArray, filter, map } from 'rxjs';
 
 /**
- * Service that talks to the PokeAPI
- * Handles all the HTTP calls to get Pokemon data - lists, by name, or by URL
+ * Service that calls the PokeAPI
+ * Handles all the HTTP calls to get Pokemon data
  */
 @Injectable({ providedIn: 'root' })
 export class PokeApiService {
   private readonly baseURL = "https://pokeapi.co/api/v2";
   private readonly http = inject(HttpClient);
 
-
-  /**
-   * @param limit How many Pokemon to get (default 20)
-   * @param offset Where to start from (default 0)
-   * @returns NamedAPIResourceList
-   */
-  private getPokemonList(limit: number = 20, offset: number = 0) {
-    const url = `${this.baseURL}/pokemon?limit=${limit}&offset=${offset}`;
-    return this.http.get<NamedAPIResourceList>(url);
-  }
 
   /**
    * Function to fetch the resource for all pokemon
@@ -33,50 +23,13 @@ export class PokeApiService {
     return this.http.get<NamedAPIResourceList>(`${this.baseURL}/pokemon?limit=9999`)
       .pipe(map(res => res.results))
   }
+
   /**
-   *
    * @param name of pokemon
    * @returns pokemon
    */
   private getPokemonByName(name: string) {
     return this.http.get<Pokemon>(`${this.baseURL}/pokemon/${name}`);
-  }
-  /**
-  * Get Pokemon Species data
-  * @param url Species URL
-  * @returns PokemonSpecies
-  */
-  private getPokemonSpecies(url: string) {
-    return this.http.get<PokemonSpecies>(url);
-  }
-
-  /**
-   * Get Generation data
-   * @param url Generation URL
-   * @returns Generation
-   */
-  private getGeneration(url: string) {
-    return this.http.get<Generation>(url);
-  }
-
-  getAvailableTypes() {
-    return this.http.get<{ results: { name: string }[] }>(`${this.baseURL}/type`).pipe(
-      map(res => res.results
-        .map(t => t.name)
-      )
-    )
-  }
-
-  getAvailableGenerations() {
-    return this.http.get<{ results: { name: string }[] }>(`${this.baseURL}/generation`).pipe(
-      map(res => res.results.map(g => g.name))
-    )
-  }
-
-  getAvailableRegions() {
-    return this.http.get<{ results: { name: string }[] }>(`${this.baseURL}/region`).pipe(
-      map(res => res.results.map(r => r.name))
-    )
   }
 
 
@@ -137,8 +90,55 @@ export class PokeApiService {
     );
   }
 
+  /**
+  * @param url Species URL
+  * @returns PokemonSpecies
+  */
+  private getPokemonSpecies(url: string) {
+    return this.http.get<PokemonSpecies>(url);
+  }
 
-  /** Mapear username -> pokemonId (fijo) */
+  /**
+   * @param url Generation URL
+   * @returns Generation
+   */
+  private getGeneration(url: string) {
+    return this.http.get<Generation>(url);
+  }
+
+  /**
+   * Return all available types on the pokeapi as strings
+   * @return Object: { results: string[] }
+   */
+  getAvailableTypes() {
+    return this.http.get<{ results: { name: string }[] }>(`${this.baseURL}/type`).pipe(
+      map(res => res.results
+        .map(t => t.name)
+      )
+    )
+  }
+
+   /**
+   * Return all available generations on the pokeapi as strings
+   * @return Object: { results: string[] }
+   */
+  getAvailableGenerations() {
+    return this.http.get<{ results: { name: string }[] }>(`${this.baseURL}/generation`).pipe(
+      map(res => res.results.map(g => g.name))
+    )
+  }
+
+    /**
+   * Return all available regions on the pokeapi as strings
+   * @return Object: { results: string[] }
+   */
+  getAvailableRegions() {
+    return this.http.get<{ results: { name: string }[] }>(`${this.baseURL}/region`).pipe(
+      map(res => res.results.map(r => r.name))
+    )
+  }
+
+
   hashToPokemonId(text: string, max = 1025): number {
     let h = 0;
     for (let i = 0; i < text.length; i++) {
@@ -147,7 +147,10 @@ export class PokeApiService {
     h = Math.abs(h);
     return (h % max) + 1; // 1..max
   }
-  //obtengo la sprite del pokemon segun el id generado
+
+  /**
+   * Gets an artwork based on its ID
+   */
   pokemonArtworkUrl(id: number | string | undefined): string {
     if (!id) return 'default.png';
 
@@ -155,7 +158,6 @@ export class PokeApiService {
   }
 
 
-  //Genera un ID de Pokémon aleatorio para el avatar del usuario
   randomPokemonId(max = 1025) {
     return Math.floor(Math.random() * max) + 1;
   }

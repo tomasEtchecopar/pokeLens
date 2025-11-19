@@ -3,6 +3,10 @@ import { AuthServ } from '../../core/auth.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 
+/**
+ * LogIn component handles user authentication.
+ * Validates credentials and redirects to catalog on success.
+ */
 @Component({
   selector: 'app-log-in',
   imports: [ReactiveFormsModule],
@@ -10,7 +14,6 @@ import { Router } from '@angular/router';
   styleUrl: './log-in.css',
 })
 export class LogIn {
-
   private readonly auth = inject(AuthServ);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
@@ -20,6 +23,11 @@ export class LogIn {
     password: ['', Validators.required]
   });
 
+  /**
+   * Handles login submission.
+   * Validates form, calls auth service, and navigates to catalog on success.
+   * Shows alerts for validation errors or incorrect credentials.
+   */
   logIn() {
     if (this.form.invalid) {
       alert('Complete correctamente todos los campos');
@@ -28,11 +36,11 @@ export class LogIn {
 
     const { username, password } = this.form.getRawValue();
 
-    // SUSCRIBIRSE y recién ahí navegar
+    // Subscribe to login observable before navigating (important for proper flow)
     this.auth.login(username, password).subscribe({
       next: () => {
         console.log('Logueado correctamente')
-        this.router.navigateByUrl('/catalogo');   
+        this.router.navigateByUrl('/catalogo');
       },
       error: (err) => {
         console.error(err);
@@ -40,5 +48,4 @@ export class LogIn {
       }
     });
   }
-
 }

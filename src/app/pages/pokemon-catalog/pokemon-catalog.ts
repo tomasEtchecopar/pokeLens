@@ -18,45 +18,32 @@ import { PokemonSortMenu } from './pokemon-filtering-and-sorting/pokemon-sort-me
   templateUrl: './pokemon-catalog.html',
   styleUrl: './pokemon-catalog.css'
 })
-export class PokemonCatalog implements AfterViewInit, OnDestroy{
-  /**
-   * Sets up infinite scroll
-   */
-  @ViewChild('scrollSentinel', {static: false} ) scrollSentinel?: ElementRef<HTMLElement>;
+export class PokemonCatalog implements AfterViewInit, OnDestroy {
 
-  /**
-   * This is where we get our pokemon list from
-   */
+  //Sets up infinite scroll
+  @ViewChild('scrollSentinel', { static: false }) scrollSentinel?: ElementRef<HTMLElement>;
+
+  //this is where we get our pokemon list from
   private readonly filtering = inject(PokemonFilterService);
 
-  /**
-   * This is where we perform searchs upon the list from the service above
-   */
+  //this is where we perform searchs upon the list from the service above
   private readonly pokemonSearch = inject(PokemonCatalogSearch);
 
-  /**
-   * Used to paginate pokemons to make use of infinite scroll
-   */
+  //this is where we paginate the entire list to make use of infinite scroll
   protected readonly pagination = inject(PokemonCatalogPagination)
 
-  /**
-   * List of pokemons to work from; already filtered
-   */
+  /* ---------------------------------------------------------------------------------------- */
+
+  //List of pokemons to work from; already filtered and sorted
   protected readonly allPokemon = this.filtering.filteredPokemon;
   protected readonly currentFilters = this.filtering.currentFilters;
 
-  /**
-   * Search results from the list above; full list in case of no results/input
-   */
+  //Search results from the list above; full list in case of no results/input
   protected readonly pokemonList = this.pokemonSearch.results;
 
-  /**
-   * Boolean signal telling if the search has results
-   */
   protected readonly hasSearchResults = this.pokemonSearch.hasResults;
-  /**
-   * Paginated list from the seach results
-   */
+
+  //paginated list. this is what is used in the template
   readonly displayedPokemon = this.pagination.displayedPokemon;
 
   protected readonly isLoading = computed(() =>
@@ -66,41 +53,40 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   //dont really know what its for but infinite scroll uses it
   private sentinelAttached = false;
 
-  constructor(){
+  constructor() {
     effect(() => {
       const list = this.allPokemon();
-      if(list && list.length) this.pokemonSearch.setPokemonList(list); //setting up search
+      if (list && list.length) this.pokemonSearch.setPokemonList(list); //setting up search
       const searchResults = this.pokemonList();
-      if(searchResults && searchResults.length){
+      if (searchResults && searchResults.length) {
         untracked(() => this.pagination.setPokemonList(searchResults, 50)) //setting up pagination
       }
     })
   };
 
-  ngAfterViewInit(): void{
+  ngAfterViewInit(): void {
     setTimeout(() => {
-    if(this.scrollSentinel?.nativeElement && !this.sentinelAttached){
-      console.log("initializing scroll")
-      this.pagination.initScroll(this.scrollSentinel.nativeElement);
-      this.sentinelAttached = true;
-    } else{
-      console.error('Sentinel not found');
-    }
+      if (this.scrollSentinel?.nativeElement && !this.sentinelAttached) {
+        console.log("initializing scroll")
+        this.pagination.initScroll(this.scrollSentinel.nativeElement);
+        this.sentinelAttached = true;
+      } else {
+        console.error('Sentinel not found');
+      }
     }, 0);
   }
 
   ngOnDestroy(): void {
-      this.pagination.disconnect();
+    this.pagination.disconnect();
   }
 
 
-  onSearch(term: string){
+  onSearch(term: string) {
     this.pokemonSearch.search(term);
   }
 
 
-
-  applyFilters(filters: FilterOptions){
+  applyFilters(filters: FilterOptions) {
     console.log("detected event on filter buttons");
     this.filtering.updateFilters(filters);
   }

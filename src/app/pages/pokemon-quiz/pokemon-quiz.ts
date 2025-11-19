@@ -6,6 +6,10 @@ import { PointsService } from '../../core/points.service';
 import { PointEvent } from '../../user/user-model';
 import { Router } from '@angular/router';
 
+/**
+ * PokemonQuiz component provides an interactive pokemon guessing game.
+ * Awards points for correct answers and tracks user statistics.
+ */
 @Component({
   selector: 'app-pokemon-quiz',
   standalone: true,
@@ -18,13 +22,16 @@ export class PokemonQuiz implements OnInit {
   private readonly router = inject(Router);
   private readonly auth = inject(AuthServ);
   private readonly points = inject(PointsService);
-  protected readonly usuario = computed(() => this.auth.activeUser());
 
+  protected readonly usuario = computed(() => this.auth.activeUser());
 
   ngOnInit(): void {
     this.quizService.generateQuestion();
   }
 
+  /**
+   * Handles answer selection and awards points if correct.
+   */
   selectAnswer(answer: string): void {
     this.quizService.checkAnswer(answer);
     if (this.quizService.isCorrect()) {
@@ -41,13 +48,16 @@ export class PokemonQuiz implements OnInit {
     this.quizService.generateQuestion();
   }
 
-  // Obtiene la imagen ocultada (silueta)
+  // Returns image URL for display (can be extended for silhouette effect)
   getHiddenImage(imageUrl: string | null): string {
     if (!imageUrl) return '';
     return imageUrl;
   }
 
-  // Lógica para sumar puntos al usuario cuando acierta
+  /**
+   * Awards +5 points for correct quiz answers.
+   * Updates both points and history, then syncs with auth service and localStorage.
+   */
   private awardPointsForCorrectAnswer(): void {
     const user = this.auth.activeUser();
     if (!user || !user.id) {
@@ -56,9 +66,9 @@ export class PokemonQuiz implements OnInit {
 
     const amount = 5;
     const reason = 'Respuesta correcta en el Quiz Pokémon';
-
     const today = new Date();
 
+    // Step 1: Add points
     this.points.addPoints(user, amount, undefined, reason).subscribe({
       next: (updatedUser) => {
         const event: PointEvent = {
@@ -67,8 +77,10 @@ export class PokemonQuiz implements OnInit {
           date: today.toISOString()
         };
 
+        // Step 2: Add to history
         this.points.addHistory(updatedUser, event).subscribe({
           next: (finalUser) => {
+            // Step 3: Sync with auth and localStorage
             this.auth.activeUser.set(finalUser);
             localStorage.setItem('activeUser', JSON.stringify(finalUser));
           },
@@ -84,14 +96,14 @@ export class PokemonQuiz implements OnInit {
   }
 
   goToLogin() {
-    this.router.navigateByUrl('/logIn');    // ajustá al path real de tu login
+    this.router.navigateByUrl('/logIn');
   }
 
   goToSignIn() {
-    this.router.navigateByUrl('/signIn');  // ajustá si tu ruta es otra
+    this.router.navigateByUrl('/signIn');
   }
 
   backToCatalog() {
-    this.router.navigateByUrl('/catalogo'); // ya la usás en otros lados
+    this.router.navigateByUrl('/catalog');
   }
 }

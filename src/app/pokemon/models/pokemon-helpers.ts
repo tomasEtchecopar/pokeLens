@@ -1,10 +1,3 @@
-/**
- * Utility functions for Pokemon data transformation
- */
-
-/**
- * Translates Pokemon type names from English to Spanish
- */
 export function translateType(typeName: string): string {
   const typeTranslations: { [key: string]: string } = {
     'normal': 'Normal',

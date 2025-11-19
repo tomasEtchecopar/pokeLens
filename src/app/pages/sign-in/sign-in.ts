@@ -1,8 +1,8 @@
 import { Component, inject, input, model, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PointEvent } from '../../user/user-model';
-import { UserClient } from '../../core/sign-in.service';
 import { User } from '../../user/user-model';
+import { UserClient } from '../../core/user-client.service';
 import { AuthServ } from '../../core/auth.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
@@ -12,7 +12,10 @@ import { PokeApiService } from '../../pokemon/pokeapi-service';
 
 const emailPatter = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
-
+/**
+ * SignIn component handles both user registration and profile editing.
+ * Features real-time email/username validation and automatic avatar generation.
+ */
 @Component({
   selector: 'app-sign-in',
   imports: [ReactiveFormsModule],
@@ -20,22 +23,20 @@ const emailPatter = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
   styleUrl: './sign-in.css',
 })
 export class SignIn implements OnInit {
-  //Servicios
   private readonly users: UserClient = inject(UserClient);
   private readonly formBuilder = inject(FormBuilder);
   private readonly auth = inject(AuthServ);
   private readonly router = inject(Router);
-  private readonly pokeService = inject(PokeApiService)
-  private readonly points = inject(PointsService)
+  private readonly pokeService = inject(PokeApiService);
+  private readonly points = inject(PointsService);
 
-  //Inputs
+  // Dual-mode: registration vs profile editing
   readonly isEditing = model<boolean>(false);
   readonly client = input<User>();
-  //Variables
+
+  // Real-time validation flags
   protected emailTaken = false;
   protected usernameTaken = false;
-
-
 
   protected readonly form = this.formBuilder.nonNullable.group({
     username: ['', Validators.required],
@@ -47,8 +48,11 @@ export class SignIn implements OnInit {
     password: ['', Validators.required]
   });
 
+  /**
+   * Sets up real-time email/username uniqueness validation.
+   * Debounced to avoid excessive API calls. Skips checks during editing if values haven't changed.
+   */
   ngOnInit(): void {
-
     const u = this.client();
     if (this.isEditing() && u) {
       this.form.patchValue({
@@ -59,6 +63,7 @@ export class SignIn implements OnInit {
       });
     }
 
+    // EMAIL validation
     this.form.controls.mail.valueChanges
       .pipe(
         debounceTime(400),
@@ -67,20 +72,19 @@ export class SignIn implements OnInit {
           const ctrl = this.form.controls.mail;
           const value = (raw ?? '').trim().toLowerCase();
 
-          // 1) Si está vacío o inválido, NO consultar y limpiar flag
+          // Skip check if empty or invalid
           if (!value || ctrl.invalid) {
             this.emailTaken = false;
             return of(false);
           }
 
-          // 2) Si estoy editando y no cambió el mail, NO consultar
+          // Skip check during editing if email hasn't changed
           const current = this.client();
           if (this.isEditing() && current?.mail?.trim().toLowerCase() === value) {
             this.emailTaken = false;
             return of(false);
           }
 
-          // 3) Recién acá consulto al server
           return this.auth.existsEmail(value);
         })
       )
@@ -88,7 +92,7 @@ export class SignIn implements OnInit {
         this.emailTaken = exists;
       });
 
-    // USERNAME
+    // USERNAME validation
     this.form.controls.username.valueChanges
       .pipe(
         debounceTime(400),
@@ -108,31 +112,49 @@ export class SignIn implements OnInit {
           this.usernameTaken = exists;
         }
       });
-
   }
 
-
+  /**
+   * Handles form submission for both registration and profile editing.
+   *
+   * Registration flow:
+   * 1. Generates avatar from username hash
+   * 2. Awards random welcome points (0-20)
+   * 3. Creates user with initialized collections/history
+   * 4. Adds welcome points to history
+   * 5. Sets active session and redirects to home
+   *
+   * Edit flow:
+   * 1. Preserves existing points, history, and collections
+   * 2. Updates only form fields
+   * 3. Syncs with activeUser and localStorage
+   */
   onSubmit() {
-    if (this.form.invalid) { this.form.markAllAsTouched(); alert('El formulario es inválido.'); return; }
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      alert('El formulario es inválido.');
+      return;
+    }
     if (this.emailTaken) { alert('Ese email ya está registrado.'); return; }
     if (this.usernameTaken) { alert('Ese usuario ya existe.'); return; }
 
     const datosUser = this.form.getRawValue();
 
-    //  EDITAR PERFIL
+    // EDIT MODE
     if (this.isEditing()) {
       const current = this.auth.activeUser();
       if (!current?.id) { alert('No se encontró el usuario a editar'); return; }
 
+      // Preserve existing data, only update form fields
       const updated: User = {
-        ...current,         // conserva puntos, historial, avatar, colecciones
-        ...datosUser,       // solo lo editable
+        ...current,
+        ...datosUser,
         id: current.id,
         points: current.points ?? 0,
         pointsHistory: current.pointsHistory ?? []
       };
+
       this.users.updateUser(updated, current.id).subscribe({
-        // sincronizar sesión para que header/profile se actualicen
         next: (res) => {
           this.auth.activeUser.set(res);
           localStorage.setItem('activeUser', JSON.stringify(res));
@@ -140,20 +162,23 @@ export class SignIn implements OnInit {
           this.isEditing.set(false);
         },
         error: (err) => {
-          console.error(err); alert('No se pudo actualizar el perfil');
+          console.error(err);
+          alert('No se pudo actualizar el perfil');
         }
       });
     }
     else {
-      //  REGISTRO
+      // REGISTRATION MODE
       const usernameKey = datosUser.username.trim().toLowerCase();
-      const pokemonId = this.pokeService.hashToPokemonId(usernameKey); //genero un hash con el nombre de usuario lo que me da un ID
-      const avatarUrl = this.pokeService.pokemonArtworkUrl(pokemonId); //Consigo el avatar para el usuario
-      const puntos = this.points.randomPoints() //Genero los puntos de bienvenida
+      const pokemonId = this.pokeService.hashToPokemonId(usernameKey);
+      const avatarUrl = this.pokeService.pokemonArtworkUrl(pokemonId);
+      const puntos = this.points.randomPoints();
 
-      //Inicializo las variables ? que no se ingresan por formulario en 0 ;
       const newUser: User = {
-        ...datosUser, pokemonId, avatarUrl, points: puntos,
+        ...datosUser,
+        pokemonId,
+        avatarUrl,
+        points: puntos,
         lastLoginDate: new Date().toISOString(),
         lastCreateCollection: null,
         pokemonVault: [],
@@ -161,45 +186,41 @@ export class SignIn implements OnInit {
         pointsHistory: []
       };
 
-      this.users.addUser(newUser).
-        subscribe({
-          next: (createdUser) => {
+      this.users.addUser(newUser).subscribe({
+        next: (createdUser) => {
+          alert(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
 
-            alert(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
+          const event: PointEvent = {
+            amount: puntos,
+            reason: 'Puntos de Bienvenida! Que los disfrutes! ',
+            date: new Date().toISOString()
+          };
 
-            const event: PointEvent = {
-              amount: puntos,
-              reason: 'Puntos de Bienvenida! Que los disfrutes! ',
-              date: new Date().toISOString()
+          // Add welcome points to history
+          this.points.addHistory(createdUser, event).subscribe({
+            next: (userWithHistory) => {
+              console.log('Puntos de bienvenida registrados correctamente');
+              this.auth.activeUser.set(userWithHistory);
+              localStorage.setItem('activeUser', JSON.stringify(userWithHistory));
+            },
+            error: () => {
+              console.error('Error al registrar puntos de bienvenida');
+              // Fallback: set user without history if that fails
+              this.auth.activeUser.set(createdUser);
+              localStorage.setItem('activeUser', JSON.stringify(createdUser));
             }
-            this.points.addHistory(createdUser, event).subscribe({
-              next: (userWithHistory) => {
-                console.log('Puntos de bienvenida registrados correctamente');
-                this.auth.activeUser.set(userWithHistory);
-                localStorage.setItem('activeUser', JSON.stringify(userWithHistory));
-              },
-              error: () => {
-                console.error('Error al registrar puntos de bienvenida');
-                this.auth.activeUser.set(createdUser);
-                localStorage.setItem('activeUser', JSON.stringify(createdUser));
-              }
-            });
+          });
 
-
-            this.form.reset({ username: '', age: undefined, mail: '', password: '' });
-            this.emailTaken = false;
-            this.usernameTaken = false;
-            return this.router.navigateByUrl('/home')
-
-          },
-          error: (err) => {
-            console.error(err);
-            alert('No se pudo registrar el usuario');
-          }
-        });
+          this.form.reset({ username: '', age: undefined, mail: '', password: '' });
+          this.emailTaken = false;
+          this.usernameTaken = false;
+          return this.router.navigateByUrl('/home');
+        },
+        error: (err) => {
+          console.error(err);
+          alert('No se pudo registrar el usuario');
+        }
+      });
     }
   }
-
-
-
 }

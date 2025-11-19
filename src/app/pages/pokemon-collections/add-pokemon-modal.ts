@@ -1,11 +1,11 @@
 import { pokemonVault } from './collection-model';
 import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthServ } from '../../../core/auth.service';
-import { Pokemon } from '../../../pokemon/models/pokemon-models';
-import { UserClient } from '../../../core/user-client.service';
-import { PointsService } from '../../../core/points.service';
-import { PointEvent, User } from '../../../user/user-model';
+import { Pokemon } from '../../pokemon/models/pokemon-models';
+import { AuthServ } from '../../core/auth.service';
+import { UserClient } from '../../core/user-client.service';
+import { PointsService } from '../../core/points.service';
+import { PointEvent, User } from '../../user/user-model';
 
 @Component({
   selector: 'app-add-pokemon-modal',
@@ -27,35 +27,33 @@ import { PointEvent, User } from '../../../user/user-model';
               <div class="form-group">
                 <label for="collection">Equipo:</label>
 
-            <!--Mostramos los nombres de las equipos  -->
-<select
-  id="collection"
-  [ngModel]="selectedCollection()"
-  (ngModelChange)="selectedCollection.set(+$event)">
-  @for (col of collections(); let i = $index; track i) {
-    <option [value]="i + 1">
-      {{ getCollectionName(i) }} ({{ col.length }} Pokémon)
-    </option>
-  }
-  <option [value]="collections().length + 1">
-    + Nuevo equipo
-  </option>
-</select>
-            <!--Si elegimos una nuevo, se habilita el input  -->
+                  <select
+                    id="collection"
+                    [ngModel]="selectedCollection()"
+                    (ngModelChange)="selectedCollection.set(+$event)">
+                    @for (col of collections(); let i = $index; track i) {
+                      <option [value]="i + 1">
+                        {{ getCollectionName(i) }} ({{ col.length }} Pokémon)
+                      </option>
+                    }
+                    <option [value]="collections().length + 1">
+                      + Nuevo equipo
+                    </option>
+                  </select>
 
-@if (isCreatingNewCollection()) {
-  <div class="form-group">
-    <label for="newCollectionName">Nombre de la nuevo equipo:</label>
-    <input
-      id="newCollectionName"
-      type="text"
-      maxlength="20"
-      [ngModel]="newCollectionName()"
-      (ngModelChange)="newCollectionName.set($event)"
-      placeholder="Ej: Equipo Fuego"
-    >
-  </div>
-}
+                @if (isCreatingNewCollection()) {
+                  <div class="form-group">
+                    <label for="newCollectionName">Nombre de la nuevo equipo:</label>
+                    <input
+                      id="newCollectionName"
+                      type="text"
+                      maxlength="20"
+                      [ngModel]="newCollectionName()"
+                      (ngModelChange)="newCollectionName.set($event)"
+                      placeholder="Ej: Equipo Fuego"
+                    >
+                  </div>
+                }
 
               </div>
 
@@ -261,33 +259,31 @@ export class AddPokemonModal {
   newCollectionName = signal('');
 
 
-  // Inputs
   pokemon = input.required<Pokemon>();
   isOpen = input.required<boolean>();
 
-  // Outputs
   closed = output<void>();
   captured = output<void>();
 
-  // State
   selectedCollection = signal(1);
   nickname = signal('');
   isLoading = signal(false);
   errorMessage = signal('');
 
-  // Computed
   usuario = this.auth.activeUser;
   collections = signal<pokemonVault[][]>([]);
 
   constructor() {
-    // Cargar equipos cuando se abre el modal
     effect(() => {
       if (this.auth.activeUser()?.pokemonVault) {
         this.collections.set(this.auth.activeUser()!.pokemonVault!);
       }
     })
   };
-  //Metodo para calcular los dias que pasaron entre la ultima creacion de una equipo
+
+  /**
+   * Calculates days of difference between parameters
+   */
   private daysBetween(a: string, b: string): number {
     const msA = new Date(a).getTime();
     const msB = new Date(b).getTime();

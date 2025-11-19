@@ -11,6 +11,10 @@ import { AuthServ } from '../../core/auth.service';
   templateUrl: './home-page.html',
   styleUrl: './home-page.css',
 })
+
+/**
+ * HOME PAGE component. Main route of our app
+ */
 export class HomePage {
   private readonly dailyPokemonService = inject(DailyPokemonService);
 

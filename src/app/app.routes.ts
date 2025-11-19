@@ -6,7 +6,7 @@ import { Profile } from './pages/profile/profile';
 import { PokemonDetails } from './pages/pokemon-details/pokemon-details';
 import { HomePage } from './pages/home-page/home-page';
 import { Contact } from './pages/contact/contact';
-import { UserCollections } from './pages/profile/pokemon-collections/user-collections';
+import { UserCollections } from './pages/pokemon-collections/user-collections';
 import { PokemonQuiz } from './pages/pokemon-quiz/pokemon-quiz';
 import { authGuard } from './core/auth-guard';
 
@@ -23,7 +23,7 @@ export const routes: Routes = [
     },
     {
         path: 'details/:name', component: PokemonDetails,
-        title: 'Detalles de Pokémon' //eventualmente cambiar a nombre de pokemon
+        title: 'Detalles de Pokémon'
     },
     {
         path: 'logIn', component: LogIn,
@@ -52,7 +52,6 @@ export const routes: Routes = [
         canActivate: [authGuard]
 
     },
-
     {
         path: 'contact', component: Contact,
         title: 'Contacto'
@@ -61,7 +60,6 @@ export const routes: Routes = [
         title: 'Quiz Pokemon'
     },
     {
-        path: '**', redirectTo: 'catalogo'
+        path: '**', redirectTo: 'home'
     }
-    //mas adelante agregar rutas de log in, etc
 ];

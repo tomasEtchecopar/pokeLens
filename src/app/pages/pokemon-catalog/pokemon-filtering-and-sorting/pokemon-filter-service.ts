@@ -10,19 +10,16 @@ import { FilterOptions } from '../../../pokemon/models/pokemon-filters';
 })
 // Service that manages the pokemon list; search, pagination and ordering are done over it
 export class PokemonFilterService{
-
   private readonly pokemonListService = inject(PokemonListService);
 
   readonly allPokemon = this.pokemonListService.allPokemon;
 
   private readonly filters = signal<FilterOptions>({});
-
   private readonly sort = signal<SortOption | null>(null);
 
-  readonly filteredPokemon = computed(() => this.applyFilters());
-
+  //exposed signals
+  readonly filteredPokemon = computed(() => this.applyFiltersAndSort());
   readonly currentSort = computed(() => this.sort());
-
   readonly currentFilters = computed(() => this.filters());
 
   updateFilters(filters: FilterOptions){
@@ -32,6 +29,7 @@ export class PokemonFilterService{
   clearFilters(){
     this.filters.set({});
   }
+
    setSort(option: SortOption | null){
     this.sort.set(option);
   }
@@ -103,7 +101,6 @@ export class PokemonFilterService{
   private applyFiltersAndSort(): Pokemon[] {
     let list = this.applyFilters();
 
-    // Aplicar ordenamiento si existe
     const sortOption = this.sort();
     if (sortOption) {
       list = this.sortPokemon(list, sortOption);

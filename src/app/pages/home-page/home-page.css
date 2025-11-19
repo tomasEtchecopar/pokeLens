@@ -1,4 +1,3 @@
-/* Home Page Styles */
 .home-container {
   width: 100%;
   min-height: 100vh;
@@ -11,7 +10,6 @@
   box-sizing: border-box;
 }
 
-/* Logo */
 .logo {
   width: 280px;
   height: auto;
@@ -53,7 +51,6 @@ p{
   max-width: 600px;
 }
 
-/* Featured Section */
 .featured-section {
   background: #3a3a3a;
   border: 4px solid #5f0b0b;
@@ -82,7 +79,6 @@ p{
   border-radius: 6px;
 }
 
-/* Featured Pokemon Card */
 .pokemon-featured {
   display: flex;
   justify-content: center;
@@ -93,7 +89,6 @@ p{
   box-shadow: 2px 2px 0px #1a1a1a;
 }
 
-/* Navigation Section */
 .navigation-section {
   margin-top: 2rem;
   text-align: center;
@@ -108,7 +103,6 @@ p{
   flex-wrap: wrap;
 }
 
-/* Botones de navegación */
 .catalog-button,
 .quiz-button {
   font-family: 'Press Start 2P', monospace;
@@ -137,57 +131,48 @@ p{
   font-size: 0.9rem;
 }
 
-/* Catálogo button - Rojo */
-/* Botones de navegación — estilo coherente con .btn-header del header */
 .catalog-button,
 .quiz-button {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 1rem;
-
-  min-width: 260px;            /* MÁS GRANDES */
-  padding: 1.2rem 2rem;        /* BOLDE, COMPACTO RETRO */
-
-  font-family: 'Press Start 2P', monospace; /* Estética retro real */
+  min-width: 260px;
+  padding: 1.2rem 2rem;
+  font-family: 'Press Start 2P', monospace;
   font-size: 1rem;
   text-transform: uppercase;
   letter-spacing: 2px;
   font-weight: 700;
-
-  border: 6px solid #000;      /* BORDE GRUESO */
-  box-shadow: 6px 6px 0 #111;  /* SOMBRA RETRO EN BLOQUE */
+  border: 6px solid #000;
+  box-shadow: 6px 6px 0 #111;
 
   cursor: pointer;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
 }
 
-/* Colores sólidos en lugar de degradados */
 .catalog-button {
-  background: #d43030;   /* Rojo intenso */
+  background: #d43030;
   color: #fff;
 }
 
 .quiz-button {
-  background: #ffd700;   /* Dorado */
-  color: #000;           /* Texto negro para contraste */
+  background: #ffd700;
+  color: #000;
 }
 
-/* Hover retro */
 .catalog-button:hover,
 .quiz-button:hover {
   transform: translate(3px, 3px);
   box-shadow: 3px 3px 0 #000;
 }
 
-/* Active (presionado) */
 .catalog-button:active,
 .quiz-button:active {
   transform: translate(5px, 5px);
   box-shadow: 1px 1px 0 #000;
 }
 
-/* Estado activo por routerLinkActive */
 .catalog-button.active,
 .quiz-button.active {
   transform: translate(3px, 3px);
@@ -196,11 +181,10 @@ p{
 
 
 .button-text {
-  font-size: 0.9rem; /* Ajustado para que no se coma padding */
+  font-size: 0.9rem;
 }
 
 
-/* Responsive */
 @media (max-width: 768px) {
   .logo {
     width: 200px;

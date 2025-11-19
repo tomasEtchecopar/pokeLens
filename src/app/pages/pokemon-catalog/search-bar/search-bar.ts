@@ -22,7 +22,7 @@ export class SearchBar {
   /**
    * Detect changes on search form
    */
-  readonly searchControl = new FormControl('', {nonNullable: true});
+  readonly searchControl = new FormControl('', { nonNullable: true });
 
   /**
    * Input signal for placeholder text
@@ -39,7 +39,7 @@ export class SearchBar {
       distinctUntilChanged(),
       map(term => (term || '').trim())
     ),
-    {initialValue: ''}
+    { initialValue: '' }
   )
 
   /**
@@ -47,7 +47,7 @@ export class SearchBar {
    */
   readonly searchUpdate = output<string>();
 
-  constructor(){
+  constructor() {
     effect(() => {
       const term = this.searchTerm();
       untracked(() => this.searchUpdate.emit(term));
@@ -58,7 +58,7 @@ export class SearchBar {
 
   readonly isInSearchMode = computed(() => !!this.searchTerm().trim());
 
-  clearSearch(): void{
+  clearSearch(): void {
     this.searchControl.setValue('');
   }
 }

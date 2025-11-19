@@ -3,6 +3,10 @@ import { PokemonFiltersTranslation } from '../pokemon-filters-translation';
 import { FilterOptions, PokemonGeneration, PokemonRegion, PokemonType } from '../../../../pokemon/models/pokemon-filters';
 import { FormsModule } from '@angular/forms';
 
+/**
+ * PokemonFilterDropdown provides a UI for filtering pokemon by various criteria.
+ * Handles unit conversions for height (decimeters) and weight (hectograms).
+ */
 @Component({
   selector: 'app-pokemon-filter-dropdown',
   standalone: true,
@@ -12,16 +16,18 @@ import { FormsModule } from '@angular/forms';
 })
 export class PokemonFilterDropdown {
   private readonly filtersTranslations = inject(PokemonFiltersTranslation);
-    filtersOpen = signal(false);
 
-  // Input con valor por defecto
+  filtersOpen = signal(false);
+
+  // Receives current filter state from parent
   currentFilters = input<FilterOptions>({});
-
+  // Emits filter changes to parent
   filterUpdate = output<FilterOptions>();
 
   selectedType = signal('');
   selectedGeneration = signal('');
   selectedRegion = signal('');
+
   minHeight = signal<number | null>(null);
   maxHeight = signal<number | null>(null);
   minWeight = signal<number | null>(null);
@@ -35,6 +41,7 @@ export class PokemonFilterDropdown {
     effect(() => {
       const filters = this.currentFilters();
       if (filters) {
+        // Converts API units (decimeters/hectograms) to display units (meters/kg)
         this.selectedType.set(filters.type || '');
         this.selectedGeneration.set(filters.generation || '');
         this.selectedRegion.set(filters.region || '');
@@ -68,6 +75,9 @@ export class PokemonFilterDropdown {
     this.emit();
   }
 
+  /**
+   * Resets all filters to default state and notifies parent.
+   */
   clear(): void {
     this.selectedType.set('');
     this.selectedGeneration.set('');

@@ -9,12 +9,12 @@
   align-items: center;
 
   position: fixed;
-  bottom: -60px;      /* 👈 OCULTO por defecto */
+  bottom: -60px;
   left: 0;
   width: 100%;
   z-index: 90;
 
-  transition: bottom 0.3s ease;  /* 👈 animación suave */
+  transition: bottom 0.3s ease;
 }
 
 
@@ -47,7 +47,6 @@
   text-shadow: 1px 1px 0px #1a1a1a;
 }
 
-/* Botones (reutilizando estilo del header) */
 .repo-btn,
 .contact-btn {
   background: #2c2c2c;
@@ -91,13 +90,11 @@
   }
 }
 
-/*Boton para volver arriba*/
 .scroll-top-btn {
   position: absolute;
-  right: 1rem;          /* pegado al borde derecho */
-  bottom: 100%;         /* ← esto lo pone encima del footer */
-  transform: translateY(-8px);  /* lo separa visualmente */
-
+  right: 1rem;
+  bottom: 100%;
+  transform: translateY(-8px);
   background: #2c2c2c;
   color: white;
   border: 2px solid #1a1a1a;
@@ -111,12 +108,12 @@
   transition: all 0.2s;
   line-height: 1;
   border-radius: 6px;
-  z-index: 999;         /* encima del footer */
+  z-index: 999;
 }
 
 .scroll-top-btn:hover {
   background: #1a1a1a;
-  transform: translateY(-12px);  /* sube más al hover */
+  transform: translateY(-12px);
   box-shadow: 0 4px 0 #0a0a0a;
 }
 

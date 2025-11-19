@@ -56,7 +56,6 @@
     @let question = quizService.currentQuestion()!;
 
     <div class="quiz-content">
-      <!-- Imagen del Pokemon -->
       <div class="pokemon-display" [class.revealed]="quizService.hasAnswered()">
         <div class="image-container">
           @if(question.pokemon.sprites.front_default) {
@@ -65,7 +64,6 @@
           }
         </div>
 
-        <!-- Pista: Número de Pokemon -->
         @if(!quizService.hasAnswered()) {
         <div class="hint">
           <span class="hint-label">Pista:</span>
@@ -74,7 +72,6 @@
         }
       </div>
 
-      <!-- Resultado -->
       @if(quizService.hasAnswered()) {
       <div class="result-banner" [class.correct]="quizService.isCorrect()" [class.incorrect]="!quizService.isCorrect()">
         @if(quizService.isCorrect()) {
@@ -87,7 +84,6 @@
       </div>
       }
 
-      <!-- Opciones -->
       <div class="options-grid">
         @for(option of question.options; track option) {
         <button class="option-button" [class.selected]="quizService.selectedAnswer() === option"
@@ -99,7 +95,6 @@
         }
       </div>
 
-      <!-- Botón siguiente pregunta -->
       @if(quizService.hasAnswered()) {
       <button class="next-button" (click)="nextQuestion()">
         Siguiente Pregunta →
@@ -108,7 +103,6 @@
     </div>
     }
 
-    <!-- Botón reiniciar -->
     <div class="quiz-footer">
       <button class="reset-button" (click)="resetQuiz()">
         Reiniciar Estadísticas

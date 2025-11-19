@@ -7,38 +7,34 @@ import { Pokemon } from '../../../pokemon/models/pokemon-models';
   providedIn: 'root'
 })
 export class PokemonCatalogSearch {
-  /**
-   * Pokemon list to search from
-   */
+  //pokemon list to search from
   private readonly allPokemon = signal<Pokemon[]>([]);
 
   readonly searchTerm = signal('');
 
-  /**
-   * filtered search results
-   */
+  //filtered search results
   readonly results = computed(() => {
     console.log("setting search service: ", this.allPokemon() as Pokemon[]);
     const term = this.searchTerm().trim().toLowerCase();
-    if(!term) return this.allPokemon();
+    if (!term) return this.allPokemon();
 
     console.log(`searching '${term}'`)
     const filteredResults = this.allPokemon().filter(p =>
       p.name.toLowerCase().includes(term)
     );
     console.log("search results: ", filteredResults as Pokemon[]);
-    return filteredResults; 
+    return filteredResults;
   });
 
   readonly hasResults = computed(() => {
-    return this.results().length>0;
+    return this.results().length > 0;
   })
 
-  setPokemonList(list: Pokemon[]): void{
+  setPokemonList(list: Pokemon[]): void {
     this.allPokemon.set(list ?? []);
   }
 
-  search(term: string): void{
+  search(term: string): void {
     this.searchTerm.set(term);
   }
 }

@@ -1,6 +1,5 @@
 .quiz-page {
   padding-top: 20px;
-  /* espacio para el header fijo */
   padding-bottom: 0rem;
   display: flex;
   justify-content: center;
@@ -9,7 +8,6 @@
 
 .quiz-root {
   padding: 1.5rem 2rem 1rem 2rem;
-  /* padding normal, ya no 180px */
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
@@ -22,7 +20,6 @@
 }
 
 
-/* Header */
 .quiz-header {
   text-align: center;
   padding: 1rem;
@@ -41,7 +38,6 @@
   text-shadow: 3px 3px 0 #111;
 }
 
-/* Stats Bar */
 .stats-bar {
   display: flex;
   gap: 1rem;
@@ -91,7 +87,6 @@
   color: #3b88c3;
 }
 
-/* Loading */
 .loading-state {
   text-align: center;
   padding: 3rem;
@@ -115,7 +110,6 @@
   }
 }
 
-/* Quiz Content */
 .quiz-content {
   display: flex;
   flex-direction: column;
@@ -123,7 +117,6 @@
   padding: 1rem;
 }
 
-/* Pokemon Display */
 .pokemon-display {
   background: linear-gradient(180deg, #343434, #2c2c2c);
   border: 3px solid #1a1a1a;
@@ -157,7 +150,6 @@
   z-index: 1;
 }
 
-/* Capa negra que oculta la imagen */
 .silhouette-overlay {
   position: absolute;
   top: 50%;
@@ -187,7 +179,6 @@
   }
 }
 
-/* Hint */
 .hint {
   background: #1a1a1a;
   padding: 0.5rem 1rem;
@@ -212,7 +203,6 @@
   font-family: 'Courier New', monospace;
 }
 
-/* Result Banner */
 .result-banner {
   padding: 1rem;
   border: 3px solid;
@@ -258,7 +248,6 @@
   font-weight: 900;
 }
 
-/* Options Grid */
 .options-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -337,7 +326,6 @@
   }
 }
 
-/* Next Button */
 .next-button {
   padding: 1rem 2rem;
   background: linear-gradient(180deg, #ffd700, #f59e0b);
@@ -360,7 +348,6 @@
   box-shadow: inset 1px 1px 0 #fef3c7, 2px 2px 0 #111;
 }
 
-/* Footer */
 .quiz-footer {
   margin-top: 1rem;
   padding: 1rem;
@@ -389,7 +376,6 @@
   box-shadow: inset 1px 1px 0 #5a5a5a, 2px 2px 0 #111;
 }
 
-/* Responsive */
 @media (max-width: 640px) {
   .quiz-root {
     margin: 1rem;
@@ -437,11 +423,9 @@
 
 .quiz-root {
   transform: scale(0.90);
-  /* 90% del tamaño original */
   transform-origin: top center;
 }
 
-/* --- BACKDROP DEL MODAL --- */
 .auth-modal-backdrop {
   position: fixed;
   inset: 0;
@@ -452,9 +436,7 @@
   z-index: 300;
 }
 
-/* --- CAJA PRINCIPAL --- */
 .auth-modal {
-  /* Limpiamos estilos heredados y reconstruimos igual que <form> */
   all: unset;
   max-width: 500px;
   width: 90%;
@@ -470,7 +452,6 @@
   display: block;
 }
 
-/* --- TÍTULO --- */
 .auth-modal h2 {
   margin-bottom: 1rem;
   color: #ffd700;
@@ -479,13 +460,11 @@
   letter-spacing: 1px;
 }
 
-/* --- DESCRIPCIÓN --- */
 .auth-modal p {
   margin-bottom: 1.5rem;
   font-size: 0.95rem;
 }
 
-/* --- CONTENEDOR DE BOTONES --- */
 .auth-modal-actions {
   display: flex;
   flex-direction: column;
@@ -493,11 +472,10 @@
   margin-bottom: 1rem;
 }
 
-/* --- BOTONES PRINCIPALES (btn-signIn EXACTO) --- */
 .auth-modal-actions .btn-signIn {
-  width: 100%;            /* Igual */
+  width: 100%;
   display: block;
-  margin: 0;              /* El gap ya lo maneja el contenedor */
+  margin: 0;
   padding: 0.875rem;
   background: #dc3545;
   color: #fff;
@@ -510,7 +488,7 @@
   letter-spacing: 1px;
   cursor: pointer;
   transition: background 0.3s, transform 0.1s;
-  box-shadow: 0 3px 0 #a02a2a; /* MISMO SOMBREADO */
+  box-shadow: 0 3px 0 #a02a2a;
 }
 
 .auth-modal-actions .btn-signIn:hover {
@@ -523,7 +501,6 @@
   box-shadow: 0 1px 0 #8a2020;
 }
 
-/* --- VARIANTE SECUNDARIA --- */
 .btn-signIn-secondary {
   background: #6c757d !important;
   box-shadow: 0 3px 0 #495057 !important;
@@ -538,7 +515,6 @@
   box-shadow: 0 1px 0 #3a3f44 !important;
 }
 
-/* --- BOTÓN LINK (volver al catálogo) --- */
 .auth-link-btn {
   background: transparent;
   border: none;

@@ -14,7 +14,6 @@
   <section class="collection-block">
     <div class="collection-header">
 
-      <!-- Nombre editable -->
       @if (editingIndex() === i) {
       <input class="collection-name-input" type="text" [ngModel]="editingName()"
         (ngModelChange)="editingName.set($event)" (blur)="saveCollectionName(i)" (keyup.enter)="saveCollectionName(i)"
@@ -57,7 +56,6 @@
         @if (pkmList.getPokemonFromMemory(entry.idPokemon); as pkm) {
 
 <div class="vault-card-wrapper">
-  <!-- Botón eliminar con cruz -->
   <button
     class="pokeball-btn"
     (click)="deletePokemon(i, entry.arrayId!)"
@@ -65,7 +63,6 @@
     aria-label="Eliminar Pokémon">
   </button>
 
-  <!-- Botón editar nickname -->
   <button
     class="edit-nickname-btn"
     title="Editar apodo"

@@ -90,7 +90,7 @@ onTypeClick(ev: MouseEvent, typeName: string | undefined) {
   this.filterService.updateFilters(filters);
 
   // navegar al catálogo (sin query params)
-  this.router.navigateByUrl('/catalogo');
+  this.router.navigateByUrl('/catalog');
 }
 
 onRegionClick(ev: MouseEvent, region: string | undefined) {
@@ -109,7 +109,7 @@ onRegionClick(ev: MouseEvent, region: string | undefined) {
   };
 
   this.filterService.updateFilters(filters);
-  this.router.navigateByUrl('/catalogo');
+  this.router.navigateByUrl('/catalog');
 }
 
 onGenerationClick(ev: MouseEvent, generation: string | number | undefined) {
@@ -128,6 +128,6 @@ onGenerationClick(ev: MouseEvent, generation: string | number | undefined) {
   };
 
   this.filterService.updateFilters(filters);
-  this.router.navigateByUrl('/catalogo');
+  this.router.navigateByUrl('/catalog');
 }
 }

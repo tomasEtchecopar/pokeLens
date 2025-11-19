@@ -48,12 +48,10 @@ input::placeholder {
   font-family: 'Courier New', monospace;
 }
 
-/* Invalid input styling */
 input.ng-invalid.ng-touched {
   border-color: #ff6b6b;
 }
 
-/* Autocomplete styles for dark theme */
 input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus {
@@ -62,7 +60,6 @@ input:-webkit-autofill:focus {
   border-color: #dc3545;
 }
 
-/* Error messages */
 small {
   display: block;
   margin-top: 0.25rem;
@@ -71,7 +68,6 @@ small {
   font-size: 0.85rem;
 }
 
-/* Button container */
 form > button {
   margin-top: 0.5rem;
 }
@@ -104,7 +100,6 @@ form > button {
   box-shadow: 0 1px 0 #8a2020;
 }
 
-/* Reset button variant */
 .btn-signIn[type="reset"] {
   background: #6c757d;
   box-shadow: 0 3px 0 #495057;
@@ -125,7 +120,6 @@ form > button {
   box-shadow: 0 3px 0 #444;
 }
 
-/* Remove spinner from number input */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;

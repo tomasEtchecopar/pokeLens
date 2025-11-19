@@ -40,7 +40,7 @@ export class Header {
   }
 
 isAlreadyInCatalog(): boolean {
-  const path = this.router.url.split('?')[0].split('#')[0]; // quita query/fragment
+  const path = this.router.url;
   return path === '/catalog' || path.startsWith('/details/');
 }
 

@@ -29,7 +29,6 @@
   letter-spacing: 2px;
 }
 
-/* FILA DE PERFIL */
 .profile-row {
   display: flex;
   gap: 1rem;
@@ -58,7 +57,6 @@
   color: #ffd700;
 }
 
-/* ACCIONES */
 .actions {
   display: flex;
   flex-wrap: wrap;
@@ -99,7 +97,6 @@
     1px 1px 0 #111;
 }
 
-/* HEADER HISTORIAL */
 .points-header h3 {
   margin: 0.5rem 0;
   text-align: center;
@@ -111,7 +108,6 @@
   text-shadow: 1px 1px 0 #111;
 }
 
-/* SCROLL DE PUNTOS */
 .points-scroll {
   max-height: 220px;
   overflow-y: auto;
@@ -153,7 +149,6 @@
   font-style: italic;
 }
 
-/* SCROLL CUSTOM */
 .points-scroll::-webkit-scrollbar {
   width: 8px;
 }

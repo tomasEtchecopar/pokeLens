@@ -17,7 +17,6 @@ export interface NamedAPIResourceList {
 }
 
 
-/** POKEMON */
 export interface Pokemon {
     id: number;
     name: string;

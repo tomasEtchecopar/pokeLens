@@ -1,23 +1,13 @@
 import { PokemonListService } from './../../pokemon/pokemon-list-service';
 import { Injectable, signal, computed } from '@angular/core';
 import { inject } from '@angular/core';
-import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { PokeApiService } from '../../pokemon/pokeapi-service';
+import { QuizQuestion, QuizStats } from '../../pokemon/models/pokemon-quiz-model';
 
-
-export interface QuizQuestion {
-  pokemon: Pokemon;
-  options: string[];
-  correctAnswer: string;
-}
-
-export interface QuizStats {
-  correct: number;
-  incorrect: number;
-  streak: number;
-  bestStreak: number;
-}
-
+/**
+ * PokemonQuizService manages the pokemon guessing game.
+ * Generates random questions, validates answers, and tracks user statistics.
+ */
 @Injectable({
   providedIn: 'root'
 })
@@ -25,14 +15,12 @@ export class PokemonQuizService {
   private readonly pokeListService = inject(PokemonListService);
   private readonly pokeApiService = inject(PokeApiService);
 
-  // Estado del quiz
   readonly currentQuestion = signal<QuizQuestion | null>(null);
   readonly isLoading = signal(false);
   readonly hasAnswered = signal(false);
   readonly selectedAnswer = signal<string | null>(null);
   readonly isCorrect = signal<boolean | null>(null);
 
-  // Estadísticas
   readonly stats = signal<QuizStats>({
     correct: 0,
     incorrect: 0,
@@ -40,7 +28,6 @@ export class PokemonQuizService {
     bestStreak: 0
   });
 
-  // Computed
   readonly totalAnswered = computed(() => {
     const s = this.stats();
     return s.correct + s.incorrect;
@@ -53,30 +40,32 @@ export class PokemonQuizService {
   });
 
   /**
-   * Genera una nueva pregunta del quiz
+   * Generates a new quiz question with 4 randomized options.
+   * Tries to use cached pokemon first, falls back to API if needed.
+   * Auto-retries if pokemon list is empty or if API fails.
    */
   generateQuestion(): void {
-    // Resetea el estado INMEDIATAMENTE
+    // Reset state immediately to prevent stale data
     this.hasAnswered.set(false);
     this.selectedAnswer.set(null);
     this.isCorrect.set(null);
-    this.currentQuestion.set(null); // Limpia la pregunta anterior
+    this.currentQuestion.set(null);
 
     const allResources = this.pokeListService.allPokemonResource();
 
     if (allResources.length === 0) {
       console.error('No hay pokemon disponibles');
-      setTimeout(() => this.generateQuestion(), 500); // Reintentar
+      setTimeout(() => this.generateQuestion(), 500);
       return;
     }
 
     this.isLoading.set(true);
 
-    // Selecciona un pokemon aleatorio
+    // Pick random correct answer
     const randomIndex = Math.floor(Math.random() * allResources.length);
     const correctPokemon = allResources[randomIndex];
 
-    // Genera 3 opciones incorrectas
+    // Generate 3 unique incorrect options
     const incorrectOptions: string[] = [];
     while (incorrectOptions.length < 3) {
       const randomIdx = Math.floor(Math.random() * allResources.length);
@@ -87,18 +76,16 @@ export class PokemonQuizService {
       }
     }
 
-    // Mezcla las opciones
     const options = this.shuffleArray([
       correctPokemon.name,
       ...incorrectOptions
     ]);
 
-    // Primero verifica si ya está cargado en la lista
+    // Check cache first to avoid unnecessary API calls
     const allPokemon = this.pokeListService.allPokemon();
     const cachedPokemon = allPokemon.find(p => p.name === correctPokemon.name);
 
     if (cachedPokemon) {
-      // Usa el pokemon del caché
       this.currentQuestion.set({
         pokemon: cachedPokemon,
         options,
@@ -106,7 +93,7 @@ export class PokemonQuizService {
       });
       this.isLoading.set(false);
     } else {
-      // Carga desde la API
+      // Fetch from API if not cached
       this.pokeApiService.getPokemon(correctPokemon.name).subscribe({
         next: (pokemon) => {
           this.currentQuestion.set({
@@ -119,7 +106,7 @@ export class PokemonQuizService {
         error: (error) => {
           console.error('Error cargando pokemon:', error);
           this.isLoading.set(false);
-          // Reintenta con otro pokemon
+          // Retry with a different pokemon
           this.generateQuestion();
         }
       });
@@ -127,7 +114,8 @@ export class PokemonQuizService {
   }
 
   /**
-   * Verifica la respuesta del usuario
+   * Validates the user's answer and updates stats accordingly.
+   * Prevents multiple answers for the same question.
    */
   checkAnswer(answer: string): void {
     if (this.hasAnswered()) return;
@@ -141,7 +129,7 @@ export class PokemonQuizService {
     const correct = answer === question.correctAnswer;
     this.isCorrect.set(correct);
 
-    // Actualiza estadísticas
+    // Update statistics
     const currentStats = this.stats();
     if (correct) {
       this.stats.set({
@@ -154,15 +142,12 @@ export class PokemonQuizService {
       this.stats.set({
         correct: currentStats.correct,
         incorrect: currentStats.incorrect + 1,
-        streak: 0,
+        streak: 0, // Reset streak on wrong answer
         bestStreak: currentStats.bestStreak
       });
     }
   }
 
-  /**
-   * Reinicia las estadísticas
-   */
   resetStats(): void {
     this.stats.set({
       correct: 0,
@@ -173,7 +158,8 @@ export class PokemonQuizService {
   }
 
   /**
-   * Mezcla un array (Fisher-Yates shuffle)
+   * Shuffles an array using Fisher-Yates algorithm.
+   * Creates a copy to avoid mutating the original.
    */
   private shuffleArray<T>(array: T[]): T[] {
     const shuffled = [...array];

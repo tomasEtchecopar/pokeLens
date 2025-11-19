@@ -51,13 +51,13 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
                   [checked]="selectedDir() === d.value"
                   (change)="selectDir(d.value)"
                 />
-                
+
                 <span class="radio-label">{{ d.label }}</span>
-                
+
               </label>
             }
           </div>
-          
+
         </div>
 
         <div class="actions">
@@ -78,7 +78,6 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
   color: #fff;
 }
 
-/* Botón que abre/cierra el panel */
 .filters-toggle {
   width: 100%;
   background: #2c2c2c;
@@ -104,7 +103,6 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
   transform: rotate(180deg);
 }
 
-/* Acordeón del panel */
 .dropdown-accordion {
   overflow: hidden;
   max-height: 0;
@@ -115,10 +113,9 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
   max-height: 900px;
 }
 
-/* Contenedor del menú desplegable */
 .dropdown {
   background: #1a1a1a;
-  border: 3px solid #c51717;
+  border: 3px solid #5f0b0b;
   padding: 8px;
   box-sizing: border-box;
   image-rendering: pixelated;
@@ -132,8 +129,9 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
   justify-content: space-between;
 }
 
-/* Layout interno */
 .dropdown-inner {
+margin-top: 0.5rem;
+margin-bottom: 1rem;
   display: flex;
   gap: 8px;
   align-items: stretch;
@@ -144,9 +142,9 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
   gap: 4px;
   flex: 1;
 }
-.keys-col { flex: 1.5; 
+.keys-col { flex: 1.5;
 gap: 13px}
-.dir-col  { flex: 1; 
+.dir-col  { flex: 1;
   gap :13px;}
 
 .divider {
@@ -161,8 +159,6 @@ gap: 13px}
   align-self: stretch;
   margin: 0 4px;
 }
-
-/* Opciones de radio */
 .radio-row {
   display: flex;
   align-items: center;
@@ -197,13 +193,22 @@ input[type="radio"]:checked + .radio-label {
 
 .radio-label { color: #fff; }
 
-/* Botones de acción */
-.actions {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 8px;
+
+.actions button {
+  background: #2c2c2c;
+  color: white;
+  border: 3px solid #000000;
+  padding: 0.5rem 1rem;
+  font-family: 'Press Start 2P', monospace;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 2px 0 #1a1a1a;
+  width: 50%;
 }
+
 
 .apply,
 .clear {
@@ -222,7 +227,6 @@ input[type="radio"]:checked + .radio-label {
   cursor: not-allowed;
 }
 
-/* Responsive */
 @media (max-width: 720px) {
   .sort-menu,
   .dropdown {
@@ -243,11 +247,9 @@ export class PokemonSortMenu {
   private readonly filterService = inject(PokemonFilterService);
   @Output() sorted = new EventEmitter<SortOption | null>();
 
-  // botón desplegable abierto?
   open = signal(false);
   closing = signal(false);
 
-  // opciones keys (coinciden con SortKey)
   readonly keys = [
     { value: 'id', label: 'ID' },
     { value: 'name', label: 'Nombre' },
@@ -256,13 +258,11 @@ export class PokemonSortMenu {
     { value: 'weight', label: 'Peso' }
   ] as const;
 
-  // opciones direcciones
   readonly dirs = [
     { value: 'asc', label: 'Ascendente' },
     { value: 'desc', label: 'Descendente' }
   ] as const;
 
-  // estados seleccionados
   selectedKey = signal<string>('');
   selectedDir = signal<string>('');
 
@@ -271,7 +271,7 @@ export class PokemonSortMenu {
   canApply = computed(() => !!this.selectedKey() && !!this.selectedDir());
   hasSort = computed(() => !!this.currentSort());
 
-  // referencia host para click-outside
+  // host reference for click-outside
   private hostEl = inject(ElementRef).nativeElement as HTMLElement;
 
   constructor() {
@@ -317,11 +317,6 @@ export class PokemonSortMenu {
     this.open.set(false);
   }
 
-  // click-outside to close (HostListener modern)
-  /* @HostListener('document:click', ['$event'])
-   onDocClick(ev: MouseEvent) {
-     if (!this.hostEl.contains(ev.target as Node)) this.open.set(false);
-   }*/
 
   toggle() {
     this.open.update(v => !v);

@@ -1,33 +1,33 @@
 <div class="catalog">
 
-    <div class="center">
-        <h1>Catalogo Pokemon</h1>
-        <app-search-bar placeholder="Buscar pokemon..." (searchUpdate)="onSearch($event)">
-        </app-search-bar>
+  <div class="center">
+    <h1>Catalogo Pokemon</h1>
+    <app-search-bar placeholder="Buscar pokemon..." (searchUpdate)="onSearch($event)">
+    </app-search-bar>
 
 
-    </div>
+  </div>
 
-    <div class="search-section">
-        <app-pokemon-filter-dropdown [currentFilters]="currentFilters()" (filterUpdate)="applyFilters($event)">
-        </app-pokemon-filter-dropdown>
+  <div class="search-section">
+    <app-pokemon-filter-dropdown [currentFilters]="currentFilters()" (filterUpdate)="applyFilters($event)">
+    </app-pokemon-filter-dropdown>
 
-        <pokemon-sort-menu></pokemon-sort-menu>
-    </div>
+    <pokemon-sort-menu></pokemon-sort-menu>
+  </div>
 
-    @if(isLoading()){
-    <p>Cargando Pokemons...</p>
-    }@else {
-    <div class="grid">
-        @for (pokemonResource of displayedPokemon(); track pokemonResource){
-        <app-pokemon-card [pokemon]="pokemonResource"></app-pokemon-card>
-        }
-
-        @if (pagination.loading()) {
-        <div class="loading">Cargando mas Pokemon...</div>
-        }
-    </div>
-
+  @if(isLoading()){
+  <p>Cargando Pokemons...</p>
+  }@else {
+  <div class="grid">
+    @for (pokemonResource of displayedPokemon(); track pokemonResource){
+    <app-pokemon-card [pokemon]="pokemonResource"></app-pokemon-card>
     }
-    <div #scrollSentinel class="scroll-sentine"></div>
+
+    @if (pagination.loading()) {
+    <div class="loading">Cargando mas Pokemon...</div>
+    }
+  </div>
+
+  }
+  <div #scrollSentinel class="scroll-sentine"></div>
 </div>
