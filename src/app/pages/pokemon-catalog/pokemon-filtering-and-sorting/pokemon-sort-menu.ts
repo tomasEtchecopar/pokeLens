@@ -9,27 +9,33 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-    <div class="sort-menu" #root>
-      <button class="filters-toggle" type="button" (click)="toggle()" aria-haspopup="true" >
-        Ordenar
-        <span [class.open]="open()">▼</span>
-      </button>
+  <div class="sort-menu">
+    <button
+      class="filters-toggle"
+      type="button"
+      (click)="toggle()"
+      aria-haspopup="true"
+      [attr.aria-expanded]="open()"
+    >
+      Ordenar
+      <span [class.open]="open()">▼</span>
+    </button>
 
-      @if(open()) {
+    <div class="dropdown-accordion" [class.open]="open()">
       <div class="dropdown" role="dialog" aria-label="Menu de ordenamiento">
         <div class="dropdown-inner">
           <div class="col keys-col" role="radiogroup" aria-label="Orden por">
             @for (k of keys; track k.value) {
-            <label class="radio-row" title="{{k.label}}">
-              <input
-                type="radio"
-                name="sort-key"
-                [value]="k.value"
-                [checked]="selectedKey() === k.value"
-                (change)="selectKey(k.value)"
-              />
-              <span class="radio-label">{{ k.label }}</span>
-            </label>
+              <label class="radio-row" title="{{k.label}}">
+                <input
+                  type="radio"
+                  name="sort-key"
+                  [value]="k.value"
+                  [checked]="selectedKey() === k.value"
+                  (change)="selectKey(k.value)"
+                />
+                <span class="radio-label">{{ k.label }}</span>
+              </label>
             }
           </div>
 
@@ -37,18 +43,21 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
 
           <div class="col dir-col" role="radiogroup" aria-label="Dirección">
             @for (d of dirs; track d.value) {
-            <label class="radio-row">
-              <input
-                type="radio"
-                name="sort-dir"
-                [value]="d.value"
-                [checked]="selectedDir() === d.value"
-                (change)="selectDir(d.value)"
-              />
-              <span class="radio-label">{{ d.label }}</span>
-            </label>
+              <label class="radio-row">
+                <input
+                  type="radio"
+                  name="sort-dir"
+                  [value]="d.value"
+                  [checked]="selectedDir() === d.value"
+                  (change)="selectDir(d.value)"
+                />
+                
+                <span class="radio-label">{{ d.label }}</span>
+                
+              </label>
             }
           </div>
+          
         </div>
 
         <div class="actions">
@@ -56,22 +65,20 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
           <button class="clear" (click)="clear()" [disabled]="!hasSort()">Limpiar</button>
         </div>
       </div>
-      }
     </div>
-  `,
-styles: [`
-/* -------- SortMenu - Retro 8-Bit con Botón Centrado y Desplegable que Empuja Abajo -------- */
-
+  </div>
+`,
+  styles: [`
 .sort-menu {
   display: block;
-  margin: 0.6rem auto;
-  max-width: 600px;
+  margin: 0;
+  max-width: none;
   font-family: 'Press Start 2P', monospace;
   font-size: 0.8rem;
   color: #fff;
 }
 
-/* Reutilizamos la clase filters-toggle igual que en tu UI de filtros */
+/* Botón que abre/cierra el panel */
 .filters-toggle {
   width: 100%;
   background: #2c2c2c;
@@ -87,45 +94,75 @@ styles: [`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0.5rem auto;
-  max-width: 600px;
+  margin: 0;
 }
 
-/* flecha rotada cuando open */
-.filters-toggle span { transition: transform 0.25s ease; }
-.filters-toggle span.open { transform: rotate(180deg); }
+.filters-toggle span {
+  transition: transform 0.25s ease;
+}
+.filters-toggle span.open {
+  transform: rotate(180deg);
+}
 
+/* Acordeón del panel */
+.dropdown-accordion {
+  overflow: hidden;
+  max-height: 0;
+  transition: max-height 0.25s ease;
+}
 
+.dropdown-accordion.open {
+  max-height: 900px;
+}
 
-/* Contenedor desplegable: ahora en flujo normal, empuja contenido abajo */
+/* Contenedor del menú desplegable */
 .dropdown {
-  /* Quitamos position: absolute; top; left; z-index; */
   background: #1a1a1a;
   border: 3px solid #c51717;
-  min-width: 320px;
   padding: 8px;
   box-sizing: border-box;
   image-rendering: pixelated;
-  margin-top: 1rem; /* Separación del botón */
-  margin-left: auto; /* Para alinear con el centro si es necesario */
-  margin-right: auto;
-  max-width: 600px; /* Mismo ancho max que el botón */
+  margin-top: 0.5rem;
+  width: 100%;
+  max-width: none;
+
+  min-height: 245px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
-/* Layout interno: grid-like */
-.dropdown-inner { display: flex; gap: 8px; align-items: stretch; }
-.col { display: flex; flex-direction: column; gap: 4px; flex: 1; }
-.keys-col { flex: 1.5; } .dir-col { flex: 1; }
+/* Layout interno */
+.dropdown-inner {
+  display: flex;
+  gap: 8px;
+  align-items: stretch;
+}
+.col {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.keys-col { flex: 1.5; 
+gap: 13px}
+.dir-col  { flex: 1; 
+  gap :13px;}
 
-/* Divider: simple dotted line */
 .divider {
   width: 2px;
-  background: repeating-linear-gradient(to bottom, #999 0px, #999 2px, transparent 2px, transparent 4px);
+  background: repeating-linear-gradient(
+    to bottom,
+    #999 0px,
+    #999 2px,
+    transparent 2px,
+    transparent 4px
+  );
   align-self: stretch;
   margin: 0 4px;
 }
 
-/* Fila radio: blocky hover */
+/* Opciones de radio */
 .radio-row {
   display: flex;
   align-items: center;
@@ -139,7 +176,6 @@ styles: [`
   background: #666;
 }
 
-/* Radios: pixel art squares */
 input[type="radio"] {
   -webkit-appearance: none;
   appearance: none;
@@ -151,23 +187,27 @@ input[type="radio"] {
   image-rendering: pixelated;
 }
 input[type="radio"]:checked {
-  background: #ff0; /* yellow fill */
+  background: #ff0;
   border: 2px solid #000;
 }
 input[type="radio"]:checked + .radio-label {
   color: #ff0;
-  text-shadow: 1px 1px 0 #000; /* pixel shadow for relief */
+  text-shadow: 1px 1px 0 #000;
 }
 
-/* Leyenda: pixel font */
-.radio-label {
-  color: #fff;
+.radio-label { color: #fff; }
+
+/* Botones de acción */
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 8px;
 }
 
-/* Acciones: botones originales */
-.actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
-.apply, .clear {
-  background: linear-gradient(180deg,#3a3a3a,#2d2d2d);
+.apply,
+.clear {
+  background: linear-gradient(180deg, #3a3a3a, #2d2d2d);
   color: #fff;
   border: 3px solid #1a1a1a;
   padding: 0.4rem 0.6rem;
@@ -176,18 +216,28 @@ input[type="radio"]:checked + .radio-label {
   box-shadow: 2px 2px 0 #1a1a1a;
   font-size: 0.85rem;
 }
-.apply[disabled], .clear[disabled] { opacity: 0.45; cursor: not-allowed; }
+.apply[disabled],
+.clear[disabled] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 
-/* Responsive: ajusta para móviles */
+/* Responsive */
 @media (max-width: 720px) {
-  .sort-menu, .dropdown { max-width: 100%; margin-left: 0; margin-right: 0; }
+  .sort-menu,
+  .dropdown {
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+  }
   .dropdown { min-width: auto; }
 }
-@media (max-width: 520px) { .dropdown-inner { flex-direction: column; } .divider { display: none; } }
+@media (max-width: 520px) {
+  .dropdown-inner { flex-direction: column; }
+  .divider { display: none; }
+}
 `]
 })
-
-
 
 export class PokemonSortMenu {
   private readonly filterService = inject(PokemonFilterService);
@@ -195,6 +245,7 @@ export class PokemonSortMenu {
 
   // botón desplegable abierto?
   open = signal(false);
+  closing = signal(false);
 
   // opciones keys (coinciden con SortKey)
   readonly keys = [
@@ -223,7 +274,7 @@ export class PokemonSortMenu {
   // referencia host para click-outside
   private hostEl = inject(ElementRef).nativeElement as HTMLElement;
 
-  constructor(){
+  constructor() {
     // sync local selects when external sort changes
     effect(() => {
       const s = this.currentSort();
@@ -237,9 +288,7 @@ export class PokemonSortMenu {
     });
   }
 
-  toggle() {
-    this.open.update(v => !v);
-  }
+
 
   selectKey(v: string) {
     this.selectedKey.set(v ?? '');
@@ -269,8 +318,13 @@ export class PokemonSortMenu {
   }
 
   // click-outside to close (HostListener modern)
-  @HostListener('document:click', ['$event'])
-  onDocClick(ev: MouseEvent) {
-    if (!this.hostEl.contains(ev.target as Node)) this.open.set(false);
+  /* @HostListener('document:click', ['$event'])
+   onDocClick(ev: MouseEvent) {
+     if (!this.hostEl.contains(ev.target as Node)) this.open.set(false);
+   }*/
+
+  toggle() {
+    this.open.update(v => !v);
   }
+
 }

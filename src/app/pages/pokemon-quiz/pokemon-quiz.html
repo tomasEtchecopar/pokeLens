@@ -1,3 +1,27 @@
+@if (!usuario()) {
+
+<div class="auth-modal-backdrop">
+  <div class="auth-modal">
+    <h2>Quiz solo para entrenadores registrados</h2>
+    <p>Para jugar al quiz necesitás iniciar sesión o crear una cuenta.</p>
+
+    <div class="auth-modal-actions">
+      <button class="btn-signIn" type="button" (click)="goToLogin()">
+        Iniciar sesión
+      </button>
+
+      <button class="btn-signIn" type="button" (click)="goToSignIn()">
+        Crear cuenta
+      </button>
+    </div>
+
+    <button class="auth-link-btn" type="button" (click)="backToCatalog()">
+      ← Volver al catálogo
+    </button>
+  </div>
+</div>
+
+} @else {
 <div class="quiz-page">
   <div class="quiz-root">
     <div class="quiz-header">
@@ -24,71 +48,64 @@
     </div>
 
     @if(quizService.isLoading()) {
-      <div class="loading-state">
-        <div class="pokeball-spinner"></div>
-        <p>Cargando pregunta...</p>
-      </div>
+    <div class="loading-state">
+      <div class="pokeball-spinner"></div>
+      <p>Cargando pregunta...</p>
+    </div>
     } @else if(quizService.currentQuestion()) {
-      @let question = quizService.currentQuestion()!;
+    @let question = quizService.currentQuestion()!;
 
-      <div class="quiz-content">
-        <!-- Imagen del Pokemon -->
-        <div class="pokemon-display" [class.revealed]="quizService.hasAnswered()">
-          <div class="image-container">
-            @if(question.pokemon.sprites.front_default) {
-              <img
-                [src]="question.pokemon.sprites.front_default"
-                [alt]="question.pokemon.name"
-                [ngStyle]="{'filter': quizService.hasAnswered() ? 'none' : 'brightness(0) drop-shadow(0 0 8px #000)'}"
-              >
-            }
-          </div>
-
-          <!-- Pista: Número de Pokemon -->
-          @if(!quizService.hasAnswered()) {
-            <div class="hint">
-              <span class="hint-label">Pista:</span>
-              <span class="hint-value">#{{ question.pokemon.id }}</span>
-            </div>
+    <div class="quiz-content">
+      <!-- Imagen del Pokemon -->
+      <div class="pokemon-display" [class.revealed]="quizService.hasAnswered()">
+        <div class="image-container">
+          @if(question.pokemon.sprites.front_default) {
+          <img [src]="question.pokemon.sprites.front_default" [alt]="question.pokemon.name"
+            [ngStyle]="{'filter': quizService.hasAnswered() ? 'none' : 'brightness(0) drop-shadow(0 0 8px #000)'}">
           }
         </div>
 
-        <!-- Resultado -->
-        @if(quizService.hasAnswered()) {
-          <div class="result-banner" [class.correct]="quizService.isCorrect()" [class.incorrect]="!quizService.isCorrect()">
-            @if(quizService.isCorrect()) {
-              <span class="result-icon">✓</span>
-              <span class="result-text">¡Correcto! Es {{ question.correctAnswer | titlecase }}</span>
-            } @else {
-              <span class="result-icon">✗</span>
-              <span class="result-text">Incorrecto. Era {{ question.correctAnswer | titlecase }}</span>
-            }
-          </div>
-        }
-
-        <!-- Opciones -->
-        <div class="options-grid">
-          @for(option of question.options; track option) {
-            <button
-              class="option-button"
-              [class.selected]="quizService.selectedAnswer() === option"
-              [class.correct]="quizService.hasAnswered() && option === question.correctAnswer"
-              [class.incorrect]="quizService.hasAnswered() && quizService.selectedAnswer() === option && option !== question.correctAnswer"
-              [disabled]="quizService.hasAnswered()"
-              (click)="selectAnswer(option)"
-            >
-              {{ option | titlecase }}
-            </button>
-          }
+        <!-- Pista: Número de Pokemon -->
+        @if(!quizService.hasAnswered()) {
+        <div class="hint">
+          <span class="hint-label">Pista:</span>
+          <span class="hint-value">#{{ question.pokemon.id }}</span>
         </div>
-
-        <!-- Botón siguiente pregunta -->
-        @if(quizService.hasAnswered()) {
-          <button class="next-button" (click)="nextQuestion()">
-            Siguiente Pregunta →
-          </button>
         }
       </div>
+
+      <!-- Resultado -->
+      @if(quizService.hasAnswered()) {
+      <div class="result-banner" [class.correct]="quizService.isCorrect()" [class.incorrect]="!quizService.isCorrect()">
+        @if(quizService.isCorrect()) {
+        <span class="result-icon">✓</span>
+        <span class="result-text">¡Correcto! Es {{ question.correctAnswer | titlecase }}</span>
+        } @else {
+        <span class="result-icon">✗</span>
+        <span class="result-text">Incorrecto. Era {{ question.correctAnswer | titlecase }}</span>
+        }
+      </div>
+      }
+
+      <!-- Opciones -->
+      <div class="options-grid">
+        @for(option of question.options; track option) {
+        <button class="option-button" [class.selected]="quizService.selectedAnswer() === option"
+          [class.correct]="quizService.hasAnswered() && option === question.correctAnswer"
+          [class.incorrect]="quizService.hasAnswered() && quizService.selectedAnswer() === option && option !== question.correctAnswer"
+          [disabled]="quizService.hasAnswered()" (click)="selectAnswer(option)">
+          {{ option | titlecase }}
+        </button>
+        }
+      </div>
+
+      <!-- Botón siguiente pregunta -->
+      @if(quizService.hasAnswered()) {
+      <button class="next-button" (click)="nextQuestion()">
+        Siguiente Pregunta →
+      </button>
+      }
+    </div>
     }
 
     <!-- Botón reiniciar -->
@@ -99,3 +116,4 @@
     </div>
   </div>
 </div>
+}

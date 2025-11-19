@@ -1,10 +1,10 @@
+
 npx json-server --watch database/users.json --port 3000 
 
 git checkout main
 git pull
 git checkout feature/login
 git merge main
-
 --------------------------
 git push:
 git add .

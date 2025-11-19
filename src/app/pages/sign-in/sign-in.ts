@@ -189,7 +189,7 @@ export class SignIn implements OnInit {
             this.form.reset({ username: '', age: undefined, mail: '', password: '' });
             this.emailTaken = false;
             this.usernameTaken = false;
-            return this.router.navigateByUrl('/catalogo')
+            return this.router.navigateByUrl('/home')
 
           },
           error: (err) => {

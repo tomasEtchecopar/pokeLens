@@ -28,16 +28,16 @@ export class Header {
   }
 
   goToProfile() {
-    this.router.navigateByUrl('/profile');
+    this.router.navigateByUrl('profile');
   }
 
   goToCollections(){
-    this.router.navigateByUrl('/collections');
+    this.router.navigateByUrl('collections');
   }
 
   logOut() {
     this.auth.logOut();
-    this.router.navigateByUrl('/catalog');
+    this.router.navigateByUrl('home');
     this.quiz.resetStats();
   }
   setDefaultAvatar(event: Event) {

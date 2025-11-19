@@ -5,9 +5,12 @@ import { AuthServ } from './auth.service';
 export const authGuard: CanActivateFn = () => {
   const auth = inject(AuthServ);
   const router = inject(Router);
+  const user = auth.activeUser();
 
-  if (auth.isLoggedIn()) return true;
+  if (!user || !user.id) {
+    router.navigate(['/login'], { queryParams: { redirectTo: '/quiz' } });
+    return false;
+  }
 
-  router.navigateByUrl('/login');
-  return false;
+  return true;
 };

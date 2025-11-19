@@ -8,6 +8,7 @@ import { HomePage } from './pages/home-page/home-page';
 import { Contact } from './pages/contact/contact';
 import { UserCollections } from './pages/profile/pokemon-collections/user-collections';
 import { PokemonQuiz } from './pages/pokemon-quiz/pokemon-quiz';
+import { authGuard } from './core/auth-guard';
 
 export const routes: Routes = [
     {
@@ -34,24 +35,30 @@ export const routes: Routes = [
     },
     {
         path: 'profile', component: Profile,
-        title: 'Perfil de Usuario'
+        title: 'Perfil de Usuario',
+        canActivate: [authGuard]
+
 
     },
     {
         path: 'edit-profile', component: Profile,
-        title: 'Editar Perfil de Usuario'
+        title: 'Editar Perfil de Usuario',
+        canActivate: [authGuard]
+
     },
     {
         path: 'collections', component: UserCollections,
-        title: 'Mis Equipos'
+        title: 'Mis Equipos',
+        canActivate: [authGuard]
+
     },
 
     {
         path: 'contact', component: Contact,
         title: 'Contacto'
-    },{
-      path: 'quiz', component: PokemonQuiz,
-      title: 'Quiz Pokemon'
+    }, {
+        path: 'quiz', component: PokemonQuiz,
+        title: 'Quiz Pokemon'
     },
     {
         path: '**', redirectTo: 'catalogo'

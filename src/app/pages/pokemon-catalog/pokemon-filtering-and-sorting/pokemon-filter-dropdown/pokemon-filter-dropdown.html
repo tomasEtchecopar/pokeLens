@@ -10,7 +10,7 @@
       <div class="filter-item">
         <label>Tipo</label>
         <select [(ngModel)]="selectedType" (ngModelChange)="onChange()">
-          <option value="">Todos los tipos</option>
+          <option value="">Todos</option>
           @for (type of types(); track type.value) {
           <option [value]="type.value">{{ type.label }}</option>
           }

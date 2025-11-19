@@ -1,9 +1,10 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, computed, inject, OnInit } from '@angular/core';
 import { NgStyle, TitleCasePipe } from '@angular/common';
 import { PokemonQuizService } from './pokemon-quiz-service';
 import { AuthServ } from '../../core/auth.service';
 import { PointsService } from '../../core/points.service';
 import { PointEvent } from '../../user/user-model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pokemon-quiz',
@@ -14,9 +15,11 @@ import { PointEvent } from '../../user/user-model';
 })
 export class PokemonQuiz implements OnInit {
   protected readonly quizService = inject(PokemonQuizService);
-
+  private readonly router = inject(Router);
   private readonly auth = inject(AuthServ);
   private readonly points = inject(PointsService);
+  protected readonly usuario = computed(() => this.auth.activeUser());
+
 
   ngOnInit(): void {
     this.quizService.generateQuestion();
@@ -51,7 +54,7 @@ export class PokemonQuiz implements OnInit {
       return;
     }
 
-    const amount = 5; 
+    const amount = 5;
     const reason = 'Respuesta correcta en el Quiz Pokémon';
 
     const today = new Date();
@@ -78,5 +81,17 @@ export class PokemonQuiz implements OnInit {
         console.error('Error al sumar puntos por respuesta correcta');
       }
     });
+  }
+
+  goToLogin() {
+    this.router.navigateByUrl('/logIn');    // ajustá al path real de tu login
+  }
+
+  goToSignIn() {
+    this.router.navigateByUrl('/signIn');  // ajustá si tu ruta es otra
+  }
+
+  backToCatalog() {
+    this.router.navigateByUrl('/catalogo'); // ya la usás en otros lados
   }
 }

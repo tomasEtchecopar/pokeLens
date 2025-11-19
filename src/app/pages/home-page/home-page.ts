@@ -1,8 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { DailyPokemonService } from '../../pokemon/daily-pokemon/daily-pokemon-service';
 import { inject } from '@angular/core';
 import { PokemonCard } from "../../pokemon/pokemon-card/pokemon-card";
-import { RouterLink, RouterLinkActive } from "@angular/router";
+import { Router, RouterLink, RouterLinkActive } from "@angular/router";
+import { AuthServ } from '../../core/auth.service';
 
 @Component({
   selector: 'app-home-page',
@@ -15,4 +16,5 @@ export class HomePage {
 
   readonly pokemonOfTheDay = this.dailyPokemonService.pokemonOfTheDay;
   readonly loadingDaily = this.dailyPokemonService.isLoading;
+ 
 }

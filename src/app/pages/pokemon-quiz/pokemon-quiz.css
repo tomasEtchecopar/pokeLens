@@ -1,5 +1,6 @@
 .quiz-page {
-  padding-top: 20px;          /* espacio para el header fijo */
+  padding-top: 20px;
+  /* espacio para el header fijo */
   padding-bottom: 0rem;
   display: flex;
   justify-content: center;
@@ -7,7 +8,8 @@
 
 
 .quiz-root {
-  padding: 1.5rem 2rem 1rem 2rem; /* padding normal, ya no 180px */
+  padding: 1.5rem 2rem 1rem 2rem;
+  /* padding normal, ya no 180px */
   width: 100%;
   max-width: 800px;
   margin: 0 auto;
@@ -50,7 +52,7 @@
 .stat-item {
   background: linear-gradient(180deg, #3a3a3a, #2d2d2d);
   border: 2px solid #1a1a1a;
-  padding: 0.5rem 1.2rem ;
+  padding: 0.5rem 1.2rem;
   box-shadow: 2px 2px 0 #111;
   display: flex;
   flex-direction: column;
@@ -434,6 +436,120 @@
 }
 
 .quiz-root {
-  transform: scale(0.90);  /* 90% del tamaño original */
+  transform: scale(0.90);
+  /* 90% del tamaño original */
   transform-origin: top center;
+}
+
+/* --- BACKDROP DEL MODAL --- */
+.auth-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 300;
+}
+
+/* --- CAJA PRINCIPAL --- */
+.auth-modal {
+  /* Limpiamos estilos heredados y reconstruimos igual que <form> */
+  all: unset;
+  max-width: 500px;
+  width: 90%;
+  padding: 2.5rem;
+  background: #2b2b2b;
+  border: 3px solid #dc3545;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+  color: #fff;
+  font-family: 'Courier New', monospace;
+  text-align: center;
+  box-sizing: border-box;
+  display: block;
+}
+
+/* --- TÍTULO --- */
+.auth-modal h2 {
+  margin-bottom: 1rem;
+  color: #ffd700;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+/* --- DESCRIPCIÓN --- */
+.auth-modal p {
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+/* --- CONTENEDOR DE BOTONES --- */
+.auth-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+/* --- BOTONES PRINCIPALES (btn-signIn EXACTO) --- */
+.auth-modal-actions .btn-signIn {
+  width: 100%;            /* Igual */
+  display: block;
+  margin: 0;              /* El gap ya lo maneja el contenedor */
+  padding: 0.875rem;
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
+  box-shadow: 0 3px 0 #a02a2a; /* MISMO SOMBREADO */
+}
+
+.auth-modal-actions .btn-signIn:hover {
+  background: #c82333;
+  box-shadow: 0 3px 0 #8a2020;
+}
+
+.auth-modal-actions .btn-signIn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #8a2020;
+}
+
+/* --- VARIANTE SECUNDARIA --- */
+.btn-signIn-secondary {
+  background: #6c757d !important;
+  box-shadow: 0 3px 0 #495057 !important;
+}
+
+.btn-signIn-secondary:hover {
+  background: #5a6268 !important;
+  box-shadow: 0 3px 0 #3a3f44 !important;
+}
+
+.btn-signIn-secondary:active {
+  box-shadow: 0 1px 0 #3a3f44 !important;
+}
+
+/* --- BOTÓN LINK (volver al catálogo) --- */
+.auth-link-btn {
+  background: transparent;
+  border: none;
+  color: #ffd700;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 0.5rem;
+}
+
+.auth-link-btn:hover {
+  color: #ffe680;
 }

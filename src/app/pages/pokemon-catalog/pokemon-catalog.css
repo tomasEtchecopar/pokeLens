@@ -1,4 +1,4 @@
-/* Pokemon Catalog Styles */
+/* Layout general del catálogo */
 .catalog {
   width: 100%;
   max-width: none;
@@ -6,14 +6,57 @@
   padding: 0;
 }
 
-/* Search Section */
-.search-section {
-  padding: 2rem 1rem;
-  background: #2c2c2c;
+/* Título + buscador */
+.center {
+  text-align: center;
+  padding: 1.5rem 1rem 1rem;
 }
 
+/* Título */
+.catalog h1 {
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  font-size: 2.2rem;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  padding: 2rem 1rem 1rem;
+  margin: 0 auto;
+  text-shadow:
+    2px 2px 0 #111,
+    4px 4px 0 #111;
+  background: #d43030;
+  display: inline-block;
+  border: 3px solid #000;
+  border-radius: 6px;
+  box-shadow: 0 0 12px rgba(0, 0, 0, 0.8);
+}
 
+/* Buscador debajo del título */
+.center app-search-bar {
+  display: block;
+  margin: 1rem auto 0;
+  width: 100%;
+  max-width: 600px;
+}
 
+/* Fila de Filtrar | Ordenar */
+.search-section {
+  padding: 0 1rem 1.5rem;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 10rem;
+}
+
+/* Ancho de filtro y sort */
+.search-section app-pokemon-filter-dropdown,
+.search-section pokemon-sort-menu {
+  flex: 1 1 0;
+  max-width: 550px;
+}
+
+/* Mensajes y estados */
 .loading-indicator {
   position: absolute;
   right: 1rem;
@@ -42,27 +85,7 @@
   box-shadow: 3px 3px 0px #c51717;
 }
 
-.catalog h1 {
-  font-family: 'Press Start 2P', monospace;
-  color: #fff;
-  font-size: 2.2rem;
-  text-align: center;
-  text-transform: uppercase;
-  letter-spacing: 3px;
-  padding: 2rem 1rem 1rem;
-  margin: 0 auto;
-  text-shadow:
-    2px 2px 0 #111,
-    4px 4px 0 #111;
-  background: #d43030;
-  display: inline-block;
-  border: 3px solid #000;
-  border-radius: 6px;
-  box-shadow: 0 0 12px rgba(0,0,0,0.8);
-    position: relative;
-  left: 50%;
-  transform: translateX(-50%);
-}
+/* Grid de cartas */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
@@ -72,7 +95,7 @@
   border: 4px solid #5f0b0b;
 }
 
-/* Loading State */
+/* Loading */
 .catalog p {
   text-align: center;
   color: white;
@@ -81,26 +104,13 @@
   font-weight: 500;
 }
 
-/* Infinite scroll sentinel */
-/* .scroll-sentinel {
-  min-height: 50px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 2rem;
-}
-
-.scroll-sentinel p {
-  font-size: 1.2rem;
-  padding: 0;
-} */
-
-.scroll-sentinel{
+/* Sentinel de scroll infinito */
+.scroll-sentinel {
   height: 20px;
   width: 100%;
 }
 
-/* Responsive Grid */
+/* Responsive */
 @media (max-width: 768px) {
   .catalog h1 {
     font-size: 2rem;
@@ -121,4 +131,3 @@
     font-size: 1.5rem;
   }
 }
-
