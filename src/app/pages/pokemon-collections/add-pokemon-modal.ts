@@ -6,6 +6,7 @@ import { AuthServ } from '../../core/auth.service';
 import { UserClient } from '../../core/user-client.service';
 import { PointsService } from '../../core/points.service';
 import { PointEvent, User } from '../../user/user-model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-pokemon-modal',
@@ -20,10 +21,31 @@ import { PointEvent, User } from '../../user/user-model';
             <button class="close-btn" (click)="close()">✕</button>
           </div>
 
+
+
           <div class="modal-body">
-            @if (!usuario()) {
-              <p class="error-message">Debes iniciar sesión para capturar Pokémon</p>
-            } @else {
+           @if (!usuario()) {
+            <div class="auth-modal-content">
+              <h2>¡Entrenador, necesitamos tu identificación!</h2>
+              <p class="auth-modal-info">Iniciá sesión o creá una cuenta para poder capturar Pokémon.</p>
+
+            <div class="auth-modal-actions">
+               <button class="btn-signIn" type="button" (click)="goLogin()">
+                   Iniciar sesión
+                </button>
+
+                <button class="btn-signIn btn-signIn-secondary" type="button" (click)="goRegister()">
+                   Crear cuenta
+                </button>
+            </div>
+
+    <button class="auth-link-btn" type="button" (click)="close()">
+               ← Volver
+               </button>
+             </div>
+           }
+
+ @else {
               <div class="form-group">
                 <label for="collection">Equipo:</label>
 
@@ -250,9 +272,101 @@ import { PointEvent, User } from '../../user/user-model';
       opacity: 0.5;
       cursor: not-allowed;
     }
+    .auth-modal-content {
+  text-align: center;
+  padding: 1rem 0.5rem;
+}
+
+.auth-modal-content h2 {
+  margin-bottom: 1rem;
+  color: #ffd700;
+  font-size: 1.1rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.auth-modal-content p {
+  margin-bottom: 1.5rem;
+  font-size: 0.95rem;
+}
+
+.auth-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.auth-modal-actions .btn-signIn {
+  width: 100%;
+  display: block;
+  margin: 0;
+  padding: 0.875rem;
+  background: #dc3545;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.1s;
+  box-shadow: 0 3px 0 #a02a2a;
+}
+
+.auth-modal-actions .btn-signIn:hover {
+  background: #c82333;
+  box-shadow: 0 3px 0 #8a2020;
+}
+
+.auth-modal-actions .btn-signIn:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 #8a2020;
+}
+
+.btn-signIn-secondary {
+  background: #6c757d !important;
+  box-shadow: 0 3px 0 #495057 !important;
+}
+
+.btn-signIn-secondary:hover {
+  background: #5a6268 !important;
+  box-shadow: 0 3px 0 #3a3f44 !important;
+}
+
+.btn-signIn-secondary:active {
+  box-shadow: 0 1px 0 #3a3f44 !important;
+}
+
+.auth-link-btn {
+  background: transparent;
+  border: none;
+  color: #ffd700;
+  font-family: 'Courier New', monospace;
+  font-size: 0.9rem;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 0.5rem;
+}
+
+.auth-link-btn:hover {
+  color: #ffe680;
+}
+.auth-modal-info {
+  color: #ffd700;
+  font-weight: 700;
+  font-size: 0.95rem;
+  margin-bottom: 1.5rem;
+  text-shadow: 1px 1px 0 #000;
+}
+
+    
   `]
 })
 export class AddPokemonModal {
+  private readonly router = inject(Router)
   private readonly auth = inject(AuthServ);
   private readonly userClient = inject(UserClient);
   private readonly points = inject(PointsService);
@@ -494,5 +608,15 @@ export class AddPokemonModal {
     }
     return `Equipo ${index + 1}`;
   }
+  goLogin() {
+    this.close();
+    this.router.navigate(['/logIn']);
+  }
+
+  goRegister() {
+    this.close();
+    this.router.navigate(['/signIn']);
+  }
+
 
 }
