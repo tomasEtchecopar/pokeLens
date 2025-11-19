@@ -18,7 +18,7 @@
         },
         {
           "amount": 100,
-          "reason": "Colección completada",
+          "reason": "Equipo completada",
           "date": "2025-11-12T18:00:00.000Z"
         },
         {
@@ -68,12 +68,12 @@
         },
         {
           "amount": 50,
-          "reason": "Puntos por crear colección semanal",
+          "reason": "Puntos por crear equipo semanal",
           "date": "2025-11-18T02:04:15.554Z"
         },
         {
           "amount": 50,
-          "reason": "Puntos por crear colección semanal",
+          "reason": "Puntos por crear equipo semanal",
           "date": "2025-11-18T02:10:43.168Z"
         },
         {
@@ -98,7 +98,7 @@
         },
         {
           "amount": 100,
-          "reason": "Colección completada",
+          "reason": "Equipo completada",
           "date": "2025-11-12T18:00:00.000Z"
         },
         {
@@ -148,12 +148,12 @@
         },
         {
           "amount": 50,
-          "reason": "Puntos por crear colección semanal",
+          "reason": "Puntos por crear equipo semanal",
           "date": "2025-11-18T02:04:15.554Z"
         },
         {
           "amount": 50,
-          "reason": "Puntos por crear colección semanal",
+          "reason": "Puntos por crear equipo semanal",
           "date": "2025-11-18T02:10:43.168Z"
         },
         {
@@ -178,7 +178,7 @@
         },
         {
           "amount": 100,
-          "reason": "Colección completada",
+          "reason": "Equipo completada",
           "date": "2025-11-12T18:00:00.000Z"
         },
         {
@@ -228,12 +228,12 @@
         },
         {
           "amount": 50,
-          "reason": "Puntos por crear colección semanal",
+          "reason": "Puntos por crear equipo semanal",
           "date": "2025-11-18T02:04:15.554Z"
         },
         {
           "amount": 50,
-          "reason": "Puntos por crear colección semanal",
+          "reason": "Puntos por crear equipo semanal",
           "date": "2025-11-18T02:10:43.168Z"
         },
         {
@@ -321,7 +321,7 @@
       "password": "asd",
       "pokemonId": 533,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/533.png",
-      "points": 50,
+      "points": 55,
       "lastLoginDate": "2025-11-19T02:59:06.980Z",
       "lastCreateCollection": "2025-11-18T15:23:49.899Z",
       "pokemonVault": [
@@ -345,7 +345,8 @@
           {
             "arrayId": 3,
             "idPokemon": 6,
-            "name": "charizard"
+            "name": "charizard",
+            "nickname": "asd"
           },
           {
             "arrayId": 4,
@@ -365,8 +366,13 @@
       "pointsHistory": [
         {
           "amount": 50,
-          "reason": "Puntos por crear colección semanal",
+          "reason": "Puntos por crear equipo semanal",
           "date": "2025-11-18T15:23:49.899Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T03:58:12.691Z"
         }
       ]
     }

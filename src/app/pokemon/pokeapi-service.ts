@@ -160,7 +160,7 @@ export class PokeApiService {
     return Math.floor(Math.random() * max) + 1;
   }
 
-  //Calcular el poder de una coleccion
+  //Calcular el poder de una equipo
   //pokeApi devuelve un array, con reduce ya soluciona
   calcularPoder(stats: any[]): number {
     return stats.reduce((total, s) => total + s.base_stat, 0);

@@ -43,7 +43,7 @@ export const routes: Routes = [
     },
     {
         path: 'collections', component: UserCollections,
-        title: 'Mis Colecciones'
+        title: 'Mis Equipos'
     },
 
     {

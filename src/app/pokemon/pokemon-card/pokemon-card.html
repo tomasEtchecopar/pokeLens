@@ -19,7 +19,7 @@
         </div>
         @if(nickname()) {
         <h2>{{ nickname() | titlecase }}</h2>
-        <p class="original-name">{{ pokemon.name | titlecase }}</p>
+        <p class="original-name">({{ pokemon.name | titlecase }})</p>
         } @else {
         <h2>{{ pokemon.name | titlecase }}</h2>
         }

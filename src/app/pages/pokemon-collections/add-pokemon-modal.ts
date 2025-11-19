@@ -16,7 +16,7 @@ import { PointEvent, User } from '../../user/user-model';
       <div class="modal-overlay" (click)="close()">
         <div class="modal-content" (click)="$event.stopPropagation()">
           <div class="modal-header">
-            <h3>Añadir {{ pokemon().name }} a colección</h3>
+            <h3>Añadir {{ pokemon().name }} a equipo</h3>
             <button class="close-btn" (click)="close()">✕</button>
           </div>
 
@@ -25,9 +25,9 @@ import { PointEvent, User } from '../../user/user-model';
               <p class="error-message">Debes iniciar sesión para capturar Pokémon</p>
             } @else {
               <div class="form-group">
-                <label for="collection">Colección:</label>
+                <label for="collection">Equipo:</label>
 
-            <!--Mostramos los nombres de las colecciones  -->
+            <!--Mostramos los nombres de las equipos  -->
 <select
   id="collection"
   [ngModel]="selectedCollection()"
@@ -38,14 +38,14 @@ import { PointEvent, User } from '../../user/user-model';
     </option>
   }
   <option [value]="collections().length + 1">
-    + Nueva colección
+    + Nueva equipo
   </option>
 </select>
             <!--Si elegimos una nueva, se habilita el input  -->
 
 @if (isCreatingNewCollection()) {
   <div class="form-group">
-    <label for="newCollectionName">Nombre de la nueva colección:</label>
+    <label for="newCollectionName">Nombre de la nueva equipo:</label>
     <input
       id="newCollectionName"
       type="text"
@@ -280,14 +280,14 @@ export class AddPokemonModal {
   collections = signal<pokemonVault[][]>([]);
 
   constructor() {
-    // Cargar colecciones cuando se abre el modal
+    // Cargar equipos cuando se abre el modal
     effect(() => {
       if (this.auth.activeUser()?.pokemonVault) {
         this.collections.set(this.auth.activeUser()!.pokemonVault!);
       }
     })
   };
-  //Metodo para calcular los dias que pasaron entre la ultima creacion de una coleccion
+  //Metodo para calcular los dias que pasaron entre la ultima creacion de una equipo
   private daysBetween(a: string, b: string): number {
     const msA = new Date(a).getTime();
     const msB = new Date(b).getTime();
@@ -295,10 +295,10 @@ export class AddPokemonModal {
   }
 
   private shouldRewardWeeklyCollection(user: User, isNewCollection: boolean, nowIso: string): boolean {
-    if (!isNewCollection) return false; // solo premiamos una nueva colección
+    if (!isNewCollection) return false; // solo premiamos una nueva equipo
 
     if (!user.lastCreateCollection) {
-      // Nunca se premió una colección y es la  primera vez
+      // Nunca se premió una equipo y es la  primera vez
       return true;
     }
 
@@ -317,16 +317,16 @@ export class AddPokemonModal {
 
 
   /**
-   * Intenta capturar el Pokémon seleccionado y agregarlo a la coleccion elegida.
+   * Intenta capturar el Pokémon seleccionado y agregarlo a la equipo elegida.
    *
    * Flujo general:
    * 1. Valida que haya usuario logueado y Pokémon valido.
    * 2. Controla:
-   *    - que la colección no tenga más de 6 Pokémon,
-   *    - que el Pokémon no esté repetido en esa coleccion,
-   *    - que si es una coleccion nueva, tenga nombre.
-   * 3. Llama al backend para agregar el Pokémon a la coleccion.
-   * 4. Si corresponde, otorga puntos por crear una colección semanal y registra el evento.
+   *    - que la equipo no tenga más de 6 Pokémon,
+   *    - que el Pokémon no esté repetido en esa equipo,
+   *    - que si es una equipo nueva, tenga nombre.
+   * 3. Llama al backend para agregar el Pokémon a la equipo.
+   * 4. Si corresponde, otorga puntos por crear una equipo semanal y registra el evento.
    * 5. Actualiza el usuario activo en memoria y en localStorage.
    */
   capturePokemon() {
@@ -345,17 +345,17 @@ export class AddPokemonModal {
     }
     //------------------------------------------------------------------------------
     // Sector donde se controla la cantidad de pokemones en el array
-    const matrix = this.collections();              // Matriz de colecciones: pokemonVault[][]
-    const selectedIndex = this.selectedCollection() - 1; //indice de la coleccion elegida
+    const matrix = this.collections();              // Matriz de equipos: pokemonVault[][]
+    const selectedIndex = this.selectedCollection() - 1; //indice de la equipo elegida
 
-    const currentCount = matrix[selectedIndex]?.length ?? 0; //calcula los pokemones en la coleccion
+    const currentCount = matrix[selectedIndex]?.length ?? 0; //calcula los pokemones en la equipo
 
     if (currentCount >= 6) {
-      this.errorMessage.set('Esta colección ya tiene 6 Pokémon (límite máximo).');
+      this.errorMessage.set('Esta equipo ya tiene 6 Pokémon (límite máximo).');
       return;
     }
     //------------------------------------------------------------------------------
-    // Evitar Pokémon duplicado en la misma colección
+    // Evitar Pokémon duplicado en la misma equipo
     const selectedCollectionEntries = matrix[selectedIndex] ?? [];
 
     const alreadyInCollection = selectedCollectionEntries.some(//verificamos el id en el array
@@ -363,7 +363,7 @@ export class AddPokemonModal {
     );
 
     if (alreadyInCollection) {
-      this.errorMessage.set('Este Pokémon ya está en esta colección.');
+      this.errorMessage.set('Este Pokémon ya está en esta equipo.');
       return;
     }
     //------------------------------------------------------------------------------
@@ -380,23 +380,23 @@ export class AddPokemonModal {
     };
 
 
-    const pointsCollection = 50; //puntos a dar por la creacion de la coleccion
+    const pointsCollection = 50; //puntos a dar por la creacion de la equipo
     const nowIso = new Date().toISOString(); //Fecha y hora actual
 
-    // Indica si el usuario seleccionó la opción "+ Nueva colección"
+    // Indica si el usuario seleccionó la opción "+ Nueva equipo"
     const isNewCollection = this.isCreatingNewCollection();
 
-    // si es una colección nueva, se le pide ingresar un nombre
+    // si es una equipo nueva, se le pide ingresar un nombre
     if (isNewCollection) {
       const name = this.newCollectionName().trim();
       if (!name) {
-        this.errorMessage.set('Ingresá un nombre para la nueva colección.');
+        this.errorMessage.set('Ingresá un nombre para la nueva equipo.');
         this.isLoading.set(false);
         return;
       }
     }
 
-    // Llamada al backend para agregar el pokémon a la coleccion del usuario
+    // Llamada al backend para agregar el pokémon a la equipo del usuario
     this.userClient
       .addPokemonToVault(user.id, pokemonData, this.selectedCollection())
       .subscribe({
@@ -404,7 +404,7 @@ export class AddPokemonModal {
           // Usuario devuelto por el backend luego de agregar el pokémon
           let userWithCollections: User = updatedUser;
 
-          // Si se creo una coleccion nueva, agregamos el nombre al array de nombres
+          // Si se creo una equipo nueva, agregamos el nombre al array de nombres
           if (isNewCollection) {
             const names = [...(updatedUser.collectionNames ?? [])];
             const name = this.newCollectionName().trim();
@@ -415,11 +415,11 @@ export class AddPokemonModal {
               ...updatedUser,
               collectionNames: names
             };
-            // Limpiamos el input del nombre de colección para futuras capturas
+            // Limpiamos el input del nombre de equipo para futuras capturas
             this.newCollectionName.set('');
           }
 
-          // Aca se chequea si corresponde dar el bonus semanal por crear coleccion
+          // Aca se chequea si corresponde dar el bonus semanal por crear equipo
           const giveWeeklyBonus = this.shouldRewardWeeklyCollection(
             userWithCollections,
             isNewCollection,
@@ -427,23 +427,23 @@ export class AddPokemonModal {
           );
 
           if (giveWeeklyBonus) {
-            // Actualizamos la fecha de última creación de colección
+            // Actualizamos la fecha de última creación de equipo
             const updatedUserWithDate: User = {
               ...userWithCollections,
               lastCreateCollection: nowIso
             };
 
-            // Sumamos puntos por la colección semanal
+            // Sumamos puntos por la equipo semanal
             this.points
               .addPoints(
                 updatedUserWithDate,
                 pointsCollection,
-                'Sumaste puntos por crear tu colección semanal!'
+                'Sumaste puntos por crear tu equipo semanal!'
               )
               .subscribe(userWithPoints => {
                 const event: PointEvent = {
                   amount: pointsCollection,
-                  reason: 'Puntos por crear colección semanal',
+                  reason: 'Puntos por crear equipo semanal',
                   date: nowIso
                 };
 
@@ -456,14 +456,14 @@ export class AddPokemonModal {
               });
 
           } else {
-            // Si no hay bonus semanal, igual persistimos el usuario con las colecciones/nombres actualizados
+            // Si no hay bonus semanal, igual persistimos el usuario con las equipos/nombres actualizados
             this.userClient.updateUser(userWithCollections, userWithCollections.id!).subscribe({
               next: (savedUser) => {
                 this.auth.activeUser.set(savedUser);
                 localStorage.setItem('activeUser', JSON.stringify(savedUser));
               },
               error: (err) => {
-                console.error('Error actualizando usuario con nombres de coleccion', err);
+                console.error('Error actualizando usuario con nombres de equipo', err);
               }
             });
           }
@@ -484,7 +484,7 @@ export class AddPokemonModal {
 
 
   isCreatingNewCollection(): boolean {
-    // si seleccionó el value "length + 1", es la opción "+ Nueva colección"
+    // si seleccionó el value "length + 1", es la opción "+ Nueva equipo"
     return this.selectedCollection() === this.collections().length + 1;
   }
 
@@ -496,7 +496,7 @@ export class AddPokemonModal {
     if (stored && stored.trim().length > 0) {
       return stored.trim();
     }
-    return `Colección ${index + 1}`;
+    return `Equipo ${index + 1}`;
   }
 
 }

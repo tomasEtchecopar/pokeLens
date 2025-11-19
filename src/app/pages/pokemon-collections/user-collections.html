@@ -1,7 +1,7 @@
 <div class="collections-page">
 
   <div class="header-row">
-    <h2>Mis colecciones</h2>
+    <h2>Mis equipos</h2>
     <button class="btn" (click)="backToProfile()">Volver al perfil</button>
   </div>
 
@@ -30,8 +30,8 @@
         {{ collectionAverages()[i] || 0 }}
       </p>
 
-      <button class="btn-delete-collection" (click)="deleteCollection(i)" title="Eliminar colección completa">
-        Eliminar colección
+      <button class="btn-delete-collection" (click)="deleteCollection(i)" title="Eliminar equipo completa">
+        Eliminar equipo
       </button>
     </div>
 
@@ -45,7 +45,7 @@
 
         <div class="vault-card-wrapper">
           <button class="pokeball-btn" (click)="deletePokemon(i, entry.arrayId!)"
-            title="Quitar Pokémon de la colección">
+            title="Quitar Pokémon de la equipo">
             <div class="pokeball">
               <div class="pokeball-top"></div>
               <div class="pokeball-bottom"></div>
@@ -61,14 +61,14 @@
         }
         }
       }@else {
-        <p>No hay pokemon en la coleccion...</p>
+        <p>No hay pokemon en la equipo...</p>
       }
       </div>
     </div>
   </section>
   }
   } @else {
-  <p>No hay colecciones guardadas...</p>
+  <p>No hay equipos guardadas...</p>
   }
 
   } @else {

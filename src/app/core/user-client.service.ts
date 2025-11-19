@@ -37,17 +37,17 @@ addPokemonToVault(
         // aseguramos array externo
         const vaults: pokemonVault[][] = usuario.pokemonVault ?? [];
 
-        // colección 1 -> índice 0, colección 2 -> índice 1, etc.
+        // equipo 1 -> índice 0, equipo 2 -> índice 1, etc.
         const index = Math.max(collectionNumber - 1, 0);
 
-        // si no existe esa colección, creamos las que falten vacías
+        // si no existe esa equipo, creamos las que falten vacías
         while (vaults.length <= index) {
           vaults.push([]);
         }
 
         const targetCollection = vaults[index];
 
-        // calcular próximo arrayId dentro DE ESA colección
+        // calcular próximo arrayId dentro DE ESA equipo
         const nextId = targetCollection.length
           ? Math.max(...targetCollection.map(p => p.arrayId ?? 0)) + 1
           : 0;
@@ -57,7 +57,7 @@ addPokemonToVault(
           { ...nuevoPokemon, arrayId: nextId }
         ];
 
-        // reconstruimos el array de colecciones
+        // reconstruimos el array de equipos
         const updatedVaults = vaults.map((col, i) =>
           i === index ? updatedCollection : col
         );

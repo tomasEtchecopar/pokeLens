@@ -30,17 +30,17 @@ export class UserCollections {
   // Usuario activo
   usuario = computed(() => this.auth.activeUser());
 
-  // Colecciones del usuario (pokemonVault[][])
+  // Equipos del usuario (pokemonVault[][])
   collections = computed(() => this.usuario()?.pokemonVault ?? []);
 
-  // Promedio de poder por colección
+  // Promedio de poder por equipo
   private readonly _collectionAverages = signal<number[]>([]);
   collectionAverages = computed(() => this._collectionAverages());
 
 
   /**
    * Effect reactivo que recalcula los promedios de poder
-   * cada vez que cambian las colecciones del usuario.
+   * cada vez que cambian las equipos del usuario.
    *
    * Este effect se ejecuta automáticamente cuando:
    * - this.collections() cambia (cuando el usuario agrega/borra pokémon)
@@ -48,10 +48,10 @@ export class UserCollections {
    *
    * El objetivo es llenar this._collectionAverages con
    * un array de números donde:
-   *    collectionAverages[i] = promedio de poder de la colección i
+   *    collectionAverages[i] = promedio de poder de la equipo i
    */
   constructor() {
-    // Recalcula promedios cada vez que cambian las colecciones
+    // Recalcula promedios cada vez que cambian las equipos
     effect(() => {
       const cols = this.collections();
 
@@ -70,7 +70,7 @@ export class UserCollections {
         }
 
         /**
-       * Convierte cada entrada de la colección (pokemonVault) en un objeto Pokemon real.
+       * Convierte cada entrada de la equipo (pokemonVault) en un objeto Pokemon real.
        * Para eso:
        * - toma el idPokemon
        * - lo busca en allPokemon
@@ -110,16 +110,16 @@ export class UserCollections {
 
 
   /**
-   * Elimina un Pokemon de una coleccion del usuario.
+   * Elimina un Pokemon de una equipo del usuario.
    *
-   * @param collectionIndex Numero de la coleccion dentro de pokemonVault (indice del array)
-   * @param arrayId Identificador unico del Pokemon dentro de esa coleccion
+   * @param collectionIndex Numero de la equipo dentro de pokemonVault (indice del array)
+   * @param arrayId Identificador unico del Pokemon dentro de esa equipo
    *
    * Flujo:
    * 1. Verifica que exista usuario y tenga id.
-   * 2. Valida que la coleccion exista.
+   * 2. Valida que la equipo exista.
    * 3. Filtra el Pokemon a eliminar usando su arrayId.
-   * 4. Reconstruye el pokemonVault con la coleccion actualizada.
+   * 4. Reconstruye el pokemonVault con la equipo actualizada.
    * 5. Persiste el usuario actualizado en el backend (updateUser).
    * 6. Actualiza activeUser y localStorage.
    */
@@ -127,7 +127,7 @@ export class UserCollections {
     const user = this.usuario();
     if (!user || !user.id) return;
 
-    if(confirm('Seguro que desea eliminar al Pokemon de la coleccion?')){
+    if(confirm('Seguro que desea eliminar al Pokemon de la equipo?')){
       const vault = user.pokemonVault ?? [];
       if (collectionIndex < 0 || collectionIndex >= vault.length) return;
 
@@ -143,7 +143,7 @@ export class UserCollections {
           this.auth.activeUser.set(res);
           localStorage.setItem('activeUser', JSON.stringify(res));
         },
-        error: () => alert('Error al eliminar el Pokémon de la colección'),
+        error: () => alert('Error al eliminar el Pokémon de la equipo'),
       });
   }
   }
@@ -174,7 +174,7 @@ editNickname(collectionIndex: number, arrayId: number, newNickname?: string) {
   // Si quedó vacío, lo removemos (undefined) para mantener consistencia
   const finalNickname = nickname.length > 0 ? nickname : undefined;
 
-  // Construir colección actualizada (no mutamos objetos originales)
+  // Construir equipo actualizada (no mutamos objetos originales)
   const updatedEntry = { ...collection[entryIndex], nickname: finalNickname };
   const updatedCollection = [...collection];
   updatedCollection[entryIndex] = updatedEntry;
@@ -201,14 +201,14 @@ editNickname(collectionIndex: number, arrayId: number, newNickname?: string) {
 }
 
   /**
-   * Elimina una coleccion completa del usuario.
+   * Elimina una equipo completa del usuario.
    *
-   * @param index Numero de la coleccion dentro de pokemonVault (indice del array)
+   * @param index Numero de la equipo dentro de pokemonVault (indice del array)
    *
    * Flujo:
    * 1. Verifica que exista usuario y tenga id.
    * 2. Pide confirmacion antes de borrar.
-   * 3. Quita la coleccion del array pokemonVault.
+   * 3. Quita la equipo del array pokemonVault.
    * 4. Quita tambien el nombre correspondiente en collectionNames.
    * 5. Genera un usuario actualizado con esos cambios.
    * 6. Persiste el usuario en el backend.
@@ -218,14 +218,14 @@ editNickname(collectionIndex: number, arrayId: number, newNickname?: string) {
     const user = this.usuario();
     if (!user || !user.id) return;
 
-    const ok = confirm(`Seguro que queres eliminar la coleccion ${index + 1}?`);
+    const ok = confirm(`Seguro que queres eliminar la equipo ${index + 1}?`);
     if (!ok) return;
 
-    // Copia del vault actual. Elimina la coleccion por indice.
+    // Copia del vault actual. Elimina la equipo por indice.
     const matrix = [...(user.pokemonVault ?? [])];
     matrix.splice(index, 1);
 
-    // Copia de los nombres. Si existe un nombre para esa coleccion, tambien se elimina.
+    // Copia de los nombres. Si existe un nombre para esa equipo, tambien se elimina.
     const names = [...(user.collectionNames ?? [])];
     if (index < names.length) {
       names.splice(index, 1);
@@ -244,14 +244,14 @@ editNickname(collectionIndex: number, arrayId: number, newNickname?: string) {
         localStorage.setItem('activeUser', JSON.stringify(res));
       },
       error: (err) => {
-        console.error('Error al borrar coleccion', err);
-        alert('Error al borrar la coleccion');
+        console.error('Error al borrar equipo', err);
+        alert('Error al borrar la equipo');
       }
     });
   }
 
 
-  // Nombre visible de la colección i
+  // Nombre visible de la equipo i
   getCollectionName(index: number): string {
     const user = this.usuario();
     const names = user?.collectionNames ?? [];
@@ -260,7 +260,7 @@ editNickname(collectionIndex: number, arrayId: number, newNickname?: string) {
     if (stored && stored.trim().length > 0) {
       return stored.trim();
     }
-    return `Colección ${index + 1}`;
+    return `Equipo ${index + 1}`;
   }
 
   // Empieza edición
@@ -271,12 +271,12 @@ editNickname(collectionIndex: number, arrayId: number, newNickname?: string) {
   }
 
   /**
-   * Guarda el nombre de una coleccion.
+   * Guarda el nombre de una equipo.
    *
    * Se ejecuta cuando el input pierde el foco (blur) o cuando el usuario
    * toca Enter en el campo de edicion del nombre.
    *
-   * @param index Indice de la coleccion que se esta editando.
+   * @param index Indice de la equipo que se esta editando.
    *
    * Flujo:
    * 1. Verifica que haya usuario y que tenga id.
@@ -298,7 +298,7 @@ editNickname(collectionIndex: number, arrayId: number, newNickname?: string) {
     const data = this.editingName().trim();
 
     // Si quedo vacio, usamos un nombre generico
-    const finalName = data || `Coleccion ${index + 1}`;
+    const finalName = data || `Equipo ${index + 1}`;
 
     // Nombres actuales (puede venir undefined)
     const existing = user.collectionNames ?? [];
@@ -308,13 +308,13 @@ editNickname(collectionIndex: number, arrayId: number, newNickname?: string) {
 
     /**
      *Con este metodo aseguramos que si hay carrera de tiempos entre componentes,
-     *la coleccion tenga al menos un nombre generico
+     *la equipo tenga al menos un nombre generico
      *ya que el array de nombres esta directamente relacionado con cada array interno del Vaul[]
      */
     if (updatedNames.length < this.collections().length) {
       for (let i = updatedNames.length; i < this.collections().length; i++) {
         if (!updatedNames[i]) {
-          updatedNames[i] = `Coleccion ${i + 1}`;
+          updatedNames[i] = `Equipo ${i + 1}`;
         }
       }
     }
@@ -334,7 +334,7 @@ editNickname(collectionIndex: number, arrayId: number, newNickname?: string) {
         this.editingIndex.set(null);
       },
       error: () => {
-        alert('Error al guardar el nombre de la coleccion');
+        alert('Error al guardar el nombre de la equipo');
         this.editingIndex.set(null);
       }
     });

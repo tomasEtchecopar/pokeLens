@@ -14,7 +14,7 @@ export class PointsService {
   private readonly baseUrl = 'http://localhost:3000/users';
 
 
-  //Otorga entre 0 y 20 puntos , utilizada en el registro 
+  //Otorga entre 0 y 20 puntos , utilizada en el registro
   randomPoints() {
     return Math.floor(Math.random() * (20 - 0 + 1))
   }
@@ -116,7 +116,7 @@ notAlertAddPoints(user: User, id: string, reason2: string): Observable<User> {
 
 
   /**
-   *Registra un evento que sume puntos, 
+   *Registra un evento que sume puntos,
       * AUN SIN IMPLEMENTAR REALMENTE (si en pruebas)
    * @param user   Usuario actual
    * @param event   pointsHistory?: PointEvent[];
@@ -137,11 +137,11 @@ notAlertAddPoints(user: User, id: string, reason2: string): Observable<User> {
 /* const user = this.auth.activeUser();
 
   if (!user) return;
-  
+
   this.points.addPoints(
     user,
     10,
-    '+10 puntos por agregar un Pokémon a tu colección'
+    '+10 puntos por agregar un Pokémon a tu equipo'
   ).subscribe(updatedUser => {
 
     // actualizar usuario activo
