@@ -10,8 +10,9 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
   imports: [CommonModule, FormsModule],
   template: `
     <div class="sort-menu" #root>
-      <button class="sort-button" type="button" (click)="toggle()" aria-haspopup="true" [attr.aria-expanded]="open()">
-        Ordenar ▾
+      <button class="filters-toggle" type="button" (click)="toggle()" aria-haspopup="true" >
+        Ordenar
+        <span [class.open]="open()">▼</span>
       </button>
 
       @if(open()) {
@@ -60,41 +61,47 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
   `,
 styles: [`
 /* -------- SortMenu - Retro 8-Bit con Botón Centrado y Desplegable que Empuja Abajo -------- */
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
 .sort-menu {
-  position: relative; /* Mantenemos relative para posibles absolutos internos si necesitas */
-  display: block; /* Para centrar con margin auto */
-  margin: 1rem auto; /* Centra horizontalmente */
-  max-width: 600px; /* Ancho máximo como en tu filters-toggle */
+  display: block;
+  margin: 0.6rem auto;
+  max-width: 600px;
   font-family: 'Press Start 2P', monospace;
   font-size: 0.8rem;
   color: #fff;
 }
 
-/* Botón principal: ancho completo, centrado, inspirado en filters-toggle */
-.sort-button {
-  width: 100%; /* Ocupa todo el ancho del .sort-menu */
-  background: linear-gradient(180deg,#3a3a3a,#2d2d2d);
-  color: #FFF;
-  border: 3px solid #1a1a1a;
-  padding: 0.8rem 1rem; /* Padding similar a filters-toggle */
-  cursor: pointer;
-  box-shadow: 2px 2px 0 #1a1a1a; /* Sombra original */
-  font-weight: 900;
+/* Reutilizamos la clase filters-toggle igual que en tu UI de filtros */
+.filters-toggle {
+  width: 100%;
+  background: #2c2c2c;
+  color: white;
+  border: 3px solid #000;
+  padding: 0.7rem 1rem;
+  font-family: 'Press Start 2P', monospace;
+  font-weight: bold;
   text-transform: uppercase;
+  cursor: pointer;
   letter-spacing: 1px;
-  font-size: 0.85rem;
+  box-shadow: 0 3px 0 #111;
   display: flex;
-  justify-content: space-between; /* Para alinear texto e ícono como en filters-toggle */
+  justify-content: space-between;
   align-items: center;
+  margin: 0.5rem auto;
+  max-width: 600px;
 }
+
+/* flecha rotada cuando open */
+.filters-toggle span { transition: transform 0.25s ease; }
+.filters-toggle span.open { transform: rotate(180deg); }
+
+
 
 /* Contenedor desplegable: ahora en flujo normal, empuja contenido abajo */
 .dropdown {
   /* Quitamos position: absolute; top; left; z-index; */
-  background: #000;
-  border: 4px solid #f00; /* Borde rojo retro */
+  background: #1a1a1a;
+  border: 3px solid #c51717;
   min-width: 320px;
   padding: 8px;
   box-sizing: border-box;
