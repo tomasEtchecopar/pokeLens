@@ -187,16 +187,23 @@
 }
 
 .evolution-card app-pokemon-card::ng-deep .card-root,
-.evolution-card app-pokemon-card>* {
+.evolution-card app-pokemon-card > * {
   max-width: 100%;
   box-sizing: border-box;
   pointer-events: auto;
 }
 
-.evolution-card app-pokemon-card {
+/* Escalamos solo la “pantalla” de la card,
+   no todo el componente ni sus ancestros */
+.evolution-card app-pokemon-card .pokedex-screen {
   transform: scale(0.85);
   transform-origin: center;
   margin: -1rem 0;
+}
+
+/* Ajustamos el hover para que mantenga la escala */
+.evolution-card app-pokemon-card .pokedex-screen:hover {
+  transform: scale(0.85) translateY(-2px);
 }
 
 .evolution-card:not(:last-child)::after {
