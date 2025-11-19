@@ -38,14 +38,14 @@ import { PointEvent, User } from '../../../user/user-model';
     </option>
   }
   <option [value]="collections().length + 1">
-    + Nueva equipo
+    + Nuevo equipo
   </option>
 </select>
-            <!--Si elegimos una nueva, se habilita el input  -->
+            <!--Si elegimos una nuevo, se habilita el input  -->
 
 @if (isCreatingNewCollection()) {
   <div class="form-group">
-    <label for="newCollectionName">Nombre de la nueva equipo:</label>
+    <label for="newCollectionName">Nombre de la nuevo equipo:</label>
     <input
       id="newCollectionName"
       type="text"
@@ -295,7 +295,7 @@ export class AddPokemonModal {
   }
 
   private shouldRewardWeeklyCollection(user: User, isNewCollection: boolean, nowIso: string): boolean {
-    if (!isNewCollection) return false; // solo premiamos una nueva equipo
+    if (!isNewCollection) return false; // solo premiamos una nuevo equipo
 
     if (!user.lastCreateCollection) {
       // Nunca se premió una equipo y es la  primera vez
@@ -324,7 +324,7 @@ export class AddPokemonModal {
    * 2. Controla:
    *    - que la equipo no tenga más de 6 Pokémon,
    *    - que el Pokémon no esté repetido en esa equipo,
-   *    - que si es una equipo nueva, tenga nombre.
+   *    - que si es una equipo nuevo, tenga nombre.
    * 3. Llama al backend para agregar el Pokémon a la equipo.
    * 4. Si corresponde, otorga puntos por crear una equipo semanal y registra el evento.
    * 5. Actualiza el usuario activo en memoria y en localStorage.
@@ -383,14 +383,14 @@ export class AddPokemonModal {
     const pointsCollection = 50; //puntos a dar por la creacion de la equipo
     const nowIso = new Date().toISOString(); //Fecha y hora actual
 
-    // Indica si el usuario seleccionó la opción "+ Nueva equipo"
+    // Indica si el usuario seleccionó la opción "+ Nuevo equipo"
     const isNewCollection = this.isCreatingNewCollection();
 
-    // si es una equipo nueva, se le pide ingresar un nombre
+    // si es una equipo nuevo, se le pide ingresar un nombre
     if (isNewCollection) {
       const name = this.newCollectionName().trim();
       if (!name) {
-        this.errorMessage.set('Ingresá un nombre para la nueva equipo.');
+        this.errorMessage.set('Ingresá un nombre para la nuevo equipo.');
         this.isLoading.set(false);
         return;
       }
@@ -404,7 +404,7 @@ export class AddPokemonModal {
           // Usuario devuelto por el backend luego de agregar el pokémon
           let userWithCollections: User = updatedUser;
 
-          // Si se creo una equipo nueva, agregamos el nombre al array de nombres
+          // Si se creo una equipo nuevo, agregamos el nombre al array de nombres
           if (isNewCollection) {
             const names = [...(updatedUser.collectionNames ?? [])];
             const name = this.newCollectionName().trim();
@@ -484,7 +484,7 @@ export class AddPokemonModal {
 
 
   isCreatingNewCollection(): boolean {
-    // si seleccionó el value "length + 1", es la opción "+ Nueva equipo"
+    // si seleccionó el value "length + 1", es la opción "+ Nuevo equipo"
     return this.selectedCollection() === this.collections().length + 1;
   }
 
