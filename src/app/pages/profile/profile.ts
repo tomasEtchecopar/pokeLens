@@ -49,12 +49,12 @@ export class Profile {
     this.isEditing.set(false);
   }
 
-  loadHistory(id: string) {
-    this.points.getHistory(id, Infinity).subscribe(history => {
-      this.history.set(history);
-    });
-    this.history().reverse();
-  }
+loadHistory(id: string) {
+  this.points.getHistory(id, Infinity).subscribe(history => {
+    this.history.set([...history].reverse());
+  });
+}
+
 
   setDefaultAvatar(event: Event) {
     const img = event.target as HTMLImageElement;

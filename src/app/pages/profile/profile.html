@@ -71,3 +71,20 @@
 
 </div>
 
+@if (isAvatarOpen) {
+  <div class="avatar-modal-overlay" (click)="closeAvatar()">
+
+    <div class="avatar-modal" (click)="$event.stopPropagation()">
+
+      @if (usuario(); as u) {
+        <img
+          [src]="u.avatarUrl || 'default.png'"
+          class="avatar-modal-img"
+          (click)="closeAvatar()"          
+          (error)="setDefaultAvatar($event)"
+        />
+      }
+    </div>
+
+  </div>
+}

@@ -169,16 +169,17 @@
   background: #2c2c2c;
   overflow-x: auto;
 }
-
 .vault-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  display: flex;
   gap: 1.5rem;
   min-width: min-content;
+  padding-bottom: 1rem;
+  /* sin overflow acá */
 }
 
 .vault-card-wrapper {
-  position: relative;
+  position: relative;   
+  flex: 0 0 auto;
   display: flex;
   justify-content: center;
 }
@@ -393,3 +394,37 @@
   box-shadow: 2px 2px 0 #1a1a1a;
 }
 
+.avatar-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+
+.avatar-modal {
+  position: relative;
+  background: #111;
+  padding: 0.5rem;
+  border: 3px solid #ffd700;
+  box-shadow: 0 0 0 5px #1a1a1a;
+  max-width: 90vw;
+  max-height: 90vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.avatar-modal-img {
+  max-width: 100%;
+  max-height: 85vh;
+  image-rendering: pixelated;
+  border: 3px solid #000;
+  box-shadow: 3px 3px 0 #000;
+  cursor: pointer; /* indica que se puede cerrar */
+}

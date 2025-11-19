@@ -161,8 +161,8 @@
 }
 
 .btn-header.avatar-btn .avatar {
-  width: 100% !important;
-  height: 100% !important;
+  width: 55% !important;
+  height: 80% !important;
   object-fit: cover !important;
   border-radius: 50% !important;
   display: block !important;

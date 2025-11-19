@@ -91,14 +91,14 @@
 }
 
 .scroll-top-btn {
-  position: absolute;
+  position:absolute;
   right: 1rem;
   bottom: 100%;
-  transform: translateY(-8px);
-  background: #2c2c2c;
+  transform: translateY(-20px);
+  background: #d4303070;
   color: white;
   border: 2px solid #1a1a1a;
-  padding: 0.25rem 0.5rem;
+  padding: 0.3rem 0.5rem;
   font-size: 0.9rem;
   font-family: 'Courier New', monospace;
   font-weight: bold;
@@ -108,7 +108,7 @@
   transition: all 0.2s;
   line-height: 1;
   border-radius: 6px;
-  z-index: 999;
+  z-index: 999;;
 }
 
 .scroll-top-btn:hover {

@@ -9,6 +9,7 @@ import { Contact } from './pages/contact/contact';
 import { UserCollections } from './pages/pokemon-collections/user-collections';
 import { PokemonQuiz } from './pages/pokemon-quiz/pokemon-quiz';
 import { authGuard } from './core/auth-guard';
+import { guestGuard } from './core/guestGuard';
 
 export const routes: Routes = [
     {
@@ -27,11 +28,14 @@ export const routes: Routes = [
     },
     {
         path: 'logIn', component: LogIn,
-        title: 'Log In'
+        title: 'Log In',
+        canActivate: [guestGuard]
+
     },
     {
         path: 'signIn', component: SignIn,
-        title: 'Sign In'
+        title: 'Sign In',
+        canActivate: [guestGuard]
     },
     {
         path: 'profile', component: Profile,
@@ -55,7 +59,8 @@ export const routes: Routes = [
     {
         path: 'contact', component: Contact,
         title: 'Contacto'
-    }, {
+    },
+    {
         path: 'quiz', component: PokemonQuiz,
         title: 'Quiz Pokemon'
     },
