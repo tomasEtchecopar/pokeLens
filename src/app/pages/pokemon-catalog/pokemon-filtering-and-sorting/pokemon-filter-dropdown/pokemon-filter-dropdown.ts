@@ -12,6 +12,7 @@ import { FormsModule } from '@angular/forms';
 })
 export class PokemonFilterDropdown {
   private readonly filtersTranslations = inject(PokemonFiltersTranslation);
+    filtersOpen = signal(false);
 
   // Input con valor por defecto
   currentFilters = input<FilterOptions>({});
@@ -43,6 +44,10 @@ export class PokemonFilterDropdown {
         this.maxWeight.set(filters.maxWeight ? filters.maxWeight / 10 : null);
       }
     });
+  }
+
+  toggleFilters() {
+    this.filtersOpen.set(!this.filtersOpen());
   }
 
   private emit(): void {

@@ -12,12 +12,12 @@ export interface User {
   age: number;
   mail: string;
   password: string;
-  pokemonVault?: pokemonVault[][];
-  collectionNames?:string[];
   pokemonId?: number;
   avatarUrl?: string;
   points?: number;
-  lastLoginDate?: string ;
+  lastLoginDate?: string;
   lastCreateCollection?: string | null;
+  pokemonVault?: pokemonVault[][];
+  collectionNames?: string[];
   pointsHistory?: PointEvent[];
 }

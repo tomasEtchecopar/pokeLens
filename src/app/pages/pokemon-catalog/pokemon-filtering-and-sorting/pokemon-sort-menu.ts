@@ -59,34 +59,50 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
     </div>
   `,
 styles: [`
-.sort-menu { position: relative; display: inline-block; font-family: 'Press Start 2P', monospace; font-size: 0.8rem; color: #fff; }
+/* -------- SortMenu - Retro 8-Bit con Botón Centrado y Desplegable que Empuja Abajo -------- */
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
 
-/* Botón principal: revertido al original */
+.sort-menu {
+  position: relative; /* Mantenemos relative para posibles absolutos internos si necesitas */
+  display: block; /* Para centrar con margin auto */
+  margin: 1rem auto; /* Centra horizontalmente */
+  max-width: 600px; /* Ancho máximo como en tu filters-toggle */
+  font-family: 'Press Start 2P', monospace;
+  font-size: 0.8rem;
+  color: #fff;
+}
+
+/* Botón principal: ancho completo, centrado, inspirado en filters-toggle */
 .sort-button {
+  width: 100%; /* Ocupa todo el ancho del .sort-menu */
   background: linear-gradient(180deg,#3a3a3a,#2d2d2d);
   color: #FFF;
   border: 3px solid #1a1a1a;
-  padding: 0.5rem 0.75rem;
+  padding: 0.8rem 1rem; /* Padding similar a filters-toggle */
   cursor: pointer;
-  box-shadow: 2px 2px 0 #1a1a1a;
+  box-shadow: 2px 2px 0 #1a1a1a; /* Sombra original */
   font-weight: 900;
   text-transform: uppercase;
   letter-spacing: 1px;
   font-size: 0.85rem;
+  display: flex;
+  justify-content: space-between; /* Para alinear texto e ícono como en filters-toggle */
+  align-items: center;
 }
 
-/* Contenedor desplegable: como un sprite框 */
+/* Contenedor desplegable: ahora en flujo normal, empuja contenido abajo */
 .dropdown {
-  position: absolute;
-  top: calc(100% + 4px);
-  left: 0;
-  background: linear-gradient(180deg, #2c2c2c 0%, #262626 100%);
-  border: 4px solid #f00; /* red border like game UI */
+  /* Quitamos position: absolute; top; left; z-index; */
+  background: #000;
+  border: 4px solid #f00; /* Borde rojo retro */
   min-width: 320px;
-  z-index: 100;
   padding: 8px;
   box-sizing: border-box;
   image-rendering: pixelated;
+  margin-top: 1rem; /* Separación del botón */
+  margin-left: auto; /* Para alinear con el centro si es necesario */
+  margin-right: auto;
+  max-width: 600px; /* Mismo ancho max que el botón */
 }
 
 /* Layout interno: grid-like */
@@ -141,7 +157,7 @@ input[type="radio"]:checked + .radio-label {
   color: #fff;
 }
 
-/* Acciones: botones revertidos al original */
+/* Acciones: botones originales */
 .actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; }
 .apply, .clear {
   background: linear-gradient(180deg,#3a3a3a,#2d2d2d);
@@ -155,8 +171,11 @@ input[type="radio"]:checked + .radio-label {
 }
 .apply[disabled], .clear[disabled] { opacity: 0.45; cursor: not-allowed; }
 
-/* Responsive: keep it simple, 8-bit didn't resize much */
-@media (max-width: 720px) { .dropdown { min-width: 280px; } }
+/* Responsive: ajusta para móviles */
+@media (max-width: 720px) {
+  .sort-menu, .dropdown { max-width: 100%; margin-left: 0; margin-right: 0; }
+  .dropdown { min-width: auto; }
+}
 @media (max-width: 520px) { .dropdown-inner { flex-direction: column; } .divider { display: none; } }
 `]
 })

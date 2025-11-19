@@ -11,3 +11,8 @@ git add .
 git commit -m ""
 git push origin feature/login
 --------------------------
+
+restarurar ultimo pull
+git checkout feature/login
+git fetch
+git reset --hard origin/feature/login

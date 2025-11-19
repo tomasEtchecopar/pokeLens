@@ -7,7 +7,8 @@
     @if (usuario(); as u) {
 
     <div class="profile-row">
-      <img [src]="u.avatarUrl || 'default.png'" alt="avatar" class="avatar-lg" (error)="setDefaultAvatar($event)" />
+      <img [src]="u.avatarUrl || 'default.png'" alt="avatar" class="avatar-lg" (click)="openAvatar()"
+        (error)="setDefaultAvatar($event)" />
       <div>
         <p><strong>UserName:</strong> {{ u.username }}</p>
         <p><strong>Email:</strong> {{ u.mail }}</p>
@@ -28,9 +29,9 @@
     </div>
     <br>
 
-  <div class="points-header">
-  <h3>Historial de puntos</h3>
-</div>
+    <div class="points-header">
+      <h3>Historial de puntos</h3>
+    </div>
 
     <div class="points-scroll">
       <table class="points-table">
@@ -75,4 +76,8 @@
   <app-sign-in [client]="usuario()" [(isEditing)]="isEditing"></app-sign-in>
   }
 
+</div>
+<!-- Modal de avatar -->
+<div class="avatar-modal" (click)="closeAvatar()" [class.open]="isAvatarOpen">
+  <img [src]="usuario()?.avatarUrl || 'default.png'" alt="avatar grande">
 </div>

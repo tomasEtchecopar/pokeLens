@@ -1,5 +1,6 @@
 import { Component, inject, input, model, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { PointEvent } from '../../user/user-model';
 import { UserClient } from '../../core/sign-in.service';
 import { User } from '../../user/user-model';
 import { AuthServ } from '../../core/auth.service';
@@ -120,11 +121,16 @@ export class SignIn implements OnInit {
 
     //  EDITAR PERFIL
     if (this.isEditing()) {
-      const current = this.client();
+      const current = this.auth.activeUser();
       if (!current?.id) { alert('No se encontró el usuario a editar'); return; }
 
-      const updated: User = { ...current, ...datosUser, id: current.id };
-
+      const updated: User = {
+        ...current,         // conserva puntos, historial, avatar, colecciones
+        ...datosUser,       // solo lo editable
+        id: current.id,
+        points: current.points ?? 0,
+        pointsHistory: current.pointsHistory ?? []
+      };
       this.users.updateUser(updated, current.id).subscribe({
         // sincronizar sesión para que header/profile se actualicen
         next: (res) => {
@@ -160,8 +166,25 @@ export class SignIn implements OnInit {
           next: (createdUser) => {
 
             alert(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
-            this.auth.activeUser.set(createdUser);
-            localStorage.setItem('activeUser', JSON.stringify(createdUser));
+
+            const event: PointEvent = {
+              amount: puntos,
+              reason: 'Puntos de Bienvenida! Que los disfrutes! ',
+              date: new Date().toISOString()
+            }
+            this.points.addHistory(createdUser, event).subscribe({
+              next: (userWithHistory) => {
+                console.log('Puntos de bienvenida registrados correctamente');
+                this.auth.activeUser.set(userWithHistory);
+                localStorage.setItem('activeUser', JSON.stringify(userWithHistory));
+              },
+              error: () => {
+                console.error('Error al registrar puntos de bienvenida');
+                this.auth.activeUser.set(createdUser);
+                localStorage.setItem('activeUser', JSON.stringify(createdUser));
+              }
+            });
+
 
             this.form.reset({ username: '', age: undefined, mail: '', password: '' });
             this.emailTaken = false;

@@ -82,36 +82,37 @@ export class PointsService {
    * @param reason2 (opcional) Para que no genere un alerta, pero se registre el motivo de los puntos
    * ambos reason pueden ser undefined, si se desea un alert se debe pasar en reason, sino en reason2
    */
-addPoints(user: User, amount: number, reason?: string, reason2?: string): Observable<User> {
-  if (!user.id) return of(user);
+  addPoints(user: User, amount: number, reason?: string, reason2?: string): Observable<User> {
+    if (!user.id) return of(user);
 
-  const updated: User = {
-    ...user,
-    points: (user.points ?? 0) + amount
-  };
+    const updated: User = {
+      ...user,
+      points: (user.points ?? 0) + amount,
+      pointsHistory: user.pointsHistory ?? []   
+    };
 
-  if (reason) {
-    return this.alertAddPoints(updated, user.id, reason);
-  } else {
-    return this.notAlertAddPoints(updated, user.id, reason2 ?? '');
+    if (reason) {
+      return this.alertAddPoints(updated, user.id, reason);
+    } else {
+      return this.notAlertAddPoints(updated, user.id, reason2 ?? '');
+    }
   }
-}
 
-alertAddPoints(user: User, id: string, reason: string): Observable<User> {
-  return this.http.put<User>(`${this.baseUrl}/${id}`, user).pipe(
-    tap(() => {
-      alert(reason);
-    })
-  );
-}
+  alertAddPoints(user: User, id: string, reason: string): Observable<User> {
+    return this.http.put<User>(`${this.baseUrl}/${id}`, user).pipe(
+      tap(() => {
+        alert(reason);
+      })
+    );
+  }
 
-notAlertAddPoints(user: User, id: string, reason2: string): Observable<User> {
-  return this.http.put<User>(`${this.baseUrl}/${id}`, user).pipe(
-    tap((updatedUser) => {
-      console.log(`Puntos actualizados (${reason2}) — total: ${updatedUser.points}`);
-    })
-  );
-}
+  notAlertAddPoints(user: User, id: string, reason2: string): Observable<User> {
+    return this.http.put<User>(`${this.baseUrl}/${id}`, user).pipe(
+      tap((updatedUser) => {
+        console.log(`Puntos actualizados (${reason2}) — total: ${updatedUser.points}`);
+      })
+    );
+  }
 
 
 
