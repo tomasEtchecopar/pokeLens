@@ -1,162 +1,168 @@
-/* Contenedor padre */
 .father {
+  width: 100%;
+  max-width: 1100px;
+  margin: 1.5rem auto;
   padding: 1rem;
-  padding-top: 50px;
-}
-.father.father-edit {
-  padding-top: 0px;    
-}
-
-/* Panel principal estilo Pokédex pero con fondo BLANCO */
-.child {
-  background: #fff;
-  border: 4px solid #1a1a1a;
-  border-radius: 12px;
+  background: linear-gradient(180deg, #2c2c2c 0%, #262626 100%);
+  border: 4px solid #5f0b0b;
   box-shadow:
-    inset 0 0 0 3px #d43030,
-    4px 4px 0 #1a1a1a;
-  padding: 1.5rem;
-  color: #2c2c2c;
+    inset 2px 2px 0 #3a3a3a,
+    6px 6px 0 #1a1a1a;
+  color: #fff;
+  font-family: Inter, "Courier New", monospace;
+  box-sizing: border-box;
 }
 
-/* Título del perfil */
+.father-edit {
+  border-color: #ffd700;
+}
+
 .child h2 {
+  margin: 0;
   font-family: 'Press Start 2P', monospace;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
+  color: #fff;
+  text-shadow: 2px 2px 0 #111;
   text-transform: uppercase;
+  text-align: center;
+  margin-bottom: 1rem;
   letter-spacing: 2px;
-  color: #d43030;
-  text-shadow: 2px 2px #1a1a1a;
-  margin-bottom: 1.5rem;
 }
 
-/* Fila del perfil */
+/* FILA DE PERFIL */
 .profile-row {
   display: flex;
+  gap: 1rem;
   align-items: center;
-  gap: 1.5rem;
-}
-
-/* Avatar */
-.avatar-lg {
-  width: 110px;
-  height: 110px;
-  border-radius: 6px;        /* Ya NO es redondo */
-  border: 2px solid #1a1a1a; /* Borde más fino */
-  box-shadow: none;          /* SIN sombra pixelada */
-  object-fit: cover;
-  background: #eee;          /* Fondo gris claro por si tarda en cargar */
-}
-
-/* Texto de datos del usuario */
-.child p {
-  margin: 0.3rem 0;
-  font-size: 1rem;
-  font-family: 'Courier New', monospace;
-  color: #1a1a1a;
-  font-weight: 600;
-}
-
-.child strong {
-  color: #d43030;
-  text-shadow: 1px 1px #1a1a1a;
-  font-weight: 900;
-}
-
-/* Botones - mismo estilo Pokédex */
-.actions {
-  margin-top: 1.5rem;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
-.btn {
-  background: #2c2c2c;
-  border: 3px solid #1a1a1a;
-  color: #fff;
-  padding: 0.6rem 1.2rem;
-  font-family: 'Courier New', monospace;
-  font-weight: 900;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  cursor: pointer;
-  transition: all 0.1s ease;
-  font-size: 0.85rem;
+  padding: 0.8rem;
+  background: linear-gradient(180deg,#3b3b3b,#2f2f2f);
+  border: 2px solid #111;
   box-shadow: 2px 2px 0 #1a1a1a;
 }
 
-.btn:hover {
-  background: #3a3a3a;
-  transform: translate(1px, 1px);
-  box-shadow: 1px 1px 0 #1a1a1a;
+.avatar-lg {
+  width: 96px;
+  height: 96px;
+  border: 3px solid #1a1a1a;
+  box-shadow: 3px 3px 0 #111;
+  image-rendering: pixelated;
 }
 
-.btn:active {
-  transform: translate(2px, 2px);
-  box-shadow: 0 0 0 #1a1a1a;
+.profile-row p {
+  margin: 0.2rem 0;
+  font-size: 0.9rem;
+  font-weight: 700;
 }
 
-/* Título del historial */
-.points-header {
-  margin-top: 1.5rem;
-  margin-bottom: 0.5rem;
+.profile-row strong {
+  color: #ffd700;
 }
 
-.points-header h3 {
+/* ACCIONES */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.75rem;
+}
+
+.actions .btn {
+  background: linear-gradient(180deg, #3a3a3a, #2d2d2d);
+  border: 3px solid #1a1a1a;
+  box-shadow:
+    inset 1px 1px 0 #4a4a4a,
+    3px 3px 0 #111;
+  color: #ffd700;
+  font-weight: 900;
+  font-size: 0.75rem;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 0.5rem 0.75rem;
   font-family: 'Press Start 2P', monospace;
-  font-size: 1rem;
-  letter-spacing: 1px;
-  color: #2c2c2c;
+  cursor: pointer;
+  transition: all 0.15s ease;
 }
 
-/* Contenedor scroll del historial */
+.actions .btn:hover {
+  background: linear-gradient(180deg, #4a4a4a, #3d3d3d);
+  transform: translate(1px, 1px);
+  box-shadow:
+    inset 1px 1px 0 #5a5a5a,
+    2px 2px 0 #111;
+}
+
+.actions .btn:active {
+  transform: translate(2px, 2px);
+  box-shadow:
+    inset 1px 1px 0 #2a2a2a,
+    1px 1px 0 #111;
+}
+
+/* HEADER HISTORIAL */
+.points-header h3 {
+  margin: 0.5rem 0;
+  text-align: center;
+  font-size: 0.85rem;
+  font-weight: 900;
+  color: #ffd700;
+  text-transform: uppercase;
+  font-family: 'Press Start 2P', monospace;
+  text-shadow: 1px 1px 0 #111;
+}
+
+/* SCROLL DE PUNTOS */
 .points-scroll {
-  max-height: 250px;
+  max-height: 220px;
   overflow-y: auto;
-  overflow-x: hidden;
-  border: 2px solid #1a1a1a;
-  margin-top: 0.5rem;
+  border: 2px solid #111;
   background: #2c2c2c;
+  box-shadow: 2px 2px 0 #1a1a1a;
 }
 
-/* Tabla de puntos */
 .points-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'Courier New', monospace;
-  color: white;
-}
-
-/* Cabecera fija dentro del scroll */
-.points-table thead tr th {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: #d43030;
+  font-size: 0.8rem;
 }
 
 .points-table th {
-  padding: 0.5rem;
-  border-bottom: 3px solid #1a1a1a;
-  text-align: left;
-  font-weight: bold;
+  background: #3a3a3a;
+  border: 2px solid #111;
+  padding: 0.4rem;
+  font-weight: 900;
+  color: #ffd700;
+  text-transform: uppercase;
+  font-size: 0.65rem;
+  letter-spacing: 1px;
 }
 
 .points-table td {
-  padding: 0.5rem;
-  border-bottom: 1px solid #444;
+  border: 2px solid #111;
+  padding: 0.4rem;
 }
 
-/* Hover filas con datos */
-.points-table tbody tr:hover {
+.col-amount {
+  font-weight: 900;
+  color: #22c55e;
+}
+
+.empty-row {
+  text-align: center;
+  color: rgba(255,255,255,0.6);
+  font-style: italic;
+}
+
+/* SCROLL CUSTOM */
+.points-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.points-scroll::-webkit-scrollbar-track {
   background: #1a1a1a;
 }
 
-/* Fila de "sin movimientos" SOLO dentro de la tabla */
-.points-table .empty-row {
-  text-align: center;
-  font-style: italic;
-  opacity: 0.8;
-  border-bottom: none;
+.points-scroll::-webkit-scrollbar-thumb {
+  background: #ffd700;
+  border-radius: 2px;
 }

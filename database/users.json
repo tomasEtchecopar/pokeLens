@@ -322,16 +322,10 @@
       "pokemonId": 533,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/533.png",
       "points": 50,
-      "lastLoginDate": "2025-11-18T15:23:41.171Z",
+      "lastLoginDate": "2025-11-19T02:59:06.980Z",
       "lastCreateCollection": "2025-11-18T15:23:49.899Z",
-      "pokemonVault": [
-        [],
-        []
-      ],
-      "collectionNames": [
-        "col1",
-        "asd"
-      ],
+      "pokemonVault": [],
+      "collectionNames": [],
       "pointsHistory": [
         {
           "amount": 50,
