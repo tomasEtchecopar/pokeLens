@@ -7,6 +7,8 @@
         <p>No se encontraron resultados...</p>
         }
         <app-pokemon-filter-dropdown [currentFilters]="currentFilters()"(filterUpdate)="applyFilters($event)"></app-pokemon-filter-dropdown>
+
+        <pokemon-sort-menu ></pokemon-sort-menu>
     </div>
 
 

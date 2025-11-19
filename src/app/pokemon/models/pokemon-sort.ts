@@ -1,7 +1,7 @@
-export type SortKey = 'id' | 'name' | 'height' | 'weight' | 'base_experience' | 'total_stats';
-export type SortDir = 'asc' | 'desc';
+export type Sort= 'id' | 'name' | 'height' | 'weight' | 'generation';
+export type SortDirection = 'asc' | 'desc';
 
 export interface SortOption {
-  key: SortKey;
-  dir: SortDir;
+  key: Sort;
+  dir: SortDirection;
 }

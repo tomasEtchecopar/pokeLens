@@ -10,10 +10,11 @@ import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
 import { PokemonFilterService } from './pokemon-filtering-and-sorting/pokemon-filter-service';
 import { FilterOptions } from '../../pokemon/models/pokemon-filters';
 import { PokemonFilterDropdown } from './pokemon-filtering-and-sorting/pokemon-filter-dropdown/pokemon-filter-dropdown';
+import { PokemonSortMenu } from './pokemon-filtering-and-sorting/pokemon-sort-menu';
 
 @Component({
   selector: 'app-pokemon-catalog',
-  imports: [ReactiveFormsModule, PokemonCard, SearchBar, PokemonFilterDropdown],
+  imports: [ReactiveFormsModule, PokemonCard, SearchBar, PokemonFilterDropdown, PokemonSortMenu],
   templateUrl: './pokemon-catalog.html',
   styleUrl: './pokemon-catalog.css'
 })
@@ -96,6 +97,8 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy{
   onSearch(term: string){
     this.pokemonSearch.search(term);
   }
+
+
 
   applyFilters(filters: FilterOptions){
     console.log("detected event on filter buttons");
