@@ -185,7 +185,6 @@
   justify-content: center;
 }
 
-/* Pokeball Delete Button */
 .pokeball-btn {
   position: absolute;
   top: -8px;
@@ -194,7 +193,6 @@
   height: 36px;
   background: #5f0b0b;
   border: 2px solid #1a1a1a;
-  border-radius: 50%;
   cursor: pointer;
   transition: all 0.1s ease;
   z-index: 10;
@@ -203,57 +201,46 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  font-family: 'Courier New', monospace;
+  font-size: 1.6rem;
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
 }
 
 .pokeball-btn:hover {
   background: #7f0f0f;
-  transform: scale(1.1);
-  box-shadow: 3px 3px 0 #1a1a1a;
-}
-
-.pokeball-btn:active {
-  transform: scale(0.95);
+  transform: translate(1px, 1px) scale(1.05);
   box-shadow: 1px 1px 0 #1a1a1a;
 }
 
-/* Pokeball Icon */
-.pokeball {
-  width: 20px;
-  height: 20px;
-  position: relative;
-  border-radius: 50%;
-  overflow: hidden;
+.pokeball-btn:active {
+  transform: translate(2px, 2px) scale(0.95);
+  box-shadow: 0 0 0 #1a1a1a;
+  background: #3f0505;
 }
 
-.pokeball-top {
+
+/* Cruz creada con pseudo-elementos */
+.pokeball-btn::before,
+.pokeball-btn::after {
+  content: '';
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
   background: #fff;
 }
 
-.pokeball-bottom {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 50%;
-  background: #fff;
+/* Línea diagonal \ */
+.pokeball-btn::before {
+  width: 3px;
+  height: 18px;
+  transform: rotate(45deg);
 }
 
-.pokeball-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 8px;
-  height: 8px;
-  background: #fff;
-  border: 2px solid #1a1a1a;
-  border-radius: 50%;
-  z-index: 1;
+/* Línea diagonal / */
+.pokeball-btn::after {
+  width: 3px;
+  height: 18px;
+  transform: rotate(-45deg);
 }
 
 .edit-nickname-btn {
@@ -262,13 +249,14 @@
   right: 36px;
   width: 36px;
   height: 36px;
+  z-index: 10;
   font-size: 1rem;            /* ajustar */
   line-height: 1;
   background: #ffffff;
   border: 3px solid #1a1a1a;
   box-shadow: 2px 2px 0 #1a1a1a;
-  width: 34px;
-  height: 34px;
+  width: 36px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;

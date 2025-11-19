@@ -369,14 +369,9 @@
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/533.png",
       "points": 55,
       "lastLoginDate": "2025-11-19T02:59:06.980Z",
-      "lastCreateCollection": "2025-11-02T15:23:49.899Z",
+      "lastCreateCollection": "2025-11-18T15:23:49.899Z",
       "pokemonVault": [
         [
-          {
-            "arrayId": 0,
-            "idPokemon": 751,
-            "name": "dewpider"
-          },
           {
             "arrayId": 1,
             "idPokemon": 3,
@@ -387,12 +382,6 @@
             "idPokemon": 5,
             "name": "charmeleon",
             "nickname": "hola"
-          },
-          {
-            "arrayId": 3,
-            "idPokemon": 6,
-            "name": "charizard",
-            "nickname": "asd"
           },
           {
             "arrayId": 4,
@@ -412,7 +401,7 @@
       "pointsHistory": [
         {
           "amount": 50,
-          "reason": "Puntos por crear equipo semanal",
+          "reason": "Puntos por crear colección semanal",
           "date": "2025-11-18T15:23:49.899Z"
         },
         {
