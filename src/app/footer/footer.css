@@ -3,7 +3,7 @@
   max-height: 75px;
   padding: 0 2rem;
 
-  background: #271c1c9d;
+  background: #d4303070;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -36,7 +36,7 @@
   font-weight: 900;
   font-size: 1.4rem;
   color: white;
-  text-shadow: 3px 3px 0px #1a1a1a;
+  text-shadow: 2px 2px 0px #1a1a1a;
 }
 
 .rights {
@@ -44,7 +44,7 @@
   color: white;
   font-size: 0.85rem;
   opacity: 0.8;
-  text-shadow: 2px 2px 0px #1a1a1a;
+  text-shadow: 1px 1px 0px #1a1a1a;
 }
 
 /* Botones (reutilizando estilo del header) */
@@ -97,7 +97,7 @@
   right: 1rem;          /* pegado al borde derecho */
   bottom: 100%;         /* ← esto lo pone encima del footer */
   transform: translateY(-8px);  /* lo separa visualmente */
-  
+
   background: #2c2c2c;
   color: white;
   border: 2px solid #1a1a1a;
