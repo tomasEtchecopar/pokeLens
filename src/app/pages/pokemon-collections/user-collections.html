@@ -36,6 +36,15 @@
     </div>
 
     <div class="collection-scroll">
+      @if (col.length === 0) {
+      <div class="empty-collection-card">
+        <button class="empty-collection-card big-empty-btn" (click)="goToCatalog()">
+          <p><strong>Esta colección está vacía.</strong></p>
+          <p>Agregá Pokémon para verlos aquí.</p>
+        </button>
+
+      </div>
+      }
       <div class="vault-grid">
 
         @for (entry of col; track entry.arrayId) {

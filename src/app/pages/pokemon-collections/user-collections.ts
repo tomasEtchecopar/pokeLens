@@ -291,4 +291,8 @@ export class UserCollections {
     const value = (event.target as HTMLInputElement).value;
     this.editingName.set(value);
   }
+  goToCatalog() {
+    this.router.navigateByUrl('/catalogo');
+  }
+
 }

@@ -321,3 +321,48 @@
     padding: 0.3rem 0.6rem;
   }
 }
+/* Tarjeta cuando la colección está vacía */
+.empty-collection-card {
+  background: #2c2c2c;
+  border: 3px solid #1a1a1a;
+  padding: 2rem;
+  margin: 1.5rem 0;
+  text-align: center;
+  color: #9dbc9b;
+  font-family: 'Courier New', monospace;
+  font-size: 1.1rem;
+  font-weight: 700;
+  box-shadow: inset 2px 2px 0 #3a3a3a, 3px 3px 0 #1a1a1a;
+  border-radius: 6px;
+}
+
+.empty-collection-card strong {
+  color: #b0d0ae;
+  font-size: 1.2rem;
+}
+.big-empty-btn {
+  cursor: pointer;
+  width: 100%;
+  text-align: center;
+
+  border: none;
+  background: none;
+  padding: 0;
+
+  display: block;
+  padding: 1rem;
+  margin: 1rem auto;
+
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.big-empty-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 4px 4px 0 #1a1a1a;
+}
+
+.big-empty-btn:active {
+  transform: translateY(0);
+  box-shadow: 2px 2px 0 #1a1a1a;
+}
+

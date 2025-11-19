@@ -41,11 +41,11 @@
 .avatar-lg {
   width: 110px;
   height: 110px;
-  border-radius: 6px;        /* Ya NO es redondo */
-  border: 2px solid #1a1a1a; /* Borde más fino */
-  box-shadow: none;          /* SIN sombra pixelada */
+  border-radius: 6px;        
+  border: 2px solid #1a1a1a; 
+  box-shadow: none;         
   object-fit: cover;
-  background: #eee;          /* Fondo gris claro por si tarda en cargar */
+  background: #eee;          
 }
 
 /* Texto de datos del usuario */
