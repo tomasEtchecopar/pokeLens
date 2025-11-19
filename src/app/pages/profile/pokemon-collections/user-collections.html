@@ -30,6 +30,10 @@
         {{ collectionAverages()[i] || 0 }}
       </p>
 
+      <p class="team-length">
+        <strong>{{col.length}}/6</strong>
+      </p>
+
       <button class="btn-delete-collection" (click)="deleteCollection(i)" title="Eliminar equipo completa">
         Eliminar equipo
       </button>

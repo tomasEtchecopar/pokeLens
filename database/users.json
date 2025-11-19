@@ -367,7 +367,7 @@
       "password": "asd",
       "pokemonId": 533,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/533.png",
-      "points": 55,
+      "points": 60,
       "lastLoginDate": "2025-11-19T02:59:06.980Z",
       "lastCreateCollection": "2025-11-18T15:23:49.899Z",
       "pokemonVault": [
@@ -392,6 +392,16 @@
             "arrayId": 5,
             "idPokemon": 11,
             "name": "metapod"
+          },
+          {
+            "arrayId": 6,
+            "idPokemon": 751,
+            "name": "dewpider"
+          },
+          {
+            "arrayId": 7,
+            "idPokemon": 75,
+            "name": "graveler"
           }
         ]
       ],
@@ -408,6 +418,11 @@
           "amount": 5,
           "reason": "Respuesta correcta en el Quiz Pokémon",
           "date": "2025-11-19T03:58:12.691Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T14:59:48.882Z"
         }
       ]
     },
