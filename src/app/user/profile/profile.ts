@@ -72,7 +72,7 @@ export class Profile {
 
     const gained = this.points.randomPoints();
 
-    this.points.addPoints(user, gained, `Prueba: se otorgaron ${gained} puntos`,undefined)
+    this.points.addPoints(user, gained, `Prueba: se otorgaron ${gained} puntos`, undefined)
       .subscribe(updatedUser => {
 
         const event: PointEvent = {
@@ -88,4 +88,15 @@ export class Profile {
 
       });
   }
+
+  isAvatarOpen = false;
+
+  openAvatar() {
+    this.isAvatarOpen = true;
+  }
+
+  closeAvatar() {
+    this.isAvatarOpen = false;
+  }
+
 }

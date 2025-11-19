@@ -49,3 +49,22 @@ body {
     font-size: 0.9rem;
   }
 }
+/* Franja invisible que activa el footer */
+.footer-hotzone {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 20px;         /* grosor de la “zona” */
+  z-index: 89;         /* debajo del footer */
+}
+
+/* Mostrar footer cuando el mouse está en la hotzone */
+.footer-hotzone:hover ~ app-footer .footer-bar {
+  bottom: 0;
+}
+
+/* Mantenerlo visible mientras el mouse está sobre el footer */
+app-footer:hover .footer-bar {
+  bottom: 0;
+}

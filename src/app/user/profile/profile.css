@@ -160,3 +160,43 @@
   opacity: 0.8;
   border-bottom: none;
 }
+/* Modal del avatar */
+.avatar-modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+  z-index: 999;
+}
+
+/* Cuando se abre */
+.avatar-modal.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* Imagen grande */
+.avatar-modal img {
+  width: 320px;      /* Podés cambiarlo a lo que quieras */
+  height: auto;
+  border: 4px solid #fff;
+  border-radius: 8px;
+  box-shadow: 0 0 20px #000;
+  animation: zoomIn 0.25s ease;
+}
+
+@keyframes zoomIn {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

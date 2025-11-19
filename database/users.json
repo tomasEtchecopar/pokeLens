@@ -8,7 +8,7 @@
       "password": "pikachu",
       "pokemonId": 25,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png",
-      "points": 620,
+      "points": 680,
       "lastLoginDate": "2025-11-18T20:21:33.046Z",
       "pointsHistory": [
         {
@@ -265,6 +265,66 @@
           "amount": 5,
           "reason": "Respuesta correcta en el Quiz Pokémon",
           "date": "2025-11-18T19:24:06.024Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:22:45.702Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:22:55.100Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:22:57.356Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:23:05.396Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:23:07.368Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:23:13.264Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:23:26.578Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:23:28.502Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:23:31.526Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:23:32.908Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:23:40.497Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:23:46.058Z"
         }
       ],
       "pokemonVault": [
@@ -337,6 +397,73 @@
           "amount": 50,
           "reason": "Puntos por crear colección semanal",
           "date": "2025-11-18T15:23:49.899Z"
+        }
+      ]
+    },
+    {
+      "id": "8fbb",
+      "username": "adrian",
+      "age": 31,
+      "mail": "adriannggonzalez@gmail.com",
+      "password": "1234",
+      "pokemonId": 304,
+      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/304.png",
+      "points": 114,
+      "lastLoginDate": "2025-11-19T01:59:41.748Z",
+      "lastCreateCollection": "2025-11-19T02:01:46.075Z",
+      "pokemonVault": [
+        [
+          {
+            "arrayId": 0,
+            "idPokemon": 751,
+            "name": "dewpider",
+            "nickname": "adasdasd"
+          }
+        ]
+      ],
+      "collectionNames": [
+        "alksdñas"
+      ],
+      "pointsHistory": [
+        {
+          "amount": 12,
+          "reason": "Puntos de Bienvenida! Que los disfrutes! ",
+          "date": "2025-11-19T01:59:43.151Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T01:59:49.527Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T02:00:02.655Z"
+        },
+        {
+          "amount": 50,
+          "reason": "Puntos por crear colección semanal",
+          "date": "2025-11-19T02:01:46.075Z"
+        },
+        {
+          "amount": 6,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-19T02:02:59.909Z"
+        },
+        {
+          "amount": 16,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-19T02:03:06.645Z"
+        },
+        {
+          "amount": 19,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-19T02:03:08.939Z"
+        },
+        {
+          "amount": 1,
+          "reason": "Estamos probando el sistema",
+          "date": "2025-11-19T02:03:10.071Z"
         }
       ]
     }
