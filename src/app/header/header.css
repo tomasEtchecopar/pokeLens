@@ -18,10 +18,15 @@
   align-items: center;
   text-decoration: none;
   transition: transform 0.2s ease-in-out;
+  position: absolute;
+  /* Posicionamiento absoluto para centrar */
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .logo-link:hover {
-  transform: translateY(-2px);
+  transform: translate(-50%, -2px);
+  /* Ajustado para mantener centrado en hover */
 }
 
 .logo {
@@ -49,7 +54,7 @@
   flex: 1;
 }
 
-.header-buttons {
+.header-right {
   display: flex;
   gap: 1rem;
 }
@@ -79,6 +84,23 @@
   box-shadow: 0 1px 0 #0a0a0a;
 }
 
+.btn-header[disabled] {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: #2c2c2c;
+  /* Mantiene el fondo original, pero puedes ajustarlo */
+  color: #999;
+  /* Texto gris para indicar desactivado */
+}
+
+.btn-header[disabled]:hover {
+  background: #2c2c2c;
+  /* Evita cambios en hover */
+  transform: none;
+  box-shadow: 0 2px 0 #1a1a1a;
+  /* Restaura sombra base */
+}
+
 /* Responsive */
 @media (max-width: 768px) {
   .header-container {
@@ -86,6 +108,18 @@
     flex-direction: column;
     text-align: center;
     gap: 0.75rem;
+  }
+
+  .logo-link {
+    position: static;
+    /* Vuelve a posicionamiento normal en mobile */
+    transform: none;
+    /* Elimina translate en mobile */
+  }
+
+  .logo-link:hover {
+    transform: translateY(-2px);
+    /* Hover normal en mobile */
   }
 
   .logo {
@@ -143,6 +177,7 @@
   transform: translateY(-2px);
   box-shadow: 0 4px 0 #0a0a0a;
 }
+
 .btn-header.avatar-btn:active {
   transform: translateY(1px);
   box-shadow: 0 1px 0 #0a0a0a;

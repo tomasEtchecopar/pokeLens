@@ -34,7 +34,7 @@ export class Profile {
   }
 
   backToCatalog() {
-    this.router.navigateByUrl('/catalogo');
+    this.router.navigateByUrl('/catalog');
   }
 
   goToCollections() {
@@ -49,11 +49,11 @@ export class Profile {
     this.isEditing.set(false);
   }
 
-  //Carga los últimos 10 eventos de puntos
   loadHistory(id: string) {
     this.points.getHistory(id, Infinity).subscribe(history => {
       this.history.set(history);
     });
+    this.history().reverse();
   }
 
   setDefaultAvatar(event: Event) {
@@ -61,33 +61,6 @@ export class Profile {
     img.src = 'default.png';
   }
 
-  metodoPruebaSumarPuntos() {
-    const today = new Date();
-    const user = this.usuario();
-
-    if (!user) {
-      alert("No hay usuario logueado");
-      return;
-    }
-
-    const gained = this.points.randomPoints();
-
-    this.points.addPoints(user, gained, `Prueba: se otorgaron ${gained} puntos`, undefined)
-      .subscribe(updatedUser => {
-
-        const event: PointEvent = {
-          amount: gained,
-          reason: "Estamos probando el sistema",
-          date: today.toISOString()
-        };
-
-        this.points.addHistory(updatedUser, event).subscribe(finalUser => {
-          this.auth.activeUser.set(finalUser);
-          localStorage.setItem('activeUser', JSON.stringify(finalUser));
-        });
-
-      });
-  }
 
   isAvatarOpen = false;
 

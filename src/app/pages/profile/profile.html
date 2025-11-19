@@ -23,9 +23,7 @@
 
     <div class="actions">
       <button class="btn" (click)="isEditing.set(true)">Editar perfil</button>
-      <button class="btn" (click)="backToCatalog()">Volver al catálogo</button>
       <button class="btn" (click)="goToCollections()">Ver mis equipos</button>
-      <button class="btn" (click)="metodoPruebaSumarPuntos()">Probar puntos</button>
     </div>
     <br>
 
@@ -62,10 +60,6 @@
         </tbody>
       </table>
     </div>
-
-
-
-
     } @else {
     <p>No hay usuario activo. Iniciá sesión.</p>
     }

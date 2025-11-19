@@ -367,8 +367,8 @@
       "password": "asd",
       "pokemonId": 533,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/533.png",
-      "points": 60,
-      "lastLoginDate": "2025-11-19T02:59:06.980Z",
+      "points": 90,
+      "lastLoginDate": "2025-11-19T17:17:40.833Z",
       "lastCreateCollection": "2025-11-18T15:23:49.899Z",
       "pokemonVault": [
         [
@@ -423,6 +423,31 @@
           "amount": 5,
           "reason": "Respuesta correcta en el Quiz Pokémon",
           "date": "2025-11-19T14:59:48.882Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T17:17:04.073Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T17:17:05.747Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T17:17:21.556Z"
+        },
+        {
+          "amount": 10,
+          "reason": "Inicio de sesión diario",
+          "date": "2025-11-19T17:17:40.833Z"
+        },
+        {
+          "amount": 5,
+          "reason": "Respuesta correcta en el Quiz Pokémon",
+          "date": "2025-11-19T17:25:21.699Z"
         }
       ]
     },
