@@ -369,11 +369,7 @@
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/533.png",
       "points": 55,
       "lastLoginDate": "2025-11-19T02:59:06.980Z",
-<<<<<<< HEAD
-      "lastCreateCollection": "2025-11-18T15:23:49.899Z",
-=======
       "lastCreateCollection": "2025-11-02T15:23:49.899Z",
->>>>>>> feature/login
       "pokemonVault": [
         [
           {
@@ -423,8 +419,6 @@
           "amount": 5,
           "reason": "Respuesta correcta en el Quiz Pokémon",
           "date": "2025-11-19T03:58:12.691Z"
-<<<<<<< HEAD
-=======
         }
       ]
     },
@@ -529,7 +523,6 @@
           "amount": 50,
           "reason": "Puntos por crear colección semanal",
           "date": "2025-11-19T05:36:14.352Z"
->>>>>>> feature/login
         }
       ]
     }

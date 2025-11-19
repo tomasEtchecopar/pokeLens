@@ -32,6 +32,12 @@ export class PokemonFilterService{
   clearFilters(){
     this.filters.set({});
   }
+   setSort(option: SortOption | null){
+    this.sort.set(option);
+  }
+  clearSort(){
+    this.sort.set(null);
+  }
 
   private applyFilters(): Pokemon[]{
     let list=this.allPokemon();
@@ -52,60 +58,57 @@ export class PokemonFilterService{
     if (f.minWeight !== undefined) list = list.filter(p => p.weight >= f.minWeight!);
     if (f.maxWeight !== undefined) list = list.filter(p => p.weight <= f.maxWeight!)
 
-  //after all filters are applied
-
-  const currentSort = this.sort();
-
-  if(currentSort && list && list.length >1){
-    list = [...list];
-    const key = currentSort.key;
-    const dir = currentSort.dir === 'asc' ? 1: -1;
-
-
-  const compare = (a: Pokemon, b: Pokemon) =>{
-    let aValue: any, bValue:any;
-
-    switch(key){
-      case 'id':
-        aValue = a.id ?? 0;
-        bValue = b.id?? 0;
-        break;
-        case 'name':
-          aValue = (a.name ?? '').toString().toLowerCase();
-          bValue = (b.name ?? '').toString().toLowerCase();
-        break;
-      case 'generation':
-        aValue = (a.generation ?? '').toString().toLowerCase();
-        bValue = (b.generation ?? '').toString().toLowerCase();
-        break;
-      case 'height':
-        aValue = a.height ?? 0;
-        bValue = b.height  ?? 0;
-        break;
-      case 'weight':
-        aValue = a.weight ?? 0;
-        bValue = b.weight  ?? 0;
-        break;
-        default:
-          aValue=0;
-          bValue=0;
-    }
-
-    if(aValue<bValue) return -1 * dir;
-    if(aValue > bValue) return 1 * dir;
-    return ((a.id ?? 0) - (b.id ?? 0));
-  }
-
-  list.sort(compare);
-
-}
     return list;
   }
 
-  setSort(option: SortOption | null){
-    this.sort.set(option);
+   private sortPokemon(list: Pokemon[], sortOption: SortOption): Pokemon[] {
+    const { key, dir } = sortOption;
+    const multiplier = dir === 'asc' ? 1 : -1;
+
+    return [...list].sort((a, b) => {
+      let valA: any;
+      let valB: any;
+
+      switch (key) {
+        case 'id':
+          valA = a.id;
+          valB = b.id;
+          break;
+        case 'name':
+          valA = a.name.toLowerCase();
+          valB = b.name.toLowerCase();
+          break;
+        case 'generation':
+          valA = a.generation || '';
+          valB = b.generation || '';
+          break;
+        case 'height':
+          valA = a.height;
+          valB = b.height;
+          break;
+        case 'weight':
+          valA = a.weight;
+          valB = b.weight;
+          break;
+        default:
+          return 0;
+      }
+
+      if (valA < valB) return -1 * multiplier;
+      if (valA > valB) return 1 * multiplier;
+      return 0;
+    });
   }
-  clearSort(){
-    this.sort.set(null);
+
+  private applyFiltersAndSort(): Pokemon[] {
+    let list = this.applyFilters();
+
+    // Aplicar ordenamiento si existe
+    const sortOption = this.sort();
+    if (sortOption) {
+      list = this.sortPokemon(list, sortOption);
+    }
+
+    return list;
   }
 }
