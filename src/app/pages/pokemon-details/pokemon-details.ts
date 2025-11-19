@@ -1,4 +1,5 @@
 import { Component, inject} from '@angular/core';
+import { PokemonFilterService } from '../pokemon-catalog/pokemon-filtering-and-sorting/pokemon-filter-service';
 import { FilterOptions } from '../../pokemon/models/pokemon-filters';
 import { computed } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -11,7 +12,6 @@ import { signal } from '@angular/core';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { translateGeneration, translateType } from '../../pokemon/models/pokemon-helpers';
 import { forkJoin, switchMap } from 'rxjs';
-import { PokemonFilterService } from '../pokemon-catalog/pokemon-filter-dropdown/pokemon-filter-service';
 
 @Component({
   selector: 'app-pokemon-details',

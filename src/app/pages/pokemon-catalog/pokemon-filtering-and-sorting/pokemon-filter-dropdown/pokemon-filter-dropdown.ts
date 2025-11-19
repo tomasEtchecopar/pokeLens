@@ -1,6 +1,6 @@
 import { Component, effect, signal, input, output, inject } from '@angular/core';
-import { FilterOptions, PokemonGeneration, PokemonRegion, PokemonType } from '../../../pokemon/models/pokemon-filters';
-import { PokemonFiltersTranslation } from './pokemon-filters-translation';
+import { PokemonFiltersTranslation } from '../pokemon-filters-translation';
+import { FilterOptions, PokemonGeneration, PokemonRegion, PokemonType } from '../../../../pokemon/models/pokemon-filters';
 import { FormsModule } from '@angular/forms';
 
 @Component({

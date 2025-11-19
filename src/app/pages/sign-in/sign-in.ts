@@ -1,7 +1,7 @@
 import { Component, inject, input, model, OnInit } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { User } from '../user-model';
 import { UserClient } from '../../core/sign-in.service';
+import { User } from '../../user/user-model';
 import { AuthServ } from '../../core/auth.service';
 import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
