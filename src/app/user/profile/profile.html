@@ -1,4 +1,4 @@
-<div class="father">
+<div class="father" [class.father-edit]="isEditing()">
 
   @if (!isEditing()) {
   <div class="child">
@@ -26,38 +26,41 @@
       <button class="btn" (click)="goToCollections()">Ver mis colecciones</button>
       <button class="btn" (click)="metodoPruebaSumarPuntos()">Probar puntos</button>
     </div>
+    <br>
 
-<h3>Historial de puntos</h3>
+  <div class="points-header">
+  <h3>Historial de puntos</h3>
+</div>
 
-<div class="points-scroll">
-  <table class="points-table">
-    <thead>
-      <tr>
-        <th>Puntos</th>
-        <th>Motivo</th>
-        <th>Fecha</th>
-        <th>Hora</th>
-      </tr>
-    </thead>
+    <div class="points-scroll">
+      <table class="points-table">
+        <thead>
+          <tr>
+            <th>Puntos</th>
+            <th>Motivo</th>
+            <th>Fecha</th>
+            <th>Hora</th>
+          </tr>
+        </thead>
 
-    <tbody>
-      @if (history().length === 0) {
-        <tr>
-          <td colspan="4" class="empty-row">No hay movimientos aún.</td>
-        </tr>
-      } @else {
-        @for (ev of history(); track ev.date) {
+        <tbody>
+          @if (history().length === 0) {
+          <tr>
+            <td colspan="4" class="empty-row">No hay movimientos aún.</td>
+          </tr>
+          } @else {
+          @for (ev of history(); track ev.date) {
           <tr>
             <td class="col-amount">+{{ ev.amount }}</td>
             <td>{{ ev.reason }}</td>
             <td>{{ ev.date | date:'dd/MM/yyyy' }}</td>
             <td>{{ ev.date | date:'HH:mm' }}</td>
           </tr>
-        }
-      }
-    </tbody>
-  </table>
-</div>
+          }
+          }
+        </tbody>
+      </table>
+    </div>
 
 
 

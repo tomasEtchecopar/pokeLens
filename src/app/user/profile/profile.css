@@ -1,70 +1,142 @@
+/* Contenedor padre */
 .father {
   padding: 1rem;
-  padding-top: 120px;
+  padding-top: 50px;
+}
+.father.father-edit {
+  padding-top: 0px;    
 }
 
+/* Panel principal estilo Pokédex pero con fondo BLANCO */
 .child {
   background: #fff;
-  border-radius: 8px;
-  padding: 1rem;
+  border: 4px solid #1a1a1a;
+  border-radius: 12px;
+  box-shadow:
+    inset 0 0 0 3px #d43030,
+    4px 4px 0 #1a1a1a;
+  padding: 1.5rem;
+  color: #2c2c2c;
 }
 
+/* Título del perfil */
+.child h2 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1.3rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  color: #d43030;
+  text-shadow: 2px 2px #1a1a1a;
+  margin-bottom: 1.5rem;
+}
+
+/* Fila del perfil */
 .profile-row {
   display: flex;
   align-items: center;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
+/* Avatar */
 .avatar-lg {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
+  width: 110px;
+  height: 110px;
+  border-radius: 6px;        /* Ya NO es redondo */
+  border: 2px solid #1a1a1a; /* Borde más fino */
+  box-shadow: none;          /* SIN sombra pixelada */
   object-fit: cover;
+  background: #eee;          /* Fondo gris claro por si tarda en cargar */
 }
 
+/* Texto de datos del usuario */
+.child p {
+  margin: 0.3rem 0;
+  font-size: 1rem;
+  font-family: 'Courier New', monospace;
+  color: #1a1a1a;
+  font-weight: 600;
+}
+
+.child strong {
+  color: #d43030;
+  text-shadow: 1px 1px #1a1a1a;
+  font-weight: 900;
+}
+
+/* Botones - mismo estilo Pokédex */
 .actions {
-  margin-top: 1rem;
+  margin-top: 1.5rem;
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 0.75rem;
 }
 
 .btn {
   background: #2c2c2c;
+  border: 3px solid #1a1a1a;
   color: #fff;
-  border: 2px solid #1a1a1a;
-  padding: 0.4rem 0.8rem;
+  padding: 0.6rem 1.2rem;
+  font-family: 'Courier New', monospace;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
   cursor: pointer;
+  transition: all 0.1s ease;
+  font-size: 0.85rem;
+  box-shadow: 2px 2px 0 #1a1a1a;
 }
 
 .btn:hover {
-  background: #1a1a1a;
+  background: #3a3a3a;
+  transform: translate(1px, 1px);
+  box-shadow: 1px 1px 0 #1a1a1a;
 }
 
-.points-list {
-  margin-top: 0.75rem;
-  padding-left: 1.25rem;
+.btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 #1a1a1a;
 }
 
-/*Tabla de puntos*/
+/* Título del historial */
+.points-header {
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.points-header h3 {
+  font-family: 'Press Start 2P', monospace;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  color: #2c2c2c;
+}
+
+/* Contenedor scroll del historial */
+.points-scroll {
+  max-height: 250px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 2px solid #1a1a1a;
+  margin-top: 0.5rem;
+  background: #2c2c2c;
+}
+
+/* Tabla de puntos */
 .points-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 1rem;
   font-family: 'Courier New', monospace;
-  background: #2c2c2c;
   color: white;
-  border: 2px solid #1a1a1a;
 }
+
+/* Cabecera fija dentro del scroll */
 .points-table thead tr th {
   position: sticky;
   top: 0;
   z-index: 10;
+  background: #d43030;
 }
 
-
 .points-table th {
-  background: #d43030;
   padding: 0.5rem;
   border-bottom: 3px solid #1a1a1a;
   text-align: left;
@@ -76,20 +148,15 @@
   border-bottom: 1px solid #444;
 }
 
-.points-table tr:hover {
+/* Hover filas con datos */
+.points-table tbody tr:hover {
   background: #1a1a1a;
 }
 
-.empty-row {
+/* Fila de "sin movimientos" SOLO dentro de la tabla */
+.points-table .empty-row {
   text-align: center;
   font-style: italic;
   opacity: 0.8;
-}
-.points-scroll {
-  max-height: 250px;       /* Ajustá la altura que quieras */
-  overflow-y: auto;
-  overflow-x: hidden;
-  border: 2px solid #1a1a1a;
-  margin-top: 1rem;
-  background: #2c2c2c;
+  border-bottom: none;
 }
