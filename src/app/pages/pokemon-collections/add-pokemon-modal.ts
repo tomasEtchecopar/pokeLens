@@ -362,7 +362,7 @@ import { Router } from '@angular/router';
   text-shadow: 1px 1px 0 #000;
 }
 
-    
+
   `]
 })
 export class AddPokemonModal {
@@ -427,15 +427,15 @@ export class AddPokemonModal {
 
 
   /**
-   * Intenta capturar el Pokémon seleccionado y agregarlo a la equipo elegida.
+   * Intenta capturar el Pokémon seleccionado y agregarlo a el equipo elegida.
    *
    * Flujo general:
    * 1. Valida que haya usuario logueado y Pokémon valido.
    * 2. Controla:
-   *    - que la equipo no tenga más de 6 Pokémon,
+   *    - que el equipo no tenga más de 6 Pokémon,
    *    - que el Pokémon no esté repetido en esa equipo,
    *    - que si es una equipo nuevo, tenga nombre.
-   * 3. Llama al backend para agregar el Pokémon a la equipo.
+   * 3. Llama al backend para agregar el Pokémon a el equipo.
    * 4. Si corresponde, otorga puntos por crear una equipo semanal y registra el evento.
    * 5. Actualiza el usuario activo en memoria y en localStorage.
    */
@@ -456,9 +456,9 @@ export class AddPokemonModal {
     //------------------------------------------------------------------------------
     // Sector donde se controla la cantidad de pokemones en el array
     const matrix = this.collections();              // Matriz de equipos: pokemonVault[][]
-    const selectedIndex = this.selectedCollection() - 1; //indice de la equipo elegida
+    const selectedIndex = this.selectedCollection() - 1; //indice de el equipo elegida
 
-    const currentCount = matrix[selectedIndex]?.length ?? 0; //calcula los pokemones en la equipo
+    const currentCount = matrix[selectedIndex]?.length ?? 0; //calcula los pokemones en el equipo
 
     if (currentCount >= 6) {
       this.errorMessage.set('Esta equipo ya tiene 6 Pokémon (límite máximo).');
@@ -490,7 +490,7 @@ export class AddPokemonModal {
     };
 
 
-    const pointsCollection = 50; //puntos a dar por la creacion de la equipo
+    const pointsCollection = 50; //puntos a dar por la creacion de el equipo
     const nowIso = new Date().toISOString(); //Fecha y hora actual
 
     // Indica si el usuario seleccionó la opción "+ Nuevo equipo"
@@ -506,7 +506,7 @@ export class AddPokemonModal {
       }
     }
 
-    // Llamada al backend para agregar el pokémon a la equipo del usuario
+    // Llamada al backend para agregar el pokémon a el equipo del usuario
     this.userClient
       .addPokemonToVault(user.id, pokemonData, this.selectedCollection())
       .subscribe({
@@ -543,7 +543,7 @@ export class AddPokemonModal {
               lastCreateCollection: nowIso
             };
 
-            // Sumamos puntos por la equipo semanal
+            // Sumamos puntos por el equipo semanal
             this.points
               .addPoints(
                 updatedUserWithDate,
@@ -566,7 +566,7 @@ export class AddPokemonModal {
               });
 
           } else {
-            // Si no hay bonus semanal, igual persistimos el usuario con las equipos/nombres actualizados
+            // Si no hay bonus semanal, igual persistimos el usuario con los equipos/nombres actualizados
             this.userClient.updateUser(userWithCollections, userWithCollections.id!).subscribe({
               next: (savedUser) => {
                 this.auth.activeUser.set(savedUser);

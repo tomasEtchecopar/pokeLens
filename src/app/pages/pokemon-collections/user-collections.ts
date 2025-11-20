@@ -107,7 +107,7 @@ export class UserCollections {
     const user = this.usuario();
     if (!user || !user.id) return;
 
-    if (confirm('Seguro que desea eliminar al Pokemon de la equipo?')) {
+    if (confirm('Seguro que desea eliminar al Pokemon de el equipo?')) {
       const vault = user.pokemonVault ?? [];
       if (collectionIndex < 0 || collectionIndex >= vault.length) return;
 
@@ -123,7 +123,7 @@ export class UserCollections {
           this.auth.activeUser.set(res);
           localStorage.setItem('activeUser', JSON.stringify(res));
         },
-        error: () => alert('Error al eliminar el Pokémon de la equipo'),
+        error: () => alert('Error al eliminar el Pokémon de el equipo'),
       });
     }
   }
@@ -187,7 +187,7 @@ export class UserCollections {
     const user = this.usuario();
     if (!user || !user.id) return;
 
-    const ok = confirm(`Seguro que queres eliminar la equipo ${index + 1}?`);
+    const ok = confirm(`Seguro que queres eliminar el equipo ${index + 1}?`);
     if (!ok) return;
 
     const matrix = [...(user.pokemonVault ?? [])];
@@ -211,7 +211,7 @@ export class UserCollections {
       },
       error: (err) => {
         console.error('Error al borrar equipo', err);
-        alert('Error al borrar la equipo');
+        alert('Error al borrar el equipo');
       }
     });
   }
@@ -278,7 +278,7 @@ export class UserCollections {
         this.editingIndex.set(null);
       },
       error: () => {
-        alert('Error al guardar el nombre de la equipo');
+        alert('Error al guardar el nombre de el equipo');
         this.editingIndex.set(null);
       }
     });
