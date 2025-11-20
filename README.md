@@ -6,10 +6,15 @@ PokéLens es una aplicación web educativa y entretenida diseñada para explorar
 ## Funcionalidades Principales
 
 - **Exploración del Catálogo**: Navega por un listado dinámico de Pokémon obtenido de la PokeAPI. Busca por nombre o ID, filtra por tipo (agua, fuego, etc.) y visualiza detalles como sprite, tipos, altura, peso y estadísticas base. Incluye paginación con scroll infinito y un Pokémon del día destacado.
+- ![Screenshot catalogo](screenshots/catalog.png)
 - **Registro e Inicio de Sesión**: Crea una cuenta con email y contraseña para acceder a funciones personalizadas. Actualiza tu perfil (nombre visible) y cierra sesión de forma segura.
+- ![Screenshot Registro](screenshots/sign-in.png)
 - **Colección Personal**: Agrega hasta 6 Pokémon favoritos a tu equipo, evita duplicados y elimina elementos. Calcula el promedio de poder basado en estadísticas (HP, Attack, Defense, Sp.Atk, Sp.Def y Speed).
+- ![Screenshot equipos](screenshots/teams.png)
 - **Sistema de Puntos**: Acumula puntos por inicio de sesión diario, creación de colecciones semanales y aciertos en el quiz. Visualiza tus puntos en el perfil.
 - **Quiz Pokémon**: Participa en una trivia adivinando el nombre de un Pokémon mostrado en sombra. Gana puntos por respuestas correctas.
+- ![screenshot quiz1](screenshots/quiz1.png)
+- ![screenshot quiz2](screenshots/quiz2.png)
 - **Reproducir Sonidos**: Escucha el sonido característico de cada Pokémon en su detalle o tarjeta.
 - **Interfaz Amigable**: Indicadores de carga, mensajes de error/confirmación, navegación fluida sin recargas y diseño responsive.
 
