@@ -70,7 +70,7 @@ export class Profile {
 
   setDefaultAvatar(event: Event) {
     const img = event.target as HTMLImageElement;
-    img.src = 'default.png';
+    img.src = '/src/public/default.png';
   }
 
 
