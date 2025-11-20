@@ -18,6 +18,9 @@
   @if(isLoading()){
   <p>Cargando Pokemons...</p>
   }@else {
+    @if(!hasSearchResults()) {
+  <p>No hay pokemon disponible para la busqueda...</p>
+}@else{
   <div class="grid">
     @for (pokemonResource of displayedPokemon(); track pokemonResource){
     <app-pokemon-card [pokemon]="pokemonResource"></app-pokemon-card>
@@ -27,6 +30,7 @@
     <div class="loading">Cargando mas Pokemon...</div>
     }
   </div>
+}
 
   }
   <div #scrollSentinel class="scroll-sentine"></div>
