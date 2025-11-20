@@ -24,6 +24,8 @@
     <div class="actions">
       <button class="btn" (click)="isEditing.set(true)">Editar perfil</button>
       <button class="btn" (click)="goToCollections()">Ver mis equipos</button>
+      <button class="btn btn-danger" (click)="openDeleteModal()">Eliminar cuenta</button>
+
     </div>
     <br>
 
@@ -72,19 +74,34 @@
 </div>
 
 @if (isAvatarOpen) {
-  <div class="avatar-modal-overlay" (click)="closeAvatar()">
+<div class="avatar-modal-overlay" (click)="closeAvatar()">
 
-    <div class="avatar-modal" (click)="$event.stopPropagation()">
+  <div class="avatar-modal" (click)="$event.stopPropagation()">
 
-      @if (usuario(); as u) {
-        <img
-          [src]="u.avatarUrl || 'default.png'"
-          class="avatar-modal-img"
-          (click)="closeAvatar()"          
-          (error)="setDefaultAvatar($event)"
-        />
-      }
+    @if (usuario(); as u) {
+    <img [src]="u.avatarUrl || 'default.png'" class="avatar-modal-img" (click)="closeAvatar()"
+      (error)="setDefaultAvatar($event)" />
+    }
+  </div>
+
+</div>
+}
+@if (isDeleteModalOpen()) {
+<div class="delete-modal-overlay" (click)="closeDeleteModal()">
+
+  <div class="delete-modal" (click)="$event.stopPropagation()">
+
+    <h2>¿Eliminar tu cuenta?</h2>
+    <p class="delete-info">
+      Esta acción es <span>permanente</span> y no se puede deshacer.
+    </p>
+
+    <div class="delete-actions">
+      <button class="btn-delete" (click)="confirmDeleteAccount()">Eliminar</button>
+      <button class="btn-cancel" (click)="closeDeleteModal()">Cancelar</button>
     </div>
 
   </div>
+
+</div>
 }

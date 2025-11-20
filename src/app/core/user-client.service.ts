@@ -19,13 +19,18 @@ export class UserClient {
     return this.http.get<User>(`${this.baseUrl}/${id}`);
   }
 
-  addUser(user: User): Observable<User> {
+  user(user: User): Observable<User> {
     return this.http.post<User>(this.baseUrl, user);
   }
 
   updateUser(user: User, id: string | number): Observable<User> {
     return this.http.put<User>(`${this.baseUrl}/${id}`, user);
   }
+
+  deleteUser(id: string) {
+    return this.http.delete(`${this.baseUrl}/${id}`);
+  }
+
 
   /**
    * Adds a pokemon to a specific collection/team in the user's vault.

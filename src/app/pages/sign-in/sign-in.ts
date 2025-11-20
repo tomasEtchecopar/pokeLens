@@ -186,7 +186,7 @@ export class SignIn implements OnInit {
         pointsHistory: []
       };
 
-      this.users.addUser(newUser).subscribe({
+      this.users.user(newUser).subscribe({
         next: (createdUser) => {
           alert(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
 
