@@ -22,6 +22,7 @@ export class Profile {
   private readonly points = inject(PointsService);
   private readonly clienteService = inject(UserClient)
   isDeleteModalOpen = signal(false);
+  confirmDeleteClick = signal(false);
 
   usuario = computed(() => this.auth.activeUser());
   readonly isEditing = signal(false);
@@ -83,25 +84,44 @@ export class Profile {
     this.isAvatarOpen = false;
   }
 
- confirmDeleteAccount() {
-  const user = this.usuario();
-  if (!user || !user.id) return;
+  onDeleteButtonClick() {
+    if (!this.confirmDeleteClick()) {
+      // Primer click: solo entra en modo "¿Seguro?"
+      this.confirmDeleteClick.set(true);
 
-  this.clienteService.deleteUser(user.id).subscribe({
-    next: () => {
-      localStorage.removeItem('activeUser');
-      this.auth.activeUser.set(undefined);
+      // Opcional: si no hace el segundo click en 3s, se resetea
+      setTimeout(() => {
+        this.confirmDeleteClick.set(false);
+      }, 3000);
 
-      this.isDeleteModalOpen.set(false); // cerrar modal
-
-      this.router.navigateByUrl('/login');
-    },
-    error: (err) => {
-      console.error('Error eliminando cuenta:', err);
-      alert('Hubo un error al eliminar la cuenta.');
+      return;
     }
-  });
-}
+
+    // Segundo click: abrimos el modal real
+    this.confirmDeleteClick.set(false);
+    this.openDeleteModal();
+  }
+
+
+  confirmDeleteAccount() {
+    const user = this.usuario();
+    if (!user || !user.id) return;
+
+    this.clienteService.deleteUser(user.id).subscribe({
+      next: () => {
+        localStorage.removeItem('activeUser');
+        this.auth.activeUser.set(undefined);
+
+        this.isDeleteModalOpen.set(false); // cerrar modal
+
+        this.router.navigateByUrl('/login');
+      },
+      error: (err) => {
+        console.error('Error eliminando cuenta:', err);
+        alert('Hubo un error al eliminar la cuenta.');
+      }
+    });
+  }
 
 
 

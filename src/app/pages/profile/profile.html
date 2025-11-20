@@ -24,8 +24,9 @@
     <div class="actions">
       <button class="btn" (click)="isEditing.set(true)">Editar perfil</button>
       <button class="btn" (click)="goToCollections()">Ver mis equipos</button>
-      <button class="btn btn-danger" (click)="openDeleteModal()">Eliminar cuenta</button>
-
+      <button class="btn btn-danger" [class.btn-confirm-delete]="confirmDeleteClick()" (click)="onDeleteButtonClick()">
+        {{ confirmDeleteClick() ? 'Confirmar eliminación' : 'Eliminar cuenta' }}
+      </button>
     </div>
     <br>
 

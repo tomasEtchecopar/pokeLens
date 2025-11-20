@@ -395,6 +395,27 @@
           "date": "2025-11-20T03:16:47.034Z"
         }
       ]
+    },
+    {
+      "id": "e109",
+      "username": "pepe",
+      "age": 31,
+      "mail": "pepe@gmail.com",
+      "password": "1234",
+      "pokemonId": 402,
+      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/402.png",
+      "points": 15,
+      "lastLoginDate": "2025-11-20T06:06:45.950Z",
+      "lastCreateCollection": null,
+      "pokemonVault": [],
+      "collectionNames": [],
+      "pointsHistory": [
+        {
+          "amount": 15,
+          "reason": "Puntos de Bienvenida! Que los disfrutes! ",
+          "date": "2025-11-20T06:06:46.798Z"
+        }
+      ]
     }
   ]
 }

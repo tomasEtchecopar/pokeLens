@@ -261,3 +261,8 @@
 .btn-cancel {
   padding: 1rem;          
 }
+.btn-delete.confirm {
+  background: #b91c1c;
+  border-color: #7f1d1d;
+  box-shadow: 0 3px 0 #5b1111;
+}
