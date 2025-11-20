@@ -1,4 +1,4 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://pokelens-backend.onrender.com/' // Lo llenaremos después
+  apiUrl: 'https://pokelens-backend.onrender.com' // Lo llenaremos después
 };
