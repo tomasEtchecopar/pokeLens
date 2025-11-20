@@ -8,8 +8,8 @@
       "password": "1234",
       "pokemonId": 304,
       "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/304.png",
-      "points": 585,
-      "lastLoginDate": "2025-11-19T22:58:14.538Z",
+      "points": 595,
+      "lastLoginDate": "2025-11-20T03:16:47.034Z",
       "lastCreateCollection": "2025-11-19T22:58:32.191Z",
       "pokemonVault": [
         [
@@ -322,6 +322,11 @@
             "arrayId": 0,
             "idPokemon": 3,
             "name": "venusaur"
+          },
+          {
+            "arrayId": 1,
+            "idPokemon": 59,
+            "name": "arcanine"
           }
         ]
       ],
@@ -383,6 +388,11 @@
           "amount": 50,
           "reason": "Puntos por crear equipo semanal",
           "date": "2025-11-19T22:58:32.191Z"
+        },
+        {
+          "amount": 10,
+          "reason": "Inicio de sesión diario",
+          "date": "2025-11-20T03:16:47.034Z"
         }
       ]
     }
