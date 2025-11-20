@@ -7,7 +7,7 @@
     @if (usuario(); as u) {
 
     <div class="profile-row">
-      <img [src]="u.avatarUrl || '/src/public/default.png'" alt="avatar" class="avatar-lg" (click)="openAvatar()"
+      <img [src]="u.avatarUrl || '/src/assets/default.png'" alt="avatar" class="avatar-lg" (click)="openAvatar()"
         (error)="setDefaultAvatar($event)" />
       <div>
         <p><strong>UserName:</strong> {{ u.username }}</p>
@@ -80,7 +80,7 @@
   <div class="avatar-modal" (click)="$event.stopPropagation()">
 
     @if (usuario(); as u) {
-    <img [src]="u.avatarUrl || '/src/public/default.png'" class="avatar-modal-img" (click)="closeAvatar()"
+    <img [src]="u.avatarUrl || '/src/assets/default.png'" class="avatar-modal-img" (click)="closeAvatar()"
       (error)="setDefaultAvatar($event)" />
     }
   </div>

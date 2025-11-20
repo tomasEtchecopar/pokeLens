@@ -20,7 +20,7 @@ export class PokemonCatalogPagination {
   private readonly hasMore = signal(true);
   private readonly isLoading = signal(false);
 
-  // Public signals for component consumption
+  // assets signals for component consumption
   readonly displayedPokemon = computed(() => this.loadedPokemon());
   readonly loading = computed(() => this.isLoading());
   readonly hasMoreAvailable = computed(() => this.hasMore());

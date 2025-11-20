@@ -152,7 +152,7 @@ export class PokeApiService {
    * Gets an artwork based on its ID
    */
   pokemonArtworkUrl(id: number | string | undefined): string {
-    if (!id) return '/src/public/default.png';
+    if (!id) return '/src/assets/default.png';
 
     return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${id}.png`;
   }

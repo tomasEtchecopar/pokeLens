@@ -55,7 +55,7 @@ isAlreadyInCatalog(): boolean {
   }
   setDefaultAvatar(event: Event) {
   const img = event.target as HTMLImageElement;
-  img.src = '/src/public/default.png';
+  img.src = '/src/assets/default.png';
 }
 
 }
