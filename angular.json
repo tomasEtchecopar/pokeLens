@@ -20,7 +20,9 @@
               "glob": "_redirects",
                 "input": "src",
                 "output": "/"
-              }
+              },
+              "src/assets",
+              "public"
             ],
             "styles": [
               "src/styles.css"
