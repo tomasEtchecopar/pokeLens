@@ -3,6 +3,7 @@ import { User } from '../user/user-model';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { pokemonVault } from '../pages/pokemon-collections/collection-model';
+import { environment } from '../../enviroments/enviroment';
 
 /**
  * UserClient handles CRUD operations for users and manages pokemon collections.
@@ -13,7 +14,7 @@ import { pokemonVault } from '../pages/pokemon-collections/collection-model';
 })
 export class UserClient {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = "http://localhost:3000/users"
+  private readonly baseUrl = `${environment.apiUrl}/users`
 
   getUserById(id: string): Observable<User> {
     return this.http.get<User>(`${this.baseUrl}/${id}`);

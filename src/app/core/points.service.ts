@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { PointEvent, User } from '../user/user-model';
 import { Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
+import { environment } from '../../enviroments/enviroment';
 
 /**
  * PointsService manages the user points system.
@@ -14,7 +15,7 @@ import { map, tap } from 'rxjs/operators';
 export class PointsService {
 
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:3000/users';
+  private readonly baseUrl =`${environment.apiUrl}/users`
 
   /**
    * Generates a random bonus between 0-20 points.

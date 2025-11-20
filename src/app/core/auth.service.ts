@@ -3,6 +3,7 @@ import { User } from '../user/user-model';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { catchError, map, of, tap, switchMap } from 'rxjs';
 import { PointsService } from './points.service';
+import { environment } from '../../enviroments/enviroment';
 
 /**
  * AuthServ handles all authentication-related operations.
@@ -13,7 +14,7 @@ import { PointsService } from './points.service';
 })
 export class AuthServ {
   private readonly http = inject(HttpClient);
-  private readonly baseUrl = 'http://localhost:3000/users';
+  private readonly baseUrl = `${environment.apiUrl}/users`;
   private readonly points = inject(PointsService);
 
   // Signal that holds the currently logged-in user (undefined if not logged in)
