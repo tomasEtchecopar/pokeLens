@@ -1,114 +1,94 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../user/user-model';
-import { HttpParams } from '@angular/common/http';
-import { catchError, map, of, tap, switchMap } from 'rxjs';
-import { PointsService } from './points.service';
-import { SupabaseService } from './supabase-service';
-import { from } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { catchError, map, Observable, of, tap } from 'rxjs';
+import { environment } from '../../enviroments/enviroment';
 
-/**
- * AuthServ handles all authentication-related operations.
- * Manages user sessions, login/logout, and credential validation.
- */
 @Injectable({
   providedIn: 'root'
 })
 export class AuthServ {
-  private readonly supabase = inject(SupabaseService);
-  private readonly points = inject(PointsService);
+  private readonly http = inject(HttpClient);
+  private readonly baseUrl = `${environment.apiUrl}/auth`;
 
-  // Signal that holds the currently logged-in user (undefined if not logged in)
   public readonly activeUser = signal<User | undefined>(undefined);
-
-  // Computed signal that returns true if there's an active user
   public readonly isLoggedIn = computed(() => this.activeUser() !== undefined);
 
   /**
    * Checks if an email already exists in the database.
-   * Returns true if found, false otherwise (or on error).
    */
-  existsEmail(email: string) {
-    return from(
-      this.supabase.client
-      .from('users')
-      .select('id')
-      .eq('mail', email)
-      .single()
-    ).pipe(
-      map(({data}) => !!data),
-      catchError(() => of(false))
-    )
+  existsEmail(email: string): Observable<boolean> {
+    return this.http
+      .get<{ exists: boolean }>(`${this.baseUrl}/check-email`, {
+        params: { email }
+      })
+      .pipe(
+        map(response => response.exists),
+        catchError(() => of(false))
+      );
   }
 
   /**
    * Checks if a username already exists in the database.
-   * Returns true if found, false otherwise (or on error).
    */
-  existsUsername(username: string) {
-    return from(
-      this.supabase.client
-        .from('users')
-        .select('id')
-        .eq('username', username)
-        .single()
-    ).pipe(
-      map(({ data }) => !!data),
-      catchError(() => of(false))
-    );
+  existsUsername(username: string): Observable<boolean> {
+    return this.http
+      .get<{ exists: boolean }>(`${this.baseUrl}/check-username`, {
+        params: { username }
+      })
+      .pipe(
+        map(response => response.exists),
+        catchError(() => of(false))
+      );
   }
 
   /**
-   * Logs in a user by validating credentials, awarding login points,
-   * and storing the session in localStorage.
-   * Throws an error if credentials are invalid.
+   * Logs in a user and stores the JWT token.
    */
-  login(username: string, password: string) {
-  return from(
-      this.supabase.client
-        .from('users')
-        .select('*')
-        .eq('username', username)
-        .eq('password', password)
-        .single()
-    ).pipe(
-      map(({ data, error }) => {
-        if (error || !data) {
-          throw new Error('Credenciales inválidas');
-        }
-        return data as User;
-      }),
-      switchMap(user => this.points.awardLoginPoints(user)),
-      tap(updatedUser => {
-        this.activeUser.set(updatedUser);
-        localStorage.setItem('activeUser', JSON.stringify(updatedUser));
-      }),
-      map(() => void 0)
-    );
+  login(username: string, password: string): Observable<void> {
+    return this.http
+      .post<{ user: User; token: string; pointsAwarded: number }>(
+        `${this.baseUrl}/login`,
+        { username, password }
+      )
+      .pipe(
+        tap(({ user, token, pointsAwarded }) => {
+          this.activeUser.set(user);
+          localStorage.setItem('activeUser', JSON.stringify(user));
+          localStorage.setItem('token', token);
+
+          if (pointsAwarded > 0) {
+            alert(`¡Bienvenido de vuelta! +${pointsAwarded} puntos por tu ingreso diario`);
+          }
+        }),
+        map(() => void 0)
+      );
   }
 
   /**
-   * Logs out the current user by clearing the session
-   * and removing data from localStorage.
+   * Logs out the current user.
    */
   logOut() {
     this.activeUser.set(undefined);
     localStorage.removeItem('activeUser');
+    localStorage.removeItem('token');
   }
 
   /**
-   * Attempts to restore a previous session from localStorage.
-   * If data is invalid or corrupted, it cleans up localStorage.
+   * Restores session from localStorage.
    */
   restoreSession() {
     const data = localStorage.getItem('activeUser');
-    if (!data) return;
+    const token = localStorage.getItem('token');
+
+    if (!data || !token) return;
 
     try {
       const user = JSON.parse(data) as User;
       this.activeUser.set(user);
     } catch {
-      // If parsing fails, just remove the corrupted data
       localStorage.removeItem('activeUser');
+      localStorage.removeItem('token');
     }
   }
 }

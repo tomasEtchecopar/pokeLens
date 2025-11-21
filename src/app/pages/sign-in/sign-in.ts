@@ -114,113 +114,84 @@ export class SignIn implements OnInit {
       });
   }
 
-  /**
-   * Handles form submission for both registration and profile editing.
-   *
-   * Registration flow:
-   * 1. Generates avatar from username hash
-   * 2. Awards random welcome points (0-20)
-   * 3. Creates user with initialized collections/history (snake_case for Supabase)
-   * 4. Adds welcome points to history
-   * 5. Sets active session and redirects to home
-   *
-   * Edit flow:
-   * 1. Preserves existing points, history, and collections
-   * 2. Updates only form fields
-   * 3. Syncs with activeUser and localStorage
-   */
-  onSubmit() {
-    if (this.form.invalid) {
-      this.form.markAllAsTouched();
-      alert('El formulario es inválido.');
-      return;
-    }
-    if (this.emailTaken) { alert('Ese email ya está registrado.'); return; }
-    if (this.usernameTaken) { alert('Ese usuario ya existe.'); return; }
-
-    const datosUser = this.form.getRawValue();
-
-    // EDIT MODE
-    if (this.isEditing()) {
-      const current = this.auth.activeUser();
-      if (!current?.id) { alert('No se encontró el usuario a editar'); return; }
-
-      // Preserve existing data, only update form fields
-      const updated: User = {
-        ...current,
-        ...datosUser,
-        id: current.id,
-        points: current.points ?? 0,
-        points_history: current.points_history ?? []
-      };
-
-      this.users.updateUser(updated, current.id).subscribe({
-        next: (res) => {
-          this.auth.activeUser.set(res);
-          localStorage.setItem('activeUser', JSON.stringify(res));
-          alert('Perfil actualizado');
-          this.isEditing.set(false);
-        },
-        error: (err) => {
-          console.error(err);
-          alert('No se pudo actualizar el perfil');
-        }
-      });
-    }
-    else {
-      // REGISTRATION MODE
-      const usernameKey = datosUser.username.trim().toLowerCase();
-      const pokemonId = this.pokeService.hashToPokemonId(usernameKey);
-      const avatar_url = this.pokeService.pokemonArtworkUrl(pokemonId);
-      const puntos = this.points.randomPoints();
-
-      // Note: Using snake_case for Supabase column names
-      const newUser: User = {
-        ...datosUser,
-        avatar_url,
-        points: puntos,
-        last_login_date: new Date().toISOString(),
-        last_created_collection: null,
-        pokemon_vault: [],
-        collection_names: [],
-        points_history: []
-      };
-
-      this.users.addUser(newUser).subscribe({
-        next: (createdUser) => {
-          alert(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
-
-          const event: PointEvent = {
-            amount: puntos,
-            reason: 'Puntos de Bienvenida! Que los disfrutes! ',
-            date: new Date().toISOString()
-          };
-
-          // Add welcome points to history
-          this.points.addHistory(createdUser, event).subscribe({
-            next: (userWithHistory) => {
-              console.log('Puntos de bienvenida registrados correctamente');
-              this.auth.activeUser.set(userWithHistory);
-              localStorage.setItem('activeUser', JSON.stringify(userWithHistory));
-            },
-            error: () => {
-              console.error('Error al registrar puntos de bienvenida');
-              // Fallback: set user without history if that fails
-              this.auth.activeUser.set(createdUser);
-              localStorage.setItem('activeUser', JSON.stringify(createdUser));
-            }
-          });
-
-          this.form.reset({ username: '', age: undefined, mail: '', password: '' });
-          this.emailTaken = false;
-          this.usernameTaken = false;
-          return this.router.navigateByUrl('/home');
-        },
-        error: (err) => {
-          console.error(err);
-          alert('No se pudo registrar el usuario');
-        }
-      });
-    }
+ onSubmit() {
+  if (this.form.invalid) {
+    this.form.markAllAsTouched();
+    alert('El formulario es inválido.');
+    return;
   }
+  if (this.emailTaken) { alert('Ese email ya está registrado.'); return; }
+  if (this.usernameTaken) { alert('Ese usuario ya existe.'); return; }
+
+  const datosUser = this.form.getRawValue();
+
+  // EDIT MODE
+  if (this.isEditing()) {
+    const current = this.auth.activeUser();
+    if (!current?.id) { alert('No se encontró el usuario a editar'); return; }
+
+    const updated: User = {
+      ...current,
+      ...datosUser,
+      id: current.id,
+      points: current.points ?? 0,
+      points_history: current.points_history ?? []
+    };
+
+    this.users.updateUser(updated, current.id).subscribe({
+      next: (res) => {
+        this.auth.activeUser.set(res);
+        localStorage.setItem('activeUser', JSON.stringify(res));
+        alert('Perfil actualizado');
+        this.isEditing.set(false);
+      },
+      error: (err) => {
+        console.error(err);
+        alert('No se pudo actualizar el perfil');
+      }
+    });
+  }
+  else {
+    // REGISTRATION MODE
+    const usernameKey = datosUser.username.trim().toLowerCase();
+    const pokemon_id = this.pokeService.hashToPokemonId(usernameKey);
+    const avatar_url = this.pokeService.pokemonArtworkUrl(pokemon_id);
+    const puntos = this.points.randomPoints();
+
+    const newUser: User = {
+      ...datosUser,
+      avatar_url,
+      points: puntos,
+      last_login_date: new Date().toISOString(),
+      last_created_collection: null,
+      pokemon_vault: [],
+      collection_names: [],
+      points_history: [{
+        amount: puntos,
+        reason: 'Puntos de Bienvenida! Que los disfrutes!',
+        date: new Date().toISOString()
+      }]
+    };
+
+    this.users.addUser(newUser).subscribe({
+      next: ({ user, token }) => {
+        alert(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
+
+        // Guardar usuario y token
+        this.auth.activeUser.set(user);
+        localStorage.setItem('activeUser', JSON.stringify(user));
+        localStorage.setItem('token', token);
+
+        this.form.reset({ username: '', age: undefined, mail: '', password: '' });
+        this.emailTaken = false;
+        this.usernameTaken = false;
+        return this.router.navigateByUrl('/home');
+      },
+      error: (err) => {
+        console.error(err);
+        alert(err.error?.error || 'No se pudo registrar el usuario');
+      }
+    });
+  }
+}
 }

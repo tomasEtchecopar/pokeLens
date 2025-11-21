@@ -1,4 +1,4 @@
-export interface pokemon_vault {
+export interface pokemonVault {
   arrayId: number,
   idPokemon: string | number | undefined,
   name: string | undefined,
