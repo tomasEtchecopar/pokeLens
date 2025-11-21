@@ -1,9 +1,10 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { User } from '../user/user-model';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpParams } from '@angular/common/http';
 import { catchError, map, of, tap, switchMap } from 'rxjs';
 import { PointsService } from './points.service';
-import { environment } from '../../enviroments/enviroment';
+import { SupabaseService } from './supabase-service';
+import { from } from 'rxjs';
 
 /**
  * AuthServ handles all authentication-related operations.
@@ -13,8 +14,7 @@ import { environment } from '../../enviroments/enviroment';
   providedIn: 'root'
 })
 export class AuthServ {
-  private readonly http = inject(HttpClient);
-  private readonly baseUrl = `${environment.apiUrl}/users`;
+  private readonly supabase = inject(SupabaseService);
   private readonly points = inject(PointsService);
 
   // Signal that holds the currently logged-in user (undefined if not logged in)
@@ -28,12 +28,16 @@ export class AuthServ {
    * Returns true if found, false otherwise (or on error).
    */
   existsEmail(email: string) {
-    return this.http
-      .get<User[]>(this.baseUrl, { params: { mail: email } })
-      .pipe(
-        map(arr => arr.length > 0),
-        catchError(() => of(false))
-      );
+    return from(
+      this.supabase.client
+      .from('users')
+      .select('id')
+      .eq('mail', email)
+      .single()
+    ).pipe(
+      map(({data}) => !!data),
+      catchError(() => of(false))
+    )
   }
 
   /**
@@ -41,12 +45,16 @@ export class AuthServ {
    * Returns true if found, false otherwise (or on error).
    */
   existsUsername(username: string) {
-    return this.http
-      .get<User[]>(this.baseUrl, { params: { username } })
-      .pipe(
-        map(arr => arr.length > 0),
-        catchError(() => of(false))
-      );
+    return from(
+      this.supabase.client
+        .from('users')
+        .select('id')
+        .eq('username', username)
+        .single()
+    ).pipe(
+      map(({ data }) => !!data),
+      catchError(() => of(false))
+    );
   }
 
   /**
@@ -55,24 +63,21 @@ export class AuthServ {
    * Throws an error if credentials are invalid.
    */
   login(username: string, password: string) {
-    const params = new HttpParams()
-      .set('username', username)
-      .set('password', password)
-      .set('_limit', 1);
-
-    return this.http.get<User[]>(this.baseUrl, { params }).pipe(
-      map(users => users[0] ?? null),
-
-      // 1) Validate credentials
-      switchMap(user => {
-        if (!user) {
+  return from(
+      this.supabase.client
+        .from('users')
+        .select('*')
+        .eq('username', username)
+        .eq('password', password)
+        .single()
+    ).pipe(
+      map(({ data, error }) => {
+        if (error || !data) {
           throw new Error('Credenciales inválidas');
         }
-        // 2) Award points based on last login date
-        return this.points.awardLoginPoints(user);
+        return data as User;
       }),
-
-      // 3) Update session with the user (now with updated points/date)
+      switchMap(user => this.points.awardLoginPoints(user)),
       tap(updatedUser => {
         this.activeUser.set(updatedUser);
         localStorage.setItem('activeUser', JSON.stringify(updatedUser));

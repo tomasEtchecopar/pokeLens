@@ -32,8 +32,8 @@ export class UserCollections {
 
   usuario = computed(() => this.auth.activeUser());
 
-  // User's pokemon teams (pokemonVault[][])
-  collections = computed(() => this.usuario()?.pokemonVault ?? []);
+  // User's pokemon teams (pokemon_vault[][])
+  collections = computed(() => this.usuario()?.pokemon_vault ?? []);
 
   // Average power per collection
   private readonly _collectionAverages = signal<number[]>([]);
@@ -43,7 +43,7 @@ export class UserCollections {
    * Effect that reactively recalculates power averages whenever collections change.
    *
    * For each collection:
-   * 1. Maps pokemonVault entries to full Pokemon objects
+   * 1. Maps pokemon_vault entries to full Pokemon objects
    * 2. Calculates total base stats for each pokemon
    * 3. Computes the average power for the collection
    * 4. Rounds to 2 decimal places
@@ -108,7 +108,7 @@ export class UserCollections {
     if (!user || !user.id) return;
 
     if (confirm('Seguro que desea eliminar al Pokemon de el equipo?')) {
-      const vault = user.pokemonVault ?? [];
+      const vault = user.pokemon_vault ?? [];
       if (collectionIndex < 0 || collectionIndex >= vault.length) return;
 
       const updatedCollection = vault[collectionIndex].filter(p => p.arrayId !== arrayId);
@@ -116,7 +116,7 @@ export class UserCollections {
         i === collectionIndex ? updatedCollection : col
       );
 
-      const updatedUser: User = { ...user, pokemonVault: updatedVault };
+      const updatedUser: User = { ...user, pokemon_vault: updatedVault };
 
       this.userClient.updateUser(updatedUser, user.id).subscribe({
         next: (res) => {
@@ -137,7 +137,7 @@ export class UserCollections {
     const user = this.usuario();
     if (!user || !user.id) return;
 
-    const vault = user.pokemonVault ?? [];
+    const vault = user.pokemon_vault ?? [];
     if (collectionIndex < 0 || collectionIndex >= vault.length) return;
 
     const collection = vault[collectionIndex] ?? [];
@@ -164,7 +164,7 @@ export class UserCollections {
 
     const updatedUser: User = {
       ...user,
-      pokemonVault: updatedVault
+      pokemon_vault: updatedVault
     };
 
     this.userClient.updateUser(updatedUser, user.id).subscribe({
@@ -190,18 +190,18 @@ export class UserCollections {
     const ok = confirm(`Seguro que queres eliminar el equipo ${index + 1}?`);
     if (!ok) return;
 
-    const matrix = [...(user.pokemonVault ?? [])];
+    const matrix = [...(user.pokemon_vault ?? [])];
     matrix.splice(index, 1);
 
-    const names = [...(user.collectionNames ?? [])];
+    const names = [...(user.collection_names ?? [])];
     if (index < names.length) {
       names.splice(index, 1);
     }
 
     const updatedUser: User = {
       ...user,
-      pokemonVault: matrix,
-      collectionNames: names
+      pokemon_vault: matrix,
+      collection_names: names
     };
 
     this.userClient.updateUser(updatedUser, user.id).subscribe({
@@ -222,7 +222,7 @@ export class UserCollections {
    */
   getCollectionName(index: number): string {
     const user = this.usuario();
-    const names = user?.collectionNames ?? [];
+    const names = user?.collection_names ?? [];
     const stored = names[index];
 
     if (stored && stored.trim().length > 0) {
@@ -239,7 +239,7 @@ export class UserCollections {
 
   /**
    * Saves a collection name on blur or Enter key.
-   * Ensures collectionNames array matches vault length to prevent race conditions.
+   * Ensures collection_names array matches vault length to prevent race conditions.
    * Uses generic names as fallback for empty inputs.
    */
   saveCollectionName(index: number) {
@@ -252,7 +252,7 @@ export class UserCollections {
     const data = this.editingName().trim();
     const finalName = data || `Equipo ${index + 1}`;
 
-    const existing = user.collectionNames ?? [];
+    const existing = user.collection_names ?? [];
     const updatedNames = [...existing];
 
     // Ensure names array matches vault length to prevent sync issues
@@ -268,7 +268,7 @@ export class UserCollections {
 
     const updatedUser: User = {
       ...user,
-      collectionNames: updatedNames
+      collection_names: updatedNames
     };
 
     this.userClient.updateUser(updatedUser, user.id).subscribe({

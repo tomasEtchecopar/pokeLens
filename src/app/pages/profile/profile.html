@@ -7,7 +7,7 @@
     @if (usuario(); as u) {
 
     <div class="profile-row">
-      <img [src]="u.avatarUrl || '/src/assets/default.png'" alt="avatar" class="avatar-lg" (click)="openAvatar()"
+      <img [src]="u.avatar_url || '/src/assets/default.png'" alt="avatar" class="avatar-lg" (click)="openAvatar()"
         (error)="setDefaultAvatar($event)" />
       <div>
         <p><strong>UserName:</strong> {{ u.username }}</p>
@@ -16,7 +16,7 @@
         <p><strong>Puntos:</strong> {{ u.points ?? 0 }} PokePoints</p>
         <p>
           <strong>Último Ingreso:</strong>
-          {{ u.lastLoginDate | date:'dd/MM/yyyy HH:mm:ss' }}
+          {{ u.last_login_date | date:'dd/MM/yyyy HH:mm:ss' }}
         </p>
       </div>
     </div>
@@ -80,7 +80,7 @@
   <div class="avatar-modal" (click)="$event.stopPropagation()">
 
     @if (usuario(); as u) {
-    <img [src]="u.avatarUrl || '/src/assets/default.png'" class="avatar-modal-img" (click)="closeAvatar()"
+    <img [src]="u.avatar_url || '/src/assets/default.png'" class="avatar-modal-img" (click)="closeAvatar()"
       (error)="setDefaultAvatar($event)" />
     }
   </div>

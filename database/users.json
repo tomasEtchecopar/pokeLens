@@ -7,11 +7,11 @@
       "mail": "adriannggonzalez@gmail.com",
       "password": "1234",
       "pokemonId": 304,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/304.png",
+      "avatar_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/304.png",
       "points": 595,
-      "lastLoginDate": "2025-11-20T03:16:47.034Z",
-      "lastCreateCollection": "2025-11-19T22:58:32.191Z",
-      "pokemonVault": [
+      "last_login_date": "2025-11-20T03:16:47.034Z",
+      "last_created_collection": "2025-11-19T22:58:32.191Z",
+      "pokemon_vault": [
         [
           {
             "arrayId": 0,
@@ -330,7 +330,7 @@
           }
         ]
       ],
-      "collectionNames": [
+      "collection_names": [
         "Fuego",
         "Agua",
         "Planta",
@@ -343,7 +343,7 @@
         "Mixto",
         "probar puntos semana"
       ],
-      "pointsHistory": [
+      "points_history": [
         {
           "amount": 100,
           "reason": "Puntos de Bienvenida",
@@ -403,13 +403,13 @@
       "mail": "pepe@gmail.com",
       "password": "1234",
       "pokemonId": 402,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/402.png",
+      "avatar_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/402.png",
       "points": 15,
-      "lastLoginDate": "2025-11-20T06:06:45.950Z",
-      "lastCreateCollection": null,
-      "pokemonVault": [],
-      "collectionNames": [],
-      "pointsHistory": [
+      "last_login_date": "2025-11-20T06:06:45.950Z",
+      "last_created_collection": null,
+      "pokemon_vault": [],
+      "collection_names": [],
+      "points_history": [
         {
           "amount": 15,
           "reason": "Puntos de Bienvenida! Que los disfrutes! ",

@@ -120,7 +120,7 @@ export class SignIn implements OnInit {
    * Registration flow:
    * 1. Generates avatar from username hash
    * 2. Awards random welcome points (0-20)
-   * 3. Creates user with initialized collections/history
+   * 3. Creates user with initialized collections/history (snake_case for Supabase)
    * 4. Adds welcome points to history
    * 5. Sets active session and redirects to home
    *
@@ -151,7 +151,7 @@ export class SignIn implements OnInit {
         ...datosUser,
         id: current.id,
         points: current.points ?? 0,
-        pointsHistory: current.pointsHistory ?? []
+        points_history: current.points_history ?? []
       };
 
       this.users.updateUser(updated, current.id).subscribe({
@@ -171,22 +171,22 @@ export class SignIn implements OnInit {
       // REGISTRATION MODE
       const usernameKey = datosUser.username.trim().toLowerCase();
       const pokemonId = this.pokeService.hashToPokemonId(usernameKey);
-      const avatarUrl = this.pokeService.pokemonArtworkUrl(pokemonId);
+      const avatar_url = this.pokeService.pokemonArtworkUrl(pokemonId);
       const puntos = this.points.randomPoints();
 
+      // Note: Using snake_case for Supabase column names
       const newUser: User = {
         ...datosUser,
-        pokemonId,
-        avatarUrl,
+        avatar_url,
         points: puntos,
-        lastLoginDate: new Date().toISOString(),
-        lastCreateCollection: null,
-        pokemonVault: [],
-        collectionNames: [],
-        pointsHistory: []
+        last_login_date: new Date().toISOString(),
+        last_created_collection: null,
+        pokemon_vault: [],
+        collection_names: [],
+        points_history: []
       };
 
-      this.users.user(newUser).subscribe({
+      this.users.addUser(newUser).subscribe({
         next: (createdUser) => {
           alert(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
 

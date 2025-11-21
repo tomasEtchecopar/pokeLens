@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { PointEvent, User } from '../user/user-model';
-import { Observable, of } from 'rxjs';
+import { from, Observable, of } from 'rxjs';
 import { map, tap } from 'rxjs/operators';
 import { environment } from '../../enviroments/enviroment';
+import { SupabaseService } from './supabase-service';
 
 /**
  * PointsService manages the user points system.
@@ -13,9 +14,8 @@ import { environment } from '../../enviroments/enviroment';
   providedIn: 'root'
 })
 export class PointsService {
+  private readonly supabase = inject(SupabaseService);
 
-  private readonly http = inject(HttpClient);
-  private readonly baseUrl =`${environment.apiUrl}/users`
 
   /**
    * Generates a random bonus between 0-20 points.
@@ -29,21 +29,30 @@ export class PointsService {
    * Retrieves the user's points history (last N events).
    */
   getHistory(userId: string, limit = 10): Observable<PointEvent[]> {
-    return this.http.get<User>(`${this.baseUrl}/${userId}`).pipe(
-      map(user => (user.pointsHistory ?? []).slice(-limit))
-    );
+    return from(
+      this.supabase.client
+      .from('users')
+      .select('points_history')
+      .eq('id', userId)
+      .single()
+    ).pipe(
+      map(({data}) =>{
+        const history = (data?.points_history as PointEvent[]) ?? [];
+        return history.slice(-limit);
+      })
+    )
   }
 
   /**
    * Awards +10 points for daily login if user hasn't logged in today yet.
-   * Updates lastLoginDate regardless. Shows an alert when points are awarded.
+   * Updates last_login_date regardless. Shows an alert when points are awarded.
    * Returns the updated user (with or without new points).
    */
   awardLoginPoints(user: User): Observable<User> {
     if (!user.id) return of(user);
 
     const today = new Date();
-    const last = user.lastLoginDate ? new Date(user.lastLoginDate) : null;
+    const last = user.last_login_date ? new Date(user.last_login_date) : null;
 
     const isSameDay =
       last &&
@@ -51,48 +60,56 @@ export class PointsService {
       last.getMonth() === today.getMonth() &&
       last.getDate() === today.getDate();
 
-    // Already logged in today - just update timestamp, no points
+    // Just update last_login_date, no points
     if (isSameDay) {
-      const updated: User = {
-        ...user,
-        lastLoginDate: today.toISOString()
+      const updated: Partial<User> = {
+        last_login_date: today.toISOString()
       };
-      return this.http.put<User>(`${this.baseUrl}/${user.id}`, updated);
+
+      return from(
+        this.supabase.client
+          .from('users')
+          .update(updated)
+          .eq('id', user.id)
+          .select()
+          .single()
+      ).pipe(
+        map(({ data }) => data as User)
+      );
     }
 
-    // New day - award daily login bonus
+    // Award daily login bonus
     const event: PointEvent = {
       amount: 10,
       reason: 'Inicio de sesión diario',
       date: today.toISOString()
     };
 
-    const updatedWithPoints: User = {
-      ...user,
+    const updatedWithPoints: Partial<User> = {
       points: (user.points ?? 0) + 10,
-      lastLoginDate: today.toISOString(),
-      pointsHistory: [...(user.pointsHistory ?? []), event]
+      last_login_date: today.toISOString(),
+      points_history: [...(user.points_history ?? []), event]
     };
 
-    return this.http.put<User>(`${this.baseUrl}/${user.id}`, updatedWithPoints).pipe(
+    return from(
+      this.supabase.client
+        .from('users')
+        .update(updatedWithPoints)
+        .eq('id', user.id)
+        .select()
+        .single()
+    ).pipe(
+      map(({ data }) => data as User),
       tap(() => alert('Se le asignaron +10 Puntos por su ingreso diario!'))
     );
   }
 
-  /**
-   * Generic method to add points for any action.
-   * @param reason - If provided, shows an alert with this message
-   * @param reason2 - If provided (and reason is not), logs silently to console
-   *
-   * Usage: Pass reason for user-facing alerts, reason2 for silent logging.
-   */
   addPoints(user: User, amount: number, reason?: string, reason2?: string): Observable<User> {
     if (!user.id) return of(user);
 
-    const updated: User = {
-      ...user,
+    const updated: Partial<User> = {
       points: (user.points ?? 0) + amount,
-      pointsHistory: user.pointsHistory ?? []
+      points_history: user.points_history ?? []
     };
 
     if (reason) {
@@ -102,52 +119,52 @@ export class PointsService {
     }
   }
 
-  // Updates user and shows alert with the reason
-  alertAddPoints(user: User, id: string, reason: string): Observable<User> {
-    return this.http.put<User>(`${this.baseUrl}/${id}`, user).pipe(
-      tap(() => {
-        alert(reason);
-      })
+  private alertAddPoints(user: Partial<User>, id: string, reason: string): Observable<User> {
+    return from(
+      this.supabase.client
+        .from('users')
+        .update(user)
+        .eq('id', id)
+        .select()
+        .single()
+    ).pipe(
+      map(({ data }) => data as User),
+      tap(() => alert(reason))
     );
   }
 
-  // Updates user and logs silently to console
-  notAlertAddPoints(user: User, id: string, reason2: string): Observable<User> {
-    return this.http.put<User>(`${this.baseUrl}/${id}`, user).pipe(
+  private notAlertAddPoints(user: Partial<User>, id: string, reason2: string): Observable<User> {
+    return from(
+      this.supabase.client
+        .from('users')
+        .update(user)
+        .eq('id', id)
+        .select()
+        .single()
+    ).pipe(
+      map(({ data }) => data as User),
       tap((updatedUser) => {
         console.log(`Puntos actualizados (${reason2}) — total: ${updatedUser.points}`);
       })
     );
   }
 
-  /**
-   * Adds a custom event to the user's points history.
-   */
   addHistory(user: User, event: PointEvent): Observable<User> {
     if (!user.id) return of(user);
 
-    const updatedUser: User = {
-      ...user,
-      pointsHistory: [...(user.pointsHistory ?? []), event]
-    };
+    const updatedHistory = [...(user.points_history ?? []), event];
 
-    return this.http.put<User>(`${this.baseUrl}/${user.id}`, updatedUser);
+    return from(
+      this.supabase.client
+        .from('users')
+        .update({ points_history: updatedHistory })
+        .eq('id', user.id)
+        .select()
+        .single()
+    ).pipe(
+      map(({ data }) => data as User)
+    );
   }
 }
 
-// Example usage:
-/*
-const user = this.auth.activeUser();
 
-if (!user) return;
-
-this.points.addPoints(
-  user,
-  10,
-  '+10 puntos por agregar un Pokémon a tu equipo'
-).subscribe(updatedUser => {
-  // Update active user in auth service
-  this.auth.activeUser.set(updatedUser);
-  localStorage.setItem('activeUser', JSON.stringify(updatedUser));
-});
-*/

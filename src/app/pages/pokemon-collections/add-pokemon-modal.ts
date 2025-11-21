@@ -1,4 +1,4 @@
-import { pokemonVault } from './collection-model';
+import { pokemon_vault } from './collection-model';
 import { Component, effect, inject, input, output, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
@@ -385,12 +385,12 @@ export class AddPokemonModal {
   errorMessage = signal('');
 
   usuario = this.auth.activeUser;
-  collections = signal<pokemonVault[][]>([]);
+  collections = signal<pokemon_vault[][]>([]);
 
   constructor() {
     effect(() => {
-      if (this.auth.activeUser()?.pokemonVault) {
-        this.collections.set(this.auth.activeUser()!.pokemonVault!);
+      if (this.auth.activeUser()?.pokemon_vault) {
+        this.collections.set(this.auth.activeUser()!.pokemon_vault!);
       }
     })
   };
@@ -407,12 +407,12 @@ export class AddPokemonModal {
   private shouldRewardWeeklyCollection(user: User, isNewCollection: boolean, nowIso: string): boolean {
     if (!isNewCollection) return false; // solo premiamos una nuevo equipo
 
-    if (!user.lastCreateCollection) {
+    if (!user.last_created_collection) {
       // Nunca se premió una equipo y es la  primera vez
       return true;
     }
 
-    const diffDays = this.daysBetween(user.lastCreateCollection, nowIso);
+    const diffDays = this.daysBetween(user.last_created_collection, nowIso);
     return diffDays >= 7; // 7 días o más
   }
 
@@ -455,7 +455,7 @@ export class AddPokemonModal {
     }
     //------------------------------------------------------------------------------
     // Sector donde se controla la cantidad de pokemones en el array
-    const matrix = this.collections();              // Matriz de equipos: pokemonVault[][]
+    const matrix = this.collections();              // Matriz de equipos: pokemon_vault[][]
     const selectedIndex = this.selectedCollection() - 1; //indice de el equipo elegida
 
     const currentCount = matrix[selectedIndex]?.length ?? 0; //calcula los pokemones en el equipo
@@ -482,7 +482,7 @@ export class AddPokemonModal {
     this.errorMessage.set('');
 
     //Este es el objeto que se agregara al array de Pokemones
-    const pokemonData: pokemonVault = {
+    const pokemonData: pokemon_vault = {
       arrayId: 0, // se asigna en el service
       idPokemon: pkm.id,
       name: pkm.name,
@@ -516,14 +516,14 @@ export class AddPokemonModal {
 
           // Si se creo una equipo nuevo, agregamos el nombre al array de nombres
           if (isNewCollection) {
-            const names = [...(updatedUser.collectionNames ?? [])];
+            const names = [...(updatedUser.collection_names ?? [])];
             const name = this.newCollectionName().trim();
 
             names.push(name);
 
             userWithCollections = {
               ...updatedUser,
-              collectionNames: names
+              collection_names: names
             };
             // Limpiamos el input del nombre de equipo para futuras capturas
             this.newCollectionName.set('');
@@ -540,7 +540,7 @@ export class AddPokemonModal {
             // Actualizamos la fecha de última creación de equipo
             const updatedUserWithDate: User = {
               ...userWithCollections,
-              lastCreateCollection: nowIso
+              last_created_collection: nowIso
             };
 
             // Sumamos puntos por el equipo semanal
@@ -600,7 +600,7 @@ export class AddPokemonModal {
 
   getCollectionName(index: number): string {
     const user = this.usuario();
-    const names = user?.collectionNames;
+    const names = user?.collection_names;
     const stored = names?.[index];
 
     if (stored && stored.trim().length > 0) {

@@ -7,12 +7,12 @@
       "mail": "adriannggonzalez@gmail.com",
       "password": "1234",
       "pokemonId": 304,
-      "avatarUrl": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/304.png",
+      "avatar_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/304.png",
       "points": 500,
-      "lastLoginDate": "2025-11-19T22:20:00.000Z",
-      "lastCreateCollection": "2025-11-19T22:20:00.000Z",
+      "last_login_date": "2025-11-19T22:20:00.000Z",
+      "last_created_collection": "2025-11-19T22:20:00.000Z",
 
-      "pokemonVault": [
+      "pokemon_vault": [
 
         [
           { "arrayId": 0, "idPokemon": 4, "name": "charmander" },
@@ -106,7 +106,7 @@
 
       ],
 
-      "collectionNames": [
+      "collection_names": [
         "Fuego",
         "Agua",
         "Planta",
@@ -119,7 +119,7 @@
         "Mixto"
       ],
 
-      "pointsHistory": [
+      "points_history": [
         {
           "amount": 100,
           "reason": "Puntos de Bienvenida",

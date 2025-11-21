@@ -1,35 +1,77 @@
+import { SupabaseService } from './supabase-service';
 import { Observable, switchMap } from 'rxjs';
 import { User } from '../user/user-model';
-import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { pokemonVault } from '../pages/pokemon-collections/collection-model';
-import { environment } from '../../enviroments/enviroment';
+import { from } from 'rxjs';
+import { pokemon_vault } from '../pages/pokemon-collections/collection-model';
+import { map } from 'rxjs';
 
 /**
  * UserClient handles CRUD operations for users and manages pokemon collections.
- * Wraps HTTP calls to the users endpoint.
  */
 @Injectable({
   providedIn: 'root'
 })
 export class UserClient {
-  private readonly http = inject(HttpClient);
-  private readonly baseUrl = `${environment.apiUrl}/users`
+  private readonly supabase = inject(SupabaseService);
 
   getUserById(id: string): Observable<User> {
-    return this.http.get<User>(`${this.baseUrl}/${id}`);
+    return from(
+      this.supabase.client
+        .from('users')
+        .select('*')
+        .eq('id', id)
+        .single()
+    ).pipe(
+      map(({ data, error }) => {
+        if (error) throw error;
+        return data as User;
+      })
+    );
   }
 
-  user(user: User): Observable<User> {
-    return this.http.post<User>(this.baseUrl, user);
+  addUser(user: User): Observable<User> {
+    const { id, ...userWithoutId } = user; //removing id, supabase autogenerates it
+
+    return from(
+      this.supabase.client
+        .from('users')
+        .insert(userWithoutId)
+        .select()
+        .single()
+    ).pipe(
+      map(({ data, error }) => {
+        if (error) throw error;
+        return data as User;
+      })
+    );
   }
 
-  updateUser(user: User, id: string | number): Observable<User> {
-    return this.http.put<User>(`${this.baseUrl}/${id}`, user);
+ updateUser(user: User, id: string | number): Observable<User> {
+    return from(
+      this.supabase.client
+        .from('users')
+        .update(user)
+        .eq('id', id)
+        .select()
+        .single()
+    ).pipe(
+      map(({ data, error }) => {
+        if (error) throw error;
+        return data as User;
+      })
+    );
   }
 
   deleteUser(id: string) {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+    return from(
+      this.supabase.client
+      .from('users')
+      .delete()
+      .eq('id', id)
+      .select()
+      .single()
+    )
   }
 
 
@@ -45,26 +87,20 @@ export class UserClient {
    * - Assigns next available arrayId within that specific collection
    * - Patches only the pokemonVault field
    */
-  addPokemonToVault(
-    userId: string,
-    nuevoPokemon: pokemonVault,
-    collectionNumber: number
-  ): Observable<User> {
+ addPokemonToVault( userId: string, nuevoPokemon: pokemon_vault, collectionNumber: number): Observable<User> {
     return this.getUserById(userId).pipe(
       switchMap(usuario => {
-        const vaults: pokemonVault[][] = usuario.pokemonVault ?? [];
-
-        // Convert 1-indexed collectionNumber to 0-indexed array position
+        const vaults: pokemon_vault[][] = usuario.pokemon_vault ?? [];
         const index = Math.max(collectionNumber - 1, 0);
 
-        // Create empty collections up to the target index if needed
+        // Create empty collections if needed
         while (vaults.length <= index) {
           vaults.push([]);
         }
 
         const targetCollection = vaults[index];
 
-        // Calculate next arrayId within THIS specific collection
+        // Calculate next arrayId
         const nextId = targetCollection.length
           ? Math.max(...targetCollection.map(p => p.arrayId ?? 0)) + 1
           : 0;
@@ -74,15 +110,24 @@ export class UserClient {
           { ...nuevoPokemon, arrayId: nextId }
         ];
 
-        // Rebuild the vaults array with the updated collection
         const updatedVaults = vaults.map((col, i) =>
           i === index ? updatedCollection : col
         );
 
-        // PATCH only the pokemonVault field to avoid overwriting other user data
-        return this.http.patch<User>(`${this.baseUrl}/${userId}`, {
-          pokemonVault: updatedVaults
-        });
+        // Update only pokemon_vault field
+        return from(
+          this.supabase.client
+            .from('users')
+            .update({ pokemon_vault: updatedVaults })
+            .eq('id', userId)
+            .select()
+            .single()
+        ).pipe(
+          map(({ data, error }) => {
+            if (error) throw error;
+            return data as User;
+          })
+        );
       })
     );
   }
