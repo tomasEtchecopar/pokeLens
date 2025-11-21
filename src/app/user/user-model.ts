@@ -1,4 +1,4 @@
-import { pokemon_vault } from "../pages/pokemon-collections/collection-model";
+import { pokemonVault } from "../pages/pokemon-collections/collection-model";
 
 export interface PointEvent {
   amount: number;
@@ -16,7 +16,7 @@ export interface User {
   points?: number;
   last_login_date?: string;
   last_created_collection?: string | null;
-  pokemon_vault?: pokemon_vault[][];
+  pokemon_vault?: pokemonVault[][];
   collection_names?: string[];
   points_history?: PointEvent[];
   created_at?: string;

@@ -1,5 +1,5 @@
-import { pokemon_vault } from './collection-model';
 import { Component, effect, inject, input, output, signal } from '@angular/core';
+import { pokemonVault } from './collection-model';
 import { FormsModule } from '@angular/forms';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { AuthServ } from '../../core/auth.service';
@@ -385,7 +385,7 @@ export class AddPokemonModal {
   errorMessage = signal('');
 
   usuario = this.auth.activeUser;
-  collections = signal<pokemon_vault[][]>([]);
+  collections = signal<pokemonVault[][]>([]);
 
   constructor() {
     effect(() => {
@@ -482,7 +482,7 @@ export class AddPokemonModal {
     this.errorMessage.set('');
 
     //Este es el objeto que se agregara al array de Pokemones
-    const pokemonData: pokemon_vault = {
+    const pokemonData: pokemonVault = {
       arrayId: 0, // se asigna en el service
       idPokemon: pkm.id,
       name: pkm.name,
