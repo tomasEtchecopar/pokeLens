@@ -78,6 +78,8 @@ export class PokemonCatalog implements AfterViewInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.pagination.disconnect();
+    this.filtering.clearFilters();
+    this.filtering.clearSort();
   }
 
 
