@@ -99,86 +99,61 @@ export class UserCollections {
     this.router.navigateByUrl('/profile');
   }
 
-  /**
-   * Removes a pokemon from a user's collection.
-   * Updates backend, activeUser, and localStorage.
-   */
-  deletePokemon(collectionIndex: number, arrayId: number) {
-    const user = this.usuario();
-    if (!user || !user.id) return;
+deletePokemon(collectionIndex: number, arrayId: number) {
+  const user = this.usuario();
+  if (!user || !user.id) return;
 
-    if (confirm('Seguro que desea eliminar al Pokemon de el equipo?')) {
-      const vault = user.pokemon_vault ?? [];
-      if (collectionIndex < 0 || collectionIndex >= vault.length) return;
-
-      const updatedCollection = vault[collectionIndex].filter(p => p.arrayId !== arrayId);
-      const updatedVault = vault.map((col, i) =>
-        i === collectionIndex ? updatedCollection : col
-      );
-
-      const updatedUser: User = { ...user, pokemon_vault: updatedVault };
-
-      this.userClient.updateUser(updatedUser, user.id).subscribe({
+  if (confirm('¿Seguro que desea eliminar al Pokemon de la colección?')) {
+    this.userClient.removePokemonFromVault(user.id, collectionIndex, arrayId)
+      .subscribe({
         next: (res) => {
           this.auth.activeUser.set(res);
           localStorage.setItem('activeUser', JSON.stringify(res));
         },
-        error: () => alert('Error al eliminar el Pokémon de el equipo'),
+        error: (err) => {
+          console.error(err);
+          alert('Error al eliminar el Pokémon de la colección');
+        }
       });
-    }
   }
-
+}
   /**
    * Edits a pokemon's nickname within a collection.
    * Accepts nickname via parameter or prompts user if not provided.
    * Limits to 32 characters and removes empty nicknames.
    */
-  editNickname(collectionIndex: number, arrayId: number, newNickname?: string) {
-    const user = this.usuario();
-    if (!user || !user.id) return;
+editNickname(collectionIndex: number, arrayId: number, newNickname?: string) {
+  const user = this.usuario();
+  if (!user || !user.id) return;
 
-    const vault = user.pokemon_vault ?? [];
-    if (collectionIndex < 0 || collectionIndex >= vault.length) return;
+  let nickname: string | null | undefined = typeof newNickname === 'string'
+    ? newNickname
+    : prompt('Nuevo apodo para el Pokémon:', '');
 
-    const collection = vault[collectionIndex] ?? [];
-    const entryIndex = collection.findIndex(e => e.arrayId === arrayId);
-    if (entryIndex === -1) return;
+  if (nickname === null) return; // User cancelled
 
-    // Use provided nickname or prompt user
-    let nickname: string | null | undefined = typeof newNickname === 'string'
-      ? newNickname
-      : prompt('Nuevo apodo para el Pokémon:', collection[entryIndex].nickname ?? '');
-
-    if (nickname === null) return; // User cancelled
-
-    nickname = (nickname ?? '').trim();
-    if (nickname.length > 32) nickname = nickname.slice(0, 32);
-
-    const finalNickname = nickname.length > 0 ? nickname : undefined;
-
-    const updatedEntry = { ...collection[entryIndex], nickname: finalNickname };
-    const updatedCollection = [...collection];
-    updatedCollection[entryIndex] = updatedEntry;
-
-    const updatedVault = vault.map((col, i) => (i === collectionIndex ? updatedCollection : col));
-
-    const updatedUser: User = {
-      ...user,
-      pokemon_vault: updatedVault
-    };
-
-    this.userClient.updateUser(updatedUser, user.id).subscribe({
-      next: (res) => {
-        this.auth.activeUser.set(res);
-        localStorage.setItem('activeUser', JSON.stringify(res));
-      },
-      error: (err) => {
-        console.error('Error al editar apodo', err);
-        alert('Error al editar el apodo del Pokémon');
-      }
-    });
+  nickname = (nickname ?? '').trim();
+  if (nickname.length > 32) {
+    alert('El nickname no puede exceder 32 caracteres');
+    return;
   }
 
+  this.userClient.updatePokemonNickname(
+    user.id,
+    collectionIndex,
+    arrayId,
+    nickname
+  ).subscribe({
+    next: (res) => {
+      this.auth.activeUser.set(res);
+      localStorage.setItem('activeUser', JSON.stringify(res));
+    },
+    error: (err) => {
+      console.error('Error al editar apodo', err);
+      alert('Error al editar el apodo del Pokémon');
+    }
+  });
+}
   /**
    * Deletes an entire collection and its associated name.
    * Requires confirmation before deletion.

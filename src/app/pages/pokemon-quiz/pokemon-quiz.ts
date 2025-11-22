@@ -69,7 +69,7 @@ export class PokemonQuiz implements OnInit {
     const today = new Date();
 
     // Step 1: Add points
-    this.points.addPoints(user, amount, undefined, reason).subscribe({
+    this.points.addPoints(user, amount, reason).subscribe({
       next: (updatedUser) => {
         const event: PointEvent = {
           amount,
