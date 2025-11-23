@@ -15,9 +15,10 @@ export class PointsService {
     return Math.floor(Math.random() * (20 - 0 + 1));
   }
 
-  getHistory(userId: string, limit = 10): Observable<PointEvent[]> {
+  getHistory(userId: string, limit? : number): Observable<PointEvent[]> {
+    const actualLimit = !limit || limit === Infinity ? 1000 : limit;
     return this.http.get<PointEvent[]>(
-      `${this.baseUrl}/${userId}/points/history?limit=${limit}`
+      `${this.baseUrl}/${userId}/points/history?limit=${actualLimit}`
     );
   }
 

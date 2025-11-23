@@ -251,7 +251,7 @@ export class PokemonSortMenu {
   closing = signal(false);
 
   readonly keys = [
-    { value: 'id', label: 'ID' },
+    { value: 'id', label: 'Nro Pokedex' },
     { value: 'name', label: 'Nombre' },
     { value: 'generation', label: 'Generación' },
     { value: 'height', label: 'Altura' },
