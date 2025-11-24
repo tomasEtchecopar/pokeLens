@@ -80,15 +80,10 @@
         </section>
       }
     } @else {
-      <div class="empty-state">
-        <p>No hay equipos guardados...</p>
-        <button class="btn" (click)="createTeam()">Crear primer equipo</button>
-      </div>
-    }
+        <p>No hay equipos guardados. Agrega Pokemon desde el catalogo...</p>
+      }
   } @else {
-    <div class="empty-state">
       <p>No hay usuario activo. Inicia sesión.</p>
       <button class="btn" (click)="router.navigate(['/logIn'])">Ir a Login</button>
-    </div>
   }
 </div>
