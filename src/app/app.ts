@@ -4,6 +4,7 @@ import { Header } from "./header/header";
 import { FormsModule } from '@angular/forms';
 import { AuthServ } from './core/auth.service';
 import { Footer } from './footer/footer';
+import { PokemonListService } from './pokemon/pokemon-list-service';
 
 @Component({
   selector: 'app-root',
@@ -13,11 +14,15 @@ import { Footer } from './footer/footer';
 })
 export class App {
   protected readonly title = signal('pokeLens');
+  private readonly pokemonListService = inject(PokemonListService);
 
   private readonly auth = inject(AuthServ);
 
   constructor() {
     this.auth.restoreSession();
   }
+  ngOnInit() {
+  this.pokemonListService.loadAllPokemon();
+}
 
 }

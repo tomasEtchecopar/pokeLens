@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
-import { PokeApiService } from '../../../pokemon/pokeapi-service';
 import { translateGeneration, translateRegion, translateType } from '../../../pokemon/models/pokemon-helpers';
+import { PokemonListService } from '../../../pokemon/pokemon-list-service';
 import { map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -12,9 +12,9 @@ import { toSignal } from '@angular/core/rxjs-interop';
  * service to translate filter names and map it to a label for ui use
  */
 export class PokemonFiltersTranslation {
-  private readonly service = inject(PokeApiService);
+  private readonly service = inject(PokemonListService);
 
-  readonly types = toSignal(this.service.getAvailableTypes().pipe(
+  readonly types = toSignal(this.service.getTypes().pipe(
     map(types =>
       types
         .map(name => ({
@@ -25,7 +25,7 @@ export class PokemonFiltersTranslation {
     )
   ));
 
-  readonly generations = toSignal(this.service.getAvailableGenerations().pipe(
+  readonly generations = toSignal(this.service.getGenerations().pipe(
     map(generations =>
       generations
         .map(name => ({
@@ -36,7 +36,7 @@ export class PokemonFiltersTranslation {
     )
   ));
 
-  readonly regions = toSignal(this.service.getAvailableRegions().pipe(
+  readonly regions = toSignal(this.service.getRegions().pipe(
     map(regions =>
       regions
         .map(name => ({

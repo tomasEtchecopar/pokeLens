@@ -5,8 +5,8 @@ import { PokemonListService } from '../../pokemon/pokemon-list-service';
 import { TeamService } from '../../core/team.service';
 import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
-import { Team } from '../../user/user-model';
 import { FormsModule } from '@angular/forms';
+import { Team } from './team-model';
 
 /**
  * UserTeams manages the user's pokemon teams.
@@ -23,7 +23,7 @@ export class UserTeams implements OnInit {
   private readonly auth = inject(AuthServ);
   private readonly teamService = inject(TeamService);
   readonly pkmList = inject(PokemonListService);
-  private readonly router = inject(Router);
+  protected readonly router = inject(Router);
 
   // Team name editing state
   editingTeamId = signal<string | null>(null);
@@ -123,6 +123,17 @@ export class UserTeams implements OnInit {
   }
 
   /**
+   * Obtiene los pokemon completos de un equipo
+   */
+  getTeamPokemons(team: Team): Pokemon[] {
+    const allPokemon = this.pkmList.allPokemon();
+
+    return team.pokemons
+      .map(tp => allPokemon.find(p => p.id === tp.pokemon_id))
+      .filter((p): p is Pokemon => !!p);
+  }
+
+  /**
    * Elimina un equipo
    */
   deleteTeam(teamId: string) {
@@ -159,7 +170,7 @@ export class UserTeams implements OnInit {
   /**
    * Edita el nickname de un pokemon
    */
-  editNickname(pokemonId: string, currentNickname?: string) {
+  editNickname(pokemonId: string, currentNickname?: string | null) {
     const nickname = prompt('Nuevo apodo para el Pokémon:', currentNickname || '');
 
     if (nickname === null) return; // User cancelled

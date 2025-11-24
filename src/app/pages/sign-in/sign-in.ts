@@ -8,7 +8,6 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { PointsService } from '../../core/points.service';
-import { PokeApiService } from '../../pokemon/pokeapi-service';
 
 const emailPatter = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
@@ -28,7 +27,6 @@ export class SignIn implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
   private readonly auth = inject(AuthServ);
   private readonly router = inject(Router);
-  private readonly pokeService = inject(PokeApiService);
   private readonly points = inject(PointsService);
 
   // Dual-mode: registration vs profile editing
@@ -172,14 +170,11 @@ export class SignIn implements OnInit {
     else {
       // REGISTRATION MODE
       const usernameKey = datosUser.username.trim().toLowerCase();
-      const pokemon_id = this.pokeService.hashToPokemonId(usernameKey);
-      const avatar_url = this.pokeService.pokemonArtworkUrl(pokemon_id);
       const puntos = this.points.randomPoints();
 
       // Initialize new user with modularized structure
       const newUser: User = {
         ...datosUser,
-        avatar_url,
         points: puntos,
         login_dates: [new Date().toISOString()], // First login
         last_team_created_at: null, // No teams yet

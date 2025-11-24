@@ -5,7 +5,7 @@ import { AuthServ } from '../../core/auth.service';
 import { PointsService } from '../../core/points.service';
 import { User } from '../../user/user-model';
 import { TeamService } from '../../core/team.service';
-import { Team } from '../../user/user-model';
+import { Team } from './team-model';
 import { Router } from '@angular/router';
 
 @Component({

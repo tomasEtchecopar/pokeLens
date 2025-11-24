@@ -3,7 +3,7 @@ import { User } from '../user/user-model';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { environment } from '../../enviroments/enviroment';
-import { pokemonVault } from '../pages/pokemon-teams/team-model';
+import { TeamPokemon } from '../pages/pokemon-teams/team-model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,7 +31,7 @@ export class UserClient {
     return this.http.delete<{ message: string }>(`${this.baseUrl}/${id}`);
   }
 
-  addPokemonToVault( userId: string, pokemon: pokemonVault, teamNumber: number): Observable<User> {
+  addPokemonToVault( userId: string, pokemon: TeamPokemon, teamNumber: number): Observable<User> {
     return this.http.post<User>(`${this.baseUrl}/${userId}/pokemon`, {
       pokemon,
       teamNumber
