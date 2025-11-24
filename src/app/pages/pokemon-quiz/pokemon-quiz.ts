@@ -74,7 +74,7 @@ export class PokemonQuiz implements OnInit {
         const event: PointEvent = {
           amount,
           reason,
-          date: today.toISOString()
+          created_at: today.toISOString()
         };
 
         // Step 2: Add to history

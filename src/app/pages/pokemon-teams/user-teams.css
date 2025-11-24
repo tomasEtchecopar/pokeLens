@@ -1,4 +1,4 @@
-.collections-page {
+.teams-page {
   width: 100%;
   max-width: 1200px;
   margin: 2rem auto;
@@ -61,8 +61,8 @@
   box-shadow: 0 0 0 #1a1a1a;
 }
 
-/* Collection Block */
-.collection-block {
+/* Team Block */
+.team-block {
   background: #3a3a3a;
   border: 3px solid #1a1a1a;
   margin-bottom: 1.5rem;
@@ -71,7 +71,7 @@
     3px 3px 0 #1a1a1a;
 }
 
-.collection-header {
+.team-header {
   display: flex;
   align-items: center;
   gap: 1rem;
@@ -81,7 +81,7 @@
   flex-wrap: wrap;
 }
 
-.collection-title {
+.team-title {
   margin: 0;
   font-size: 1.1rem;
   font-weight: 900;
@@ -93,12 +93,12 @@
   padding: 0.25rem;
 }
 
-.collection-title:hover {
+.team-title:hover {
   color: #b0d0ae;
   text-decoration: underline;
 }
 
-.collection-name-input {
+.team-name-input {
   background: #1a1a1a;
   border: 2px solid #9dbc9b;
   color: #9dbc9b;
@@ -111,7 +111,7 @@
   box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.5);
 }
 
-.collection-name-input:focus {
+.team-name-input:focus {
   outline: none;
   box-shadow: inset 2px 2px 0 rgba(0, 0, 0, 0.5), 0 0 0 2px #9dbc9b;
 }
@@ -136,7 +136,7 @@
 
 
 
-.btn-delete-collection {
+.btn-delete-team {
   margin-left: auto;
   background: #5f0b0b;
   border: 2px solid #1a1a1a;
@@ -152,19 +152,19 @@
   box-shadow: 2px 2px 0 #1a1a1a;
 }
 
-.btn-delete-collection:hover {
+.btn-delete-team:hover {
   background: #7f0f0f;
   transform: translate(1px, 1px);
   box-shadow: 1px 1px 0 #1a1a1a;
 }
 
-.btn-delete-collection:active {
+.btn-delete-team:active {
   transform: translate(2px, 2px);
   box-shadow: 0 0 0 #1a1a1a;
   background: #3f0505;
 }
 
-.collection-scroll {
+.team-scroll {
   padding: 1rem;
   background: #2c2c2c;
   overflow-x: auto;
@@ -178,7 +178,7 @@
 }
 
 .vault-card-wrapper {
-  position: relative;   
+  position: relative;
   flex: 0 0 auto;
   display: flex;
   justify-content: center;
@@ -287,10 +287,10 @@
 }
 
 
-.collections-page > p {
+.teams-page > p {
   padding: 3rem 2rem;
   text-align: center;
-  color: #9dbc9b;
+  color: #FFF;
   font-size: 1.1rem;
   font-weight: 700;
   background: #2c2c2c;
@@ -300,7 +300,7 @@
 }
 
 @media (max-width: 920px) {
-  .collections-page {
+  .teams-page {
     padding: 0.75rem;
     margin: 1rem;
   }
@@ -315,12 +315,12 @@
     text-align: center;
   }
 
-  .collection-header {
+  .team-header {
     flex-direction: column;
     align-items: stretch;
   }
 
-  .btn-delete-collection {
+  .btn-delete-team {
     margin-left: 0;
     width: 100%;
   }
@@ -341,7 +341,7 @@
     font-size: 0.75rem;
   }
 
-  .collection-title {
+  .team-title {
     font-size: 0.95rem;
   }
 
@@ -350,13 +350,13 @@
     padding: 0.3rem 0.6rem;
   }
 }
-.empty-collection-card {
+.empty-team-card {
   background: #2c2c2c;
   border: 3px solid #1a1a1a;
   padding: 2rem;
   margin: 1.5rem 0;
   text-align: center;
-  color: #9dbc9b;
+  color: #FFF;
   font-family: 'Courier New', monospace;
   font-size: 1.1rem;
   font-weight: 700;
@@ -364,8 +364,8 @@
   border-radius: 6px;
 }
 
-.empty-collection-card strong {
-  color: #b0d0ae;
+.empty-team-card strong {
+  color: #FFF;
   font-size: 1.2rem;
 }
 .big-empty-btn {

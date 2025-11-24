@@ -49,8 +49,8 @@ export class Profile {
     this.router.navigateByUrl('/catalog');
   }
 
-  goToCollections() {
-    this.router.navigateByUrl('/collections');
+  goToTeams() {
+    this.router.navigateByUrl('/teams');
   }
 
   edit() {
@@ -70,7 +70,7 @@ export class Profile {
 
   setDefaultAvatar(event: Event) {
     const img = event.target as HTMLImageElement;
-    img.src = 'default.png';
+    img.src = '/assets/images/default.png';
   }
 
 

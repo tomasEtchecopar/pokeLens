@@ -4,7 +4,7 @@ import { TitleCasePipe } from '@angular/common';
 import { signal } from '@angular/core';
 import { translateType } from '../models/pokemon-helpers';
 import { Router } from "@angular/router";
-import { AddPokemonModal } from '../../pages/pokemon-collections/add-pokemon-modal';
+import { AddPokemonModal } from '../../pages/pokemon-teams/add-pokemon-modal';
 import { PokemonCryButton } from './pokemon-cry-button';
 
 /**
@@ -22,7 +22,7 @@ export class PokemonCard {
   private readonly router = inject(Router);
 
   readonly pokemon = input.required<Pokemon>();
-  readonly nickname = input<string>(); // optional nickname; used in collections
+  readonly nickname = input<string>(); // optional nickname; used in teams
 
   protected translateType = translateType;
 
@@ -32,7 +32,7 @@ export class PokemonCard {
 
   // Modal state
   showCaptureModal = signal(false);
-  showCaptureButton = input(true); // Can hide capture button in collection views
+  showCaptureButton = input(true); // Can hide capture button in team views
 
   /**
    * Opens capture modal while preventing card click navigation.

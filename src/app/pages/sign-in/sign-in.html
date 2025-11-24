@@ -1,7 +1,7 @@
 <div class="form-body">
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
   <div class="form-field">
-    <label for="username">Nombre y Apellido</label>
+    <label for="username">Nombre de usuario</label>
     <input type="text" id="username" formControlName="username" placeholder="Ash Ketchum">
     @if (form.get('username')?.invalid && form.get('username')?.touched) {
     <small>El nombre es requerido</small>

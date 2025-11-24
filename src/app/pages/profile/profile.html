@@ -7,7 +7,7 @@
     @if (usuario(); as u) {
 
     <div class="profile-row">
-      <img [src]="u.avatar_url || '/src/assets/default.png'" alt="avatar" class="avatar-lg" (click)="openAvatar()"
+      <img [src]="u.avatar_url || '/assets/images/default.png'" alt="avatar" class="avatar-lg" (click)="openAvatar()"
         (error)="setDefaultAvatar($event)" />
       <div>
         <p><strong>UserName:</strong> {{ u.username }}</p>
@@ -16,14 +16,14 @@
         <p><strong>Puntos:</strong> {{ u.points ?? 0 }} PokePoints</p>
         <p>
           <strong>Último Ingreso:</strong>
-          {{ u.last_login_date | date:'dd/MM/yyyy HH:mm:ss' }}
+          {{ u.login_dates[u.login_dates.length-1]| date:'dd/MM/yyyy HH:mm:ss' }}
         </p>
       </div>
     </div>
 
     <div class="actions">
       <button class="btn" (click)="isEditing.set(true)">Editar perfil</button>
-      <button class="btn" (click)="goToCollections()">Ver mis equipos</button>
+      <button class="btn" (click)="goToTeams()">Ver mis equipos</button>
       <button class="btn btn-danger" [class.btn-confirm-delete]="confirmDeleteClick()" (click)="onDeleteButtonClick()">
         {{ confirmDeleteClick() ? 'Confirmar eliminación' : 'Eliminar cuenta' }}
       </button>
@@ -51,12 +51,12 @@
             <td colspan="4" class="empty-row">No hay movimientos aún.</td>
           </tr>
           } @else {
-          @for (ev of history(); track ev.date) {
+          @for (pointEvent of history(); track pointEvent.id) {
           <tr>
-            <td class="col-amount">+{{ ev.amount }}</td>
-            <td>{{ ev.reason }}</td>
-            <td>{{ ev.date | date:'dd/MM/yyyy' }}</td>
-            <td>{{ ev.date | date:'HH:mm' }}</td>
+            <td class="col-amount">+{{ pointEvent.amount }}</td>
+            <td>{{ pointEvent.reason }}</td>
+            <td>{{ pointEvent.created_at | date:'dd/MM/yyyy' }}</td>
+            <td>{{ pointEvent.created_at | date:'HH:mm' }}</td>
           </tr>
           }
           }
@@ -80,7 +80,7 @@
   <div class="avatar-modal" (click)="$event.stopPropagation()">
 
     @if (usuario(); as u) {
-    <img [src]="u.avatar_url || '/src/assets/default.png'" class="avatar-modal-img" (click)="closeAvatar()"
+    <img [src]="u.avatar_url || '/assets/images/default.png'" class="avatar-modal-img" (click)="closeAvatar()"
       (error)="setDefaultAvatar($event)" />
     }
   </div>

@@ -1,11 +1,11 @@
 import { Component, effect, inject, input, output, signal } from '@angular/core';
-import { pokemonVault } from './collection-model';
 import { FormsModule } from '@angular/forms';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { AuthServ } from '../../core/auth.service';
-import { UserClient } from '../../core/user-client.service';
 import { PointsService } from '../../core/points.service';
-import { PointEvent, User } from '../../user/user-model';
+import { User } from '../../user/user-model';
+import { TeamService } from '../../core/team.service';
+import { Team } from '../../user/user-model';
 import { Router } from '@angular/router';
 
 @Component({
@@ -47,31 +47,28 @@ import { Router } from '@angular/router';
 
  @else {
               <div class="form-group">
-                <label for="collection">Equipo:</label>
+                <label for="team">Equipo:</label>
 
                   <select
-                    id="collection"
-                    [ngModel]="selectedCollection()"
-                    (ngModelChange)="selectedCollection.set(+$event)">
-                    @for (col of collections(); let i = $index; track i) {
-                      <option [value]="i + 1">
-                        {{ getCollectionName(i) }} ({{ col.length }} Pokémon)
+                    id="team"
+                    [(ngModel)]="selectedTeamId">
+                    @for (team of teams(); track team.id) {
+                      <option [value]="team.id">
+                        {{ team.name }} ({{ team.pokemons.length }} Pokémon)
                       </option>
                     }
-                    <option [value]="collections().length + 1">
-                      + Nuevo equipo
-                    </option>
+                    <option value="new">+ Nuevo equipo</option>
                   </select>
 
-                @if (isCreatingNewCollection()) {
+                @if (isCreatingNewTeam()) {
                   <div class="form-group">
-                    <label for="newCollectionName">Nombre de la nuevo equipo:</label>
+                    <label for="newTeamName">Nombre del nuevo equipo:</label>
                     <input
-                      id="newCollectionName"
+                      id="newTeamName"
                       type="text"
                       maxlength="20"
-                      [ngModel]="newCollectionName()"
-                      (ngModelChange)="newCollectionName.set($event)"
+                      [ngModel]="newTeamName()"
+                      (ngModelChange)="newTeamName.set($event)"
                       placeholder="Ej: Equipo Fuego"
                     >
                   </div>
@@ -366,12 +363,12 @@ import { Router } from '@angular/router';
   `]
 })
 export class AddPokemonModal {
-  private readonly router = inject(Router)
+  private readonly router = inject(Router);
   private readonly auth = inject(AuthServ);
-  private readonly userClient = inject(UserClient);
+  private readonly teamService = inject(TeamService);
   private readonly points = inject(PointsService);
-  newCollectionName = signal('');
 
+  newTeamName = signal('');
 
   pokemon = input.required<Pokemon>();
   isOpen = input.required<boolean>();
@@ -379,24 +376,43 @@ export class AddPokemonModal {
   closed = output<void>();
   captured = output<void>();
 
-  selectedCollection = signal(1);
+  selectedTeamId = signal<string | 'new'>('new');
   nickname = signal('');
   isLoading = signal(false);
   errorMessage = signal('');
 
   usuario = this.auth.activeUser;
-  collections = signal<pokemonVault[][]>([]);
+  teams = signal<Team[]>([]);
 
   constructor() {
+    // Cargar teams del usuario cuando el modal se abre
     effect(() => {
-      if (this.auth.activeUser()?.pokemon_vault) {
-        this.collections.set(this.auth.activeUser()!.pokemon_vault!);
+      if (this.isOpen() && this.auth.activeUser()?.id) {
+        this.loadTeams();
       }
-    })
-  };
+    });
+  }
 
   /**
-   * Calculates days of difference between parameters
+   * Carga los equipos del usuario desde la API
+   */
+  private loadTeams() {
+    this.teamService.getUserTeams().subscribe({
+      next: (teams) => {
+        this.teams.set(teams);
+        // Seleccionar primer equipo por defecto si existe
+        if (teams.length > 0) {
+          this.selectedTeamId.set(teams[0].id);
+        }
+      },
+      error: (err) => {
+        console.error('Error cargando equipos:', err);
+      }
+    });
+  }
+
+  /**
+   * Calcula días de diferencia entre dos fechas
    */
   private daysBetween(a: string, b: string): number {
     const msA = new Date(a).getTime();
@@ -404,43 +420,39 @@ export class AddPokemonModal {
     return (msB - msA) / (1000 * 60 * 60 * 24);
   }
 
-  private shouldRewardWeeklyCollection(user: User, isNewCollection: boolean, nowIso: string): boolean {
-    if (!isNewCollection) return false; // solo premiamos una nuevo equipo
+  /**
+   * Verifica si corresponde dar bonus por crear equipo semanal
+   */
+  private shouldRewardWeeklyTeam(user: User, isNewTeam: boolean, nowIso: string): boolean {
+    if (!isNewTeam) return false;
 
-    if (!user.last_created_collection) {
-      // Nunca se premió una equipo y es la  primera vez
-      return true;
+    if (!user.last_team_created_at) {
+      return true; // Primera vez que crea un equipo
     }
 
-    const diffDays = this.daysBetween(user.last_created_collection, nowIso);
+    const diffDays = this.daysBetween(user.last_team_created_at, nowIso);
     return diffDays >= 7; // 7 días o más
   }
 
   close() {
     this.nickname.set('');
     this.errorMessage.set('');
-    this.selectedCollection.set(1);
-    this.newCollectionName.set('');
+    this.newTeamName.set('');
     this.closed.emit();
   }
 
-
-
   /**
-   * Intenta capturar el Pokémon seleccionado y agregarlo a el equipo elegida.
+   * Captura el Pokémon y lo agrega al equipo seleccionado.
    *
-   * Flujo general:
-   * 1. Valida que haya usuario logueado y Pokémon valido.
-   * 2. Controla:
-   *    - que el equipo no tenga más de 6 Pokémon,
-   *    - que el Pokémon no esté repetido en esa equipo,
-   *    - que si es una equipo nuevo, tenga nombre.
-   * 3. Llama al backend para agregar el Pokémon a el equipo.
-   * 4. Si corresponde, otorga puntos por crear una equipo semanal y registra el evento.
-   * 5. Actualiza el usuario activo en memoria y en localStorage.
+   * Flujo:
+   * 1. Valida usuario y pokemon
+   * 2. Si es equipo nuevo, lo crea primero
+   * 3. Valida límite de 6 pokemon por equipo
+   * 4. Valida que no esté duplicado
+   * 5. Agrega el pokemon al equipo
+   * 6. Si corresponde, otorga bonus semanal por crear equipo
    */
   capturePokemon() {
-    // Usuario logueado actual (signal) y Pokémon que llega por input
     const user = this.usuario();
     const pkm = this.pokemon();
 
@@ -453,161 +465,140 @@ export class AddPokemonModal {
       this.errorMessage.set('Pokémon no válido');
       return;
     }
-    //------------------------------------------------------------------------------
-    // Sector donde se controla la cantidad de pokemones en el array
-    const matrix = this.collections();              // Matriz de equipos: pokemon_vault[][]
-    const selectedIndex = this.selectedCollection() - 1; //indice de el equipo elegida
 
-    const currentCount = matrix[selectedIndex]?.length ?? 0; //calcula los pokemones en el equipo
+    const isNewTeam = this.isCreatingNewTeam();
 
-    if (currentCount >= 6) {
-      this.errorMessage.set('Esta equipo ya tiene 6 Pokémon (límite máximo).');
-      return;
-    }
-    //------------------------------------------------------------------------------
-    // Evitar Pokémon duplicado en la misma equipo
-    const selectedCollectionEntries = matrix[selectedIndex] ?? [];
-
-    const alreadyInCollection = selectedCollectionEntries.some(//verificamos el id en el array
-      entry => entry.idPokemon === pkm.id
-    );
-
-    if (alreadyInCollection) {
-      this.errorMessage.set('Este Pokémon ya está en esta equipo.');
-      return;
-    }
-    //------------------------------------------------------------------------------
-
-    this.isLoading.set(true);
-    this.errorMessage.set('');
-
-    //Este es el objeto que se agregara al array de Pokemones
-    const pokemonData: pokemonVault = {
-      arrayId: 0, // se asigna en el service
-      idPokemon: pkm.id,
-      name: pkm.name,
-      nickname: this.nickname().trim() || undefined
-    };
-
-
-    const pointsCollection = 50; //puntos a dar por la creacion de el equipo
-    const nowIso = new Date().toISOString(); //Fecha y hora actual
-
-    // Indica si el usuario seleccionó la opción "+ Nuevo equipo"
-    const isNewCollection = this.isCreatingNewCollection();
-
-    // si es una equipo nuevo, se le pide ingresar un nombre
-    if (isNewCollection) {
-      const name = this.newCollectionName().trim();
+    // Validar nombre si es equipo nuevo
+    if (isNewTeam) {
+      const name = this.newTeamName().trim();
       if (!name) {
-        this.errorMessage.set('Ingresá un nombre para la nuevo equipo.');
-        this.isLoading.set(false);
+        this.errorMessage.set('Ingresá un nombre para el nuevo equipo.');
         return;
       }
     }
 
-    // Llamada al backend para agregar el pokémon a el equipo del usuario
-    this.userClient
-      .addPokemonToVault(user.id, pokemonData, this.selectedCollection())
-      .subscribe({
-        next: (updatedUser) => {
-          // Usuario devuelto por el backend luego de agregar el pokémon
-          let userWithCollections: User = updatedUser;
+    // Validar límite de 6 pokemon si es equipo existente
+    if (!isNewTeam) {
+      const selectedTeam = this.teams().find(t => t.id === this.selectedTeamId());
+      if (selectedTeam && selectedTeam.pokemons.length >= 6) {
+        this.errorMessage.set('Este equipo ya tiene 6 Pokémon (límite máximo).');
+        return;
+      }
 
-          // Si se creo una equipo nuevo, agregamos el nombre al array de nombres
-          if (isNewCollection) {
-            const names = [...(updatedUser.collection_names ?? [])];
-            const name = this.newCollectionName().trim();
+      // Validar que no esté duplicado
+      const alreadyInTeam = selectedTeam?.pokemons.some(
+        p => p.pokemon_id === pkm.id
+      );
+      if (alreadyInTeam) {
+        this.errorMessage.set('Este Pokémon ya está en este equipo.');
+        return;
+      }
+    }
 
-            names.push(name);
+    this.isLoading.set(true);
+    this.errorMessage.set('');
 
-            userWithCollections = {
-              ...updatedUser,
-              collection_names: names
-            };
-            // Limpiamos el input del nombre de equipo para futuras capturas
-            this.newCollectionName.set('');
-          }
+    const nowIso = new Date().toISOString();
+    const pointsTeam = 50;
 
-          // Aca se chequea si corresponde dar el bonus semanal por crear equipo
-          const giveWeeklyBonus = this.shouldRewardWeeklyCollection(
-            userWithCollections,
-            isNewCollection,
-            nowIso
-          );
+    if (isNewTeam) {
+      // FLUJO: Crear equipo nuevo y luego agregar pokemon
+      this.teamService.createTeam(this.newTeamName().trim()).subscribe({
+        next: (newTeam) => {
+          // Agregar pokemon al equipo recién creado
+          this.addPokemonToTeam(newTeam.id, pkm.id, this.nickname().trim());
 
+          // Verificar y otorgar bonus semanal
+          const giveWeeklyBonus = this.shouldRewardWeeklyTeam(user, true, nowIso);
           if (giveWeeklyBonus) {
-            // Actualizamos la fecha de última creación de equipo
-            const updatedUserWithDate: User = {
-              ...userWithCollections,
-              last_created_collection: nowIso
-            };
-
-            // Sumamos puntos por el equipo semanal
-            this.points
-              .addPoints(
-                updatedUserWithDate,
-                pointsCollection,
-                'Sumaste puntos por crear tu equipo semanal!'
-              )
-              .subscribe(userWithPoints => {
-                const event: PointEvent = {
-                  amount: pointsCollection,
-                  reason: 'Puntos por crear equipo semanal',
-                  date: nowIso
-                };
-
-                // Registramos el evento en el historial de puntos
-                this.points.addHistory(userWithPoints, event)
-                  .subscribe(finalUser => {
-                    this.auth.activeUser.set(finalUser);
-                    localStorage.setItem('activeUser', JSON.stringify(finalUser));
-                  });
-              });
-
-          } else {
-            // Si no hay bonus semanal, igual persistimos el usuario con los equipos/nombres actualizados
-            this.userClient.updateUser(userWithCollections, userWithCollections.id!).subscribe({
-              next: (savedUser) => {
-                this.auth.activeUser.set(savedUser);
-                localStorage.setItem('activeUser', JSON.stringify(savedUser));
-              },
-              error: (err) => {
-                console.error('Error actualizando usuario con nombres de equipo', err);
-              }
-            });
+            this.awardWeeklyBonus(user.id!, pointsTeam, nowIso);
           }
-          // Fin del proceso de captura
-          this.isLoading.set(false);
-          this.captured.emit();
-          this.close();
-          alert(`¡${pkm.name} capturado exitosamente!`);
-        }
-        ,
-        error: (error) => {
-          console.error('Error al capturar Pokémon:', error);
-          this.errorMessage.set('Error al capturar el Pokémon');
+
+          this.finishCapture(pkm.name);
+        },
+        error: (err) => {
+          console.error('Error creando equipo:', err);
+          this.errorMessage.set('Error al crear el equipo');
           this.isLoading.set(false);
         }
       });
+    } else {
+      // FLUJO: Agregar pokemon a equipo existente
+      this.addPokemonToTeam(
+        this.selectedTeamId() as string,
+        pkm.id,
+        this.nickname().trim()
+      );
+      this.finishCapture(pkm.name);
+    }
   }
 
-
-  isCreatingNewCollection(): boolean {
-    // si seleccionó el value "length + 1", es la opción "+ Nuevo equipo"
-    return this.selectedCollection() === this.collections().length + 1;
+  /**
+   * Agrega un pokemon a un equipo específico
+   */
+  private addPokemonToTeam(teamId: string, pokemonId: number, nickname: string) {
+    this.teamService.addPokemon(teamId, pokemonId, nickname).subscribe({
+      next: () => {
+        console.log('Pokemon agregado exitosamente');
+      },
+      error: (err) => {
+        console.error('Error agregando pokemon:', err);
+        this.errorMessage.set('Error al capturar el Pokémon');
+        this.isLoading.set(false);
+      }
+    });
   }
 
-  getCollectionName(index: number): string {
-    const user = this.usuario();
-    const names = user?.collection_names;
-    const stored = names?.[index];
+  /**
+   * Otorga bonus semanal por crear equipo
+   */
+  private awardWeeklyBonus(userId: string, amount: number, date: string) {
+    this.points.addPoints(
+      { id: userId } as User,
+      amount,
+      'Sumaste puntos por crear tu equipo semanal!'
+    ).subscribe({
+      next: (updatedUser) => {
+        this.auth.activeUser.set(updatedUser);
+        localStorage.setItem('activeUser', JSON.stringify(updatedUser));
+      },
+      error: (err) => {
+        console.error('Error otorgando bonus semanal:', err);
+      }
+    });
+  }
 
-    if (stored && stored.trim().length > 0) {
-      return stored.trim();
+  /**
+   * Finaliza el proceso de captura
+   */
+  private finishCapture(pokemonName: string) {
+    this.isLoading.set(false);
+    this.captured.emit();
+    this.close();
+    alert(`¡${pokemonName} capturado exitosamente!`);
+
+    // Recargar teams para reflejar cambios
+    this.loadTeams();
+  }
+
+  /**
+   * Verifica si está creando un equipo nuevo
+   */
+  isCreatingNewTeam(): boolean {
+    return this.selectedTeamId() === 'new';
+  }
+
+  /**
+   * Obtiene el nombre de un equipo por índice
+   */
+  getTeamName(index: number): string {
+    const teams = this.teams();
+    if (index < teams.length) {
+      return teams[index].name;
     }
     return `Equipo ${index + 1}`;
   }
+
   goLogin() {
     this.close();
     this.router.navigate(['/logIn']);
@@ -617,6 +608,4 @@ export class AddPokemonModal {
     this.close();
     this.router.navigate(['/signIn']);
   }
-
-
 }

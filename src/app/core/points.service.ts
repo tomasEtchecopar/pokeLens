@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { PointEvent, User } from '../user/user-model';
-import { Observable, of} from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../enviroments/enviroment';
 
@@ -15,18 +15,26 @@ export class PointsService {
     return Math.floor(Math.random() * (20 - 0 + 1));
   }
 
-  getHistory(userId: string, limit? : number): Observable<PointEvent[]> {
-    const actualLimit = !limit || limit === Infinity ? 1000 : limit;
+  /**
+   * Obtiene el historial de puntos (ahora desde tabla separada)
+   */
+  getHistory(userId: string, limit?: number): Observable<PointEvent[]> {
+    const actualLimit = !limit || limit === Infinity ? 100 : limit;
     return this.http.get<PointEvent[]>(
       `${this.baseUrl}/${userId}/points/history?limit=${actualLimit}`
     );
   }
 
-  // El backend maneja los puntos de login automáticamente
+  /**
+   * El backend maneja los puntos de login automáticamente
+   */
   awardLoginPoints(user: User): Observable<User> {
     return of(user);
   }
 
+  /**
+   * Agrega puntos al usuario
+   */
   addPoints(user: User, amount: number, reason?: string): Observable<User> {
     if (!user.id) return of(user);
 
@@ -36,7 +44,9 @@ export class PointsService {
     });
   }
 
-  // El backend maneja el historial automáticamente al agregar puntos
+  /**
+   * El backend maneja el historial automáticamente
+   */
   addHistory(user: User, event: PointEvent): Observable<User> {
     return of(user);
   }

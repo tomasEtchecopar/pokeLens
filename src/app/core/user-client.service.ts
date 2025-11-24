@@ -2,8 +2,8 @@ import { Observable } from 'rxjs';
 import { User } from '../user/user-model';
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { pokemonVault } from '../pages/pokemon-collections/collection-model';
 import { environment } from '../../enviroments/enviroment';
+import { pokemonVault } from '../pages/pokemon-teams/team-model';
 
 @Injectable({
   providedIn: 'root'
@@ -31,31 +31,41 @@ export class UserClient {
     return this.http.delete<{ message: string }>(`${this.baseUrl}/${id}`);
   }
 
-  addPokemonToVault( userId: string, pokemon: pokemonVault, collectionNumber: number): Observable<User> {
+  addPokemonToVault( userId: string, pokemon: pokemonVault, teamNumber: number): Observable<User> {
     return this.http.post<User>(`${this.baseUrl}/${userId}/pokemon`, {
       pokemon,
-      collectionNumber
+      teamNumber
     });
   }
 
   removePokemonFromVault(
     userId: string,
-    collectionIndex: number,
+    teamIndex: number,
     arrayId: number
   ): Observable<User> {
     return this.http.delete<User>(
-      `${this.baseUrl}/${userId}/pokemon/${collectionIndex}/${arrayId}`
+      `${this.baseUrl}/${userId}/pokemon/${teamIndex}/${arrayId}`
     );
   }
+  updateTeamName(
+  userId: string,
+  teamIndex: number,
+  name: string
+): Observable<User> {
+  return this.http.patch<User>(
+    `${this.baseUrl}/${userId}/teams/${teamIndex}/name`,
+    { name }
+  );
+}
 
   updatePokemonNickname(
     userId: string,
-    collectionIndex: number,
+    teamIndex: number,
     arrayId: number,
     nickname: string
   ): Observable<User> {
     return this.http.patch<User>(
-      `${this.baseUrl}/${userId}/pokemon/${collectionIndex}/${arrayId}/nickname`,
+      `${this.baseUrl}/${userId}/pokemon/${teamIndex}/${arrayId}/nickname`,
       { nickname }
     );
   }

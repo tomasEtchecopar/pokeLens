@@ -10,7 +10,7 @@
       "avatar_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/304.png",
       "points": 500,
       "last_login_date": "2025-11-19T22:20:00.000Z",
-      "last_created_collection": "2025-11-19T22:20:00.000Z",
+      "last_created_team": "2025-11-19T22:20:00.000Z",
 
       "pokemon_vault": [
 
@@ -106,7 +106,7 @@
 
       ],
 
-      "collection_names": [
+      "team_names": [
         "Fuego",
         "Agua",
         "Planta",
