@@ -2,9 +2,7 @@ import { inject, Injectable } from '@angular/core';
 import { PointEvent, User } from '../user/user-model';
 import { Observable, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs';
 import { environment } from '../../enviroments/enviroment';
-import { tap } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -17,36 +15,39 @@ export class PointsService {
     return Math.floor(Math.random() * (20 - 0 + 1));
   }
 
-  getHistory(userId: string, limit = 10): Observable<PointEvent[]> {
-    return this.http.get<User>(`${this.baseUrl}/${userId}`).pipe(
-      map(user => (user.points_history ?? []).slice(-limit))
+  /**
+   * Obtiene el historial de puntos (ahora desde tabla separada)
+   */
+  getHistory(userId: string, limit?: number): Observable<PointEvent[]> {
+    const actualLimit = !limit || limit === Infinity ? 100 : limit;
+    return this.http.get<PointEvent[]>(
+      `${this.baseUrl}/${userId}/points/history?limit=${actualLimit}`
     );
   }
 
-  // El backend ahora maneja los puntos de login automáticamente
+  /**
+   * El backend maneja los puntos de login automáticamente
+   */
   awardLoginPoints(user: User): Observable<User> {
-    return of(user); // Ya no es necesario, el backend lo hace en login
+    return of(user);
   }
 
-  addPoints(user: User, amount: number, reason?: string, reason2?: string): Observable<User> {
+  /**
+   * Agrega puntos al usuario
+   */
+  addPoints(user: User, amount: number, reason?: string): Observable<User> {
     if (!user.id) return of(user);
 
     return this.http.post<User>(`${this.baseUrl}/${user.id}/points`, {
       amount,
-      reason: reason || reason2 || 'Puntos agregados'
-    }).pipe(
-      tap(() => {
-        if (reason) {
-          alert(reason);
-        } else if (reason2) {
-          console.log(`Puntos actualizados (${reason2})`);
-        }
-      })
-    );
+      reason: reason || 'Puntos agregados'
+    });
   }
 
+  /**
+   * El backend maneja el historial automáticamente
+   */
   addHistory(user: User, event: PointEvent): Observable<User> {
-    // Ahora el backend maneja el historial automáticamente al agregar puntos
     return of(user);
   }
 }

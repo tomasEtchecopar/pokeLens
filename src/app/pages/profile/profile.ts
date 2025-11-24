@@ -49,8 +49,8 @@ export class Profile {
     this.router.navigateByUrl('/catalog');
   }
 
-  goToCollections() {
-    this.router.navigateByUrl('/collections');
+  goToTeams() {
+    this.router.navigateByUrl('/teams');
   }
 
   edit() {
@@ -62,7 +62,7 @@ export class Profile {
   }
 
   loadHistory(id: string) {
-    this.points.getHistory(id, Infinity).subscribe(history => {
+    this.points.getHistory(id).subscribe(history => {
       this.history.set([...history].reverse());
     });
   }
@@ -70,7 +70,7 @@ export class Profile {
 
   setDefaultAvatar(event: Event) {
     const img = event.target as HTMLImageElement;
-    img.src = 'default.png';
+    img.src = '/assets/images/default.png';
   }
 
 

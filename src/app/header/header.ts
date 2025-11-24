@@ -31,8 +31,8 @@ export class Header {
     this.router.navigateByUrl('profile');
   }
 
-  goToCollections(){
-    this.router.navigateByUrl('collections');
+  goToTeams(){
+    this.router.navigateByUrl('teams');
   }
 
   goToCatalog(){
@@ -44,8 +44,8 @@ isAlreadyInCatalog(): boolean {
   return path === '/catalog' || path.startsWith('/details/');
 }
 
-  isAlreadyInCollections(): boolean{
-    return this.router.url === '/collections'
+  isAlreadyInTeams(): boolean{
+    return this.router.url === '/teams'
   }
 
   logOut() {
@@ -55,7 +55,7 @@ isAlreadyInCatalog(): boolean {
   }
   setDefaultAvatar(event: Event) {
   const img = event.target as HTMLImageElement;
-  img.src = '/src/assets/default.png';
+  img.src = '/assets/images/default.png';
 }
 
 }

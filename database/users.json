@@ -10,7 +10,7 @@
       "avatar_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/304.png",
       "points": 595,
       "last_login_date": "2025-11-20T03:16:47.034Z",
-      "last_created_collection": "2025-11-19T22:58:32.191Z",
+      "last_created_team": "2025-11-19T22:58:32.191Z",
       "pokemon_vault": [
         [
           {
@@ -330,7 +330,7 @@
           }
         ]
       ],
-      "collection_names": [
+      "team_names": [
         "Fuego",
         "Agua",
         "Planta",
@@ -406,9 +406,9 @@
       "avatar_url": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/402.png",
       "points": 15,
       "last_login_date": "2025-11-20T06:06:45.950Z",
-      "last_created_collection": null,
+      "last_created_team": null,
       "pokemon_vault": [],
-      "collection_names": [],
+      "team_names": [],
       "points_history": [
         {
           "amount": 15,

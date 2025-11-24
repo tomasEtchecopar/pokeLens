@@ -6,7 +6,7 @@ import { Profile } from './pages/profile/profile';
 import { PokemonDetails } from './pages/pokemon-details/pokemon-details';
 import { HomePage } from './pages/home-page/home-page';
 import { Contact } from './pages/contact/contact';
-import { UserCollections } from './pages/pokemon-collections/user-collections';
+import { UserTeams } from './pages/pokemon-teams/user-teams';
 import { PokemonQuiz } from './pages/pokemon-quiz/pokemon-quiz';
 import { authGuard } from './core/auth-guard';
 import { guestGuard } from './core/guestGuard';
@@ -51,7 +51,7 @@ export const routes: Routes = [
 
     },
     {
-        path: 'collections', component: UserCollections,
+        path: 'teams', component: UserTeams,
         title: 'Mis Equipos',
         canActivate: [authGuard]
 

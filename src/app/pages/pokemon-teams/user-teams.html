@@ -1,0 +1,91 @@
+<div class="teams-page">
+
+  <div class="header-row">
+    <h2>Mis equipos</h2>
+    <button class="btn" (click)="backToProfile()">Volver al perfil</button>
+  </div>
+
+  @if (usuario(); as u) {
+
+  @if (teams().length) {
+
+  @for (team of teams(); let i = $index; track i) {
+
+  <section class="team-block">
+    <div class="team-header">
+
+      @if (editingTeamId() === team.id) {
+      <input class="team-name-input" type="text" [ngModel]="editingName()"
+        (ngModelChange)="editingName.set($event)" (blur)="saveTeamName(team.id)" (keyup.enter)="saveTeamName(team.id)"
+        autofocus />
+      } @else {
+      <h3 class="team-title" (click)="startEditingName(team.id, team.name)">
+        {{ team.name }}
+      </h3>
+      }
+
+      <p class="avg-power">
+        <strong>Poder promedio:</strong>
+        {{ teamAverages()[i] || 0 }}
+      </p>
+
+      <p class="team-length">
+        <strong>{{team.pokemons.length}}/6</strong>
+      </p>
+
+      <button class="btn-delete-team" (click)="deleteTeam(team.id)" title="Eliminar equipo completa">
+        Eliminar equipo
+      </button>
+    </div>
+
+    <div class="team-scroll">
+      @if (team.pokemons.length === 0) {
+      <div class="empty-team-card">
+        <button class="empty-team-card big-empty-btn" (click)="goToCatalog()">
+          <p><strong>Este equipo está vacío.</strong></p>
+          <p>Agregá Pokémon para verlos aquí.</p>
+        </button>
+
+      </div>
+      }
+      <div class="vault-grid">
+
+        @if(team.pokemons.length>0){
+        @for (pokemon of team.pokemons; track pokemon.id) {
+
+        @if (pkmList.getPokemonFromMemory(pokemon.pokemon_id); as pkm) {
+
+<div class="vault-card-wrapper">
+  <button
+    class="pokeball-btn"
+    (click)="deletePokemon(pokemon.id)"
+    title="Quitar Pokémon del equipo"
+    aria-label="Eliminar Pokémon">
+  </button>
+
+  <button
+    class="edit-nickname-btn"
+    title="Editar apodo"
+    (click)="editNickname(pokemon.id, pokemon.nickname!)"
+    aria-label="Editar apodo">
+    ✎
+  </button>
+
+  <app-pokemon-card [pokemon]="pkm" [nickname]="pokemon.nickname!"></app-pokemon-card>
+</div>
+        }
+        }
+      }
+      </div>
+    </div>
+  </section>
+  }
+  } @else {
+  <p>No hay equipos guardados...</p>
+  }
+
+  } @else {
+  <p>No hay usuario activo. Inicia sesión.</p>
+  }
+
+</div>
