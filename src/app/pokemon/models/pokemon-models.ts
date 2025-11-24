@@ -39,7 +39,12 @@ export interface Pokemon {
     generation?: string;
     region?: string;
 
-    evolution_line?: string[];
+    evolution_line?: TemporaryEvolutionType[];
+}
+
+export interface TemporaryEvolutionType{ //will delete once evolutions are correctly representated on database
+  id: string;
+  name: string;
 }
 
 //necessary for getting generation, region and evo chain

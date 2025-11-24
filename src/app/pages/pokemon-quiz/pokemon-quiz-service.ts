@@ -1,7 +1,6 @@
 import { PokemonListService } from './../../pokemon/pokemon-list-service';
 import { Injectable, signal, computed } from '@angular/core';
 import { inject } from '@angular/core';
-import { PokeApiService } from '../../pokemon/pokeapi-service';
 import { QuizQuestion, QuizStats } from '../../pokemon/models/pokemon-quiz-model';
 
 /**
@@ -13,7 +12,6 @@ import { QuizQuestion, QuizStats } from '../../pokemon/models/pokemon-quiz-model
 })
 export class PokemonQuizService {
   private readonly pokeListService = inject(PokemonListService);
-  private readonly pokeApiService = inject(PokeApiService);
 
   readonly currentQuestion = signal<QuizQuestion | null>(null);
   readonly isLoading = signal(false);
@@ -94,7 +92,7 @@ export class PokemonQuizService {
       this.isLoading.set(false);
     } else {
       // Fetch from API if not cached
-      this.pokeApiService.getPokemon(correctPokemon.name).subscribe({
+      this.pokeListService.getPokemonByName(correctPokemon.name).subscribe({
         next: (pokemon) => {
           this.currentQuestion.set({
             pokemon,

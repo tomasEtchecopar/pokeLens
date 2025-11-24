@@ -1,19 +1,16 @@
-import { toSignal } from '@angular/core/rxjs-interop';
 import { signal } from '@angular/core';
+import { PokemonListService } from '../pokemon-list-service';
 import { effect } from '@angular/core';
 import { Injectable } from '@angular/core';
-import { PokemonListService } from '../pokemon-list-service';
 import { inject } from '@angular/core';
 import { computed } from '@angular/core';
 import { Pokemon } from '../models/pokemon-models';
-import { PokeApiService } from '../pokeapi-service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DailyPokemonService {
   private readonly pokeListService = inject(PokemonListService);
-  private readonly pokeApiService = inject(PokeApiService)
 
   private readonly salt = 'esta-es-una-string-para-aumentar-aleatoriedad';
   private readonly _pokemonOfTheDay = signal<Pokemon | null>(null);
@@ -47,14 +44,8 @@ export class DailyPokemonService {
     const index = Math.floor(rng() * allPokemon.length);
     const resourceName = allPokemon[index].name;
 
-    const fromMemory = this.pokeListService.getPokemonFromMemory(index + 1);
-    if (fromMemory) {
-      this._pokemonOfTheDay.set(fromMemory);
-      return
-    }
-
     this.isLoading.set(true);
-    this.pokeApiService.getPokemon(resourceName).subscribe({
+    this.pokeListService.getPokemonByName(resourceName).subscribe({
       next: (pokemon) => {
         this._pokemonOfTheDay.set(pokemon);
         this.isLoading.set(false);

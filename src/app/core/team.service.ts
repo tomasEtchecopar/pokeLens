@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Team, TeamPokemon } from '../user/user-model';
 import { environment } from '../../enviroments/enviroment';
+import { Team, TeamPokemon } from '../pages/pokemon-teams/team-model';
 
 @Injectable({
   providedIn: 'root'

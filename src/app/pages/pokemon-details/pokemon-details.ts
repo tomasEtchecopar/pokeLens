@@ -7,11 +7,11 @@ import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
 import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { effect } from '@angular/core';
-import { PokeApiService } from '../../pokemon/pokeapi-service';
 import { signal } from '@angular/core';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { translateGeneration, translateType } from '../../pokemon/models/pokemon-helpers';
 import { forkJoin, switchMap } from 'rxjs';
+import { PokemonListService } from '../../pokemon/pokemon-list-service';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -20,7 +20,7 @@ import { forkJoin, switchMap } from 'rxjs';
   styleUrl: './pokemon-details.css'
 })
 export class PokemonDetails {
-  private readonly service = inject(PokeApiService);
+  private readonly service = inject(PokemonListService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
   private readonly filterService = inject(PokemonFilterService);
@@ -29,7 +29,7 @@ export class PokemonDetails {
 
   protected readonly pokemon = toSignal(this.route.paramMap.pipe(switchMap(params =>{
     const name = params.get('name');
-    return this.service.getPokemon(name!);
+    return this.service.getPokemonByName(name!);
   })));
   protected readonly isLoading = computed(() => this.pokemon() === undefined);
 
@@ -43,7 +43,10 @@ export class PokemonDetails {
     if (p?.evolution_line && p.evolution_line.length > 0) {
       this.loadingEvolutions.set(true);
 
-      const evolution = p.evolution_line.map(name => this.service.getPokemon(name));
+      const evolution = p.evolution_line.map(evo => {
+    console.log('getting evolution:', evo.name)
+    return this.service.getPokemonByName(evo.name);
+  });
 
       forkJoin(evolution).subscribe({
         next: (evolutions) => {
