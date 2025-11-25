@@ -1,12 +1,14 @@
 import { Component, computed, effect, inject, signal, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthServ } from '../../core/auth.service';
-import { PokemonListService } from '../../pokemon/pokemon-list-service';
 import { TeamService } from '../../core/team.service';
 import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { FormsModule } from '@angular/forms';
 import { Team } from './team-model';
+import { catchError, forkJoin, map, of } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
+import { PokemonService } from '../../pokemon/pokemon-service';
 
 /**
  * UserTeams manages the user's pokemon teams.
@@ -22,7 +24,7 @@ import { Team } from './team-model';
 export class UserTeams implements OnInit {
   private readonly auth = inject(AuthServ);
   private readonly teamService = inject(TeamService);
-  readonly pkmList = inject(PokemonListService);
+  private readonly pokemonService = inject(PokemonService);
   protected readonly router = inject(Router);
 
   // Team name editing state
@@ -34,6 +36,8 @@ export class UserTeams implements OnInit {
   // Teams from API
   teams = signal<Team[]>([]);
 
+  private readonly pokemonCache = signal(new Map<number, Pokemon>());
+
   // Average power per team
   private readonly _teamAverages = signal<number[]>([]);
   teamAverages = computed(() => this._teamAverages());
@@ -43,51 +47,42 @@ export class UserTeams implements OnInit {
   }
 
   constructor() {
-    // Recalculate averages when teams change
+   // Recalcular promedios cuando cambian equipos o cache
     effect(() => {
       const teams = this.teams();
+      // Dependencia explícita a cache para re-evaluar cuando llegan pokemons
+      const cacheSnapshot = this.pokemonCache();
 
       if (!teams || teams.length === 0) {
         this._teamAverages.set([]);
         return;
       }
 
-      const allPokemon = this.pkmList.allPokemon();
-      const averages: number[] = [];
+      // Para cada equipo calculamos promedio con lo que haya en cache
+      const averages: number[] = teams.map(team => {
+        if (!team.pokemons || team.pokemons.length === 0) return 0;
 
-      teams.forEach(team => {
-        if (!team.pokemons || team.pokemons.length === 0) {
-          averages.push(0);
-          return;
-        }
-
-        // Convert team pokemon to full Pokemon objects
         const pokemons: Pokemon[] = team.pokemons
           .map(entry => {
-            const idNum = entry.pokemon_id;
-            return allPokemon.find(p => p.id === idNum);
+            const idNum = Number(entry.pokemon_id);
+            return cacheSnapshot.get(idNum);
           })
           .filter((p): p is Pokemon => !!p);
 
-        if (pokemons.length === 0) {
-          averages.push(0);
-          return;
-        }
+        if (pokemons.length === 0) return 0;
 
-        // Calculate total base stats for each pokemon
         const powers = pokemons.map(pk =>
           (pk.stats ?? []).reduce((acc, s) => acc + (s.base_stat ?? 0), 0)
         );
 
         const sum = powers.reduce((a, b) => a + b, 0);
         const avg = sum / powers.length;
-
-        averages.push(Number(avg.toFixed(2)));
+        return Number(avg.toFixed(2));
       });
 
       this._teamAverages.set(averages);
     });
-  }
+}
 
   /**
    * Carga los equipos del usuario
@@ -99,6 +94,7 @@ export class UserTeams implements OnInit {
     this.teamService.getUserTeams().subscribe({
       next: (teams) => {
         this.teams.set(teams);
+        this.prefetchTeamPokemonIds(teams);
       },
       error: (err) => {
         console.error('Error cargando equipos:', err);
@@ -122,15 +118,75 @@ export class UserTeams implements OnInit {
     });
   }
 
+   /**
+   * Prefetch: trae en background pokemons que no estén en cache
+   */
+  private prefetchTeamPokemonIds(teams: Team[]) {
+    const needed = new Set<number>();
+    teams.forEach(t => t.pokemons?.forEach(tp => {
+      const idNum = Number(tp.pokemon_id);
+      if (!Number.isNaN(idNum)) needed.add(idNum);
+    }));
+
+    const cache = this.pokemonCache();
+    const missing = Array.from(needed).filter(id => !cache.has(id));
+    if (missing.length === 0) return;
+
+    // Usar pokemonService.getPokemonById para cada id
+    forkJoin(
+      missing.map(id =>
+        this.pokemonService.getPokemonById(id).pipe(
+          catchError(() => of(null))
+        )
+      )
+    ).pipe(
+      map(arr => arr.filter((p): p is Pokemon => !!p))
+    ).subscribe({
+      next: fetched => {
+        if (fetched.length === 0) return;
+        const newMap = new Map<number, Pokemon>(this.pokemonCache());
+        fetched.forEach(p => newMap.set(p.id as number, p));
+        this.pokemonCache.set(newMap);
+      },
+      error: err => console.error('Prefetch error', err)
+    });
+  }
+
   /**
    * Obtiene los pokemon completos de un equipo
    */
-  getTeamPokemons(team: Team): Pokemon[] {
-    const allPokemon = this.pkmList.allPokemon();
+   getTeamPokemons(team: Team): Pokemon[] {
+    const cache = this.pokemonCache();
+    const idsToFetch: number[] = [];
 
-    return team.pokemons
-      .map(tp => allPokemon.find(p => p.id === tp.pokemon_id))
+    const results: Pokemon[] = (team.pokemons ?? [])
+      .map(tp => {
+        const idNum = Number(tp.pokemon_id);
+        const p = cache.get(idNum);
+        if (!p) idsToFetch.push(idNum);
+        return p;
+      })
       .filter((p): p is Pokemon => !!p);
+
+    if (idsToFetch.length > 0) {
+      const uniqueMissing = Array.from(new Set(idsToFetch));
+      forkJoin(
+        uniqueMissing.map(id =>
+          this.pokemonService.getPokemonById(id).pipe(catchError(() => of(null)))
+        )
+      ).pipe(map(arr => arr.filter((p): p is Pokemon => !!p)))
+        .subscribe({
+          next: fetched => {
+            if (fetched.length === 0) return;
+            const newMap = new Map<number, Pokemon>(this.pokemonCache());
+            fetched.forEach(p => newMap.set(p.id as number, p));
+            this.pokemonCache.set(newMap);
+          },
+          error: err => console.error('Error cargando pokemons faltantes', err)
+        });
+    }
+
+    return results;
   }
 
   /**

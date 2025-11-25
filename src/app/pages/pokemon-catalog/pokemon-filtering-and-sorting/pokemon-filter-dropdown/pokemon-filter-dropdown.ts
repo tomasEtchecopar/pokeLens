@@ -1,4 +1,5 @@
-import { Component, effect, signal, input, output, inject } from '@angular/core';
+import { Component, effect, signal, Input, Output, inject } from '@angular/core';
+import { EventEmitter } from '@angular/core';
 import { PokemonFiltersTranslation } from '../pokemon-filters-translation';
 import { FilterOptions, PokemonGeneration, PokemonRegion, PokemonType } from '../../../../pokemon/models/pokemon-filters';
 import { FormsModule } from '@angular/forms';
@@ -15,70 +16,55 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './pokemon-filter-dropdown.css',
 })
 export class PokemonFilterDropdown {
-  private readonly filtersTranslations = inject(PokemonFiltersTranslation);
+ private readonly filtersTranslations = inject(PokemonFiltersTranslation);
+
+  @Input() currentFilters: FilterOptions = {};
+  @Output() filterUpdate = new EventEmitter<FilterOptions>();
 
   filtersOpen = signal(false);
-
-  // Receives current filter state from parent
-  currentFilters = input<FilterOptions>({});
-  // Emits filter changes to parent
-  filterUpdate = output<FilterOptions>();
 
   selectedType = signal('');
   selectedGeneration = signal('');
   selectedRegion = signal('');
-
   minHeight = signal<number | null>(null);
   maxHeight = signal<number | null>(null);
   minWeight = signal<number | null>(null);
   maxWeight = signal<number | null>(null);
 
-  protected types = this.filtersTranslations.types;
-  protected generations = this.filtersTranslations.generations;
-  protected regions = this.filtersTranslations.regions;
+  types = this.filtersTranslations.types;
+  generations = this.filtersTranslations.generations;
+  regions = this.filtersTranslations.regions;
 
   constructor() {
     effect(() => {
-      const filters = this.currentFilters();
-      if (filters) {
-        // Converts API units (decimeters/hectograms) to display units (meters/kg)
-        this.selectedType.set(filters.type || '');
-        this.selectedGeneration.set(filters.generation || '');
-        this.selectedRegion.set(filters.region || '');
-        this.minHeight.set(filters.minHeight ? filters.minHeight * 10 : null);
-        this.maxHeight.set(filters.maxHeight ? filters.maxHeight * 10 : null);
-        this.minWeight.set(filters.minWeight ? filters.minWeight / 10 : null);
-        this.maxWeight.set(filters.maxWeight ? filters.maxWeight / 10 : null);
-      }
+      const f = this.currentFilters;
+      this.selectedType.set(f.type || '');
+      this.selectedGeneration.set(f.generation || '');
+      this.selectedRegion.set(f.region || '');
+      this.minHeight.set(f.minHeight ?? null);
+      this.maxHeight.set(f.maxHeight ?? null);
+      this.minWeight.set(f.minWeight ?? null);
+      this.maxWeight.set(f.maxWeight ?? null);
     });
   }
 
   toggleFilters() {
-    this.filtersOpen.set(!this.filtersOpen());
+    this.filtersOpen.update(v => !v);
   }
 
-  private emit(): void {
-    const filters: FilterOptions = {
-      type: this.selectedType() as PokemonType || undefined,
-      generation: this.selectedGeneration() as PokemonGeneration || undefined,
-      region: this.selectedRegion() as PokemonRegion || undefined,
-      minHeight: this.minHeight() != null ? this.minHeight()! / 10 : undefined,
-      maxHeight: this.maxHeight() != null ? this.maxHeight()! / 10 : undefined,
-      minWeight: this.minWeight() != null ? this.minWeight()! * 10 : undefined,
-      maxWeight: this.maxWeight() != null ? this.maxWeight()! * 10 : undefined,
-    };
-    this.filterUpdate.emit(filters);
+  onChange() {
+    this.filterUpdate.emit({
+      type: this.selectedType() as PokemonType|| undefined,
+      generation: this.selectedGeneration() as PokemonGeneration|| undefined,
+      region: this.selectedRegion() as PokemonRegion|| undefined,
+      minHeight: this.minHeight() ?? undefined,
+      maxHeight: this.maxHeight() ?? undefined,
+      minWeight: this.minWeight() ?? undefined,
+      maxWeight: this.maxWeight() ?? undefined
+    });
   }
 
-  protected onChange(): void {
-    console.log('changes detected; emitting...');
-    this.emit();
-  }
-
-  /**
-   * Resets all filters to default state and notifies parent.
-   */
-  clear(): void {
+  clear() {
     this.selectedType.set('');
     this.selectedGeneration.set('');
     this.selectedRegion.set('');
@@ -86,6 +72,6 @@ export class PokemonFilterDropdown {
     this.maxHeight.set(null);
     this.minWeight.set(null);
     this.maxWeight.set(null);
-    this.emit();
+    this.filterUpdate.emit({});
   }
 }

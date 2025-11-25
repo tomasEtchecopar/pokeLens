@@ -1,5 +1,4 @@
 import { signal } from '@angular/core';
-import { PokemonListService } from '../pokemon-list-service';
 import { effect } from '@angular/core';
 import { Injectable } from '@angular/core';
 import { inject } from '@angular/core';
@@ -10,7 +9,7 @@ import { Pokemon } from '../models/pokemon-models';
   providedIn: 'root'
 })
 export class DailyPokemonService {
-  private readonly pokeListService = inject(PokemonListService);
+/*   private readonly pokeListService = inject(PokemonListService);
 
   private readonly salt = 'esta-es-una-string-para-aumentar-aleatoriedad';
   private readonly _pokemonOfTheDay = signal<Pokemon | null>(null);
@@ -35,7 +34,7 @@ export class DailyPokemonService {
 
   //generates index based on current date
   private loadDailyPokemon(): void {
-    const allPokemon = this.pokeListService.allPokemonResource();
+    const allPokemon = this.pokeListService.allPokemon();
     if (allPokemon.length === 0) return;
 
     const today = new Date().toISOString().split('T')[0]; //yyy-mm-dd
@@ -65,6 +64,6 @@ export class DailyPokemonService {
       hash = hash | 0;
     }
     return Math.abs(hash);
-  }
+  } */
 
 }

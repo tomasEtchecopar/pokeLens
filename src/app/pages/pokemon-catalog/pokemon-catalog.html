@@ -9,29 +9,21 @@
   </div>
 
   <div class="search-section">
-    <app-pokemon-filter-dropdown [currentFilters]="currentFilters()" (filterUpdate)="applyFilters($event)">
+    <app-pokemon-filter-dropdown [currentFilters]="filters()" (filterUpdate)="applyFilters($event)">
     </app-pokemon-filter-dropdown>
 
-    <pokemon-sort-menu></pokemon-sort-menu>
+    <pokemon-sort-menu [currentSort]="sort()" (sorted)="onSort($event)"></pokemon-sort-menu>
   </div>
 
-  @if(isLoading()){
-  <p>Cargando Pokemons...</p>
-  }@else {
-    @if(!hasSearchResults()) {
-  <p>No hay pokemon disponible para la busqueda...</p>
-}@else{
   <div class="grid">
-    @for (pokemonResource of displayedPokemon(); track pokemonResource){
-    <app-pokemon-card [pokemon]="pokemonResource"></app-pokemon-card>
+    @for (pokemon of pokemons(); track pokemon.id){
+    <app-pokemon-card [pokemon]="pokemon"></app-pokemon-card>
     }
-
-    @if (pagination.loading()) {
+    @if (isLoading()) {
     <div class="loading">Cargando mas Pokemon...</div>
     }
   </div>
-}
 
-  }
-  <div #scrollSentinel class="scroll-sentine"></div>
+  <div #scrollSentinel class="scroll-sentinel"></div>
+
 </div>

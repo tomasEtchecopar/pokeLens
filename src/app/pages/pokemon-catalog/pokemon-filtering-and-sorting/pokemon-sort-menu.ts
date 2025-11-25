@@ -1,7 +1,7 @@
-import { Component, ElementRef, EventEmitter, HostListener, inject, Output, signal, computed, effect } from '@angular/core';
+import { Component, EventEmitter, Output, signal, computed, effect } from '@angular/core';
+import { Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { PokemonFilterService } from './pokemon-filter-service';
 import { SortOption } from '../../../pokemon/models/pokemon-sort';
 
 @Component({
@@ -244,11 +244,10 @@ input[type="radio"]:checked + .radio-label {
 })
 
 export class PokemonSortMenu {
-  private readonly filterService = inject(PokemonFilterService);
+ @Input() currentSort: SortOption | null = null;
   @Output() sorted = new EventEmitter<SortOption | null>();
 
   open = signal(false);
-  closing = signal(false);
 
   readonly keys = [
     { value: 'id', label: 'Nro Pokedex' },
@@ -266,60 +265,46 @@ export class PokemonSortMenu {
   selectedKey = signal<string>('');
   selectedDir = signal<string>('');
 
-  currentSort = computed(() => this.filterService.currentSort());
-
   canApply = computed(() => !!this.selectedKey() && !!this.selectedDir());
-  hasSort = computed(() => !!this.currentSort());
-
-  // host reference for click-outside
-  private hostEl = inject(ElementRef).nativeElement as HTMLElement;
+  hasSort = computed(() => !!this.selectedKey() || !!this.selectedDir());
 
   constructor() {
-    // sync local selects when external sort changes
     effect(() => {
-      const s = this.currentSort();
-      if (!s) {
+      if (!this.currentSort) {
         this.selectedKey.set('');
         this.selectedDir.set('');
       } else {
-        this.selectedKey.set(s.key ?? '');
-        this.selectedDir.set(s.dir ?? '');
+        this.selectedKey.set(this.currentSort.key);
+        this.selectedDir.set(this.currentSort.dir);
       }
     });
   }
-
-
-
-  selectKey(v: string) {
-    this.selectedKey.set(v ?? '');
-    if (!v) this.selectedDir.set('');
-  }
-
-  selectDir(v: string) {
-    this.selectedDir.set(v ?? '');
-  }
-
-  apply() {
-    const k = this.selectedKey();
-    const d = this.selectedDir() as 'asc' | 'desc' | '';
-    if (!k || !d) return;
-    const opt: SortOption = { key: k as any, dir: d as 'asc' | 'desc' };
-    this.filterService.setSort(opt);
-    this.sorted.emit(opt);
-    this.open.set(false);
-  }
-
-  clear() {
-    this.filterService.setSort(null);
-    this.sorted.emit(null);
-    this.selectedKey.set('');
-    this.selectedDir.set('');
-    this.open.set(false);
-  }
-
 
   toggle() {
     this.open.update(v => !v);
   }
 
+  selectKey(value: string) {
+    this.selectedKey.set(value);
+  }
+
+  selectDir(value: string) {
+    this.selectedDir.set(value);
+  }
+
+  apply() {
+    if (!this.canApply()) return;
+    this.sorted.emit({
+      key: this.selectedKey() as any,
+      dir: this.selectedDir() as any
+    });
+    this.open.set(false);
+  }
+
+  clear() {
+    this.sorted.emit(null);
+    this.selectedKey.set('');
+    this.selectedDir.set('');
+    this.open.set(false);
+  }
 }

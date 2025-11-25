@@ -1,4 +1,3 @@
-import { PokemonListService } from './../../pokemon/pokemon-list-service';
 import { Injectable, signal, computed } from '@angular/core';
 import { inject } from '@angular/core';
 import { QuizQuestion, QuizStats } from '../../pokemon/models/pokemon-quiz-model';
@@ -11,7 +10,7 @@ import { QuizQuestion, QuizStats } from '../../pokemon/models/pokemon-quiz-model
   providedIn: 'root'
 })
 export class PokemonQuizService {
-  private readonly pokeListService = inject(PokemonListService);
+/*   private readonly pokeListService = inject(PokemonListService);
 
   readonly currentQuestion = signal<QuizQuestion | null>(null);
   readonly isLoading = signal(false);
@@ -35,21 +34,21 @@ export class PokemonQuizService {
     const total = this.totalAnswered();
     if (total === 0) return 0;
     return Math.round((this.stats().correct / total) * 100);
-  });
+  }); */
 
   /**
    * Generates a new quiz question with 4 randomized options.
    * Tries to use cached pokemon first, falls back to API if needed.
    * Auto-retries if pokemon list is empty or if API fails.
    */
-  generateQuestion(): void {
+/*   generateQuestion(): void {
     // Reset state immediately to prevent stale data
     this.hasAnswered.set(false);
     this.selectedAnswer.set(null);
     this.isCorrect.set(null);
     this.currentQuestion.set(null);
 
-    const allResources = this.pokeListService.allPokemonResource();
+    const allResources = this.pokeListService.allPokemon();
 
     if (allResources.length === 0) {
       console.error('No hay pokemon disponibles');
@@ -110,12 +109,12 @@ export class PokemonQuizService {
       });
     }
   }
-
+ */
   /**
    * Validates the user's answer and updates stats accordingly.
    * Prevents multiple answers for the same question.
    */
-  checkAnswer(answer: string): void {
+/*   checkAnswer(answer: string): void {
     if (this.hasAnswered()) return;
 
     const question = this.currentQuestion();
@@ -153,7 +152,7 @@ export class PokemonQuizService {
       streak: 0,
       bestStreak: 0
     });
-  }
+  } */
 
   /**
    * Shuffles an array using Fisher-Yates algorithm.
