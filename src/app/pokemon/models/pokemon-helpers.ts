@@ -49,3 +49,13 @@ export function translateRegion(regionName: string): string {
   };
   return regionTranslations[regionName.toLowerCase()] || regionName;
 }
+
+export function translateRarity(rarityName: string): string {
+  const rarityTranslations: { [key: string]: string } = {
+    'common': 'Común',
+    'rare': 'Raro',
+    'epic': 'Épico',
+    'legendary': 'Legendario'
+  };
+  return rarityTranslations[rarityName.toLowerCase()] || rarityName;
+}

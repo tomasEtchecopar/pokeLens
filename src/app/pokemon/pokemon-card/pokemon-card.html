@@ -13,6 +13,7 @@
       <div class="data-screen">
         <div class="screen-header">
           <app-pokemon-cry-button [pokemon]="pokemon"></app-pokemon-cry-button>
+          <span class="poke-rarity rarity-{{pokemon.rarity}}">{{translateRarity(pokemon.rarity!)}}</span>
           <span class="poke-region">{{pokemon.region | titlecase}}</span>
           <span class="poke-number">#{{ pokemon.id.toString().padStart(3, '0') }}</span>
         </div>

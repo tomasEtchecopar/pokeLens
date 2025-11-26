@@ -2,7 +2,7 @@ import { Component, inject, input } from '@angular/core';
 import { Pokemon } from '../models/pokemon-models';
 import { TitleCasePipe } from '@angular/common';
 import { signal } from '@angular/core';
-import { translateType } from '../models/pokemon-helpers';
+import { translateRarity, translateType } from '../models/pokemon-helpers';
 import { Router } from "@angular/router";
 import { AddPokemonModal } from '../../pages/pokemon-teams/add-pokemon-modal';
 import { PokemonCryButton } from './pokemon-cry-button';
@@ -25,6 +25,7 @@ export class PokemonCard {
   readonly nickname = input<string>(); // optional nickname; used in teams
 
   protected translateType = translateType;
+  protected translateRarity = translateRarity;
 
   navigateToDetails(name: string): void {
     this.router.navigateByUrl(`details/${name}`);
