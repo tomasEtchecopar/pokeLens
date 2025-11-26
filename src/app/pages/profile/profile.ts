@@ -63,7 +63,7 @@ export class Profile {
 
   loadHistory(id: string) {
     this.points.getHistory(id).subscribe(history => {
-      this.history.set([...history].reverse());
+      this.history.set([...history]);
     });
   }
 

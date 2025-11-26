@@ -1,4 +1,4 @@
-<!-- @if (!usuario()) {
+ @if (!usuario()) {
 
 <div class="auth-modal-backdrop">
   <div class="auth-modal">
@@ -62,7 +62,10 @@
         <div class="image-container">
           @if(question.pokemon.sprites.front_default) {
           <img [src]="question.pokemon.sprites.front_default" [alt]="question.pokemon.name"
-            [ngStyle]="{'filter': quizService.hasAnswered() ? 'none' : 'brightness(0) drop-shadow(0 0 8px #000)'}">
+            [ngStyle]="{'filter': quizService.hasAnswered() ? 'none' : 'brightness(0) drop-shadow(0 0 8px #000)'}"
+            draggable="false"
+            (dragstart)="$event.preventDefault()"
+            (contextmenu)="$event.preventDefault()">
           }
         </div>
 
@@ -112,4 +115,4 @@
     </div>
   </div>
 </div>
-} -->
+}

@@ -18,7 +18,7 @@ import { Router } from '@angular/router';
   styleUrl: './pokemon-quiz.css'
 })
 export class PokemonQuiz /* implements OnInit  */{
-/*   protected readonly quizService = inject(PokemonQuizService);
+   protected readonly quizService = inject(PokemonQuizService);
   private readonly router = inject(Router);
   private readonly auth = inject(AuthServ);
   private readonly points = inject(PointsService);
@@ -28,11 +28,11 @@ export class PokemonQuiz /* implements OnInit  */{
   ngOnInit(): void {
     this.quizService.generateQuestion();
   }
- */
+
   /**
    * Handles answer selection and awards points if correct.
    */
-/*   selectAnswer(answer: string): void {
+  selectAnswer(answer: string): void {
     this.quizService.checkAnswer(answer);
     if (this.quizService.isCorrect()) {
       this.awardPointsForCorrectAnswer();
@@ -53,12 +53,12 @@ export class PokemonQuiz /* implements OnInit  */{
     if (!imageUrl) return '';
     return imageUrl;
   }
- */
+
   /**
    * Awards +5 points for correct quiz answers.
    * Updates both points and history, then syncs with auth service and localStorage.
    */
-/*   private awardPointsForCorrectAnswer(): void {
+  private awardPointsForCorrectAnswer(): void {
     const user = this.auth.activeUser();
     if (!user || !user.id) {
       return;
@@ -83,6 +83,9 @@ export class PokemonQuiz /* implements OnInit  */{
             // Step 3: Sync with auth and localStorage
             this.auth.activeUser.set(finalUser);
             localStorage.setItem('activeUser', JSON.stringify(finalUser));
+
+            // Step 4: Show alert with points
+            alert(`¡Respuesta correcta! +${amount} puntos`);
           },
           error: () => {
             console.error('Error al registrar el historial de puntos');
@@ -105,5 +108,5 @@ export class PokemonQuiz /* implements OnInit  */{
 
   backToCatalog() {
     this.router.navigateByUrl('/catalog');
-  } */
+  }
 }

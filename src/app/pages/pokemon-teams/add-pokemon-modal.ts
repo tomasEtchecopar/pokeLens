@@ -2,7 +2,6 @@ import { Component, effect, inject, input, output, signal } from '@angular/core'
 import { FormsModule } from '@angular/forms';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { AuthServ } from '../../core/auth.service';
-import { PointsService } from '../../core/points.service';
 import { User } from '../../user/user-model';
 import { TeamService } from '../../core/team.service';
 import { Team } from './team-model';
@@ -366,7 +365,6 @@ export class AddPokemonModal {
   private readonly router = inject(Router);
   private readonly auth = inject(AuthServ);
   private readonly teamService = inject(TeamService);
-  private readonly points = inject(PointsService);
 
   newTeamName = signal('');
 
@@ -418,20 +416,6 @@ export class AddPokemonModal {
     const msA = new Date(a).getTime();
     const msB = new Date(b).getTime();
     return (msB - msA) / (1000 * 60 * 60 * 24);
-  }
-
-  /**
-   * Verifica si corresponde dar bonus por crear equipo semanal
-   */
-  private shouldRewardWeeklyTeam(user: User, isNewTeam: boolean, nowIso: string): boolean {
-    if (!isNewTeam) return false;
-
-    if (!user.last_team_created_at) {
-      return true; // Primera vez que crea un equipo
-    }
-
-    const diffDays = this.daysBetween(user.last_team_created_at, nowIso);
-    return diffDays >= 7; // 7 días o más
   }
 
   close() {
@@ -498,23 +482,28 @@ export class AddPokemonModal {
     this.isLoading.set(true);
     this.errorMessage.set('');
 
-    const nowIso = new Date().toISOString();
-    const pointsTeam = 50;
 
     if (isNewTeam) {
       // FLUJO: Crear equipo nuevo y luego agregar pokemon
       this.teamService.createTeam(this.newTeamName().trim()).subscribe({
-        next: (newTeam) => {
-          // Agregar pokemon al equipo recién creado
-          this.addPokemonToTeam(newTeam.id, pkm.id, this.nickname().trim());
+        next: (response: any) => {
+          const newTeam = response.team || response;
+          const pointsAwarded = response.pointsAwarded || 0;
+          const updatedUser = response.user;
 
-          // Verificar y otorgar bonus semanal
-          const giveWeeklyBonus = this.shouldRewardWeeklyTeam(user, true, nowIso);
-          if (giveWeeklyBonus) {
-            this.awardWeeklyBonus(user.id!, pointsTeam, nowIso);
+          // Actualizar usuario en auth si se retorna
+          if (updatedUser) {
+            this.auth.activeUser.set(updatedUser);
+            localStorage.setItem('activeUser', JSON.stringify(updatedUser));
           }
 
-          this.finishCapture(pkm.name);
+          // Mostrar alerta de puntos
+          if (pointsAwarded > 0) {
+            alert(`¡Nuevo equipo creado! +${pointsAwarded} puntos`);
+          }
+
+          // Agregar pokemon al equipo recién creado
+          this.addPokemonToTeam(newTeam.id, pkm.id, this.nickname().trim(), pkm.name);
         },
         error: (err) => {
           console.error('Error creando equipo:', err);
@@ -527,43 +516,39 @@ export class AddPokemonModal {
       this.addPokemonToTeam(
         this.selectedTeamId() as string,
         pkm.id,
-        this.nickname().trim()
+        this.nickname().trim(),
+        pkm.name
       );
-      this.finishCapture(pkm.name);
     }
   }
 
   /**
    * Agrega un pokemon a un equipo específico
    */
-  private addPokemonToTeam(teamId: string, pokemonId: number, nickname: string) {
+  private addPokemonToTeam(teamId: string, pokemonId: number, nickname: string, pokemonName?: string) {
     this.teamService.addPokemon(teamId, pokemonId, nickname).subscribe({
-      next: () => {
+      next: (response: any) => {
+        const pointsAwarded = response.pointsAwarded || 0;
+        const updatedUser = response.user;
+
+        // Actualizar usuario en auth si se retorna
+        if (updatedUser) {
+          this.auth.activeUser.set(updatedUser);
+          localStorage.setItem('activeUser', JSON.stringify(updatedUser));
+        }
+
+        // Mostrar alerta de puntos
+        if (pointsAwarded > 0) {
+          alert(`¡Pokémon capturado! +${pointsAwarded} puntos`);
+        }
+
         console.log('Pokemon agregado exitosamente');
+        this.finishCapture(pokemonName || 'Pokémon');
       },
       error: (err) => {
         console.error('Error agregando pokemon:', err);
         this.errorMessage.set('Error al capturar el Pokémon');
         this.isLoading.set(false);
-      }
-    });
-  }
-
-  /**
-   * Otorga bonus semanal por crear equipo
-   */
-  private awardWeeklyBonus(userId: string, amount: number, date: string) {
-    this.points.addPoints(
-      { id: userId } as User,
-      amount,
-      'Sumaste puntos por crear tu equipo semanal!'
-    ).subscribe({
-      next: (updatedUser) => {
-        this.auth.activeUser.set(updatedUser);
-        localStorage.setItem('activeUser', JSON.stringify(updatedUser));
-      },
-      error: (err) => {
-        console.error('Error otorgando bonus semanal:', err);
       }
     });
   }
