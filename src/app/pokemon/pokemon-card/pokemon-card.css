@@ -288,3 +288,22 @@ h2 {
   }
 }
 
+.poke-rarity {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: rgba(255, 255, 255, 0.8);
+  color: #1a1a1a;
+  font-family: 'Courier New', monospace;
+  font-weight: bold;
+  font-size: 0.75rem;
+  padding: 2px 6px;
+  border: 2px solid #1a1a1a;
+  box-shadow: 2px 2px 0px #1a1a1a;
+  text-transform: uppercase;
+}
+
+.rarity-common{ background: #9b9b9b; }
+.rarity-rare{ background: #7ca4c2; }
+.rarity-epic{ background: #c37dc9; }
+.rarity-legendary { background: #ffd54f; }

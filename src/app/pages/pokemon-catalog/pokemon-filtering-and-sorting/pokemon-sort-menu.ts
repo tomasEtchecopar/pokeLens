@@ -253,6 +253,7 @@ export class PokemonSortMenu {
     { value: 'id', label: 'Nro Pokedex' },
     { value: 'name', label: 'Nombre' },
     { value: 'generation', label: 'Generación' },
+    { value: 'rarity', label: 'Rareza' },
     { value: 'height', label: 'Altura' },
     { value: 'weight', label: 'Peso' }
   ] as const;

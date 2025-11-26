@@ -32,6 +32,10 @@ export class Header {
     this.router.navigateByUrl('profile');
   }
 
+  goToLeaderboard(){
+    this.router.navigateByUrl('leaderboard');
+  }
+
   goToTeams(){
     this.router.navigateByUrl('teams');
   }
@@ -49,11 +53,6 @@ isAlreadyInCatalog(): boolean {
     return this.router.url === '/teams'
   }
 
-  logOut() {
-    this.auth.logOut();
-    this.router.navigateByUrl('home');
-/*     this.quiz.resetStats(); */
-  }
   setDefaultAvatar(event: Event) {
   const img = event.target as HTMLImageElement;
   img.src = '/assets/images/default.png';
