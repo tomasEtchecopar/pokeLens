@@ -1,96 +1,146 @@
-import { AfterViewInit, Component, ElementRef, OnDestroy, untracked, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, signal, untracked, ViewChild } from '@angular/core';
 import { inject } from '@angular/core';
-import { computed } from '@angular/core';
 import { ReactiveFormsModule } from '@angular/forms';
-import { effect } from '@angular/core';
-import { PokemonCatalogSearch } from './search-bar/pokemon-catalog-search';
 import { SearchBar } from "./search-bar/search-bar";
-import { PokemonCatalogPagination } from './pagination/pokemon-catalog-pagination';
 import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
-import { PokemonFilterService } from './pokemon-filtering-and-sorting/pokemon-filter-service';
+import { OnInit } from '@angular/core';
+import { NavigationStart } from '@angular/router';
+import { filter } from 'rxjs';
 import { FilterOptions } from '../../pokemon/models/pokemon-filters';
-import { PokemonFilterDropdown } from './pokemon-filtering-and-sorting/pokemon-filter-dropdown/pokemon-filter-dropdown';
 import { PokemonSortMenu } from './pokemon-filtering-and-sorting/pokemon-sort-menu';
+import { NgZone } from '@angular/core';
+import { SortOption } from '../../pokemon/models/pokemon-sort';
+import { PokemonFilterMenu } from './pokemon-filtering-and-sorting/pokemon-filter-menu/pokemon-filter-menu';
+import { PokemonCatalogState } from './pokemon-catalog-state';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pokemon-catalog',
-  imports: [ReactiveFormsModule, PokemonCard, SearchBar, PokemonFilterDropdown, PokemonSortMenu],
+  imports: [ReactiveFormsModule, PokemonCard, SearchBar, PokemonFilterMenu, PokemonSortMenu],
   templateUrl: './pokemon-catalog.html',
   styleUrl: './pokemon-catalog.css'
 })
-export class PokemonCatalog implements AfterViewInit, OnDestroy {
-
-  //Sets up infinite scroll
+export class PokemonCatalog implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('scrollSentinel', { static: false }) scrollSentinel?: ElementRef<HTMLElement>;
+  readonly catalogState = inject(PokemonCatalogState);
+  private readonly ngZone = inject(NgZone);
+  private readonly router = inject(Router);
 
-  //this is where we get our pokemon list from
-  private readonly filtering = inject(PokemonFilterService);
+  pokemons = this.catalogState.loadedPokemons.asReadonly();
+  isLoading = this.catalogState.isLoading.asReadonly();
+  hasMore = this.catalogState.hasMore.asReadonly();
 
-  //this is where we perform searchs upon the list from the service above
-  private readonly pokemonSearch = inject(PokemonCatalogSearch);
+   private observer?: IntersectionObserver;
+    private sentinelAttached = false;
+      private navigationSubscription?: any;
 
-  //this is where we paginate the entire list to make use of infinite scroll
-  protected readonly pagination = inject(PokemonCatalogPagination)
 
-  /* ---------------------------------------------------------------------------------------- */
+  ngOnInit(){
+  // saves scroll when navigating FROM catalog to other route
+    this.navigationSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationStart))
+      .subscribe((event: NavigationStart) => {
+        const currentUrl = this.router.url;
+        const targetUrl = event.url;
 
-  //List of pokemons to work from; already filtered and sorted
-  protected readonly allPokemon = this.filtering.filteredPokemon;
-  protected readonly currentFilters = this.filtering.currentFilters;
+        if (currentUrl.includes('/catalog') && targetUrl.includes('/details')) {
+          const currentScroll = window.scrollY;
+          console.log('leaving catalog - saving scroll:', currentScroll);
+          this.catalogState.saveScrollPosition(currentScroll);
+        } else {
+          console.log('navigation event ignored:', { from: currentUrl, to: targetUrl });
+        }
+      });
 
-  //Search results from the list above; full list in case of no results/input
-  protected readonly pokemonList = this.pokemonSearch.results;
-
-  protected readonly hasSearchResults = this.pokemonSearch.hasResults;
-
-  //paginated list. this is what is used in the template
-  readonly displayedPokemon = this.pagination.displayedPokemon;
-
-  protected readonly isLoading = computed(() =>
-    this.allPokemon()?.length === 0
-  );
-
-  //dont really know what its for but infinite scroll uses it
-  private sentinelAttached = false;
-
-  constructor() {
-    effect(() => {
-      const list = this.allPokemon();
-      if (list && list.length) this.pokemonSearch.setPokemonList(list); //setting up search
-      const searchResults = this.pokemonList();
-      if (searchResults && searchResults.length) {
-        untracked(() => this.pagination.setPokemonList(searchResults, 50)) //setting up pagination
-      }
-    })
-  };
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      if (this.scrollSentinel?.nativeElement && !this.sentinelAttached) {
-        console.log("initializing scroll")
-        this.pagination.initScroll(this.scrollSentinel.nativeElement);
-        this.sentinelAttached = true;
-      } else {
-        console.error('Sentinel not found');
-      }
-    }, 0);
+    if (this.pokemons().length === 0 && this.catalogState.savedScrollPosition() === 0) {
+      console.log('first load of catalog');
+      this.catalogState.reset();
+    } else {
+      console.log('restoring saved state:', {
+        pokemons: this.pokemons().length,
+        scroll: this.catalogState.savedScrollPosition()
+      });
+    }
   }
 
-  ngOnDestroy(): void {
-    this.pagination.disconnect();
-    this.filtering.clearFilters();
-    this.filtering.clearSort();
+    ngAfterViewInit(){
+   if (this.scrollSentinel?.nativeElement && !this.sentinelAttached) {
+      console.log("initializing scroll observer");
+      this.initScroll(this.scrollSentinel.nativeElement);
+      this.sentinelAttached = true;
+    }
+
+    const saved = this.catalogState.savedScrollPosition();
+    if (saved > 0) {
+      console.log('attempting to restore scroll to:', saved);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          console.log('restoring scroll now');
+          window.scrollTo({
+            top: saved,
+            behavior: 'instant'
+          });
+
+          setTimeout(() => {
+            const current = window.scrollY;
+            console.log('scroll check - expected:', saved, 'actual:', current);
+
+            if (Math.abs(current - saved) > 10) {
+              console.log('retrying scroll restoration');
+              window.scrollTo({
+                top: saved,
+                behavior: 'instant'
+              });
+            }
+          }, 200);
+        });
+      });
+    }
   }
+
+  initScroll(sentinel: HTMLElement): void {
+    this.ngZone.runOutsideAngular(() => {
+      this.observer = new IntersectionObserver(entries => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            console.log("Scroll limit reached");
+            this.ngZone.run(() => this.catalogState.loadNextChunk());
+          }
+        }
+      }, {
+        root: null,
+        rootMargin: '300px',
+        threshold: 0.1
+      });
+      this.observer.observe(sentinel);
+    });
+  }
+
+  ngOnDestroy() {
+    const currentScroll = window.scrollY;
+    if (currentScroll > 100) {
+      console.log('ngOnDestroy backup - saving scroll:', currentScroll);
+      this.catalogState.saveScrollPosition(currentScroll);
+    }
+
+    this.observer?.disconnect();
+    this.navigationSubscription?.unsubscribe();
+  }
+
 
 
   onSearch(term: string) {
-    this.pokemonSearch.search(term);
+    this.catalogState.setSearch(term);
   }
 
 
   applyFilters(filters: FilterOptions) {
-    console.log("detected event on filter buttons");
-    this.filtering.updateFilters(filters);
+    this.catalogState.setFilters(filters);
+  }
+
+  onSort(sort: SortOption | null){
+    this.catalogState.setSort(sort ?? { key: 'id', dir: 'asc' });
   }
 
 

@@ -2,36 +2,38 @@
 
   <div class="center">
     <h1>Catalogo Pokemon</h1>
-    <app-search-bar placeholder="Buscar pokemon..." (searchUpdate)="onSearch($event)">
+    <app-search-bar placeholder="Buscar pokemon..." [currentTerm]="catalogState.search()" (searchUpdate)="onSearch($event)">
     </app-search-bar>
 
 
   </div>
 
   <div class="search-section">
-    <app-pokemon-filter-dropdown [currentFilters]="currentFilters()" (filterUpdate)="applyFilters($event)">
-    </app-pokemon-filter-dropdown>
+    <app-pokemon-filter-menu [currentFilters]="catalogState.filters()" (filterUpdate)="applyFilters($event)">
+    </app-pokemon-filter-menu>
 
-    <pokemon-sort-menu></pokemon-sort-menu>
+    <pokemon-sort-menu [currentSort]="catalogState.sort()" (sorted)="onSort($event)"></pokemon-sort-menu>
   </div>
 
-  @if(isLoading()){
-  <p>Cargando Pokemons...</p>
-  }@else {
-    @if(!hasSearchResults()) {
-  <p>No hay pokemon disponible para la busqueda...</p>
-}@else{
   <div class="grid">
-    @for (pokemonResource of displayedPokemon(); track pokemonResource){
-    <app-pokemon-card [pokemon]="pokemonResource"></app-pokemon-card>
+    @for (pokemon of pokemons(); track pokemon.id){
+    <app-pokemon-card [pokemon]="pokemon"></app-pokemon-card>
     }
-
-    @if (pagination.loading()) {
-    <div class="loading">Cargando mas Pokemon...</div>
+    @if (isLoading()) {
+      <div class="loading loading-more">
+        <div class="spinner"></div>
+        <span>Cargando mas Pokémon...</span>
+      </div>
+    }<!-- @else if(pokemons.length === 0 ){
+      <div class="no-results">
+        <p>No se encontraron Pokémon con los filtros actuales</p>
+        <button class="reset-btn" (click)="catalogState.clear()">
+          Limpiar filtros
+        </button>
+      </div>
     }
   </div>
-}
+ -->
+  <div #scrollSentinel class="scroll-sentinel"></div>
 
-  }
-  <div #scrollSentinel class="scroll-sentine"></div>
 </div>

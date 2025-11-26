@@ -1,5 +1,4 @@
 import { Component, inject} from '@angular/core';
-import { PokemonFilterService } from '../pokemon-catalog/pokemon-filtering-and-sorting/pokemon-filter-service';
 import { FilterOptions } from '../../pokemon/models/pokemon-filters';
 import { computed } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
@@ -11,7 +10,7 @@ import { signal } from '@angular/core';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { translateGeneration, translateType } from '../../pokemon/models/pokemon-helpers';
 import { forkJoin, switchMap } from 'rxjs';
-import { PokemonListService } from '../../pokemon/pokemon-list-service';
+import { PokemonService } from '../../pokemon/pokemon-service';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -20,10 +19,9 @@ import { PokemonListService } from '../../pokemon/pokemon-list-service';
   styleUrl: './pokemon-details.css'
 })
 export class PokemonDetails {
-  private readonly service = inject(PokemonListService);
+  private readonly service = inject(PokemonService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly filterService = inject(PokemonFilterService);
   private readonly routeParams = toSignal(this.route.paramMap);
   private readonly pokemonName = computed(() => this.routeParams()?.get('name') ?? '');
 
@@ -90,7 +88,6 @@ onTypeClick(ev: MouseEvent, typeName: string | undefined) {
   const filters: FilterOptions = this.buildFilterForType(normalized);
 
   // reemplaza filtros (tal como hace tu API updateFilters)
-  this.filterService.updateFilters(filters);
 
   // navegar al catálogo (sin query params)
   this.router.navigateByUrl('/catalog');
@@ -111,7 +108,6 @@ onRegionClick(ev: MouseEvent, region: string | undefined) {
     maxWeight: undefined
   };
 
-  this.filterService.updateFilters(filters);
   this.router.navigateByUrl('/catalog');
 }
 
@@ -130,7 +126,6 @@ onGenerationClick(ev: MouseEvent, generation: string | number | undefined) {
     maxWeight: undefined
   };
 
-  this.filterService.updateFilters(filters);
   this.router.navigateByUrl('/catalog');
 }
 }

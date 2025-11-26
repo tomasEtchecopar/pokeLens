@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
 import { translateGeneration, translateRegion, translateType } from '../../../pokemon/models/pokemon-helpers';
-import { PokemonListService } from '../../../pokemon/pokemon-list-service';
 import { map } from 'rxjs';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { PokemonService } from '../../../pokemon/pokemon-service';
 
 
 @Injectable({
@@ -12,7 +12,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
  * service to translate filter names and map it to a label for ui use
  */
 export class PokemonFiltersTranslation {
-  private readonly service = inject(PokemonListService);
+  private readonly service = inject(PokemonService);
 
   readonly types = toSignal(this.service.getTypes().pipe(
     map(types =>
