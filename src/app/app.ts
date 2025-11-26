@@ -4,10 +4,11 @@ import { Header } from "./header/header";
 import { FormsModule } from '@angular/forms';
 import { AuthServ } from './core/auth.service';
 import { Footer } from './footer/footer';
+import { NotificationToast } from './components/notification-toast/notification-toast.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, Header, FormsModule,Footer],
+  imports: [RouterOutlet, Header, FormsModule, Footer, NotificationToast],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

@@ -8,6 +8,7 @@ import { debounceTime, distinctUntilChanged, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { Router } from '@angular/router';
 import { PointsService } from '../../core/points.service';
+import { NotificationService } from '../../core/notification.service';
 
 const emailPatter = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
 
@@ -28,6 +29,7 @@ export class SignIn implements OnInit {
   private readonly auth = inject(AuthServ);
   private readonly router = inject(Router);
   private readonly points = inject(PointsService);
+  private readonly notification = inject(NotificationService);
 
   // Dual-mode: registration vs profile editing
   readonly isEditing = model<boolean>(false);
@@ -131,18 +133,18 @@ export class SignIn implements OnInit {
   onSubmit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      alert('El formulario es inválido.');
+      this.notification.notify('El formulario es inválido.');
       return;
     }
-    if (this.emailTaken) { alert('Ese email ya está registrado.'); return; }
-    if (this.usernameTaken) { alert('Ese usuario ya existe.'); return; }
+    if (this.emailTaken) { this.notification.notify('Ese email ya está registrado.'); return; }
+    if (this.usernameTaken) { this.notification.notify('Ese usuario ya existe.'); return; }
 
     const datosUser = this.form.getRawValue();
 
     // EDIT MODE
     if (this.isEditing()) {
       const current = this.auth.activeUser();
-      if (!current?.id) { alert('No se encontró el usuario a editar'); return; }
+      if (!current?.id) { this.notification.notify('No se encontró el usuario a editar'); return; }
 
       // Preserve existing data, only update form fields
       const updated: User = {
@@ -158,12 +160,12 @@ export class SignIn implements OnInit {
         next: (res) => {
           this.auth.activeUser.set(res);
           localStorage.setItem('activeUser', JSON.stringify(res));
-          alert('Perfil actualizado');
+          this.notification.notify('Perfil actualizado');
           this.isEditing.set(false);
         },
         error: (err) => {
           console.error(err);
-          alert('No se pudo actualizar el perfil');
+          this.notification.notify('No se pudo actualizar el perfil');
         }
       });
     }
@@ -182,7 +184,7 @@ export class SignIn implements OnInit {
 
       this.users.addUser(newUser).subscribe({
         next: ({ user, token }) => {
-          alert(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
+          this.notification.notify(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
 
           // Backend automatically adds welcome points to points_history table
           // No need to call addHistory manually
@@ -199,7 +201,7 @@ export class SignIn implements OnInit {
         },
         error: (err) => {
           console.error(err);
-          alert(err.error?.error || 'No se pudo registrar el usuario');
+          this.notification.notify(err.error?.error || 'No se pudo registrar el usuario');
         }
       });
     }

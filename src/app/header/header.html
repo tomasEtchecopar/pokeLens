@@ -17,6 +17,8 @@
 
     <button class="btn-header" routerLink="/vault" routerLinkActive="active" (click)="goToTeams()" [disabled]="isAlreadyInTeams()">Equipos</button>
 
+    <app-notification-menu></app-notification-menu>
+
     <button class="btn-header" (click)="logOut()">Salir</button>
     } @else {
     <button class="btn-header" routerLink="/logIn" routerLinkActive="active" (click)="goToLogIn()">Iniciar sesión</button>

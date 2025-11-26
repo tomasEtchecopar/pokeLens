@@ -4,6 +4,7 @@ import { DatePipe } from '@angular/common';
 
 import { AuthServ } from '../../core/auth.service';
 import { PointsService } from '../../core/points.service';
+import { NotificationService } from '../../core/notification.service';
 import { PointEvent } from '../../user/user-model';
 import { SignIn } from '../sign-in/sign-in';
 import { UserClient } from '../../core/user-client.service';
@@ -19,6 +20,7 @@ export class Profile {
 
   private readonly auth = inject(AuthServ);
   private readonly router = inject(Router);
+  private readonly notification = inject(NotificationService);
   private readonly points = inject(PointsService);
   private readonly clienteService = inject(UserClient)
   isDeleteModalOpen = signal(false);
@@ -118,7 +120,7 @@ export class Profile {
       },
       error: (err) => {
         console.error('Error eliminando cuenta:', err);
-        alert('Hubo un error al eliminar la cuenta.');
+        this.notification.notify('Hubo un error al eliminar la cuenta.');
       }
     });
   }

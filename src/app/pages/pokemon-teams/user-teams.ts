@@ -9,6 +9,7 @@ import { Team } from './team-model';
 import { catchError, forkJoin, map, of } from 'rxjs';
 import { HttpClient } from '@angular/common/http';
 import { PokemonService } from '../../pokemon/pokemon-service';
+import { NotificationService } from '../../core/notification.service';
 
 /**
  * UserTeams manages the user's pokemon teams.
@@ -26,6 +27,7 @@ export class UserTeams implements OnInit {
   private readonly teamService = inject(TeamService);
   private readonly pokemonService = inject(PokemonService);
   protected readonly router = inject(Router);
+  private readonly notification = inject(NotificationService);
 
   // Team name editing state
   editingTeamId = signal<string | null>(null);
@@ -37,6 +39,8 @@ export class UserTeams implements OnInit {
   teams = signal<Team[]>([]);
 
   private readonly pokemonCache = signal(new Map<number, Pokemon>());
+  // Track IDs currently being fetched to avoid duplicate requests
+  private readonly fetchingIds = new Set<number>();
 
   // Average power per team
   private readonly _teamAverages = signal<number[]>([]);
@@ -98,7 +102,7 @@ export class UserTeams implements OnInit {
       },
       error: (err) => {
         console.error('Error cargando equipos:', err);
-        alert('Error al cargar los equipos');
+        this.notification.notify('Error al cargar los equipos');
       }
     });
   }
@@ -113,7 +117,7 @@ export class UserTeams implements OnInit {
       },
       error: (err) => {
         console.error('Error creando equipo:', err);
-        alert('Error al crear el equipo');
+        this.notification.notify('Error al crear el equipo');
       }
     });
   }
@@ -129,8 +133,13 @@ export class UserTeams implements OnInit {
     }));
 
     const cache = this.pokemonCache();
-    const missing = Array.from(needed).filter(id => !cache.has(id));
+    const missingAll = Array.from(needed).filter(id => !cache.has(id));
+    // filter out ids already being fetched
+    const missing = missingAll.filter(id => !this.fetchingIds.has(id));
     if (missing.length === 0) return;
+
+    // mark as fetching
+    missing.forEach(id => this.fetchingIds.add(id));
 
     // Usar pokemonService.getPokemonById para cada id
     forkJoin(
@@ -143,12 +152,18 @@ export class UserTeams implements OnInit {
       map(arr => arr.filter((p): p is Pokemon => !!p))
     ).subscribe({
       next: fetched => {
+        // clear fetching flags
+        missing.forEach(id => this.fetchingIds.delete(id));
         if (fetched.length === 0) return;
         const newMap = new Map<number, Pokemon>(this.pokemonCache());
         fetched.forEach(p => newMap.set(p.id as number, p));
         this.pokemonCache.set(newMap);
       },
-      error: err => console.error('Prefetch error', err)
+      error: err => {
+        // clear fetching flags on error
+        missing.forEach(id => this.fetchingIds.delete(id));
+        console.error('Prefetch error', err)
+      }
     });
   }
 
@@ -170,20 +185,34 @@ export class UserTeams implements OnInit {
 
     if (idsToFetch.length > 0) {
       const uniqueMissing = Array.from(new Set(idsToFetch));
-      forkJoin(
-        uniqueMissing.map(id =>
-          this.pokemonService.getPokemonById(id).pipe(catchError(() => of(null)))
-        )
-      ).pipe(map(arr => arr.filter((p): p is Pokemon => !!p)))
-        .subscribe({
-          next: fetched => {
-            if (fetched.length === 0) return;
-            const newMap = new Map<number, Pokemon>(this.pokemonCache());
-            fetched.forEach(p => newMap.set(p.id as number, p));
-            this.pokemonCache.set(newMap);
-          },
-          error: err => console.error('Error cargando pokemons faltantes', err)
-        });
+
+      // Filter out IDs that are already being fetched
+      const toFetch = uniqueMissing.filter(id => !this.fetchingIds.has(id));
+      if (toFetch.length > 0) {
+        // mark as fetching
+        toFetch.forEach(id => this.fetchingIds.add(id));
+
+        forkJoin(
+          toFetch.map(id =>
+            this.pokemonService.getPokemonById(id).pipe(catchError(() => of(null)))
+          )
+        ).pipe(map(arr => arr.filter((p): p is Pokemon => !!p)))
+          .subscribe({
+            next: fetched => {
+              // remove from fetching set
+              toFetch.forEach(id => this.fetchingIds.delete(id));
+              if (fetched.length === 0) return;
+              const newMap = new Map<number, Pokemon>(this.pokemonCache());
+              fetched.forEach(p => newMap.set(p.id as number, p));
+              this.pokemonCache.set(newMap);
+            },
+            error: err => {
+              // ensure we clear fetching flags on error
+              toFetch.forEach(id => this.fetchingIds.delete(id));
+              console.error('Error cargando pokemons faltantes', err)
+            }
+          });
+      }
     }
 
     return results;
@@ -201,7 +230,7 @@ export class UserTeams implements OnInit {
       },
       error: (err) => {
         console.error('Error eliminando equipo:', err);
-        alert('Error al eliminar el equipo');
+        this.notification.notify('Error al eliminar el equipo');
       }
     });
   }
@@ -218,7 +247,7 @@ export class UserTeams implements OnInit {
       },
       error: (err) => {
         console.error('Error eliminando pokemon:', err);
-        alert('Error al eliminar el Pokémon del equipo');
+        this.notification.notify('Error al eliminar el Pokémon del equipo');
       }
     });
   }
@@ -233,7 +262,7 @@ export class UserTeams implements OnInit {
 
     const trimmed = nickname.trim();
     if (trimmed.length > 32) {
-      alert('El nickname no puede exceder 32 caracteres');
+      this.notification.notify('El nickname no puede exceder 32 caracteres');
       return;
     }
 
@@ -243,7 +272,7 @@ export class UserTeams implements OnInit {
       },
       error: (err) => {
         console.error('Error al editar apodo:', err);
-        alert('Error al editar el apodo del Pokémon');
+        this.notification.notify('Error al editar el apodo del Pokémon');
       }
     });
   }
@@ -263,7 +292,7 @@ export class UserTeams implements OnInit {
     const name = this.editingName().trim();
 
     if (!name) {
-      alert('El nombre no puede estar vacío');
+      this.notification.notify('El nombre no puede estar vacío');
       return;
     }
 
@@ -274,7 +303,7 @@ export class UserTeams implements OnInit {
       },
       error: (err) => {
         console.error('Error al guardar nombre:', err);
-        alert('Error al guardar el nombre del equipo');
+        this.notification.notify('Error al guardar el nombre del equipo');
         this.editingTeamId.set(null);
       }
     });

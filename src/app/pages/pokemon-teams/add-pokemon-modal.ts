@@ -6,6 +6,7 @@ import { User } from '../../user/user-model';
 import { TeamService } from '../../core/team.service';
 import { Team } from './team-model';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../core/notification.service';
 
 @Component({
   selector: 'app-add-pokemon-modal',
@@ -365,6 +366,7 @@ export class AddPokemonModal {
   private readonly router = inject(Router);
   private readonly auth = inject(AuthServ);
   private readonly teamService = inject(TeamService);
+  private readonly notification = inject(NotificationService);
 
   newTeamName = signal('');
 
@@ -497,9 +499,9 @@ export class AddPokemonModal {
             localStorage.setItem('activeUser', JSON.stringify(updatedUser));
           }
 
-          // Mostrar alerta de puntos
+          // Mostrar notificación de puntos
           if (pointsAwarded > 0) {
-            alert(`¡Nuevo equipo creado! +${pointsAwarded} puntos`);
+            this.notification.notify(`¡Nuevo equipo creado! +${pointsAwarded} puntos`);
           }
 
           // Agregar pokemon al equipo recién creado
@@ -507,7 +509,7 @@ export class AddPokemonModal {
         },
         error: (err) => {
           console.error('Error creando equipo:', err);
-          this.errorMessage.set('Error al crear el equipo');
+          this.notification.notify('Error al crear el equipo');
           this.isLoading.set(false);
         }
       });
@@ -537,9 +539,9 @@ export class AddPokemonModal {
           localStorage.setItem('activeUser', JSON.stringify(updatedUser));
         }
 
-        // Mostrar alerta de puntos
+        // Mostrar notificación de puntos
         if (pointsAwarded > 0) {
-          alert(`¡Pokémon capturado! +${pointsAwarded} puntos`);
+          this.notification.notify(`¡Pokémon capturado! +${pointsAwarded} puntos`);
         }
 
         console.log('Pokemon agregado exitosamente');
@@ -547,7 +549,7 @@ export class AddPokemonModal {
       },
       error: (err) => {
         console.error('Error agregando pokemon:', err);
-        this.errorMessage.set('Error al capturar el Pokémon');
+        this.notification.notify('Error al capturar el Pokémon');
         this.isLoading.set(false);
       }
     });
@@ -560,7 +562,7 @@ export class AddPokemonModal {
     this.isLoading.set(false);
     this.captured.emit();
     this.close();
-    alert(`¡${pokemonName} capturado exitosamente!`);
+    this.notification.notify(`¡${pokemonName} capturado exitosamente!`);
 
     // Recargar teams para reflejar cambios
     this.loadTeams();

@@ -5,6 +5,7 @@ import { AuthServ } from '../../core/auth.service';
 import { PointsService } from '../../core/points.service';
 import { PointEvent } from '../../user/user-model';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../core/notification.service';
 
 /**
  * PokemonQuiz component provides an interactive pokemon guessing game.
@@ -22,6 +23,7 @@ export class PokemonQuiz /* implements OnInit  */{
   private readonly router = inject(Router);
   private readonly auth = inject(AuthServ);
   private readonly points = inject(PointsService);
+  private readonly notification = inject(NotificationService);
 
   protected readonly usuario = computed(() => this.auth.activeUser());
 
@@ -84,8 +86,8 @@ export class PokemonQuiz /* implements OnInit  */{
             this.auth.activeUser.set(finalUser);
             localStorage.setItem('activeUser', JSON.stringify(finalUser));
 
-            // Step 4: Show alert with points
-            alert(`¡Respuesta correcta! +${amount} puntos`);
+            // Step 4: Show notification with points
+            this.notification.notify(`¡Respuesta correcta! +${amount} puntos`);
           },
           error: () => {
             console.error('Error al registrar el historial de puntos');

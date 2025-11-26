@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { AuthServ } from '../../core/auth.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { NotificationService } from '../../core/notification.service';
 
 /**
  * LogIn component handles user authentication.
@@ -17,6 +18,7 @@ export class LogIn {
   private readonly auth = inject(AuthServ);
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly notification = inject(NotificationService);
 
   protected readonly form = this.fb.nonNullable.group({
     username: ['', Validators.required],
@@ -30,7 +32,7 @@ export class LogIn {
    */
   logIn() {
     if (this.form.invalid) {
-      alert('Complete correctamente todos los campos');
+      this.notification.notify('Complete correctamente todos los campos');
       return;
     }
 
@@ -44,7 +46,7 @@ export class LogIn {
       },
       error: (err) => {
         console.error(err);
-        alert('Usuario o contraseña incorrectos');
+        this.notification.notify('Usuario o contraseña incorrectos');
       }
     });
   }
