@@ -36,6 +36,17 @@
           }
         </select>
       </div>
+
+      <div class="filter-item">
+        <label>Rareza</label>
+        <select [(ngModel)]="selectedRarity" (ngModelChange)="onChange()">
+          <option value="">Todas</option>
+          <option value="common">Común</option>
+          <option value="rare">Rara</option>
+          <option value="epic">Épica</option>
+          <option value="legendary">Legendaria</option>
+        </select>
+      </div>
     </div>
 
     <div class="filter-row">

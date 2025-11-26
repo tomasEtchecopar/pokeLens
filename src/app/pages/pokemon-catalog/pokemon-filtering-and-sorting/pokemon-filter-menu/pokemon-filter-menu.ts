@@ -25,6 +25,7 @@ export class PokemonFilterMenu{
 
   selectedType = signal('');
   selectedGeneration = signal('');
+  selectedRarity = signal('');
   selectedRegion = signal('');
   minHeight = signal<number | null>(null);
   maxHeight = signal<number | null>(null);
@@ -40,6 +41,7 @@ export class PokemonFilterMenu{
       const f = this.currentFilters;
       this.selectedType.set(f.type || '');
       this.selectedGeneration.set(f.generation || '');
+      this.selectedRarity.set((f as any).rarity || '');
       this.selectedRegion.set(f.region || '');
       this.minHeight.set(f.minHeight ? f.minHeight  /10 : null);
       this.maxHeight.set(f.maxHeight ? f.maxHeight/ 10: null);
@@ -55,6 +57,7 @@ export class PokemonFilterMenu{
   onChange() {
     this.filterUpdate.emit({
       type: this.selectedType() as PokemonType|| undefined,
+      rarity: this.selectedRarity() || undefined,
       generation: this.selectedGeneration() as PokemonGeneration|| undefined,
       region: this.selectedRegion() as PokemonRegion|| undefined,
       minHeight: this.minHeight() != null ? this.minHeight()! * 10 : undefined,
@@ -66,6 +69,7 @@ export class PokemonFilterMenu{
 
   clear() {
     this.selectedType.set('');
+    this.selectedRarity.set('');
     this.selectedGeneration.set('');
     this.selectedRegion.set('');
     this.minHeight.set(null);

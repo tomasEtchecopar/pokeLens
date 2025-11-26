@@ -1,5 +1,6 @@
 export interface FilterOptions{
     type?: PokemonType;
+    rarity?: string;
     generation?: PokemonGeneration;
     region?: PokemonRegion;
     minHeight?: number;
