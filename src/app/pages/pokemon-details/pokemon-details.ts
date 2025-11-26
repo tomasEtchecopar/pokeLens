@@ -35,7 +35,8 @@ export class PokemonDetails {
   protected readonly evolutionPokemons = signal<Pokemon[]>([]);
   protected readonly loadingEvolutions = signal(false);
 
-  private readonly loadEvolutions = effect(() => {
+  constructor(){
+    effect(() => {
     const p = this.pokemon();
 
     if (p?.evolution_line && p.evolution_line.length > 0) {
@@ -60,72 +61,9 @@ export class PokemonDetails {
       this.evolutionPokemons.set([]);
     }
   })
-
+}
 
 
   protected translateType = translateType;
   protected translateGeneration = translateGeneration;
-
-
-
-  private buildFilterForType(type?: string): FilterOptions {
-  return {
-    type: (type ?? undefined) as any,
-    generation: undefined,
-    region: undefined,
-    minHeight: undefined,
-    maxHeight: undefined,
-    minWeight: undefined,
-    maxWeight: undefined
-  };
-}
-
-onTypeClick(ev: MouseEvent, typeName: string | undefined) {
-  ev.stopPropagation();
-  if (!typeName) return;
-
-  const normalized = typeName.toString().toLowerCase(); // coincide con tus types
-  const filters: FilterOptions = this.buildFilterForType(normalized);
-
-  // reemplaza filtros (tal como hace tu API updateFilters)
-
-  // navegar al catálogo (sin query params)
-  this.router.navigateByUrl('/catalog');
-}
-
-onRegionClick(ev: MouseEvent, region: string | undefined) {
-  ev.stopPropagation();
-  if (!region) return;
-
-  const normalized = region.toString().toLowerCase();
-  const filters: FilterOptions = {
-    type: undefined,
-    generation: undefined,
-    region: normalized as any,
-    minHeight: undefined,
-    maxHeight: undefined,
-    minWeight: undefined,
-    maxWeight: undefined
-  };
-
-  this.router.navigateByUrl('/catalog');
-}
-
-onGenerationClick(ev: MouseEvent, generation: string | number | undefined) {
-  ev.stopPropagation();
-  if (generation === undefined || generation === null) return;
-
-  const normalized = generation.toString();
-  const filters: FilterOptions = {
-    type: undefined,
-    generation: normalized as any,
-    region: undefined,
-    minHeight: undefined,
-    maxHeight: undefined,
-    minWeight: undefined,
-    maxWeight: undefined
-  };
-
-  this.router.navigateByUrl('/catalog');
-}
 }
