@@ -53,11 +53,6 @@ isAlreadyInCatalog(): boolean {
     return this.router.url === '/teams'
   }
 
-  logOut() {
-    this.auth.logOut();
-    this.router.navigateByUrl('home');
-     this.quiz.resetStats();
-  }
   setDefaultAvatar(event: Event) {
   const img = event.target as HTMLImageElement;
   img.src = '/assets/images/default.png';

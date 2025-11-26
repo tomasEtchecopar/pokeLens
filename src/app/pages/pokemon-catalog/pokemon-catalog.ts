@@ -143,5 +143,14 @@ export class PokemonCatalog implements OnInit, AfterViewInit, OnDestroy {
     this.catalogState.setSort(sort ?? { key: 'id', dir: 'asc' });
   }
 
+  hasActiveFiltersOrSearch(){
+    const hasSearch = this.catalogState.search().length > 0;
+    const filters = this.catalogState.filters();
+    const hasFilters =
+      (filters.type && filters.type.length > 0) ||
+      (filters.generation && filters.generation.length > 0) ||
+      (filters.region && filters.region.length > 0);
+    return hasSearch || hasFilters;
+  }
 
 }

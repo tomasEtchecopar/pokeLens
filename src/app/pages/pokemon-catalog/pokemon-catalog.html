@@ -19,21 +19,18 @@
     @for (pokemon of pokemons(); track pokemon.id){
     <app-pokemon-card [pokemon]="pokemon"></app-pokemon-card>
     }
+  </div>
     @if (isLoading()) {
       <div class="loading loading-more">
         <div class="spinner"></div>
         <span>Cargando mas Pokémon...</span>
       </div>
-    }<!-- @else if(pokemons.length === 0 ){
+    }@if(pokemons().length === 0 && hasActiveFiltersOrSearch()){
       <div class="no-results">
         <p>No se encontraron Pokémon con los filtros actuales</p>
-        <button class="reset-btn" (click)="catalogState.clear()">
-          Limpiar filtros
-        </button>
       </div>
     }
-  </div>
- -->
+
   <div #scrollSentinel class="scroll-sentinel"></div>
 
 </div>
