@@ -10,6 +10,7 @@ import { UserTeams } from './pages/pokemon-teams/user-teams';
 import { PokemonQuiz } from './pages/pokemon-quiz/pokemon-quiz';
 import { authGuard } from './core/auth-guard';
 import { guestGuard } from './core/guestGuard';
+import { Leaderboard } from './pages/leaderboard/leaderboard';
 
 export const routes: Routes = [
     {
@@ -63,6 +64,10 @@ export const routes: Routes = [
     {
         path: 'quiz', component: PokemonQuiz,
         title: 'Quiz Pokemon'
+    },
+    {
+        path: 'leaderboard', component: Leaderboard,
+        title: 'Leaderboard'
     },
     {
         path: '**', redirectTo: 'home'

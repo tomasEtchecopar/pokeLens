@@ -1,0 +1,45 @@
+<div class="leaderboard-page">
+  <h1>Leaderboard</h1>
+
+  <div class="controls">
+    <label>Tiempo:</label>
+    <select (change)="changeTimeframe($event)">
+      <option value="all">Todos los tiempos</option>
+      <option value="week">Ultimos 7 días</option>
+      <option value="month">Últimos 30 días</option>
+    </select>
+  </div>
+
+  @if (isLoading()) {
+  <div class="loading">Cargando...</div>
+  }
+
+  <table class="leaderboard-table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Avatar</th>
+        <th>Usuario</th>
+        <th>Puntos</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (u of leaderboard(); track u.id) {
+      <tr>
+        <td>{{u.position}}</td>
+        <td>
+          <img src="{{u.avatar_url || '/assets/images/default.png'}}" alt="avatar" class="avatar-small"/>
+        </td>
+        <td>{{u.username}}</td>
+        <td>{{u.points}}</td>
+      </tr>
+      }
+    </tbody>
+  </table>
+
+  <div class="pager">
+    <button class="btn" (click)="prev()" disabled="{{offset() === 0}}">Anterior</button>
+    <span>Mostrando {{getVisibleStart()}} - {{getVisibleEnd()}} de {{total()}}</span>
+    <button class="btn" (click)="next()" disabled="{{offset() + limit() >= total()}}">Siguiente</button>
+  </div>
+</div>

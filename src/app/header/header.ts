@@ -32,6 +32,10 @@ export class Header {
     this.router.navigateByUrl('profile');
   }
 
+  goToLeaderboard(){
+    this.router.navigateByUrl('leaderboard');
+  }
+
   goToTeams(){
     this.router.navigateByUrl('teams');
   }

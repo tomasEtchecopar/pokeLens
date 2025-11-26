@@ -2,6 +2,7 @@
 
   <div class="header-left">
     <button class="btn-header" routerLink="/catalog" routerLinkActive="active" click="goToCatalog()" [disabled]="isAlreadyInCatalog()">Catálogo</button>
+    <button class="btn-header" routerLink="/leaderboard" routerLinkActive="active" (click)="goToLeaderboard()">Leaderboard</button>
   </div>
 
   <a class="logo-link" routerLink="/home" routerLinkActive="active" (click)="goToHome()">
