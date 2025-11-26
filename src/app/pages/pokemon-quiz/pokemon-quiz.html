@@ -61,7 +61,10 @@
       <div class="pokemon-display" [class.revealed]="quizService.hasAnswered()">
         <div class="image-container">
           @if(question.pokemon.sprites.front_default) {
-          <img [src]="question.pokemon.sprites.front_default" [alt]="question.pokemon.name"
+          <img 
+            [src]="question.pokemon.sprites.front_default" 
+            [alt]="'Pokemon sprite'"
+            (error)="onImageError($event)"
             [ngStyle]="{'filter': quizService.hasAnswered() ? 'none' : 'brightness(0) drop-shadow(0 0 8px #000)'}"
             draggable="false"
             (dragstart)="$event.preventDefault()"

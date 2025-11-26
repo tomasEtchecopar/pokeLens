@@ -57,6 +57,15 @@ export class PokemonQuiz /* implements OnInit  */{
   }
 
   /**
+   * Handles broken sprite image by hiding it and logging to console
+   */
+  onImageError(event: Event): void {
+    const img = event.target as HTMLImageElement;
+    img.style.display = 'none';
+    console.warn('Failed to load Pokemon sprite:', img.src);
+  }
+
+  /**
    * Awards +5 points for correct quiz answers.
    * Updates both points and history, then syncs with auth service and localStorage.
    */
