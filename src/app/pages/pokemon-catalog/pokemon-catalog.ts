@@ -4,78 +4,113 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SearchBar } from "./search-bar/search-bar";
 import { PokemonCard } from '../../pokemon/pokemon-card/pokemon-card';
 import { OnInit } from '@angular/core';
+import { NavigationStart } from '@angular/router';
+import { filter } from 'rxjs';
 import { FilterOptions } from '../../pokemon/models/pokemon-filters';
-import { PokemonFilterDropdown } from './pokemon-filtering-and-sorting/pokemon-filter-dropdown/pokemon-filter-dropdown';
 import { PokemonSortMenu } from './pokemon-filtering-and-sorting/pokemon-sort-menu';
-import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { NgZone } from '@angular/core';
-import { PokemonService } from '../../pokemon/pokemon-service';
 import { SortOption } from '../../pokemon/models/pokemon-sort';
+import { PokemonFilterMenu } from './pokemon-filtering-and-sorting/pokemon-filter-menu/pokemon-filter-menu';
+import { PokemonCatalogState } from './pokemon-catalog-state';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-pokemon-catalog',
-  imports: [ReactiveFormsModule, PokemonCard, SearchBar, PokemonFilterDropdown, PokemonSortMenu],
+  imports: [ReactiveFormsModule, PokemonCard, SearchBar, PokemonFilterMenu, PokemonSortMenu],
   templateUrl: './pokemon-catalog.html',
   styleUrl: './pokemon-catalog.css'
 })
 export class PokemonCatalog implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('scrollSentinel', { static: false }) scrollSentinel?: ElementRef<HTMLElement>;
-  private readonly pokemonService = inject(PokemonService);
+  readonly catalogState = inject(PokemonCatalogState);
+  private readonly ngZone = inject(NgZone);
+  private readonly router = inject(Router);
 
-  private chunkSize = 50;
-  private offset = signal<number>(0);
-
-  pokemons = signal<Pokemon[]>([]);
-
-  isLoading = signal(false);
-  hasMore = signal(true);
-
-  search =signal<string>('');
-  filters = signal<FilterOptions>({});
-  sort = signal<SortOption>({key: 'id', dir: 'asc'});
+  pokemons = this.catalogState.loadedPokemons.asReadonly();
+  isLoading = this.catalogState.isLoading.asReadonly();
+  hasMore = this.catalogState.hasMore.asReadonly();
 
    private observer?: IntersectionObserver;
-
     private sentinelAttached = false;
+      private navigationSubscription?: any;
 
-    constructor(private readonly ngZone: NgZone) { }
 
   ngOnInit(){
-    console.log('Catalog ngOnInit: reset & load');
-    this.resetAndLoad();
+  // saves scroll when navigating FROM catalog to other route
+    this.navigationSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationStart))
+      .subscribe((event: NavigationStart) => {
+        const currentUrl = this.router.url;
+        const targetUrl = event.url;
+
+        if (currentUrl.includes('/catalog') && targetUrl.includes('/details')) {
+          const currentScroll = window.scrollY;
+          console.log('leaving catalog - saving scroll:', currentScroll);
+          this.catalogState.saveScrollPosition(currentScroll);
+        } else {
+          console.log('navigation event ignored:', { from: currentUrl, to: targetUrl });
+        }
+      });
+
+    if (this.pokemons().length === 0 && this.catalogState.savedScrollPosition() === 0) {
+      console.log('first load of catalog');
+      this.catalogState.reset();
+    } else {
+      console.log('restoring saved state:', {
+        pokemons: this.pokemons().length,
+        scroll: this.catalogState.savedScrollPosition()
+      });
+    }
   }
 
     ngAfterViewInit(){
-    setTimeout(() => {
-      if (this.scrollSentinel?.nativeElement && !this.sentinelAttached) {
-        console.log("initializing scroll")
-        this.initScroll(this.scrollSentinel.nativeElement);
-        this.sentinelAttached = true;
-      } else {
-        console.error('Sentinel not found');
-      }
-    }, 0);
+   if (this.scrollSentinel?.nativeElement && !this.sentinelAttached) {
+      console.log("initializing scroll observer");
+      this.initScroll(this.scrollSentinel.nativeElement);
+      this.sentinelAttached = true;
+    }
+
+    const saved = this.catalogState.savedScrollPosition();
+    if (saved > 0) {
+      console.log('attempting to restore scroll to:', saved);
+
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          console.log('restoring scroll now');
+          window.scrollTo({
+            top: saved,
+            behavior: 'instant'
+          });
+
+          setTimeout(() => {
+            const current = window.scrollY;
+            console.log('scroll check - expected:', saved, 'actual:', current);
+
+            if (Math.abs(current - saved) > 10) {
+              console.log('retrying scroll restoration');
+              window.scrollTo({
+                top: saved,
+                behavior: 'instant'
+              });
+            }
+          }, 200);
+        });
+      });
+    }
   }
 
-  /**
-   * Sets up infinite scroll using IntersectionObserver.
-   * Runs outside Angular zone for better performance.
-   *
-   * @param sentinel - HTML element to observe (typically at the bottom of the list)
-   */
   initScroll(sentinel: HTMLElement): void {
     this.ngZone.runOutsideAngular(() => {
       this.observer = new IntersectionObserver(entries => {
         for (const e of entries) {
           if (e.isIntersecting) {
             console.log("Scroll limit reached");
-            // Re-enter Angular zone to trigger change detection
-            this.ngZone.run(() => this.loadMore());
+            this.ngZone.run(() => this.catalogState.loadNextChunk());
           }
         }
       }, {
         root: null,
-        rootMargin: '100px',  // Trigger 100px before reaching sentinel
+        rootMargin: '300px',
         threshold: 0.1
       });
       this.observer.observe(sentinel);
@@ -83,83 +118,29 @@ export class PokemonCatalog implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    const currentScroll = window.scrollY;
+    if (currentScroll > 100) {
+      console.log('ngOnDestroy backup - saving scroll:', currentScroll);
+      this.catalogState.saveScrollPosition(currentScroll);
+    }
+
     this.observer?.disconnect();
+    this.navigationSubscription?.unsubscribe();
   }
 
 
+
   onSearch(term: string) {
-    console.log("search term: ", term);
-    this.search.set(term);
-    this.resetAndLoad();
+    this.catalogState.setSearch(term);
   }
 
 
   applyFilters(filters: FilterOptions) {
-    console.log("filters: ", filters);
-    this.filters.set(filters || {});
-    this.resetAndLoad();
+    this.catalogState.setFilters(filters);
   }
 
   onSort(sort: SortOption | null){
-    console.log("updating sorting: ", sort);
-    if(sort) this.sort.set(sort);
-    else this.sort.set({ key: 'id', dir: 'asc' });
-    this.resetAndLoad();
-  }
-
-  private resetAndLoad(){
-    console.log('resetAndLoad: resetting state');
-    this.offset.set(0);
-    this.hasMore.set(true);
-    this.pokemons.set([]);
-    this.loadMore();
-  }
-
-  loadMore(){
-    console.log('loadMore called — isLoading:', this.isLoading(), 'hasMore:', this.hasMore());
-    if (this.isLoading() || !this.hasMore()) {
-      console.log('not loading more');
-      return;
-    }
-    this.isLoading.set(true);
-
-        const payload = untracked(() => ({
-      offset: this.offset(),
-      limit: this.chunkSize,
-      search: this.search(),
-      filters: this.filters(),
-      sort: this.sort()
-    }));
-
-    this.pokemonService.getPokemonChunk({
-      offset: payload.offset,
-      limit: payload.limit,
-      search: payload.search, 
-      filters: payload.filters,
-      sort: payload.sort
-    })
-    .subscribe({
-      next: (data) =>{
-        console.log('chunk fetched size=', Array.isArray(data) ? data.length : 'unknown', data);
-
-        // si la API devuelve estructura con data/hasMore, adaptá aquí.
-        const received = data;
-        this.pokemons.update(curr => [...curr, ...received]);
-
-        if (received.length < this.chunkSize) {
-          this.hasMore.set(false);
-          console.log('no more data (received < chunkSize)');
-        } else {
-          this.offset.update(o => o + this.chunkSize);
-        }
-
-        this.isLoading.set(false);
-      },
-      error: (err) => {
-        console.error('chunk fetch error:', err);
-        this.isLoading.set(false)
-      },
-    })
+    this.catalogState.setSort(sort ?? { key: 'id', dir: 'asc' });
   }
 
 

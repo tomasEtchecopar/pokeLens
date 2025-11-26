@@ -9,13 +9,13 @@ import { FormsModule } from '@angular/forms';
  * Handles unit conversions for height (decimeters) and weight (hectograms).
  */
 @Component({
-  selector: 'app-pokemon-filter-dropdown',
+  selector: 'app-pokemon-filter-menu',
   standalone: true,
   imports: [FormsModule],
-  templateUrl: './pokemon-filter-dropdown.html',
-  styleUrl: './pokemon-filter-dropdown.css',
+  templateUrl: './pokemon-filter-menu.html',
+  styleUrl: './pokemon-filter-menu.css',
 })
-export class PokemonFilterDropdown {
+export class PokemonFilterMenu{
  private readonly filtersTranslations = inject(PokemonFiltersTranslation);
 
   @Input() currentFilters: FilterOptions = {};
@@ -41,10 +41,10 @@ export class PokemonFilterDropdown {
       this.selectedType.set(f.type || '');
       this.selectedGeneration.set(f.generation || '');
       this.selectedRegion.set(f.region || '');
-      this.minHeight.set(f.minHeight ?? null);
-      this.maxHeight.set(f.maxHeight ?? null);
-      this.minWeight.set(f.minWeight ?? null);
-      this.maxWeight.set(f.maxWeight ?? null);
+      this.minHeight.set(f.minHeight ? f.minHeight  /10 : null);
+      this.maxHeight.set(f.maxHeight ? f.maxHeight/ 10: null);
+      this.minWeight.set(f.minWeight ? f.minWeight / 10: null);
+      this.maxWeight.set(f.maxWeight ? f.maxWeight / 10 : null);
     });
   }
 
@@ -57,10 +57,10 @@ export class PokemonFilterDropdown {
       type: this.selectedType() as PokemonType|| undefined,
       generation: this.selectedGeneration() as PokemonGeneration|| undefined,
       region: this.selectedRegion() as PokemonRegion|| undefined,
-      minHeight: this.minHeight() ?? undefined,
-      maxHeight: this.maxHeight() ?? undefined,
-      minWeight: this.minWeight() ?? undefined,
-      maxWeight: this.maxWeight() ?? undefined
+      minHeight: this.minHeight() != null ? this.minHeight()! * 10 : undefined,
+      maxHeight: this.maxHeight() != null ? this.maxHeight()! * 10 : undefined,
+      minWeight: this.minWeight() != null ? this.minWeight()! * 10 : undefined,
+      maxWeight: this.maxWeight() != null ? this.maxWeight()! * 10 : undefined,
     });
   }
 

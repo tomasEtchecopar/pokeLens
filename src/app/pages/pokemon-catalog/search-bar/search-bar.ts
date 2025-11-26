@@ -19,44 +19,50 @@ import { toSignal } from '@angular/core/rxjs-interop';
  * Generic search bar component
  */
 export class SearchBar {
-  /**
-   * Detect changes on search form
-   */
   readonly searchControl = new FormControl('', { nonNullable: true });
 
-  /**
-   * Input signal for placeholder text
-   */
   placeholder = input<string>('Buscar...');
+  currentTerm = input<string>('');
 
+  private isRestoringFromState = false;
 
-  /**
-   * Search value
-   */
+  readonly searchUpdate = output<string>();
+
   readonly searchTerm = toSignal(
     this.searchControl.valueChanges.pipe(
-      debounceTime(300),
+debounceTime(300),
       distinctUntilChanged(),
-      map(term => (term || '').trim())
+      map(term => term.trim())
     ),
     { initialValue: '' }
   )
 
-  /**
-   * Outputs the updated search value to the parent component
-   */
-  readonly searchUpdate = output<string>();
+  readonly isSearching = signal(false);
+  readonly isInSearchMode = computed(() => !!this.searchTerm().trim());
 
   constructor() {
+  // EFECTO 1: Restaura desde state sin emitir
+    effect(() => {
+      const external = this.currentTerm() ?? '';
+      const current = this.searchControl.value.trim();
+
+      if (external !== current) {
+        this.isRestoringFromState = true;
+        this.searchControl.setValue(external, { emitEvent: true }); // 👈 Ahora SÍ emite
+        setTimeout(() => this.isRestoringFromState = false, 0);
+      }
+    });
+
+    // EFECTO 2: Solo emite si NO estamos restaurando
     effect(() => {
       const term = this.searchTerm();
-      untracked(() => this.searchUpdate.emit(term));
-    })
+      if (!this.isRestoringFromState) {
+        this.searchUpdate.emit(term);
+      }
+    });
   }
 
-  readonly isSearching = signal(false);
 
-  readonly isInSearchMode = computed(() => !!this.searchTerm().trim());
 
   clearSearch(): void {
     this.searchControl.setValue('');
