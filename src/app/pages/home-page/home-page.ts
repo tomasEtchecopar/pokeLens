@@ -18,7 +18,7 @@ import { AuthServ } from '../../core/auth.service';
 export class HomePage {
   private readonly dailyPokemonService = inject(DailyPokemonService);
 
-/*   readonly pokemonOfTheDay = this.dailyPokemonService.pokemonOfTheDay;
-  readonly loadingDaily = this.dailyPokemonService.isLoading; */
- 
+   readonly pokemonOfTheDay = this.dailyPokemonService.pokemonOfTheDay;
+  readonly loadingDaily = this.dailyPokemonService.isLoading;
+
 }
