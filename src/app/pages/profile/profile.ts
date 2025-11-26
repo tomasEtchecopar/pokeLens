@@ -8,6 +8,7 @@ import { NotificationService } from '../../core/notification.service';
 import { PointEvent } from '../../user/user-model';
 import { SignIn } from '../sign-in/sign-in';
 import { UserClient } from '../../core/user-client.service';
+import { PokemonQuizService } from '../pokemon-quiz/pokemon-quiz-service';
 
 @Component({
   selector: 'app-profile',
@@ -19,6 +20,7 @@ import { UserClient } from '../../core/user-client.service';
 export class Profile {
 
   private readonly auth = inject(AuthServ);
+  private readonly quiz = inject(PokemonQuizService);
   private readonly router = inject(Router);
   private readonly notification = inject(NotificationService);
   private readonly points = inject(PointsService);
@@ -104,7 +106,11 @@ export class Profile {
     this.openDeleteModal();
   }
 
-
+  logOut() {
+    this.auth.logOut();
+    this.router.navigateByUrl('home');
+     this.quiz.resetStats();
+  }
   confirmDeleteAccount() {
     const user = this.usuario();
     if (!user || !user.id) return;

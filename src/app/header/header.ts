@@ -56,7 +56,7 @@ isAlreadyInCatalog(): boolean {
   logOut() {
     this.auth.logOut();
     this.router.navigateByUrl('home');
-/*     this.quiz.resetStats(); */
+     this.quiz.resetStats();
   }
   setDefaultAvatar(event: Event) {
   const img = event.target as HTMLImageElement;

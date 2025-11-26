@@ -24,6 +24,7 @@
     <div class="actions">
       <button class="btn" (click)="isEditing.set(true)">Editar perfil</button>
       <button class="btn" (click)="goToTeams()">Ver mis equipos</button>
+      <button class="btn" (click)="logOut()">Cerrar Sesión</button>
       <button class="btn btn-danger" [class.btn-confirm-delete]="confirmDeleteClick()" (click)="onDeleteButtonClick()">
         {{ confirmDeleteClick() ? 'Confirmar eliminación' : 'Eliminar cuenta' }}
       </button>
