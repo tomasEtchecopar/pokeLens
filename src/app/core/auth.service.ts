@@ -3,12 +3,14 @@ import { User } from '../user/user-model';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, Observable, of, tap } from 'rxjs';
 import { environment } from '../../enviroments/enviroment';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthServ {
   private readonly http = inject(HttpClient);
+  private readonly notification = inject(NotificationService);
   private readonly baseUrl = `${environment.apiUrl}/auth`;
 
   public readonly activeUser = signal<User | undefined>(undefined);
@@ -58,7 +60,7 @@ export class AuthServ {
           localStorage.setItem('token', token);
 
           if (pointsAwarded > 0) {
-            alert(`¡Bienvenido de vuelta! +${pointsAwarded} puntos por tu ingreso diario`);
+            this.notification.notify(`¡Bienvenido de vuelta! +${pointsAwarded} puntos por tu ingreso diario`);
           }
         }),
         map(() => void 0)

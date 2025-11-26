@@ -37,18 +37,18 @@
 
     <div class="details-info">
       <div class="badges-row">
-        <span class="badge generation" (click)="onGenerationClick($event, p.generation)"
+        <span class="badge generation"
           title="Ver pokémons de la generación {{ translateGeneration(p.generation!) }}">
           {{ translateGeneration(p.generation!) }}
         </span>
 
-        <span class="badge region" (click)="onRegionClick($event, p.region)"
+        <span class="badge region"
           title="Ver pokémons de la región {{ p.region | titlecase }}">
           {{ p.region | titlecase }}
         </span>
 
         @for (t of p.types; track t.type.name) {
-        <span class="badge type-{{ t.type.name }}" (click)="onTypeClick($event, t.type.name)"
+        <span class="badge type-{{ t.type.name }}"
           title="Ver pokémons tipo {{ translateType(t.type.name) | titlecase }}">
           {{ translateType(t.type.name) | titlecase }}
         </span>

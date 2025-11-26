@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { NotificationService } from '../../core/notification.service';
 
 @Component({
   selector: 'app-contact',
@@ -15,6 +16,7 @@ export class Contact {
 
 
   private readonly fb = inject(FormBuilder);
+  private readonly notification = inject(NotificationService);
 
   readonly form = this.fb.nonNullable.group({
     name: ['', [Validators.required, Validators.minLength(3)]],
@@ -30,7 +32,7 @@ export class Contact {
     }
 
     console.log('Formulario de contacto (DEMO, no se envía):', this.form.getRawValue());
-    alert('Gracias por tu mensaje. Esta es solo una demo, todavía no se envía realmente :)');
+    this.notification.notify('Gracias por tu mensaje. Esta es solo una demo, todavía no se envía realmente :)');
     this.form.reset();
   }
 }

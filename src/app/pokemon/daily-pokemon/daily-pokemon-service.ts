@@ -1,69 +1,61 @@
-import { signal } from '@angular/core';
-import { effect } from '@angular/core';
-import { Injectable } from '@angular/core';
-import { inject } from '@angular/core';
-import { computed } from '@angular/core';
+import { Injectable, signal, computed } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { tap, catchError, of } from 'rxjs';
+import { environment } from '../../../enviroments/enviroment';
 import { Pokemon } from '../models/pokemon-models';
+import { inject } from '@angular/core';
+
+interface DailyPokemonResponse {
+  success: boolean;
+  data: Pokemon;
+  date: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
 export class DailyPokemonService {
-/*   private readonly pokeListService = inject(PokemonListService);
+  private readonly http = inject(HttpClient);
+  private readonly apiUrl = `${environment.apiUrl}/daily-pokemon`;
 
-  private readonly salt = 'esta-es-una-string-para-aumentar-aleatoriedad';
   private readonly _pokemonOfTheDay = signal<Pokemon | null>(null);
-
-  readonly pokemonOfTheDay = computed(() => this._pokemonOfTheDay());
+  private readonly _date = signal<string>('');
   readonly isLoading = signal(false);
 
+  readonly pokemonOfTheDay = computed(() => this._pokemonOfTheDay());
+  readonly date = computed(() => this._date());
+
   constructor() {
-    effect(() => {
-      this.loadDailyPokemon();
-    })
-  }
-  //algorithm mulberry32
-  private mulberry32(seed: number) {
-    return function () {
-      let t = seed += 0x6D2B79F5;
-      t = Math.imul(t ^ (t >>> 15), t | 1);
-      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
-      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-    };
+    // Carga automática al inicializar
+    this.loadDailyPokemon();
   }
 
-  //generates index based on current date
-  private loadDailyPokemon(): void {
-    const allPokemon = this.pokeListService.allPokemon();
-    if (allPokemon.length === 0) return;
-
-    const today = new Date().toISOString().split('T')[0]; //yyy-mm-dd
-    const seed = this.hashString(`${today}|${this.salt}`);
-    const rng = this.mulberry32(seed);
-    const index = Math.floor(rng() * allPokemon.length);
-    const resourceName = allPokemon[index].name;
-
+  /**
+   * Carga el Pokémon del día desde el backend
+   */
+  loadDailyPokemon(): void {
     this.isLoading.set(true);
-    this.pokeListService.getPokemonByName(resourceName).subscribe({
-      next: (pokemon) => {
-        this._pokemonOfTheDay.set(pokemon);
-        this.isLoading.set(false);
-      },
-      error: (error) => {
-        console.error('error getting daily pokemon: ', error);
-        this.isLoading.set(false);
-      }
+
+    this.http.get<DailyPokemonResponse>(this.apiUrl).pipe(
+      tap(response => {
+        this._pokemonOfTheDay.set(response.data);
+        this._date.set(response.date);
+        console.log(`Daily Pokémon loaded: ${response.data.name} (${response.date})`);
+      }),
+      catchError(error => {
+        console.error('Error loading daily pokemon:', error);
+        this._pokemonOfTheDay.set(null);
+        return of(null);
+      })
+    ).subscribe(() => {
+      this.isLoading.set(false);
     });
   }
 
-  //converts string to consistent numeric hash
-  private hashString(str: string): number {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      hash = hash * 31 + str.charCodeAt(i);
-      hash = hash | 0;
-    }
-    return Math.abs(hash);
-  } */
-
+  /**
+   * Fuerza recarga del Pokémon del día
+   */
+  refresh(): void {
+    this.loadDailyPokemon();
+  }
 }

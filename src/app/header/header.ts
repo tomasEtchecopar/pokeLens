@@ -2,12 +2,13 @@ import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLinkActive, RouterLinkWithHref } from "@angular/router";
 import { AuthServ } from '../core/auth.service';
 import { PokemonQuizService } from '../pages/pokemon-quiz/pokemon-quiz-service';
+import { NotificationMenu } from '../components/notification-menu/notification-menu.component';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.html',
   styleUrl: './header.css',
-  imports: [RouterLinkActive, RouterLinkWithHref],
+  imports: [RouterLinkActive, RouterLinkWithHref, NotificationMenu],
 })
 export class Header {
   private readonly router = inject(Router);
