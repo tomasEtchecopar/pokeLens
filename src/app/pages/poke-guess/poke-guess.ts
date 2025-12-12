@@ -142,7 +142,7 @@ private pokeguessService = inject(PokeGuessService);
         this.guessHistory.set(info.guessHistory || []);
 
         if (info.gameOver) {
-          this.message.set(info.won ? '¡Ganaste! 🎉' : 'Intenta mañana');
+          this.message.set(info.won ? '¡Ganaste!' : 'Intenta mañana');
         }
       },
       error: (err) => {
@@ -222,7 +222,7 @@ private pokeguessService = inject(PokeGuessService);
         this.won.set(response.won);
 
         if (response.correct) {
-          this.message.set('¡Correcto! 🎉');
+          this.message.set('¡Correcto! ');
         } else if (response.gameOver) {
           this.message.set(`Era: ${response.correctAnswer?.toUpperCase()}`);
           this.correctAnswer.set(response.correctAnswer || '');

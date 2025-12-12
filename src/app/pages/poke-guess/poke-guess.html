@@ -1,16 +1,19 @@
-<!-- src/app/components/pokeguess/pokeguess.component.html -->
 <div class="pokeguess-container">
+
   <header class="header">
-    <div class="header-content">
-      <h1 class="title">PokéGuess</h1>
-      <div class="header-info">
-        <span class="attempts-counter">{{ attempts() }}/{{ maxAttempts }}</span>
+    <div class="pixel-border">
+      <h1 class="title">POKÉGUESS</h1>
+      <div class="subtitle">¡Adivina el nombre Pokémon!</div>
+    </div>
+    <div class="stats-bar">
+      <div class="stat-box">
+        <span class="stat-label">Intentos</span>
+        <span class="stat-value">{{ attempts() }}/{{ maxAttempts }}</span>
       </div>
     </div>
   </header>
 
   <main class="main-content">
-    <!-- Game Board -->
     <div class="game-board">
       @for (row of rows(); track $index; let rowIndex = $index) {
         <div
@@ -19,27 +22,28 @@
         >
           @for (tile of row; track $index; let colIndex = $index) {
             <div
-              class="tile"
-              [attr.data-state]="tile.revealed ? tile.state : 'empty'"
-              [attr.data-animation]="tile.revealed ? 'flip' : 'idle'"
-              [style.animation-delay]="tile.revealed ? (colIndex * 100) + 'ms' : '0ms'"
+              class="tile pixel-box"
+              [attr.data-state]="tile.revealed ? tile.state : (tile.char ? 'filled' : 'empty')"
+              [attr.data-revealed]="tile.revealed"
             >
-              <div class="tile-front">{{ tile.char }}</div>
-              <div class="tile-back">{{ tile.char }}</div>
+              <div class="tile-inner">
+                {{ tile.char }}
+              </div>
             </div>
           }
         </div>
       }
     </div>
 
-    <!-- Message -->
     @if (message()) {
       <div
-        class="message"
+        class="message-box pixel-box"
         [class.success]="won()"
         [class.error]="gameOver() && !won()"
       >
-        {{ message() }}
+        <div class="message-content">
+          {{ message() }}
+        </div>
       </div>
     }
 
@@ -50,18 +54,16 @@
           <div class="keyboard-row">
             @for (key of row; track key.key) {
               <button
-                class="key"
+                class="key pixel-button"
                 [class.key-large]="key.key === 'ENTER' || key.key === 'BACK'"
                 [attr.data-state]="key.state"
                 (click)="onKeyClick(key.key)"
                 [disabled]="loading()"
               >
                 @if (key.key === 'BACK') {
-                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"/>
-                    <line x1="18" y1="9" x2="12" y2="15"/>
-                    <line x1="12" y1="9" x2="18" y2="15"/>
-                  </svg>
+                  <span class="key-icon">←</span>
+                } @else if (key.key === 'ENTER') {
+                  <span class="key-text-small">ENTER</span>
                 } @else {
                   {{ key.key }}
                 }
@@ -71,10 +73,24 @@
         }
       </div>
     } @else {
-      <div class="desktop-hint">
-        <p>Usa tu teclado para jugar</p>
-        <p class="hint-keys"><kbd>A-Z</kbd> <kbd>Enter</kbd> <kbd>Backspace</kbd></p>
+      <div class="desktop-hint pixel-box">
+        <div class="hint-title">▼ CONTROLES ▼</div>
+        <div class="hint-content">
+          <div class="hint-row">
+            <span class="hint-key pixel-button">A-Z</span>
+            <span class="hint-desc">ESCRIBIR LETRAS</span>
+          </div>
+          <div class="hint-row">
+            <span class="hint-key pixel-button">ENTER</span>
+            <span class="hint-desc">ENVIAR</span>
+          </div>
+          <div class="hint-row">
+            <span class="hint-key pixel-button">BACK</span>
+            <span class="hint-desc">BORRAR</span>
+          </div>
+        </div>
       </div>
     }
   </main>
+
 </div>
