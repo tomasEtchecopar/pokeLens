@@ -3,11 +3,8 @@ import { HttpClient } from '@angular/common/http';
 import { QuizQuestion, QuizStats } from '../../pokemon/models/pokemon-quiz-model';
 import { environment } from '../../../enviroments/enviroment';
 import { tap, catchError, of } from 'rxjs';
+import { ApiResponse } from '../../core/api-model';
 
-interface QuizQuestionResponse {
-  success: boolean;
-  data: QuizQuestion;
-}
 
 @Injectable({
   providedIn: 'root'
@@ -51,17 +48,11 @@ export class PokemonQuizService {
     this.currentQuestion.set(null);
     this.isLoading.set(true);
 
-    this.http.get<QuizQuestionResponse>(`${this.apiUrl}/question`).pipe(
+    this.http.get<ApiResponse<QuizQuestion>>(`${this.apiUrl}/question`).pipe(
       tap(response => {
         this.currentQuestion.set(response.data);
         console.log('Quiz question loaded:', response.data.pokemon.name);
       }),
-      catchError(error => {
-        console.error('Error loading quiz question:', error);
-        // Reintentar después de 1 segundo
-        setTimeout(() => this.generateQuestion(), 1000);
-        return of(null);
-      })
     ).subscribe(() => {
       this.isLoading.set(false);
     });

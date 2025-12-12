@@ -11,6 +11,7 @@ import { PokemonQuiz } from './pages/pokemon-quiz/pokemon-quiz';
 import { authGuard } from './core/auth-guard';
 import { guestGuard } from './core/guestGuard';
 import { Leaderboard } from './pages/leaderboard/leaderboard';
+import { PokeGuess } from './pages/poke-guess/poke-guess';
 
 export const routes: Routes = [
     {
@@ -64,6 +65,10 @@ export const routes: Routes = [
     {
         path: 'quiz', component: PokemonQuiz,
         title: 'Quiz Pokemon'
+    },
+    {
+      path: 'pokeguess', component: PokeGuess,
+      title: 'Poke-Guess'
     },
     {
         path: 'leaderboard', component: Leaderboard,
