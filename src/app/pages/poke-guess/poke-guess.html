@@ -1,5 +1,7 @@
+@if(!usuario()){
+<app-auth-modal></app-auth-modal>
+}@else{
 <div class="pokeguess-container">
-
   <header class="header">
     <div class="pixel-border">
       <h1 class="title">POKÉGUESS</h1>
@@ -16,81 +18,74 @@
   <main class="main-content">
     <div class="game-board">
       @for (row of rows(); track $index; let rowIndex = $index) {
+      <div class="tile-row" [class.shake]="shake() && rowIndex === guessHistory().length">
+        @for (tile of row; track $index; let colIndex = $index) {
         <div
-          class="tile-row"
-          [class.shake]="shake() && rowIndex === guessHistory().length"
+          class="tile pixel-box"
+          [attr.data-state]="tile.revealed ? tile.state : tile.char ? 'filled' : 'empty'"
+          [attr.data-revealed]="tile.revealed"
         >
-          @for (tile of row; track $index; let colIndex = $index) {
-            <div
-              class="tile pixel-box"
-              [attr.data-state]="tile.revealed ? tile.state : (tile.char ? 'filled' : 'empty')"
-              [attr.data-revealed]="tile.revealed"
-            >
-              <div class="tile-inner">
-                {{ tile.char }}
-              </div>
-            </div>
-          }
+          <div class="tile-inner">
+            {{ tile.char }}
+          </div>
         </div>
+        }
+      </div>
       }
     </div>
 
     @if (message()) {
-      <div
-        class="message-box pixel-box"
-        [class.success]="won()"
-        [class.error]="gameOver() && !won()"
-      >
-        <div class="message-content">
-          {{ message() }}
-        </div>
+    <div class="message-box pixel-box" [class.success]="won()" [class.error]="gameOver() && !won()">
+      <div class="message-content">
+        {{ message() }}
       </div>
+    </div>
     }
 
     <!-- Keyboard (solo móvil) -->
     @if (isMobile()) {
-      <div class="keyboard">
-        @for (row of keyboard(); track $index) {
-          <div class="keyboard-row">
-            @for (key of row; track key.key) {
-              <button
-                class="key pixel-button"
-                [class.key-large]="key.key === 'ENTER' || key.key === 'BACK'"
-                [attr.data-state]="key.state"
-                (click)="onKeyClick(key.key)"
-                [disabled]="loading()"
-              >
-                @if (key.key === 'BACK') {
-                  <span class="key-icon">←</span>
-                } @else if (key.key === 'ENTER') {
-                  <span class="key-text-small">ENTER</span>
-                } @else {
-                  {{ key.key }}
-                }
-              </button>
-            }
-          </div>
+    <div class="keyboard">
+      @for (row of keyboard(); track $index) {
+      <div class="keyboard-row">
+        @for (key of row; track key.key) {
+        <button
+          class="key pixel-button"
+          [class.key-large]="key.key === 'ENTER' || key.key === 'BACK'"
+          [attr.data-state]="key.state"
+          (click)="onKeyClick(key.key)"
+          [disabled]="loading()"
+        >
+          @if (key.key === 'BACK') {
+          <span class="key-icon">←</span>
+          } @else if (key.key === 'ENTER') {
+          <span class="key-text-small">ENTER</span>
+          } @else {
+          {{ key.key }}
+          }
+        </button>
         }
       </div>
+      }
+    </div>
     } @else {
-      <div class="desktop-hint pixel-box">
-        <div class="hint-title">▼ CONTROLES ▼</div>
-        <div class="hint-content">
-          <div class="hint-row">
-            <span class="hint-key pixel-button">A-Z</span>
-            <span class="hint-desc">ESCRIBIR LETRAS</span>
-          </div>
-          <div class="hint-row">
-            <span class="hint-key pixel-button">ENTER</span>
-            <span class="hint-desc">ENVIAR</span>
-          </div>
-          <div class="hint-row">
-            <span class="hint-key pixel-button">BACK</span>
-            <span class="hint-desc">BORRAR</span>
-          </div>
+    <div class="desktop-hint pixel-box">
+      <div class="hint-title">▼ CONTROLES ▼</div>
+      <div class="hint-content">
+        <div class="hint-row">
+          <span class="hint-key pixel-button">A-Z</span>
+          <span class="hint-desc">ESCRIBIR LETRAS</span>
+        </div>
+        <div class="hint-row">
+          <span class="hint-key pixel-button">ENTER</span>
+          <span class="hint-desc">ENVIAR</span>
+        </div>
+        <div class="hint-row">
+          <span class="hint-key pixel-button">BACK</span>
+          <span class="hint-desc">BORRAR</span>
         </div>
       </div>
+    </div>
     }
   </main>
-
 </div>
+}

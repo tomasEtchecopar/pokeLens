@@ -1,27 +1,5 @@
  @if (!usuario()) {
-
-<div class="auth-modal-backdrop">
-  <div class="auth-modal">
-    <h2>Quiz solo para entrenadores registrados</h2>
-<p>Iniciá sesión o creá una cuenta para jugar.</p>
-<p>¡Así podrás sumar puntos y mejorar tus estadísticas!</p>
-
-
-    <div class="auth-modal-actions">
-      <button class="btn-signIn" type="button" (click)="goToLogin()">
-        Iniciar sesión
-      </button>
-
-      <button class="btn-signIn" type="button" (click)="goToSignIn()">
-        Crear cuenta
-      </button>
-    </div>
-
-    <button class="auth-link-btn" type="button" (click)="backToCatalog()">
-      ← Volver al catálogo
-    </button>
-  </div>
-</div>
+<app-auth-modal></app-auth-modal>
 
 } @else {
 <div class="quiz-page">
@@ -61,8 +39,8 @@
       <div class="pokemon-display" [class.revealed]="quizService.hasAnswered()">
         <div class="image-container">
           @if(question.pokemon.sprites.front_default) {
-          <img 
-            [src]="question.pokemon.sprites.front_default" 
+          <img
+            [src]="question.pokemon.sprites.front_default"
             [alt]="'Pokemon sprite'"
             (error)="onImageError($event)"
             [ngStyle]="{'filter': quizService.hasAnswered() ? 'none' : 'brightness(0) drop-shadow(0 0 8px #000)'}"

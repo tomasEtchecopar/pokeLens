@@ -1,75 +1,72 @@
+<!-- Filtros -->
 <button class="filters-toggle" (click)="toggleFilters()">
   Filtrar
   <span [class.open]="filtersOpen()">▼</span>
 </button>
-
 <div class="filters-panel" [class.open]="filtersOpen()">
-
   <div class="multi-filter">
-    <div class="filter-row">
-      <div class="filter-item">
-        <label>Tipo</label>
-        <select [(ngModel)]="selectedType" (ngModelChange)="onChange()">
-          <option value="">Todos</option>
-          @for (type of types(); track type.value) {
-          <option [value]="type.value">{{ type.label }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="filter-item">
-        <label>Generación</label>
-        <select [(ngModel)]="selectedGeneration" (ngModelChange)="onChange()">
-          <option value="">Todas</option>
-          @for (gen of generations(); track gen.value) {
-          <option [value]="gen.value">{{ gen.label }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="filter-item">
-        <label>Región</label>
-        <select [(ngModel)]="selectedRegion" (ngModelChange)="onChange()">
-          <option value="">Todas</option>
-          @for (region of regions(); track region.value) {
-          <option [value]="region.value">{{ region.label }}</option>
-          }
-        </select>
-      </div>
-
-      <div class="filter-item">
-        <label>Rareza</label>
-        <select [(ngModel)]="selectedRarity" (ngModelChange)="onChange()">
-          <option value="">Todas</option>
-          <option value="common">Común</option>
-          <option value="rare">Rara</option>
-          <option value="epic">Épica</option>
-          <option value="legendary">Legendaria</option>
-        </select>
-      </div>
-    </div>
-
-    <div class="filter-row">
-      <div class="filter-item range">
-        <label>Altura (m)</label>
-        <div class="range-inputs">
-          <input type="number" placeholder="Mín" [(ngModel)]="minHeight" (ngModelChange)="onChange()">
-          <span>—</span>
-          <input type="number" placeholder="Máx" [(ngModel)]="maxHeight" (ngModelChange)="onChange()">
+    <div class="filter-grid">
+      <div class="filter-col">
+        <div class="filter-item">
+          <label>Tipo</label>
+          <select [(ngModel)]="selectedType" (ngModelChange)="onChange()">
+            <option value="">Todos</option>
+            @for (type of types(); track type.value) {
+            <option [value]="type.value">{{ type.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>Generación</label>
+          <select [(ngModel)]="selectedGeneration" (ngModelChange)="onChange()">
+            <option value="">Todas</option>
+            @for (gen of generations(); track gen.value) {
+            <option [value]="gen.value">{{ gen.label }}</option>
+            }
+          </select>
+        </div>
+        <div class="filter-item">
+          <label>Región</label>
+          <select [(ngModel)]="selectedRegion" (ngModelChange)="onChange()">
+            <option value="">Todas</option>
+            @for (region of regions(); track region.value) {
+            <option [value]="region.value">{{ region.label }}</option>
+            }
+          </select>
         </div>
       </div>
 
-      <div class="filter-item range">
-        <label>Peso (kg)</label>
-        <div class="range-inputs">
-          <input type="number" placeholder="Mín" [(ngModel)]="minWeight" (ngModelChange)="onChange()">
-          <span>—</span>
-          <input type="number" placeholder="Máx" [(ngModel)]="maxWeight" (ngModelChange)="onChange()">
+      <div class="divider" aria-hidden="true"></div>
+
+      <div class="filter-col">
+        <div class="filter-item">
+          <label>Rareza</label>
+          <select [(ngModel)]="selectedRarity" (ngModelChange)="onChange()">
+            <option value="">Todas</option>
+            <option value="common">Común</option>
+            <option value="rare">Rara</option>
+            <option value="epic">Épica</option>
+            <option value="legendary">Legendaria</option>
+          </select>
+        </div>
+        <div class="filter-item range">
+          <label>Altura (m)</label>
+          <div class="range-inputs">
+            <input type="number" placeholder="Mín" [(ngModel)]="minHeight" (ngModelChange)="onChange()">
+            <span>—</span>
+            <input type="number" placeholder="Máx" [(ngModel)]="maxHeight" (ngModelChange)="onChange()">
+          </div>
+        </div>
+        <div class="filter-item range">
+          <label>Peso (kg)</label>
+          <div class="range-inputs">
+            <input type="number" placeholder="Mín" [(ngModel)]="minWeight" (ngModelChange)="onChange()">
+            <span>—</span>
+            <input type="number" placeholder="Máx" [(ngModel)]="maxWeight" (ngModelChange)="onChange()">
+          </div>
         </div>
       </div>
     </div>
-
     <button class="clear-btn" (click)="clear()">Limpiar filtros</button>
   </div>
-
 </div>

@@ -1,0 +1,22 @@
+<div class="auth-modal-backdrop">
+  <div class="auth-modal">
+    <h2>Quiz solo para entrenadores registrados</h2>
+<p>Iniciá sesión o creá una cuenta para jugar.</p>
+<p>¡Así podrás sumar puntos y mejorar tus estadísticas!</p>
+
+
+    <div class="auth-modal-actions">
+      <button class="btn-signIn" type="button" (click)="goToLogin()">
+        Iniciar sesión
+      </button>
+
+      <button class="btn-signIn" type="button" (click)="goToSignIn()">
+        Crear cuenta
+      </button>
+    </div>
+
+    <button class="auth-link-btn" type="button" (click)="backToCatalog()">
+      ← Volver al catálogo
+    </button>
+  </div>
+</div>

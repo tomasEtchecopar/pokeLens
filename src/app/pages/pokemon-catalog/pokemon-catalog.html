@@ -9,10 +9,15 @@
   </div>
 
   <div class="search-section">
-    <app-pokemon-filter-menu [currentFilters]="catalogState.filters()" (filterUpdate)="applyFilters($event)">
-    </app-pokemon-filter-menu>
+    <div class="filters">
+         <app-pokemon-filter-menu [currentFilters]="catalogState.filters()" (filterUpdate)="applyFilters($event)">
+    </app-pokemon-filter-menu>1
+    </div>
 
+
+    <div class="sorting">
     <pokemon-sort-menu [currentSort]="catalogState.sort()" (sorted)="onSort($event)"></pokemon-sort-menu>
+    </div>
   </div>
 
   <div class="grid">

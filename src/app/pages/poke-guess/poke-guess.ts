@@ -2,6 +2,11 @@
 import { Component, OnInit, inject, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PokeGuessService, GuessHistoryItem, LetterState } from '../poke-guess-service';
+import { AuthServ } from '../../core/auth.service';
+import { PointsService } from '../../core/points.service';
+import { NotificationService } from '../../core/notification.service';
+import { AuthModal } from '../auth-modal/auth-modal';
+import { PointEvent } from '../../user/user-model';
 
 interface TileState extends LetterState {
   revealed: boolean;
@@ -10,12 +15,17 @@ interface TileState extends LetterState {
 @Component({
   selector: 'app-pokeguess',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, AuthModal],
   templateUrl: './poke-guess.html',
   styleUrls: ['./poke-guess.css']
 })
 export class PokeGuess implements OnInit {
 private pokeguessService = inject(PokeGuessService);
+private auth = inject(AuthServ);
+private points = inject(PointsService);
+private notification = inject(NotificationService);
+
+protected readonly usuario = computed(() => this.auth.activeUser());
 
   letterCount = signal<number>(0);
   currentGuess = signal<string>('');
@@ -223,6 +233,7 @@ private pokeguessService = inject(PokeGuessService);
 
         if (response.correct) {
           this.message.set('¡Correcto! ');
+          this.awardPointsForCorrectAnswer()
         } else if (response.gameOver) {
           this.message.set(`Era: ${response.correctAnswer?.toUpperCase()}`);
           this.correctAnswer.set(response.correctAnswer || '');
@@ -242,6 +253,45 @@ private pokeguessService = inject(PokeGuessService);
           this.shake.set(false);
         }, 600);
         this.loading.set(false);
+      }
+    });
+  }
+  private awardPointsForCorrectAnswer(): void {
+    const user = this.auth.activeUser();
+    if (!user || !user.id) {
+      return;
+    }
+
+    const amount = 20;
+    const reason = 'Respuesta correcta en PokeGuess';
+    const today = new Date();
+
+    // Step 1: Add points
+    this.points.addPoints(user, amount, reason).subscribe({
+      next: (updatedUser) => {
+        const event: PointEvent= {
+          amount,
+          reason,
+          created_at: today.toISOString()
+        };
+
+        // Step 2: Add to history
+        this.points.addHistory(updatedUser, event).subscribe({
+          next: (finalUser) => {
+            // Step 3: Sync with auth and localStorage
+            this.auth.activeUser.set(finalUser);
+            localStorage.setItem('activeUser', JSON.stringify(finalUser));
+
+            // Step 4: Show notification with points
+            this.notification.notify(`¡Respuesta correcta! +${amount} puntos`);
+          },
+          error: () => {
+            console.error('Error al registrar el historial de puntos');
+          }
+        });
+      },
+      error: () => {
+        console.error('Error al sumar puntos por respuesta correcta');
       }
     });
   }

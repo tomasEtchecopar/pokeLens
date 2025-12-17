@@ -6,6 +6,7 @@ import { PointsService } from '../../core/points.service';
 import { PointEvent } from '../../user/user-model';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../core/notification.service';
+import { AuthModal } from "../auth-modal/auth-modal";
 
 /**
  * PokemonQuiz component provides an interactive pokemon guessing game.
@@ -14,13 +15,12 @@ import { NotificationService } from '../../core/notification.service';
 @Component({
   selector: 'app-pokemon-quiz',
   standalone: true,
-  imports: [TitleCasePipe, NgStyle],
+  imports: [TitleCasePipe, NgStyle, AuthModal],
   templateUrl: './pokemon-quiz.html',
   styleUrl: './pokemon-quiz.css'
 })
 export class PokemonQuiz /* implements OnInit  */{
    protected readonly quizService = inject(PokemonQuizService);
-  private readonly router = inject(Router);
   private readonly auth = inject(AuthServ);
   private readonly points = inject(PointsService);
   private readonly notification = inject(NotificationService);
@@ -109,15 +109,4 @@ export class PokemonQuiz /* implements OnInit  */{
     });
   }
 
-  goToLogin() {
-    this.router.navigateByUrl('/logIn');
-  }
-
-  goToSignIn() {
-    this.router.navigateByUrl('/signIn');
-  }
-
-  backToCatalog() {
-    this.router.navigateByUrl('/catalog');
-  }
 }

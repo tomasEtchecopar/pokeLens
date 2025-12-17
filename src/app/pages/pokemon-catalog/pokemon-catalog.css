@@ -36,18 +36,19 @@
 }
 
 .search-section {
-  padding: 0 1rem 1.5rem;
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 10rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto 2rem;
 }
 
-.search-section app-pokemon-filter-dropdown,
-.search-section pokemon-sort-menu {
-  flex: 1 1 0;
-  max-width: 550px;
+@media (max-width: 920px) {
+  .search-section{
+    grid-template-columns: 1fr;
+  }
 }
+
 
 .loading-indicator {
   position: absolute;
