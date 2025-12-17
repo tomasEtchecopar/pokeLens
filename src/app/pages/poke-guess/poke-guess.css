@@ -1,0 +1,537 @@
+
+.pokeguess-container {
+  width: 100%;
+  max-width: 600px;
+  margin: 1.5rem auto;
+  padding: 1rem;
+  background: linear-gradient(180deg, #2c2c2c 0%, #262626 100%);
+  border: 4px solid #5f0b0b;
+  box-shadow:
+    inset 2px 2px 0 #3a3a3a,
+    6px 6px 0 #1a1a1a;
+  color: #fff;
+  font-family: 'Press Start 2P', monospace;
+  box-sizing: border-box;
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==================== HEADER ==================== */
+
+.header {
+  border-bottom: 3px solid rgba(0, 0, 0, 0.6);
+  background: linear-gradient(90deg, #3a3a3a, #2c2c2c);
+  margin-bottom: 1.5rem;
+}
+
+.pixel-border {
+  padding: 1rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.8rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin: 0;
+  color: #d43030;
+  text-shadow: 3px 3px 0 #111;
+  line-height: 1.4;
+}
+
+.subtitle {
+  font-size: 0.6rem;
+  margin-top: 0.5rem;
+  color: #ffd700;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.stats-bar {
+  display: flex;
+  justify-content: center;
+  padding: 0.75rem;
+}
+
+.stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  background: #2c2c2c;
+  border: 3px solid #1a1a1a;
+  box-shadow: 3px 3px 0 #111;
+}
+
+.stat-label {
+  font-size: 0.5rem;
+  color: #ffd700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.stat-value {
+  font-size: 1rem;
+  color: #fff;
+  font-weight: 700;
+}
+
+/* ==================== MAIN CONTENT ==================== */
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 0.5rem;
+}
+
+/* ==================== GAME BOARD ==================== */
+
+.game-board {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.tile-row {
+  display: flex;
+  gap: 0.4rem;
+}
+
+.tile-row.shake {
+  animation: shake 0.4s;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-8px); }
+  75% { transform: translateX(8px); }
+}
+
+.tile {
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  text-transform: uppercase;
+  user-select: none;
+  background: #2c2c2c;
+  border: 3px solid #1a1a1a;
+  box-shadow:
+    inset 1px 1px 0 #4a4a4a,
+    3px 3px 0 #111;
+  transition: all 0.1s ease;
+}
+
+.tile-inner {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.tile[data-state="empty"] {
+  background: #2c2c2c;
+  border-color: #1a1a1a;
+  color: transparent;
+}
+
+.tile[data-state="filled"] {
+  background: linear-gradient(180deg, #3a3a3a, #2d2d2d);
+  border-color: #ffd700;
+  color: #fff;
+  animation: pop 0.15s ease-out;
+  box-shadow:
+    inset 1px 1px 0 #4a4a4a,
+    3px 3px 0 #111;
+}
+
+@keyframes pop {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.tile[data-revealed="true"] {
+  animation: flip 0.5s ease-in-out forwards;
+}
+
+@keyframes flip {
+  0% { transform: scaleY(1); }
+  50% { transform: scaleY(0); }
+  100% { transform: scaleY(1); }
+}
+
+.tile[data-state="correct"] {
+  background: #4aad4e;
+  border-color: #1a1a1a;
+  color: #fff;
+  box-shadow:
+    inset -2px -2px 0 #2d7a30,
+    3px 3px 0 #111;
+}
+
+.tile[data-state="present"] {
+  background: #ffd54f;
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+  box-shadow:
+    inset -2px -2px 0 #ccaa3f,
+    3px 3px 0 #111;
+}
+
+.tile[data-state="absent"] {
+  background: #494949;
+  border-color: #1a1a1a;
+  color: #8f8782;
+  box-shadow:
+    inset -2px -2px 0 #2a2a2a,
+    3px 3px 0 #111;
+}
+
+/* ==================== MESSAGE ==================== */
+
+.message-box {
+  padding: 1rem;
+  text-align: center;
+  background: linear-gradient(180deg, #343434, #2c2c2c);
+  border: 3px solid #1a1a1a;
+  box-shadow: 3px 3px 0 #111;
+  animation: slideDown 0.3s ease-out;
+  margin: 0 auto;
+  max-width: 90%;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.message-content {
+  font-size: 0.7rem;
+  line-height: 1.6;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+.message-box.success {
+  background: #4aad4e;
+  border-color: #1a1a1a;
+  color: #fff;
+  box-shadow:
+    inset 1px 1px 0 #66bb6a,
+    3px 3px 0 #111;
+}
+
+.message-box.error {
+  background: #d43030;
+  border-color: #1a1a1a;
+  color: #fff;
+  box-shadow:
+    inset 1px 1px 0 #e85050,
+    3px 3px 0 #111;
+}
+
+/* ==================== KEYBOARD ==================== */
+
+.keyboard {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: auto;
+  padding: 0.75rem 0;
+}
+
+.keyboard-row {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+}
+
+.key {
+  min-width: 32px;
+  height: 44px;
+  font-size: 0.65rem;
+  font-family: 'Press Start 2P', monospace;
+  color: #fff;
+  cursor: pointer;
+  user-select: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  background: linear-gradient(180deg, #3a3a3a, #2d2d2d);
+  border: 3px solid #1a1a1a;
+  box-shadow:
+    inset 1px 1px 0 #4a4a4a,
+    3px 3px 0 #111;
+  transition: all 0.1s ease;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.key:hover:not(:disabled) {
+  background: linear-gradient(180deg, #4a4a4a, #3d3d3d);
+  transform: translate(1px, 1px);
+  box-shadow:
+    inset 1px 1px 0 #5a5a5a,
+    2px 2px 0 #111;
+}
+
+.key:active:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow:
+    inset 1px 1px 0 #2a2a2a,
+    none;
+}
+
+.key:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.key-large {
+  min-width: 52px;
+  font-size: 0.5rem;
+}
+
+.key-icon {
+  font-size: 1.2rem;
+  line-height: 1;
+  font-family: 'Courier New', monospace;
+}
+
+.key-text-small {
+  font-size: 0.5rem;
+  letter-spacing: 0.5px;
+}
+
+.key[data-state="correct"] {
+  background: #4aad4e;
+  border-color: #1a1a1a;
+  color: #fff;
+  box-shadow:
+    inset -2px -2px 0 #2d7a30,
+    3px 3px 0 #111;
+}
+
+.key[data-state="present"] {
+  background: #ffd54f;
+  border-color: #1a1a1a;
+  color: #1a1a1a;
+  box-shadow:
+    inset -2px -2px 0 #ccaa3f,
+    3px 3px 0 #111;
+}
+
+.key[data-state="absent"] {
+  background: #494949;
+  border-color: #1a1a1a;
+  color: #8f8782;
+  box-shadow:
+    inset -2px -2px 0 #2a2a2a,
+    3px 3px 0 #111;
+}
+
+/* ==================== DESKTOP HINT ==================== */
+
+.desktop-hint {
+  padding: 1rem;
+  margin-top: auto;
+  background: linear-gradient(180deg, #343434, #2c2c2c);
+  border: 3px solid #1a1a1a;
+  box-shadow: 3px 3px 0 #111;
+}
+
+.hint-title {
+  text-align: center;
+  font-size: 0.6rem;
+  color: #ffd700;
+  margin-bottom: 1rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+.hint-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.hint-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.hint-key {
+  min-width: 80px;
+  padding: 0.6rem 1rem;
+  font-size: 0.6rem;
+  text-align: center;
+  color: #fff;
+  background: linear-gradient(180deg, #3a3a3a, #2d2d2d);
+  border: 3px solid #1a1a1a;
+  box-shadow:
+    inset 1px 1px 0 #4a4a4a,
+    3px 3px 0 #111;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.hint-desc {
+  font-size: 0.55rem;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 768px) {
+  .pokeguess-container {
+    margin: 1rem;
+    padding: 0.75rem;
+  }
+
+  .title {
+    font-size: 1.4rem;
+  }
+
+  .subtitle {
+    font-size: 0.5rem;
+  }
+
+  .tile {
+    width: 42px;
+    height: 42px;
+    font-size: 1rem;
+  }
+
+  .stat-label {
+    font-size: 0.45rem;
+  }
+
+  .stat-value {
+    font-size: 0.9rem;
+  }
+
+  .message-content {
+    font-size: 0.65rem;
+  }
+
+  .key {
+    min-width: 28px;
+    height: 40px;
+    font-size: 0.6rem;
+  }
+
+  .key-large {
+    min-width: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .pokeguess-container {
+    padding: 0.5rem;
+    margin: 0.5rem;
+  }
+
+  .title {
+    font-size: 1.2rem;
+    letter-spacing: 1px;
+  }
+
+  .subtitle {
+    font-size: 0.45rem;
+  }
+
+  .tile {
+    width: 38px;
+    height: 38px;
+    font-size: 0.9rem;
+  }
+
+  .game-board {
+    gap: 0.4rem;
+  }
+
+  .tile-row {
+    gap: 0.3rem;
+  }
+
+  .message-content {
+    font-size: 0.6rem;
+  }
+
+  .key {
+    min-width: 26px;
+    height: 38px;
+    font-size: 0.55rem;
+    padding: 0.4rem;
+  }
+
+  .key-large {
+    min-width: 44px;
+    font-size: 0.45rem;
+  }
+
+  .hint-key {
+    min-width: 70px;
+    padding: 0.5rem 0.8rem;
+    font-size: 0.55rem;
+  }
+
+  .hint-desc {
+    font-size: 0.5rem;
+  }
+}
+
+@media (max-height: 700px) {
+  .pokeguess-container {
+    margin: 0.5rem auto;
+    padding: 0.5rem;
+  }
+
+  .header {
+    margin-bottom: 1rem;
+  }
+
+  .game-board {
+    gap: 0.4rem;
+  }
+
+  .tile-row {
+    gap: 0.3rem;
+  }
+
+  .tile {
+    width: 40px;
+    height: 40px;
+    font-size: 0.95rem;
+  }
+
+  .keyboard {
+    margin-top: 0.5rem;
+    padding: 0.5rem 0;
+  }
+
+  .main-content {
+    gap: 1rem;
+  }
+}
