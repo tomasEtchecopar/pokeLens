@@ -13,8 +13,8 @@ export class Footer {
   goToRepo() {
     window.open('https://github.com/tomasEtchecopar/pokeLens', '_blank');
   }
-  scrollTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
-  }
+  // scrollTop() {
+  //   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // }
 
 }

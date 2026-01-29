@@ -1,4 +1,6 @@
 .header-container {
+  height: 80px;
+  max-height:80px;
   background: #d43030;
   padding: 1rem 2rem;
   border-bottom: 6px solid #2c2c2c;
