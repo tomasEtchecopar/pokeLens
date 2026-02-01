@@ -1,7 +1,7 @@
 // src/app/components/pokeguess/pokeguess.component.ts
 import { Component, OnInit, inject, signal, computed, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { PokeGuessService, GuessHistoryItem, LetterState } from '../poke-guess-service';
+import { PokeGuessService, GuessHistoryItem, LetterState } from './poke-guess-service';
 import { AuthServ } from '../../core/auth.service';
 import { PointsService } from '../../core/points.service';
 import { NotificationService } from '../../core/notification.service';

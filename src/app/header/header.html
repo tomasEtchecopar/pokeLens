@@ -2,7 +2,7 @@
 
   <div class="header-left">
     <button class="btn-header" routerLink="/catalog" routerLinkActive="active" click="goToCatalog()" [disabled]="isAlreadyInCatalog()">Catálogo</button>
-    <button class="btn-header" routerLink="/leaderboard" routerLinkActive="active" (click)="goToLeaderboard()">Leaderboard</button>
+    <button class="btn-header" routerLink="/leaderboard" routerLinkActive="active" (click)="goToLeaderboard()" [disabled]="isAlreadyInLeaderboard()">Leaderboard</button>
   </div>
 
   <a class="logo-link" routerLink="/home" routerLinkActive="active" (click)="goToHome()">
@@ -11,7 +11,7 @@
 
   <div class="header-right">
     @if (user(); as currentUser) {
-    <button class="btn-header avatar-btn" (click)="goToProfile()" aria-label="Perfil">
+    <button class="btn-header avatar-btn" (click)="goToProfile()" aria-label="Perfil" [disabled]="isAlreadyInProfile()">
       <img [src]="currentUser.avatar_url || '/assets/images/default.png'" alt="Perfil" class="avatar"
         (error)="setDefaultAvatar($event)" />
     </button>

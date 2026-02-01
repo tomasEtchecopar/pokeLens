@@ -29,7 +29,7 @@ export class Header {
   }
 
   goToProfile() {
-    this.router.navigateByUrl('profile');
+    this.router.navigateByUrl('user/profile');
   }
 
   goToLeaderboard(){
@@ -37,7 +37,7 @@ export class Header {
   }
 
   goToTeams(){
-    this.router.navigateByUrl('teams');
+    this.router.navigateByUrl('user/teams');
   }
 
   goToCatalog(){
@@ -50,7 +50,15 @@ isAlreadyInCatalog(): boolean {
 }
 
   isAlreadyInTeams(): boolean{
-    return this.router.url === '/teams'
+    return this.router.url === '/user/teams'
+  }
+
+  isAlreadyInLeaderboard(): boolean{
+    return this.router.url === '/leaderboard'
+  }
+
+  isAlreadyInProfile(): boolean {
+    return this.router.url === '/user/profile'
   }
 
   setDefaultAvatar(event: Event) {
