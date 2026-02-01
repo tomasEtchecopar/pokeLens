@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLinkActive, RouterLinkWithHref } from "@angular/router";
 import { AuthServ } from '../core/auth.service';
 import { PokemonQuizService } from '../pages/pokemon-quiz/pokemon-quiz-service';
@@ -16,6 +16,7 @@ export class Header {
   private readonly quiz = inject(PokemonQuizService)
 
   readonly user = computed(() => this.auth.activeUser());
+  readonly sidebarOpen = signal(false);
 
 
   goToSignIn() {
@@ -65,5 +66,13 @@ isAlreadyInCatalog(): boolean {
   const img = event.target as HTMLImageElement;
   img.src = '/assets/images/default.png';
 }
+
+  toggleSidebar() {
+    this.sidebarOpen.set(!this.sidebarOpen());
+  }
+
+  closeSidebar() {
+    this.sidebarOpen.set(false);
+  }
 
 }
