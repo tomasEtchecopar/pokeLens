@@ -9,7 +9,7 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
-  <div class="sort-menu">
+  <!-- <div class="sort-menu"> -->
     <button
       class="filters-toggle"
       type="button"
@@ -66,20 +66,24 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
         </div>
       </div>
     </div>
-  </div>
+  <!-- </div> -->
 `,
   styles: [`
-.sort-menu {
-  display: block;
-  margin: 0;
-  max-width: none;
-  font-family: 'Press Start 2P', monospace;
-  font-size: 0.8rem;
-  color: #fff;
-}
+// .sort-menu {
+//   display: block;
+//   margin: 0;
+//   max-width: 100%;
+//   font-family: 'Press Start 2P', monospace;
+//   font-size: 0.8rem;
+//   color: #fff;
+//   box-sizing: border-box;
+//   width: 100%;
+//   overflow: hidden;
+// }
 
 .filters-toggle {
   width: 100%;
+  box-sizing: border-box;
   background: #2c2c2c;
   color: white;
   border: 3px solid #000;
@@ -121,12 +125,11 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
   image-rendering: pixelated;
   margin-top: 0.5rem;
   width: 100%;
-  max-width: none;
-
   min-height: 245px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: hidden;
 }
 
 .dropdown-inner {
@@ -235,10 +238,37 @@ input[type="radio"]:checked + .radio-label {
     margin-right: 0;
   }
   .dropdown { min-width: auto; }
+
+  .dropdown-accordion.open {
+    max-height: 600px;
+  }
+
+  .dropdown-inner {
+    padding: 0;
+  }
+
+  .col {
+    min-width: 0;
+  }
 }
 @media (max-width: 520px) {
   .dropdown-inner { flex-direction: column; }
   .divider { display: none; }
+
+  .sort-menu {
+    padding: 0;
+  }
+
+  .dropdown {
+    margin: 0;
+    width: calc(100vw - 16px);
+    max-width: 100%;
+  }
+
+  .keys-col,
+  .dir-col {
+    flex: 1 !important;
+  }
 }
 `]
 })

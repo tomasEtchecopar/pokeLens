@@ -48,7 +48,8 @@
 }
 
 .brand {
-  font-family: 'Courier New', monospace;
+  /* font-family: 'Courier New', monospace; */
+  font-family: 'Press Start 2P', monospace;
   font-weight: 900;
   font-size: 1.4rem;
   color: white;

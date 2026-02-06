@@ -1,5 +1,6 @@
 .filters-toggle {
   width: 100%;
+  box-sizing: border-box;
   background: #2c2c2c;
   color: white;
   border: 3px solid #000;
@@ -42,12 +43,12 @@
   image-rendering: pixelated;
   margin-top: 0.5rem;
   width: 100%;
-  max-width: none;
   color: white;
   min-height: 245px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  overflow: hidden;
 }
 
 .filter-grid {
@@ -201,5 +202,29 @@ input[type="number"] {
   }
   .divider {
     display: none;
+  }
+
+  .filters-panel.open {
+    max-height: 600px;
+  }
+
+  .filter-grid {
+    padding: 0;
+  }
+
+  .filter-col {
+    min-width: 0;
+  }
+}
+
+@media (max-width: 520px) {
+  .multi-filter {
+    margin: 0;
+    width: calc(100vw - 16px);
+    max-width: 100%;
+  }
+
+  .filter-col {
+    flex: 1 !important;
   }
 }
