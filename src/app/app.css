@@ -11,12 +11,6 @@ header {
 
   box-shadow: inset 0 -2px 0px #b82424, 0 4px 0px #1a1a1a;
 
-  position: sticky;
-
-  top: 0;
-
-  z-index: 100;
-
 }
 
 
@@ -43,10 +37,10 @@ header h1 {
 
 main {
 
-  min-height: calc(100vh - 200px);
+  /* min-height: calc(100vh - 200px); */
+  flex: 1;
 
   padding: 0;
-  padding-bottom: 80px;
   /* 75px del footer + 5px de margen */
 
 }

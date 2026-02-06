@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
-import { environment } from '../../enviroments/enviroment';
 import { HttpClient } from '@angular/common/http';
-import { ApiResponse } from '../core/api-model';
+import { environment } from '../../../enviroments/enviroment';
+import { ApiResponse } from '../../core/api-model';
 import { map } from 'rxjs';
 
 export interface LetterState{

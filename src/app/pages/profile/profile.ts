@@ -54,7 +54,7 @@ export class Profile {
   }
 
   goToTeams() {
-    this.router.navigateByUrl('/teams');
+    this.router.navigateByUrl('/user/teams');
   }
 
   edit() {

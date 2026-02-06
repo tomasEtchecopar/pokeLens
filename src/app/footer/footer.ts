@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import { Component, inject } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
 
 @Component({
@@ -9,12 +9,16 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './footer.css',
 })
 export class Footer {
+  private router = inject(Router);
 
   goToRepo() {
     window.open('https://github.com/tomasEtchecopar/pokeLens', '_blank');
   }
-  scrollTop() {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+  // scrollTop() {
+  //   window.scrollTo({ top: 0, behavior: 'smooth' });
+  // }
+  goToTerms(){
+    this.router.navigateByUrl('/about/terms');
   }
 
 }
