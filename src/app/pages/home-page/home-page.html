@@ -1,16 +1,16 @@
 <div class="home-container">
-    <img src="assets/images/poke-lens-logo.png" alt="PokeLens" class="logo"/>
+    <img src="assets/images/poke-lens-logo.png" alt="PokeLens" class="logo" />
     <p class="subtitle">Bienvenido a PokeLens, una wiki y gestor de equipos Pokémon.</p>
 
-     <div class="featured-section">
+    <div class="featured-section">
         <h2>POKEMON DEL DIA</h2>
         @if(loadingDaily()){
-          <p>Cargando pokemon del dia...</p>
+        <p>Cargando pokemon del dia...</p>
         }
         @else if(pokemonOfTheDay(); as p){
-            <div class="pokemon-featured">
-                <app-pokemon-card [pokemon]="p"></app-pokemon-card>
-            </div>
+        <div class="pokemon-featured">
+            <app-pokemon-card [pokemon]="p"></app-pokemon-card>
+        </div>
         }
     </div>
 
@@ -26,6 +26,10 @@
             <button class="quiz-button" routerLink="/pokeguess" routerLinkActive="active">
                 <span class="button-text">Poke-Guess</span>
             </button>
+            <button class="quiz-button" routerLink="/memory" routerLinkActive="active">
+                <span class="button-text">Memotest</span>
+            </button>
+
         </div>
     </div>
 </div>

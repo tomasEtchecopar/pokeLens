@@ -12,6 +12,7 @@ import { authGuard } from './core/auth-guard';
 import { guestGuard } from './core/guestGuard';
 import { Leaderboard } from './pages/leaderboard/leaderboard';
 import { PokeGuess } from './pages/poke-guess/poke-guess';
+import { MemoryGame } from './pages/memory-game/memory-game';
 
 export const routes: Routes = [
     {
@@ -67,13 +68,19 @@ export const routes: Routes = [
         title: 'Quiz Pokemon'
     },
     {
-      path: 'pokeguess', component: PokeGuess,
-      title: 'Poke-Guess'
+        path: 'pokeguess', component: PokeGuess,
+        title: 'Poke-Guess'
     },
     {
         path: 'leaderboard', component: Leaderboard,
         title: 'Leaderboard'
     },
+    {
+        path: 'memory',
+        component: MemoryGame,
+        title: 'Memotest Pokémon',
+    }
+    ,
     {
         path: '**', redirectTo: 'home'
     }
