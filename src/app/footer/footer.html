@@ -1,20 +1,23 @@
 <footer class="footer-bar">
   <div class="footer-left">
-    <button class="repo-btn" (click)="goToRepo()">GitHub</button>
+    <button class="link-btn" (click)="goToRepo()">GitHub</button>
+    <button class="link-btn" (click)="goToTerms()">Términos y Condiciones</button>
   </div>
 
   <div class="footer-center">
     <span class="brand">PokeLens</span>
-    <span class="rights">© 2025 - Todos los derechos reservados</span>
+    <span class="rights">© 2025-2026</span>
+    <span class="rights">Pokémon y marcas relacionadas son propiedad de Nintendo, Game Freak y The Pokémon Company. Este es un proyecto creado por fans sin fines comerciales.</span>
   </div>
 
   <div class="footer-right">
-    <button class="contact-btn" routerLink="/contact" routerLinkActive="active">
+    <button class="link-btn" (click)="goToPrivacy()">Privacidad</button>
+    <button class="link-btn" (click)="goToContact()">
       Contacto
     </button>
-    <button class="scroll-top-btn" (click)="scrollTop()">
+    <!-- <button class="scroll-top-btn" (click)="scrollTop()">
       ↑
-    </button>
+    </button> -->
 
   </div>
 </footer>

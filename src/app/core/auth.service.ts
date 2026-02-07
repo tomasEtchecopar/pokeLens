@@ -73,7 +73,13 @@ export class AuthServ {
   logOut() {
     this.activeUser.set(undefined);
     localStorage.removeItem('activeUser');
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
+
+  }
+
+  refreshAccessToken(refreshToken: string){
+    return this.http.post('api/auth/refresh', { refreshToken });
   }
 
   /**

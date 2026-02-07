@@ -1,4 +1,4 @@
-import { Component, computed, inject } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLinkActive, RouterLinkWithHref } from "@angular/router";
 import { AuthServ } from '../core/auth.service';
 import { PokemonQuizService } from '../pages/pokemon-quiz/pokemon-quiz-service';
@@ -16,6 +16,7 @@ export class Header {
   private readonly quiz = inject(PokemonQuizService)
 
   readonly user = computed(() => this.auth.activeUser());
+  readonly sidebarOpen = signal(false);
 
 
   goToSignIn() {
@@ -29,7 +30,7 @@ export class Header {
   }
 
   goToProfile() {
-    this.router.navigateByUrl('profile');
+    this.router.navigateByUrl('user/profile');
   }
 
   goToLeaderboard(){
@@ -37,7 +38,7 @@ export class Header {
   }
 
   goToTeams(){
-    this.router.navigateByUrl('teams');
+    this.router.navigateByUrl('user/teams');
   }
 
   goToCatalog(){
@@ -50,12 +51,28 @@ isAlreadyInCatalog(): boolean {
 }
 
   isAlreadyInTeams(): boolean{
-    return this.router.url === '/teams'
+    return this.router.url === '/user/teams'
+  }
+
+  isAlreadyInLeaderboard(): boolean{
+    return this.router.url === '/leaderboard'
+  }
+
+  isAlreadyInProfile(): boolean {
+    return this.router.url === '/user/profile'
   }
 
   setDefaultAvatar(event: Event) {
   const img = event.target as HTMLImageElement;
   img.src = '/assets/images/default.png';
 }
+
+  toggleSidebar() {
+    this.sidebarOpen.set(!this.sidebarOpen());
+  }
+
+  closeSidebar() {
+    this.sidebarOpen.set(false);
+  }
 
 }

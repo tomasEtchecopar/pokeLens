@@ -17,7 +17,7 @@
             "tsConfig": "tsconfig.app.json",
             "assets": [
               {
-              "glob": "_redirects",
+                "glob": "_redirects",
                 "input": "src",
                 "output": "/"
               },
@@ -80,11 +80,23 @@
               "src/styles.css"
             ]
           }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/**/*.ts",
+              "src/**/*.html"
+            ]
+          }
         }
       }
     }
   },
   "cli": {
-    "analytics": false
+    "analytics": false,
+    "schematicCollections": [
+      "@angular-eslint/schematics"
+    ]
   }
 }

@@ -1,7 +1,7 @@
+import { NotificationService } from './../../../core/notification.service';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { NotificationService } from '../../core/notification.service';
 
 @Component({
   selector: 'app-contact',

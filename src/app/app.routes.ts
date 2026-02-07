@@ -5,8 +5,8 @@ import { SignIn } from './pages/sign-in/sign-in';
 import { Profile } from './pages/profile/profile';
 import { PokemonDetails } from './pages/pokemon-details/pokemon-details';
 import { HomePage } from './pages/home-page/home-page';
-import { Contact } from './pages/contact/contact';
 import { UserTeams } from './pages/pokemon-teams/user-teams';
+import { Contact } from './pages/about/contact/contact';
 import { PokemonQuiz } from './pages/pokemon-quiz/pokemon-quiz';
 import { authGuard } from './core/auth-guard';
 import { guestGuard } from './core/guestGuard';
@@ -15,73 +15,100 @@ import { PokeGuess } from './pages/poke-guess/poke-guess';
 import { MemoryGame } from './pages/memory-game/memory-game';
 
 export const routes: Routes = [
-    {
-        path: '', redirectTo: 'home', pathMatch: 'full'
-    }, {
+  {
+    path: '', redirectTo: 'home', pathMatch: 'full'
+  },
+  {
+    path: '',
+    children: [
+      {
         path: 'home', component: HomePage,
         title: 'Inicio'
-    },
-    {
+      },
+      {
         path: 'catalog', component: PokemonCatalog,
         title: 'Catalogo Pokemon'
-    },
-    {
+      },
+      {
         path: 'details/:name', component: PokemonDetails,
         title: 'Detalles de Pokémon'
-    },
-    {
-        path: 'logIn', component: LogIn,
-        title: 'Log In',
-        canActivate: [guestGuard]
-
-    },
-    {
-        path: 'signIn', component: SignIn,
-        title: 'Sign In',
-        canActivate: [guestGuard]
-    },
-    {
-        path: 'profile', component: Profile,
-        title: 'Perfil de Usuario',
-        canActivate: [authGuard]
-
-
-    },
-    {
-        path: 'edit-profile', component: Profile,
-        title: 'Editar Perfil de Usuario',
-        canActivate: [authGuard]
-
-    },
-    {
-        path: 'teams', component: UserTeams,
-        title: 'Mis Equipos',
-        canActivate: [authGuard]
-
-    },
-    {
-        path: 'contact', component: Contact,
-        title: 'Contacto'
-    },
-    {
+      },
+      {
         path: 'quiz', component: PokemonQuiz,
         title: 'Quiz Pokemon'
-    },
-    {
+      },
+      {
         path: 'pokeguess', component: PokeGuess,
         title: 'Poke-Guess'
-    },
-    {
+      },
+      {
         path: 'leaderboard', component: Leaderboard,
         title: 'Leaderboard'
-    },
-    {
+      },
+      {
         path: 'memory',
         component: MemoryGame,
         title: 'Memotest Pokémon',
-    }
-    ,
-    {
-        path: '**', redirectTo: 'home'
-    }
+      },
+      {
+        path: 'about',
+        children: [
+          {
+            path: 'contact', component: Contact,
+            title: 'Contacto',
+          },
+          {
+            path: 'terms', component: Terms,
+            title: 'Términos y Condiciones'
+          },
+          {
+            path: 'privacy', component: Privacy,
+            title: 'Política de Privacidad'
+          }
+        ]
+      },
+    ]
+  },
+  {
+    path: '',
+    canActivateChild: [guestGuard],
+    children: [
+  {
+    path: 'logIn', component: LogIn,
+    title: 'Log In',
+
+  },
+  {
+    path: 'signIn', component: SignIn,
+    title: 'Sign In',
+  },
+    ]
+  },
+  {
+    path: 'user',
+    canActivate: [authGuard],
+    canActivateChild: [authGuard],
+    children: [
+
+  {
+    path: 'profile', component: Profile,
+    title: 'Perfil de Usuario',
+
+
+  },
+  {
+    path: 'profile/edit', component: Profile,
+    title: 'Editar Perfil de Usuario',
+
+  },
+  {
+    path: 'teams', component: UserTeams,
+    title: 'Mis Equipos',
+
+  },
+    ]
+  },
+  {
+    path: '**', redirectTo: 'home'
+  }
 ];
