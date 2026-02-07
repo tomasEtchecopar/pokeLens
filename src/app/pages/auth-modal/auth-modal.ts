@@ -18,6 +18,9 @@ export class AuthModal {
     this.router.navigateByUrl('/signIn');
   }
 
+  backToHome() {
+    this.router.navigateByUrl('/home');
+  }
   backToCatalog() {
     this.router.navigateByUrl('/catalog');
   }
