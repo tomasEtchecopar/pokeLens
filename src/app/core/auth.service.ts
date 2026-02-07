@@ -49,15 +49,16 @@ export class AuthServ {
    */
   login(username: string, password: string): Observable<void> {
     return this.http
-      .post<{ user: User; token: string; pointsAwarded: number }>(
+      .post<{ user: User; accessToken?: string; refreshToken?: string; pointsAwarded: number }>(
         `${this.baseUrl}/login`,
         { username, password }
       )
       .pipe(
-        tap(({ user, token, pointsAwarded }) => {
+        tap(({ user, accessToken, refreshToken, pointsAwarded }) => {
           this.activeUser.set(user);
           localStorage.setItem('activeUser', JSON.stringify(user));
-          localStorage.setItem('token', token);
+          if (accessToken) localStorage.setItem('accessToken', accessToken);
+          if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
 
           if (pointsAwarded > 0) {
             this.notification.notify(`¡Bienvenido de vuelta! +${pointsAwarded} puntos por tu ingreso diario`);
@@ -79,7 +80,7 @@ export class AuthServ {
   }
 
   refreshAccessToken(refreshToken: string){
-    return this.http.post('api/auth/refresh', { refreshToken });
+    return this.http.post(`${this.baseUrl}/refresh`, { refreshToken });
   }
 
   /**
@@ -87,7 +88,7 @@ export class AuthServ {
    */
   restoreSession() {
     const data = localStorage.getItem('activeUser');
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('accessToken');
 
     if (!data || !token) return;
 
@@ -96,7 +97,8 @@ export class AuthServ {
       this.activeUser.set(user);
     } catch {
       localStorage.removeItem('activeUser');
-      localStorage.removeItem('token');
+      localStorage.removeItem('accessToken');
+      localStorage.removeItem('refreshToken');
     }
   }
 }

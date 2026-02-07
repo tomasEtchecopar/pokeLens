@@ -133,8 +133,8 @@ export class MemoryGame {
       this.audio.playBackground();
     }
 
-    const limit = this.pairs(); 
-    const token = localStorage.getItem('token');
+    const limit = this.pairs();
+    const token = localStorage.getItem('accessToken');
 
     fetch(`${this.baseUrl}/deck?limit=${limit}`, {
       headers: token ? { Authorization: `Bearer ${token}` } : {},
