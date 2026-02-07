@@ -11,7 +11,7 @@ export interface User {
   username: string;
   mail: string;
   password: string;
-  age: number;
+  birthDate: string
   points?: number;
   avatar_url?: string;
   login_dates: string[]; // Array de fechas

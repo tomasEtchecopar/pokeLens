@@ -1,6 +1,5 @@
- @if (!usuario()) {
+@if (!usuario()) {
 <app-auth-modal></app-auth-modal>
-
 } @else {
 <div class="quiz-page">
   <div class="quiz-root">
@@ -39,33 +38,27 @@
       <div class="pokemon-display" [class.revealed]="quizService.hasAnswered()">
         <div class="image-container">
           @if(question.pokemon.sprites.front_default) {
-          <img
-            [src]="question.pokemon.sprites.front_default"
-            [alt]="'Pokemon sprite'"
-            (error)="onImageError($event)"
+          <img [src]="question.pokemon.sprites.front_default" [alt]="'Pokemon sprite'" (error)="onImageError($event)"
             [ngStyle]="{'filter': quizService.hasAnswered() ? 'none' : 'brightness(0) drop-shadow(0 0 8px #000)'}"
-            draggable="false"
-            (dragstart)="$event.preventDefault()"
-            (contextmenu)="$event.preventDefault()">
+            draggable="false" (dragstart)="$event.preventDefault()" (contextmenu)="$event.preventDefault()">
           }
         </div>
-
-        @if(!quizService.hasAnswered()) {
-        <div class="hint">
-          <span class="hint-label">Pista:</span>
-          <span class="hint-value">#{{ question.pokemon.id }}</span>
-        </div>
-        }
       </div>
 
       @if(quizService.hasAnswered()) {
-      <div class="result-banner" [class.correct]="quizService.isCorrect()" [class.incorrect]="!quizService.isCorrect()">
-        @if(quizService.isCorrect()) {
+      <div class="result-banner" [class.correct]="quizService.isCorrect() === true"
+        [class.incorrect]="quizService.isCorrect() === false">
+        @if(quizService.isCorrect() === true) {
         <span class="result-icon">✓</span>
-        <span class="result-text">¡Correcto! Es {{ question.correctAnswer | titlecase }}</span>
-        } @else {
+        <span class="result-text">¡Correcto!</span>
+        } @else if(quizService.isCorrect() === false) {
         <span class="result-icon">✗</span>
-        <span class="result-text">Incorrecto. Era {{ question.correctAnswer | titlecase }}</span>
+        <span class="result-text">Incorrecto.</span>
+        } @else {
+        <span class="result-icon">…</span>
+        <span class="result-text suspense">
+          {{ quizService.suspenseText() }}
+        </span>
         }
       </div>
       }
@@ -73,26 +66,46 @@
       <div class="options-grid">
         @for(option of question.options; track option) {
         <button class="option-button" [class.selected]="quizService.selectedAnswer() === option"
-          [class.correct]="quizService.hasAnswered() && option === question.correctAnswer"
-          [class.incorrect]="quizService.hasAnswered() && quizService.selectedAnswer() === option && option !== question.correctAnswer"
-          [disabled]="quizService.hasAnswered()" (click)="selectAnswer(option)">
+          [class.pending]="quizService.isValidating() && quizService.selectedAnswer() === option" [class.correct]="
+                  quizService.hasAnswered()
+                  && !quizService.isValidating()
+                  && quizService.isCorrect() === true
+                  && quizService.selectedAnswer() === option
+                " [class.incorrect]="
+                  quizService.hasAnswered()
+                  && !quizService.isValidating()
+                  && quizService.isCorrect() === false
+                  && quizService.selectedAnswer() === option
+                " [class.correct-answer]="
+                  quizService.hasAnswered()
+                  && !quizService.isValidating()
+                  && quizService.isCorrect() === false
+                  && quizService.lastValidation()?.correctAnswer
+                  && option.toLowerCase() === quizService.lastValidation()!.correctAnswer!.toLowerCase()
+                " [disabled]="quizService.hasAnswered() || quizService.isValidating() || quizService.isLoading()"
+          (click)="selectAnswer(option)">
           {{ option | titlecase }}
         </button>
         }
       </div>
 
-      @if(quizService.hasAnswered()) {
-      <button class="next-button" (click)="nextQuestion()">
+      @if (quizService.hasAnswered()) {
+      <button class="next-button" (click)="nextQuestion()"
+        [disabled]="quizService.isValidating() || quizService.isLoading()">
         Siguiente Pregunta →
       </button>
       }
+
+
     </div>
     }
 
     <div class="quiz-footer">
-      <button class="reset-button" (click)="resetQuiz()">
+      <button class="reset-button" (click)="resetQuiz()"
+        [disabled]="quizService.isValidating() || quizService.isLoading()">
         Reiniciar Estadísticas
       </button>
+
     </div>
   </div>
 </div>

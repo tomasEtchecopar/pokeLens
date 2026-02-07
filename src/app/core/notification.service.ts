@@ -17,10 +17,10 @@ export interface ActiveNotification extends Notification {
 export class NotificationService {
   // Notificaciones activas (toasts)
   activeNotifications = signal<ActiveNotification[]>([]);
-  
+
   // Historial de notificaciones
   notificationHistory = signal<Notification[]>([]);
-  
+
   // Configuración
   private readonly DEFAULT_DURATION = 3000; // 3 segundos
   private readonly MAX_HISTORY = 100;
@@ -32,7 +32,7 @@ export class NotificationService {
   notify(message: string, duration = this.DEFAULT_DURATION) {
     const id = this.generateId();
     const timestamp = new Date();
-    
+
     const notification: ActiveNotification = {
       id,
       message,
@@ -42,7 +42,7 @@ export class NotificationService {
 
     // Agregar a activos
     this.activeNotifications.update(current => [...current, notification]);
-    
+
     // Agregar a historial
     this.addToHistory({ id, message, timestamp, duration });
 
@@ -110,4 +110,15 @@ export class NotificationService {
   getActive() {
     return this.activeNotifications();
   }
+
+  /**
+   * Limpia todas las notificaciones (activas + historial)
+   * Usar al cerrar sesión o cambiar de usuario
+   */
+  clearAll() {
+    this.activeNotifications.set([]);
+    this.notificationHistory.set([]);
+  }
+
+
 }

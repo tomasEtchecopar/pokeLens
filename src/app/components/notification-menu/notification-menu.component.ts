@@ -1,6 +1,7 @@
 import { Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { NotificationService, Notification } from '../../core/notification.service';
+import { ConfirmModalComponent } from '../notification-modal/notification-menu-modal'; // ajustá ruta
 
 /**
  * NotificationMenu Component
@@ -9,7 +10,7 @@ import { NotificationService, Notification } from '../../core/notification.servi
 @Component({
   selector: 'app-notification-menu',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ConfirmModalComponent],
   template: `
     <div class="notification-menu-wrapper">
       <!-- Botón para abrir/cerrar menú (usa estilos de botones del header) -->
@@ -74,6 +75,16 @@ import { NotificationService, Notification } from '../../core/notification.servi
         </div>
       }
     </div>
+    <app-confirm-modal
+  [isOpen]="confirmOpen()"
+  [title]="confirmTitle()"
+  [message]="confirmMessage()"
+  [confirmText]="confirmCta()"
+  [cancelText]="cancelCta()"
+  (confirmed)="onConfirmYes()"
+  (cancelled)="onConfirmNo()">
+</app-confirm-modal>
+
   `,
   styles: [`
     .notification-btn {
@@ -299,6 +310,39 @@ export class NotificationMenu {
   isOpen = signal(false);
   history = this.notificationService.notificationHistory;
 
+  /*señales de las notificaciones*/
+  confirmOpen = signal(false);
+  confirmTitle = signal('Confirmar');
+  confirmMessage = signal('¿Seguro?');
+  confirmCta = signal('Aceptar');
+  cancelCta = signal('Cancelar');
+
+  // guardamos la acción a ejecutar si confirma
+  private pendingConfirmAction: (() => void) | null = null;
+
+  //Helpers de notificaciones
+  openConfirm(opts: { title: string; message: string; confirmText?: string; cancelText?: string }, action: () => void) {
+    this.confirmTitle.set(opts.title);
+    this.confirmMessage.set(opts.message);
+    this.confirmCta.set(opts.confirmText ?? 'Aceptar');
+    this.cancelCta.set(opts.cancelText ?? 'Cancelar');
+    this.pendingConfirmAction = action;
+    this.confirmOpen.set(true);
+  }
+
+  onConfirmYes() {
+    this.pendingConfirmAction?.();
+    this.pendingConfirmAction = null;
+    this.confirmOpen.set(false);
+  }
+
+  onConfirmNo() {
+    this.pendingConfirmAction = null;
+    this.confirmOpen.set(false);
+  }
+
+
+
   /**
    * Abre/cierra el menú
    */
@@ -317,17 +361,36 @@ export class NotificationMenu {
    * Elimina una notificación del historial
    */
   removeItem(id: string) {
-    this.notificationService.removeFromHistory(id);
+    this.openConfirm(
+      {
+        title: 'Eliminar',
+        message: '¿Eliminar esta notificación?',
+        confirmText: 'Eliminar',
+        cancelText: 'Cancelar'
+      },
+      () => this.notificationService.removeFromHistory(id)
+    );
   }
+
 
   /**
    * Limpia todo el historial
    */
   clearAll() {
-    if (confirm('¿Deseas eliminar todas las notificaciones?')) {
-      this.notificationService.clearHistory();
-      this.closeMenu();
-    }
+    if (this.history().length === 0) return;
+
+    this.openConfirm(
+      {
+        title: 'Eliminar todo',
+        message: '¿Deseas eliminar todas las notificaciones?',
+        confirmText: 'Sí, borrar',
+        cancelText: 'Cancelar'
+      },
+      () => {
+        this.notificationService.clearHistory();
+        this.closeMenu();
+      }
+    );
   }
 
   /**
