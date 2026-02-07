@@ -1,3 +1,4 @@
+import { PointEvent } from './../user/user-model';
 import { Component, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 
@@ -21,4 +22,11 @@ export class Footer {
     this.router.navigateByUrl('/about/terms');
   }
 
+  goToPrivacy(){
+    this.router.navigateByUrl('/about/privacy');
+  }
+
+  goToContact(){
+    this.router.navigateByUrl('/about/contact');
+  }
 }
