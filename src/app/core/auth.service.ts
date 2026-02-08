@@ -46,7 +46,7 @@ export class AuthServ {
       )
       .pipe(
         tap(({ user, accessToken, refreshToken, pointsAwarded }) => {
-          this.notification.clearAll(); 
+          this.notification.clearAll();
           this.activeUser.set(user);
           localStorage.setItem('activeUser', JSON.stringify(user));
           if (accessToken) localStorage.setItem('accessToken', accessToken);
@@ -66,7 +66,8 @@ export class AuthServ {
   logOut() {
     this.activeUser.set(undefined);
     localStorage.removeItem('activeUser');
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
+    localStorage.removeItem('refreshToken');
     this.notification.clearAll();
 
   }
