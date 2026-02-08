@@ -13,6 +13,8 @@ import { guestGuard } from './core/guestGuard';
 import { Leaderboard } from './pages/leaderboard/leaderboard';
 import { PokeGuess } from './pages/poke-guess/poke-guess';
 import { MemoryGame } from './pages/memory-game/memory-game';
+import { Privacy } from './pages/about/privacy/privacy';
+import { Terms } from './pages/about/terms/terms';
 
 export const routes: Routes = [
   {
