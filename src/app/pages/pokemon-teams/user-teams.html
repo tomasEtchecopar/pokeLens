@@ -5,85 +5,75 @@
   </div>
 
   @if (usuario(); as u) {
-    @if (teams().length) {
-      @for (team of teams(); let i = $index; track team.id) {
-        <section class="team-block">
-          <div class="team-header">
-            @if (editingTeamId() === team.id) {
-              <input
-                class="team-name-input"
-                type="text"
-                [ngModel]="editingName()"
-                (ngModelChange)="editingName.set($event)"
-                (blur)="saveTeamName(team.id)"
-                (keyup.enter)="saveTeamName(team.id)"
-                autofocus
-              />
-            } @else {
-              <h3 class="team-title" (click)="startEditingName(team.id, team.name)">
-                {{ team.name }}
-              </h3>
-            }
-            <p class="avg-power">
-              <strong>Poder promedio:</strong>
-              {{ teamAverages()[i] || 0 }}
-            </p>
-            <p class="team-length">
-              <strong>{{ team.pokemons.length }}/6</strong>
-            </p>
-            <button
-              class="btn-delete-team"
-              (click)="deleteTeam(team.id)"
-              title="Eliminar equipo completo">
-              Eliminar equipo
-            </button>
-          </div>
+  @if (teams().length) {
+  @for (team of teams(); let i = $index; track team.id) {
+  <section class="team-block">
+    <div class="team-header">
+      @if (editingTeamId() === team.id) {
+      <input class="team-name-input" type="text" [ngModel]="editingName()" (ngModelChange)="editingName.set($event)"
+        (blur)="saveTeamName(team.id)" (keyup.enter)="saveTeamName(team.id)" autofocus />
+      } @else {
+      <h3 class="team-title" (click)="startEditingName(team.id, team.name)">
+        {{ team.name }}
+      </h3>
+      }
+      <p class="avg-power">
+        <strong>Poder promedio:</strong>
+        {{ teamAverages()[i] || 0 }}
+      </p>
+      <p class="team-length">
+        <strong>{{ team.pokemons.length }}/6</strong>
+      </p>
+      <button class="btn-delete-team" (click)="deleteTeam(team.id)" title="Eliminar equipo completo">
+        Eliminar equipo
+      </button>
+    </div>
 
-          <div class="team-scroll">
-            @if (team.pokemons.length === 0) {
-              <div class="empty-team-card">
-                <button class="empty-team-card big-empty-btn" (click)="goToCatalog()">
-                  <p><strong>Este equipo está vacío.</strong></p>
-                  <p>Agregá Pokémon para verlos aquí.</p>
-                </button>
-              </div>
-            } @else {
-<div class="vault-grid">
-  @for (teamPokemon of team.pokemons; track teamPokemon.id) {
-    @for (pkm of getTeamPokemons(team); track pkm.id) {
-      @if (pkm.id === teamPokemon.pokemon_id) {
+    <div class="team-scroll">
+      @if (team.pokemons.length === 0) {
+      <div class="empty-team-card">
+        <button class="empty-team-card big-empty-btn" (click)="goToCatalog()">
+          <p><strong>Este equipo está vacío.</strong></p>
+          <p>Agregá Pokémon para verlos aquí.</p>
+        </button>
+      </div>
+      } @else {
+      <div class="vault-grid">
+        @for (teamPokemon of team.pokemons; track teamPokemon.id) {
+        @for (pkm of getTeamPokemons(team); track pkm.id) {
+        @if (pkm.id === teamPokemon.pokemon_id) {
         <div class="vault-card-wrapper">
-          <button
-            class="pokeball-btn"
-            (click)="deletePokemon(teamPokemon.id)"
-            title="Quitar Pokémon del equipo"
-            aria-label="Eliminar Pokémon">
+          <button class="pokeball-btn" (click)="deletePokemon(teamPokemon.id, pkm.name, teamPokemon.nickname)"
+            title="Quitar Pokémon del equipo" aria-label="Eliminar Pokémon">
           </button>
-          <button
-            class="edit-nickname-btn"
-            title="Editar apodo"
-            (click)="editNickname(teamPokemon.id, teamPokemon.nickname)"
-            aria-label="Editar apodo">
+
+          <button class="edit-nickname-btn" title="Editar apodo"
+            (click)="editNickname(teamPokemon.id, teamPokemon.nickname, pkm.name)" aria-label="Editar apodo">
             ✎
           </button>
-          <app-pokemon-card
-            [pokemon]="pkm"
-            [nickname]="teamPokemon.nickname!">
+          <app-pokemon-card [pokemon]="pkm" [nickname]="teamPokemon.nickname!">
           </app-pokemon-card>
         </div>
+        }
+        }
+        }
+      </div>
       }
-    }
+    </div>
+  </section>
   }
-</div>
-            }
-          </div>
-        </section>
-      }
-    } @else {
-        <p>No hay equipos guardados. Agrega Pokemon desde el catalogo...</p>
-      }
   } @else {
-      <p>No hay usuario activo. Inicia sesión.</p>
-      <button class="btn" (click)="router.navigate(['/logIn'])">Ir a Login</button>
+  <p>No hay equipos guardados. Agrega Pokemon desde el catalogo...</p>
+  }
+  } @else {
+  <p>No hay usuario activo. Inicia sesión.</p>
+  <button class="btn" (click)="router.navigate(['/logIn'])">Ir a Login</button>
   }
 </div>
+<app-confirm-modal [isOpen]="confirmOpen()" [title]="confirmTitle()" [message]="confirmMessage()"
+  [confirmText]="confirmCta()" [cancelText]="cancelCta()" (confirmed)="onConfirmYes()" (cancelled)="onConfirmNo()">
+</app-confirm-modal>
+
+<app-edit-nickname-modal [isOpen]="nicknameOpen()" [title]="nicknameTitle()" [message]="nicknameMsg()"
+  [initialValue]="nicknameInitial()" (saved)="onNicknameSave($event)" (cancelled)="onNicknameCancel()">
+</app-edit-nickname-modal>

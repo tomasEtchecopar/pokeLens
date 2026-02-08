@@ -3,11 +3,15 @@
 
   <div class="controls">
     <label>Tiempo:</label>
-    <select (change)="changeTimeframe($event)">
-      <option value="all">Todos los tiempos</option>
-      <option value="week">Ultimos 7 días</option>
-      <option value="month">Últimos 30 días</option>
-    </select>
+    <div class="retro-select">
+
+      <select (change)="changeTimeframe($event)">
+        <option value="all">Todos los tiempos</option>
+        <option value="week">Ultimos 7 días</option>
+        <option value="month">Últimos 30 días</option>
+      </select>
+    </div>
+
   </div>
 
   @if (isLoading()) {
@@ -28,7 +32,7 @@
       <tr>
         <td>{{u.position}}</td>
         <td>
-          <img src="{{u.avatar_url || '/assets/images/default.png'}}" alt="avatar" class="avatar-small"/>
+          <img src="{{u.avatar_url || '/assets/images/default.png'}}" alt="avatar" class="avatar-small" />
         </td>
         <td>{{u.username}}</td>
         <td>{{u.points}}</td>

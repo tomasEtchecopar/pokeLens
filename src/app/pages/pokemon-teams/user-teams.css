@@ -129,7 +129,7 @@
 }
 
 
-.avg-power strong{
+.avg-power strong {
   color: #9dbc9b;
   margin-right: 0.5rem;
 }
@@ -169,6 +169,7 @@
   background: #2c2c2c;
   overflow-x: auto;
 }
+
 .vault-grid {
   display: flex;
   gap: 1.5rem;
@@ -240,7 +241,7 @@
 }
 
 .edit-nickname-btn {
-    position: absolute;
+  position: absolute;
   top: -8px;
   right: 36px;
   width: 36px;
@@ -260,17 +261,20 @@
   image-rendering: auto;
   font-family: 'Press Start 2P', monospace;
 }
+
 .edit-nickname-btn .icon {
   width: 16px;
   height: 16px;
   image-rendering: pixelated;
 }
+
 .edit-nickname-btn:hover {
-  transform: translate(1px,1px) scale(1.03);
+  transform: translate(1px, 1px) scale(1.03);
   box-shadow: 1px 1px 0 #111;
 }
+
 .edit-nickname-btn:active {
-  transform: translate(2px,2px) scale(.98);
+  transform: translate(2px, 2px) scale(.98);
   box-shadow: 0 0 0 #111;
 }
 
@@ -282,12 +286,12 @@
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   border: 0;
 }
 
 
-.teams-page > p {
+.teams-page>p {
   padding: 3rem 2rem;
   text-align: center;
   color: #FFF;
@@ -350,6 +354,7 @@
     padding: 0.3rem 0.6rem;
   }
 }
+
 .empty-team-card {
   background: #2c2c2c;
   border: 3px solid #1a1a1a;
@@ -368,6 +373,7 @@
   color: #FFF;
   font-size: 1.2rem;
 }
+
 .big-empty-btn {
   cursor: pointer;
   width: 100%;
@@ -426,5 +432,6 @@
   image-rendering: pixelated;
   border: 3px solid #000;
   box-shadow: 3px 3px 0 #000;
-  cursor: pointer; /* indica que se puede cerrar */
+  cursor: pointer;
+  /* indica que se puede cerrar */
 }
