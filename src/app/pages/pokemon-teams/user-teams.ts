@@ -7,9 +7,10 @@ import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { FormsModule } from '@angular/forms';
 import { Team } from './team-model';
 import { catchError, forkJoin, map, of } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
 import { PokemonService } from '../../pokemon/pokemon-service';
 import { NotificationService } from '../../core/notification.service';
+import { ConfirmModalComponent } from '../../components/notification-modal/notification-menu-modal';
+import { EditNicknameModalComponent } from './edit-nickname-modal'; // ajustá ruta
 
 /**
  * UserTeams manages the user's pokemon teams.
@@ -18,7 +19,7 @@ import { NotificationService } from '../../core/notification.service';
 @Component({
   selector: 'app-user-teams',
   standalone: true,
-  imports: [PokemonCard, FormsModule],
+  imports: [PokemonCard, FormsModule, ConfirmModalComponent, EditNicknameModalComponent],
   templateUrl: './user-teams.html',
   styleUrl: './user-teams.css',
 })
@@ -46,12 +47,30 @@ export class UserTeams implements OnInit {
   private readonly _teamAverages = signal<number[]>([]);
   teamAverages = computed(() => this._teamAverages());
 
+  //Señales para los modales de eliminar pokemon o Equipo
+  confirmOpen = signal(false);
+  confirmTitle = signal('Confirmar');
+  confirmMessage = signal('¿Seguro?');
+  confirmCta = signal('Aceptar');
+  cancelCta = signal('Cancelar');
+
+  private pendingConfirmAction: (() => void) | null = null;
+
+  //Señales para editar apodo al pokemon
+  nicknameOpen = signal(false);
+  nicknameTargetId = signal<string | null>(null);
+  nicknameInitial = signal('');
+  nicknameTitle = signal('Editar apodo');
+  nicknameMsg = signal('Ingresá el nuevo apodo');
+
+
+
   ngOnInit(): void {
     this.loadTeams();
   }
 
   constructor() {
-   // Recalcular promedios cuando cambian equipos o cache
+    // Recalcular promedios cuando cambian equipos o cache
     effect(() => {
       const teams = this.teams();
       // Dependencia explícita a cache para re-evaluar cuando llegan pokemons
@@ -86,7 +105,7 @@ export class UserTeams implements OnInit {
 
       this._teamAverages.set(averages);
     });
-}
+  }
 
   /**
    * Carga los equipos del usuario
@@ -122,9 +141,9 @@ export class UserTeams implements OnInit {
     });
   }
 
-   /**
-   * Prefetch: trae en background pokemons que no estén en cache
-   */
+  /**
+  * Prefetch: trae en background pokemons que no estén en cache
+  */
   private prefetchTeamPokemonIds(teams: Team[]) {
     const needed = new Set<number>();
     teams.forEach(t => t.pokemons?.forEach(tp => {
@@ -170,7 +189,7 @@ export class UserTeams implements OnInit {
   /**
    * Obtiene los pokemon completos de un equipo
    */
-   getTeamPokemons(team: Team): Pokemon[] {
+  getTeamPokemons(team: Team): Pokemon[] {
     const cache = this.pokemonCache();
     const idsToFetch: number[] = [];
 
@@ -221,58 +240,91 @@ export class UserTeams implements OnInit {
   /**
    * Elimina un equipo
    */
-  deleteTeam(teamId: string) {
-    if (!confirm('¿Seguro que quieres eliminar este equipo?')) return;
-
-    this.teamService.deleteTeam(teamId).subscribe({
-      next: () => {
-        this.loadTeams();
+  deleteTeam(teamId: string, teamName?: string) {
+    this.openConfirm(
+      {
+        title: 'Eliminar equipo',
+        message: `¿Seguro que quieres eliminarlo?`,
+        confirmText: 'Sí, eliminar',
+        cancelText: 'Cancelar',
       },
-      error: (err) => {
-        console.error('Error eliminando equipo:', err);
-        this.notification.notify('Error al eliminar el equipo');
+      () => {
+        this.teamService.deleteTeam(teamId).subscribe({
+          next: () => this.loadTeams(),
+          error: (err) => {
+            console.error('Error eliminando equipo:', err);
+            this.notification.notify('Error al eliminar el equipo');
+          },
+        });
       }
-    });
+    );
   }
+
 
   /**
    * Elimina un pokemon de un equipo
    */
-  deletePokemon(pokemonId: string) {
-    if (!confirm('¿Seguro que desea eliminar al Pokemon del equipo?')) return;
+  deletePokemon(teamPokemonId: string, pokemonName?: string, nickname?: string | null) {
+    const label = (nickname?.trim() ? nickname : pokemonName) ?? 'este Pokémon';
 
-    this.teamService.removePokemon(pokemonId).subscribe({
-      next: () => {
-        this.loadTeams();
+    this.openConfirm(
+      {
+        title: 'Quitar Pokémon',
+        message: `¿Deseas quitar "${label}" del equipo?`,
+        confirmText: 'Quitar',
+        cancelText: 'Cancelar',
       },
-      error: (err) => {
-        console.error('Error eliminando pokemon:', err);
-        this.notification.notify('Error al eliminar el Pokémon del equipo');
+      () => {
+        this.teamService.removePokemon(teamPokemonId).subscribe({
+          next: () => this.loadTeams(),
+          error: (err) => {
+            console.error('Error eliminando pokemon:', err);
+            this.notification.notify('Error al eliminar el Pokémon del equipo');
+          },
+        });
       }
-    });
+    );
   }
+
+
 
   /**
    * Edita el nickname de un pokemon
    */
-  editNickname(pokemonId: string, currentNickname?: string | null) {
-    const nickname = prompt('Nuevo apodo para el Pokémon:', currentNickname || '');
+  editNickname(teamPokemonId: string, currentNickname?: string | null, pokemonName?: string) {
+    this.nicknameTargetId.set(teamPokemonId);
+    this.nicknameInitial.set(currentNickname ?? '');
+    this.nicknameTitle.set('Editar apodo');
+    this.nicknameMsg.set(`Nuevo apodo para ${pokemonName ? `"${pokemonName}"` : 'el Pokémon'}`);
+    this.nicknameOpen.set(true);
+  }
 
-    if (nickname === null) return; // User cancelled
+  onNicknameCancel() {
+    this.nicknameOpen.set(false);
+    this.nicknameTargetId.set(null);
+  }
 
-    const trimmed = nickname.trim();
+  onNicknameSave(newNickname: string) {
+    const id = this.nicknameTargetId();
+    if (!id) return;
+
+    const trimmed = (newNickname ?? '').trim();
     if (trimmed.length > 32) {
       this.notification.notify('El nickname no puede exceder 32 caracteres');
       return;
     }
 
-    this.teamService.updatePokemonNickname(pokemonId, trimmed).subscribe({
+    this.teamService.updatePokemonNickname(id, trimmed).subscribe({
       next: () => {
+        this.nicknameOpen.set(false);
+        this.nicknameTargetId.set(null);
         this.loadTeams();
       },
       error: (err) => {
         console.error('Error al editar apodo:', err);
         this.notification.notify('Error al editar el apodo del Pokémon');
+        this.nicknameOpen.set(false);
+        this.nicknameTargetId.set(null);
       }
     });
   }
@@ -309,6 +361,31 @@ export class UserTeams implements OnInit {
     });
   }
 
+  //modales
+
+  openConfirm(
+    opts: { title: string; message: string; confirmText?: string; cancelText?: string },
+    action: () => void
+  ) {
+    this.confirmTitle.set(opts.title);
+    this.confirmMessage.set(opts.message);
+    this.confirmCta.set(opts.confirmText ?? 'Aceptar');
+    this.cancelCta.set(opts.cancelText ?? 'Cancelar');
+    this.pendingConfirmAction = action;
+    this.confirmOpen.set(true);
+  }
+
+  onConfirmYes() {
+    this.pendingConfirmAction?.();
+    this.pendingConfirmAction = null;
+    this.confirmOpen.set(false);
+  }
+
+  onConfirmNo() {
+    this.pendingConfirmAction = null;
+    this.confirmOpen.set(false);
+  }
+
   /**
    * Cancela la edición
    */
@@ -326,6 +403,6 @@ export class UserTeams implements OnInit {
   }
 
   goToCatalog() {
-    this.router.navigateByUrl('/catalogo');
+    this.router.navigateByUrl('/catalog');
   }
 }

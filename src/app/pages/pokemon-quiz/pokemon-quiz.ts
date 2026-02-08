@@ -2,16 +2,9 @@ import { Component, computed, inject, OnInit } from '@angular/core';
 import { NgStyle, TitleCasePipe } from '@angular/common';
 import { PokemonQuizService } from './pokemon-quiz-service';
 import { AuthServ } from '../../core/auth.service';
-import { PointsService } from '../../core/points.service';
-import { PointEvent } from '../../user/user-model';
-import { Router } from '@angular/router';
 import { NotificationService } from '../../core/notification.service';
 import { AuthModal } from "../auth-modal/auth-modal";
 
-/**
- * PokemonQuiz component provides an interactive pokemon guessing game.
- * Awards points for correct answers and tracks user statistics.
- */
 @Component({
   selector: 'app-pokemon-quiz',
   standalone: true,
@@ -19,94 +12,55 @@ import { AuthModal } from "../auth-modal/auth-modal";
   templateUrl: './pokemon-quiz.html',
   styleUrl: './pokemon-quiz.css'
 })
-export class PokemonQuiz /* implements OnInit  */{
-   protected readonly quizService = inject(PokemonQuizService);
+export class PokemonQuiz implements OnInit {
+  protected readonly quizService = inject(PokemonQuizService);
   private readonly auth = inject(AuthServ);
-  private readonly points = inject(PointsService);
   private readonly notification = inject(NotificationService);
 
   protected readonly usuario = computed(() => this.auth.activeUser());
 
   ngOnInit(): void {
-    this.quizService.generateQuestion();
+    // Solo generamos si no hay una pregunta activa (evita resets innecesarios)
+    if (!this.quizService.currentQuestion()) {
+      this.quizService.generateQuestion();
+    }
   }
 
-  /**
-   * Handles answer selection and awards points if correct.
-   */
   selectAnswer(answer: string): void {
-    this.quizService.checkAnswer(answer);
-    if (this.quizService.isCorrect()) {
-      this.awardPointsForCorrectAnswer();
-    }
+    this.quizService.validateAnswer(answer).subscribe(res => {
+      const data = res?.data;
+      if (!data) return;
+
+      if (data.user) {
+        this.auth.activeUser.set(data.user);
+        localStorage.setItem('activeUser', JSON.stringify(data.user));
+      }
+
+      if (data.isCorrect) {
+        if (data.pointsAwarded > 0) {
+          this.notification.notify(`¡Correcto! +${data.pointsAwarded} puntos. Quedan ${data.remainingWithPoints} intentos.`);
+        } else {
+          this.notification.notify('¡Correcto! Límite de puntos diario alcanzado.');
+        }
+      }
+    });
   }
 
   nextQuestion(): void {
     this.quizService.generateQuestion();
   }
 
-  resetQuiz(): void {
-    this.quizService.resetStats();
-    this.quizService.generateQuestion();
-  }
+ resetQuiz(): void {
+  if (this.quizService.isValidating() || this.quizService.isLoading()) return;
+  this.quizService.resetStats();
+  this.quizService.generateQuestion();
+}
 
-  // Returns image URL for display (can be extended for silhouette effect)
-  getHiddenImage(imageUrl: string | null): string {
-    if (!imageUrl) return '';
-    return imageUrl;
-  }
 
-  /**
-   * Handles broken sprite image by hiding it and logging to console
-   */
   onImageError(event: Event): void {
     const img = event.target as HTMLImageElement;
     img.style.display = 'none';
-    console.warn('Failed to load Pokemon sprite:', img.src);
   }
 
-  /**
-   * Awards +5 points for correct quiz answers.
-   * Updates both points and history, then syncs with auth service and localStorage.
-   */
-  private awardPointsForCorrectAnswer(): void {
-    const user = this.auth.activeUser();
-    if (!user || !user.id) {
-      return;
-    }
-
-    const amount = 5;
-    const reason = 'Respuesta correcta en el Quiz Pokémon';
-    const today = new Date();
-
-    // Step 1: Add points
-    this.points.addPoints(user, amount, reason).subscribe({
-      next: (updatedUser) => {
-        const event: PointEvent = {
-          amount,
-          reason,
-          created_at: today.toISOString()
-        };
-
-        // Step 2: Add to history
-        this.points.addHistory(updatedUser, event).subscribe({
-          next: (finalUser) => {
-            // Step 3: Sync with auth and localStorage
-            this.auth.activeUser.set(finalUser);
-            localStorage.setItem('activeUser', JSON.stringify(finalUser));
-
-            // Step 4: Show notification with points
-            this.notification.notify(`¡Respuesta correcta! +${amount} puntos`);
-          },
-          error: () => {
-            console.error('Error al registrar el historial de puntos');
-          }
-        });
-      },
-      error: () => {
-        console.error('Error al sumar puntos por respuesta correcta');
-      }
-    });
-  }
-
+  
 }

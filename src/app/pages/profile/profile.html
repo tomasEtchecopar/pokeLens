@@ -12,7 +12,8 @@
       <div>
         <p><strong>UserName:</strong> {{ u.username }}</p>
         <p><strong>Email:</strong> {{ u.mail }}</p>
-        <p><strong>Edad:</strong> {{ u.age }} años</p>
+        <p><strong>Edad:</strong> {{ getAge(u.birthDate) }} años</p>
+        <p><strong>Nacimiento:</strong> {{ u.birthDate | date:'dd/MM/yyyy' }}</p>
         <p><strong>Puntos:</strong> {{ u.points ?? 0 }} PokePoints</p>
         <p>
           <strong>Último Ingreso:</strong>
@@ -83,6 +84,7 @@
     @if (usuario(); as u) {
     <img [src]="u.avatar_url || '/assets/images/default.png'" class="avatar-modal-img" (click)="closeAvatar()"
       (error)="setDefaultAvatar($event)" />
+
     }
   </div>
 

@@ -140,7 +140,7 @@
   box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.5);
   position: relative;
   overflow: visible;
-    user-select: none;
+  user-select: none;
   -webkit-user-select: none;
 
 }
@@ -151,24 +151,16 @@
   image-rendering: pixelated;
   position: relative;
   z-index: 1;
-    user-select: none;
+  user-select: none;
   -webkit-user-drag: none;
   -moz-user-select: none;
   -webkit-user-select: none;
   pointer-events: auto;
 }
 
-.silhouette-overlay {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 160px;
-  height: 160px;
-  background: #000;
-  z-index: 10;
-  pointer-events: none;
-  filter: drop-shadow(0 0 12px #000);
+.option-button.selected {
+  border-color: #ffd700;
+  background: #444;
 }
 
 .pokemon-display.revealed .image-container {
@@ -432,4 +424,13 @@
 .quiz-root {
   transform: scale(0.90);
   transform-origin: top center;
+}
+.option-button.pending {
+  background: #f0c419;
+  box-shadow: 0 0 0 2px #caa10f inset;
+}
+
+.option-button.correct-answer {
+  background: #28a745;
+  box-shadow: 0 0 0 2px #1e7e34 inset;
 }
