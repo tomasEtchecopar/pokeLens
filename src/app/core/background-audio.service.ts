@@ -1,26 +1,32 @@
 import { Injectable } from '@angular/core';
 
-@Injectable()
-export class MemoryAudioService {
+@Injectable({ providedIn: 'root' })
+export class BackgroundAudioService {
   private bgm: HTMLAudioElement | null = null;
   private volume = 0.35;
+  private bgmSrc: string | null = null;
 
   /* ===== background music ===== */
-  playBackground() {
-    if (this.bgm) return;
+  playBackground(src = 'assets/sounds/memory.mp3') {
+    if (this.bgm && this.bgmSrc === src) return;
 
-    this.bgm = new Audio('assets/sounds/memory.mp3');
+    this.stopBackground();
+
+    this.bgmSrc = src;
+    this.bgm = new Audio(src);
     this.bgm.loop = true;
-    this.bgm.preload = 'auto';   
+    this.bgm.preload = 'auto';
     this.bgm.volume = this.volume;
-    this.bgm.play().catch(() => {});
+    this.bgm.play().catch(() => { });
   }
+
 
   stopBackground() {
     if (!this.bgm) return;
     this.bgm.pause();
     this.bgm.currentTime = 0;
     this.bgm = null;
+    this.bgmSrc = null;
   }
 
   /* ===== volume ===== */
@@ -40,7 +46,7 @@ export class MemoryAudioService {
     const audio = new Audio(src);
     audio.preload = 'auto';
     audio.volume = this.volume * baseVolume;
-    audio.play().catch(() => {});
+    audio.play().catch(() => { });
   }
 
   match() {
@@ -58,6 +64,28 @@ export class MemoryAudioService {
     const win = new Audio('assets/sounds/win.mp3');
     win.preload = 'auto';
     win.volume = this.volume;
-    win.play().catch(() => {});
+    win.play().catch(() => { });
   }
+
+
+  private trackBag: string[] = [];
+
+  /** Reproduce un tema al azar de una lista, sin repetir hasta agotar */
+  playBackgroundRandom(tracks: readonly string[], fallback = 'assets/sounds/memory.mp3') {
+    const src = this.pickRandomTrack(tracks, fallback);
+    this.playBackground(src);
+  }
+
+  private pickRandomTrack(tracks: readonly string[], fallback: string) {
+    if (!tracks || tracks.length === 0) return fallback;
+
+    if (!this.trackBag.length) {
+      // recargar y mezclar (shuffle-bag)
+      this.trackBag = [...tracks].sort(() => Math.random() - 0.5);
+    }
+
+    return this.trackBag.pop()!;
+  }
+
+
 }

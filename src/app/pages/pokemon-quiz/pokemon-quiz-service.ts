@@ -154,9 +154,6 @@ export class PokemonQuizService {
     this.http.get<ApiResponse<QuizQuestion>>(`${this.apiUrl}/question`).pipe(
       tap(response => {
         this.currentQuestion.set(response.data);
-
-        // No loguear name si lo ocultás en backend (puede ser undefined)
-        console.log('Quiz question loaded. Pokemon ID:', response.data?.pokemon?.id);
       }),
       catchError(err => {
         console.error('Error loading quiz question:', err);

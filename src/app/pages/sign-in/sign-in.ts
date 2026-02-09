@@ -36,6 +36,14 @@ export class SignIn implements OnInit {
   protected emailTaken = false;
   protected usernameTaken = false;
 
+  private normalizeUsername(v: string): string {
+    return (v ?? '').trim().toLowerCase();
+  }
+
+  private normalizeEmail(v: string): string {
+    return (v ?? '').trim().toLowerCase();
+  }
+
   private minAgeValidator(minAge: number) {
     return (control: AbstractControl): ValidationErrors | null => {
       const value = control.value as string | null;
@@ -85,40 +93,49 @@ export class SignIn implements OnInit {
         password: u.password ?? ''
       });
 
+      // No permitir editar birthDate en edición
       this.form.controls.birthDate.disable({ emitEvent: false });
     } else {
+      // En registro, se habilita
       this.form.controls.birthDate.enable({ emitEvent: false });
     }
 
+    // EMAIL availability
     this.form.controls.mail.valueChanges
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
         switchMap(raw => {
           const ctrl = this.form.controls.mail;
-          const value = (raw ?? '').trim().toLowerCase();
+          const value = this.normalizeEmail(raw ?? '');
+
           if (!value || ctrl.invalid) return of(false);
 
           const current = this.client();
-          if (this.isEditing() && current?.mail?.trim().toLowerCase() === value) return of(false);
+          const currentMail = this.normalizeEmail(current?.mail ?? '');
+
+          // Si estás editando y no cambió el email, no chequees
+          if (this.isEditing() && currentMail === value) return of(false);
 
           return this.auth.existsEmail(value);
         })
       )
       .subscribe(exists => this.emailTaken = exists);
 
+    // USERNAME availability
     this.form.controls.username.valueChanges
       .pipe(
         debounceTime(400),
         distinctUntilChanged(),
         switchMap(raw => {
-          const value = (raw ?? '').trim();
+          const value = this.normalizeUsername(raw ?? '');
           if (!value) return of(false);
 
           const current = this.client();
-          if (this.isEditing() && current?.username?.trim().toLowerCase() === value.toLowerCase()) {
-            return of(false);
-          }
+          const currentUsername = this.normalizeUsername(current?.username ?? '');
+
+          // Si estás editando y no cambió el username, no chequees
+          if (this.isEditing() && currentUsername === value) return of(false);
 
           return this.auth.existsUsername(value);
         })
@@ -133,28 +150,87 @@ export class SignIn implements OnInit {
       return;
     }
 
+    // =========================
+    // EDIT MODE
+    // =========================
     if (this.isEditing()) {
       const current = this.auth.activeUser();
       if (!current?.id) {
         this.notification.notify('No se encontró el usuario a editar');
         return;
       }
+
       const userId = current.id;
 
-      const username = (this.form.controls.username.value ?? '').trim();
-      const mail = (this.form.controls.mail.value ?? '').trim().toLowerCase();
+      const username = this.normalizeUsername(this.form.controls.username.value ?? '');
+      const mail = this.normalizeEmail(this.form.controls.mail.value ?? '');
       const password = this.form.controls.password.value ?? '';
 
-      const oldUsername = (current.username ?? '').trim().toLowerCase();
-      const oldMail = (current.mail ?? '').trim().toLowerCase();
+      const oldUsername = this.normalizeUsername(current.username ?? '');
+      const oldMail = this.normalizeEmail(current.mail ?? '');
 
-      const usernameChanged = username.toLowerCase() !== oldUsername;
+      const usernameChanged = username !== oldUsername;
       const mailChanged = mail !== oldMail;
 
       const checkUsername$ = usernameChanged ? this.auth.existsUsername(username) : of(false);
       const checkEmail$ = mailChanged ? this.auth.existsEmail(mail) : of(false);
 
-      forkJoin({ usernameExists: checkUsername$, emailExists: checkEmail$ }).pipe(
+      forkJoin({ usernameExists: checkUsername$, emailExists: checkEmail$ })
+        .pipe(
+          switchMap(({ usernameExists, emailExists }) => {
+            if (usernameExists) {
+              this.notification.notify('Ese usuario ya existe.');
+              return of(null);
+            }
+            if (emailExists) {
+              this.notification.notify('Ese email ya está registrado.');
+              return of(null);
+            }
+
+            const payload = {
+              username,
+              mail,
+              password,
+              avatar_url: this.avatarUrlFromUsername(username),
+            };
+
+            return this.users.updateUser(payload as any, userId);
+          })
+        )
+        .subscribe({
+          next: (res) => {
+            if (!res) return;
+            this.auth.activeUser.set(res);
+            localStorage.setItem('activeUser', JSON.stringify(res));
+            this.notification.notify('Perfil actualizado');
+            this.isEditing.set(false);
+          },
+          error: (err) => {
+            console.error('UPDATE ERROR BODY:', err.error);
+            this.notification.notify(
+              typeof err.error === 'string'
+                ? err.error
+                : err.error?.message || err.error?.error || 'No se pudo actualizar el perfil'
+            );
+          }
+        });
+
+      return;
+    }
+
+    // =========================
+    // REGISTRATION MODE
+    // =========================
+    const raw = this.form.getRawValue();
+
+    const username = this.normalizeUsername(raw.username ?? '');
+    const mail = this.normalizeEmail(raw.mail ?? '');
+
+    forkJoin({
+      usernameExists: this.auth.existsUsername(username),
+      emailExists: this.auth.existsEmail(mail),
+    })
+      .pipe(
         switchMap(({ usernameExists, emailExists }) => {
           if (usernameExists) {
             this.notification.notify('Ese usuario ya existe.');
@@ -165,96 +241,49 @@ export class SignIn implements OnInit {
             return of(null);
           }
 
-          const payload = {
+          const puntos = this.points.randomPoints();
+
+          const newUser: User = {
+            ...raw,
             username,
             mail,
-            password,
             avatar_url: this.avatarUrlFromUsername(username),
+            points: puntos,
+            login_dates: [new Date().toISOString()],
+            last_team_created_at: null,
           };
 
-          return this.users.updateUser(payload as any, userId);
+          return this.users.addUser(newUser);
         })
-      ).subscribe({
+      )
+      .subscribe({
         next: (res) => {
           if (!res) return;
-          this.auth.activeUser.set(res);
-          localStorage.setItem('activeUser', JSON.stringify(res));
-          this.notification.notify('Perfil actualizado');
-          this.isEditing.set(false);
+
+          const { user, token } = res;
+          const puntos = user.points ?? 0;
+
+          this.notification.notify(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
+
+          this.auth.activeUser.set(user);
+          localStorage.setItem('activeUser', JSON.stringify(user));
+          localStorage.setItem('token', token);
+
+          this.form.reset({ username: '', birthDate: '', mail: '', password: '' });
+          this.emailTaken = false;
+          this.usernameTaken = false;
+
+          this.router.navigateByUrl('/home');
         },
         error: (err) => {
-          console.error('UPDATE ERROR BODY:', err.error);
+          console.error('REGISTER ERROR BODY:', err.error);
           this.notification.notify(
             typeof err.error === 'string'
               ? err.error
-              : err.error?.message || err.error?.error || 'No se pudo actualizar el perfil'
+              : err.error?.message || err.error?.error || 'No se pudo registrar el usuario'
           );
         }
       });
-
-      return;
-    }
-
-    const raw = this.form.getRawValue();
-    const username = (raw.username ?? '').trim();
-    const mail = (raw.mail ?? '').trim().toLowerCase();
-
-    forkJoin({
-      usernameExists: this.auth.existsUsername(username),
-      emailExists: this.auth.existsEmail(mail),
-    }).pipe(
-      switchMap(({ usernameExists, emailExists }) => {
-        if (usernameExists) {
-          this.notification.notify('Ese usuario ya existe.');
-          return of(null);
-        }
-        if (emailExists) {
-          this.notification.notify('Ese email ya está registrado.');
-          return of(null);
-        }
-
-        const puntos = this.points.randomPoints();
-
-        const newUser: User = {
-          ...raw,
-          username,
-          mail,
-          avatar_url: this.avatarUrlFromUsername(username),
-          points: puntos,
-          login_dates: [new Date().toISOString()],
-          last_team_created_at: null,
-        };
-
-        return this.users.addUser(newUser);
-      })
-    ).subscribe({
-      next: (res) => {
-        if (!res) return;
-
-        const { user, token } = res;
-        const puntos = user.points ?? 0;
-
-        this.notification.notify(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
-
-        this.auth.activeUser.set(user);
-        localStorage.setItem('activeUser', JSON.stringify(user));
-        localStorage.setItem('token', token);
-
-        this.form.reset({ username: '', birthDate: '', mail: '', password: '' });
-        this.emailTaken = false;
-        this.usernameTaken = false;
-
-        this.router.navigateByUrl('/home');
-      },
-      error: (err) => {
-        console.error('REGISTER ERROR BODY:', err.error);
-        this.notification.notify(
-          typeof err.error === 'string'
-            ? err.error
-            : err.error?.message || err.error?.error || 'No se pudo registrar el usuario'
-        );
-      }
-    });
   }
 
   private fnv1aHash(str: string): number {
@@ -267,7 +296,7 @@ export class SignIn implements OnInit {
   }
 
   private avatarUrlFromUsername(username: string): string {
-    const seed = (username ?? '').trim().toLowerCase();
+    const seed = this.normalizeUsername(username);
     const h = this.fnv1aHash(seed);
 
     const maxPokemon = 1010;

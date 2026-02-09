@@ -69,17 +69,7 @@ import { SortOption } from '../../../pokemon/models/pokemon-sort';
   <!-- </div> -->
 `,
   styles: [`
-// .sort-menu {
-//   display: block;
-//   margin: 0;
-//   max-width: 100%;
-//   font-family: 'Press Start 2P', monospace;
-//   font-size: 0.8rem;
-//   color: #fff;
-//   box-sizing: border-box;
-//   width: 100%;
-//   overflow: hidden;
-// }
+
 
 .filters-toggle {
   width: 100%;

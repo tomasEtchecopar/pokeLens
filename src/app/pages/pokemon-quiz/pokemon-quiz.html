@@ -1,8 +1,20 @@
+<app-quiz-start-modal
+  [isOpen]="showStartModal()"
+  (start)="startQuiz()"
+  (closed)="closeStartModal()">
+</app-quiz-start-modal>
+
+
+
+
 @if (!usuario()) {
 <app-auth-modal></app-auth-modal>
+
 } @else {
 <div class="quiz-page">
+
   <div class="quiz-root">
+
     <div class="quiz-header">
       <h1>¿Quién es ese Pokémon?</h1>
 
@@ -11,6 +23,7 @@
           <span class="stat-label">Correctas</span>
           <span class="stat-value correct">{{ quizService.stats().correct }}</span>
         </div>
+
         <div class="stat-item">
           <span class="stat-label">Incorrectas</span>
           <span class="stat-value incorrect">{{ quizService.stats().incorrect }}</span>
@@ -23,6 +36,14 @@
           <span class="stat-label">Precisión</span>
           <span class="stat-value accuracy">{{ quizService.accuracy() }}%</span>
         </div>
+        <div class="stat-item volume-control">
+          <span class="stat-label speaker">🔊</span>
+
+          <input class="volume-slider" type="range" min="0" max="1" step="0.05" [value]="audio.getVolume()"
+            (input)="onVolumeChange($event)" />
+        </div>
+
+
       </div>
     </div>
 

@@ -118,12 +118,16 @@ export class Profile {
     this.clienteService.deleteUser(user.id).subscribe({
       next: () => {
         localStorage.removeItem('activeUser');
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('refreshToken');
+        localStorage.removeItem('token'); // por si quedó legacy
+
         this.auth.activeUser.set(undefined);
 
-        this.isDeleteModalOpen.set(false); // cerrar modal
-
+        this.isDeleteModalOpen.set(false);
         this.router.navigateByUrl('/login');
-      },
+      }
+      ,
       error: (err) => {
         console.error('Error eliminando cuenta:', err);
         this.notification.notify('Hubo un error al eliminar la cuenta.');
