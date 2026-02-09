@@ -4,7 +4,7 @@ import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { MemoryCard } from '../../pokemon/models/memory-card-model';
 import { AuthServ } from '../../core/auth.service';
 import { AuthModal } from '../auth-modal/auth-modal';
-import { MemoryAudioService } from './memory-audio-service';
+import { BackgroundAudioService } from '../../core/background-audio.service';
 import { MemoryWinModal } from './memory-modal/memory-modal';
 import { environment } from '../../../enviroments/enviroment';
 
@@ -12,14 +12,13 @@ import { environment } from '../../../enviroments/enviroment';
   selector: 'app-memory-game',
   standalone: true,
   imports: [AuthModal, MemoryWinModal],
-  providers: [MemoryAudioService],
   templateUrl: './memory-game.html',
   styleUrl: './memory-game.css',
 })
 export class MemoryGame {
   /* ===== services ===== */
   private readonly auth = inject(AuthServ);
-  readonly audio = inject(MemoryAudioService);
+readonly audio = inject(BackgroundAudioService);
 
   private readonly baseUrl = `${environment.apiUrl}/memory`;
 

@@ -1,10 +1,15 @@
 import { Pokemon } from "./pokemon-models";
 
-export interface QuizQuestion {
-  token: string;       // ✅ viene del backend (/quiz/question)
-  pokemon: Pokemon;    // name es opcional, perfecto
+export type QuizQuestion = {
+  token: string;
   options: string[];
-}
+  pokemon: {
+    sprites: {
+      front_default?: string | null;
+    };
+  };
+};
+
 
 export interface QuizStats {
   correct: number;

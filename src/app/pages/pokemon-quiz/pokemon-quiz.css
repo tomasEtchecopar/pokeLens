@@ -425,6 +425,7 @@
   transform: scale(0.90);
   transform-origin: top center;
 }
+
 .option-button.pending {
   background: #f0c419;
   box-shadow: 0 0 0 2px #caa10f inset;
@@ -433,4 +434,77 @@
 .option-button.correct-answer {
   background: #28a745;
   box-shadow: 0 0 0 2px #1e7e34 inset;
+}
+
+
+
+/* ===== COMPACT HORIZONTAL VOLUME (SIEMPRE VISIBLE) ===== */
+.volume-control {
+  position: relative;
+  min-width: 100px;        /* 👈 tocá esto si querés más ancho el "stat-item" */
+  padding-bottom: 1.6rem;  /* 👈 tocá esto si querés subir/bajar el slider dentro del cuadro */
+}
+
+/* emoji */
+.volume-control .speaker {
+  font-size: 1.1rem;
+  user-select: none;
+}
+
+/* slider horizontal compacto */
+.volume-control .volume-slider {
+  position: absolute;
+  bottom: 6px;             /* 👈 tocá esto para subir/bajar TODO el slider */
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 80px;             /* 👈 tocá esto para hacerlo más largo/corto */
+  height: 16px;            /* 👈 altura del área clickeable (NO del track) */
+
+  padding: 0;              /* importante para que no meta offsets raros */
+  background: transparent;
+  cursor: pointer;
+  opacity: 0.95;
+
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* ===== TRACK ===== */
+.volume-control .volume-slider::-webkit-slider-runnable-track {
+  height: 6px;             /* 👈 grosor del track */
+  background: #ffd700;
+  border: 2px solid #000;
+  box-sizing: border-box;
+}
+
+.volume-control .volume-slider::-moz-range-track {
+  height: 6px;             /* 👈 grosor del track */
+  background: #ffd700;
+  border: 2px solid #000;
+  box-sizing: border-box;
+}
+
+/* ===== THUMB (la "pelotita") ===== */
+.volume-control .volume-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+
+  width: 12px;             /* 👈 tamaño del thumb */
+  height: 12px;            /* 👈 tamaño del thumb */
+  background: #d43030;
+  border: 2px solid #000;
+  box-sizing: border-box;
+  cursor: pointer;
+
+  margin-top: -5px;        /* ✅ ESTA ES LA CLAVE para centrar verticalmente el thumb en Chrome */
+                            /* 👈 tocá este valor (más negativo = sube, menos negativo = baja) */
+}
+
+.volume-control .volume-slider::-moz-range-thumb {
+  width: 12px;             /* 👈 tamaño del thumb */
+  height: 12px;            /* 👈 tamaño del thumb */
+  background: #d43030;
+  border: 2px solid #000;
+  box-sizing: border-box;
+  cursor: pointer;
 }
