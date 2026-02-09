@@ -1,0 +1,57 @@
+@if (isOpen()) {
+  <div class="start-overlay" (click)="onClose()">
+    <div class="start-modal" (click)="$event.stopPropagation()">
+      <div class="start-header">
+        <div class="start-title">⚡ QUIZ POKÉMON</div>
+        <button class="score-x" type="button" (click)="onClose()">✕</button>
+      </div>
+
+      <div class="start-content">
+        <p class="start-line">
+          ¿Quién es ese Pokémon?
+          <br />
+          Respondé y sumá puntos diarios.
+        </p>
+
+        <div class="start-actions">
+          <button class="btn primary" type="button" (click)="onStart()">
+            Jugar
+          </button>
+
+          <button class="btn" type="button" (click)="openRules()">
+            Reglas
+          </button>
+        </div>
+      </div>
+
+      <!-- MODAL INTERNO: REGLAS -->
+      @if (showRules()) {
+        <div class="score-overlay" (click)="closeRules()">
+          <div class="score-modal" (click)="$event.stopPropagation()">
+            <div class="score-header">
+              <div class="score-title">📜 Reglas</div>
+              <button class="score-x" type="button" (click)="closeRules()">✕</button>
+            </div>
+
+            <div class="score-content">
+              <div class="score-block">
+                <div class="score-subtitle">Puntaje del Quiz (UTC)</div>
+                <ul class="score-list">
+                  <li><b>Acierto</b> → <b>+5</b> puntos</li>
+                  <li><b>Máximo</b> → <b>10</b> aciertos con puntos por día</li>
+                  <li><b>Luego</b> → <b>+0</b> (podés seguir jugando igual)</li>
+                </ul>
+              </div>
+
+              <div class="score-actions">
+                <button class="btn primary" type="button" (click)="closeRules()">
+                  Entendido
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  </div>
+}

@@ -22,10 +22,11 @@
           Jugar
         </button>
 
-        <button class="btn primary" type="button" (click)="openScoreModal()">
+        <button class="btn secondary" type="button" (click)="openScoreModal()">
           Puntaje
         </button>
       </div>
+
     </div>
 
     <!-- MODAL INTERNO: PUNTAJE -->
@@ -90,12 +91,13 @@
     </div>
 
     <div class="volume-control">
-      <span class="icon">🔊</span>
-      <input type="range" min="0" max="100" [value]="audio.getVolume() * 100"
+      <span class="speaker">🔊</span>
+      <input class="volume-slider" type="range" min="0" max="100" [value]="audio.getVolume() * 100"
         (input)="audio.setVolume($any($event.target).value / 100)" />
     </div>
 
-    <button class="btn" (click)="startNewGame()" [disabled]="locked() || !gameStarted()">
+
+    <button class="btn primary" (click)="startNewGame()" [disabled]="locked() || !gameStarted()">
       Reiniciar
     </button>
   </div>

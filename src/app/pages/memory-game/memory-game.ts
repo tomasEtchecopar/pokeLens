@@ -4,7 +4,7 @@ import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { MemoryCard } from '../../pokemon/models/memory-card-model';
 import { AuthServ } from '../../core/auth.service';
 import { AuthModal } from '../auth-modal/auth-modal';
-import { MemoryAudioService } from './memory-audio-service';
+import { BackgroundAudioService } from '../../core/background-audio.service';
 import { MemoryWinModal } from './memory-modal/memory-modal';
 import { environment } from '../../../enviroments/enviroment';
 
@@ -12,14 +12,13 @@ import { environment } from '../../../enviroments/enviroment';
   selector: 'app-memory-game',
   standalone: true,
   imports: [AuthModal, MemoryWinModal],
-  providers: [MemoryAudioService],
   templateUrl: './memory-game.html',
   styleUrl: './memory-game.css',
 })
 export class MemoryGame {
   /* ===== services ===== */
   private readonly auth = inject(AuthServ);
-  readonly audio = inject(MemoryAudioService);
+readonly audio = inject(BackgroundAudioService);
 
   private readonly baseUrl = `${environment.apiUrl}/memory`;
 
@@ -291,58 +290,57 @@ export class MemoryGame {
 
   /* ===== award points ===== */
   private awardPointsForWin() {
-    const token = localStorage.getItem('token');
+  const token = localStorage.getItem('accessToken'); // ✅ MISMA KEY que en deck
 
-    // si no hay token, igual mostramos modal pero sin puntos
-    if (!token) {
+  // si no hay token, igual mostramos modal pero sin puntos
+  if (!token) {
+    this.pointsAwarded.set(null);
+    this.attemptsLeftToday.set(null);
+    this.showWinModal.set(true);
+    return;
+  }
+
+  const b = this.board();
+
+  fetch(`${this.baseUrl}/complete`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`, // ✅ ahora sí
+    },
+    body: JSON.stringify({
+      cols: b.cols,
+      rows: b.rows,
+      moves: this.moves(),
+    }),
+  })
+    .then(async (r) => {
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw { status: r.status, data }; // ✅ para ver status real
+      return data;
+    })
+    .then((resp) => {
+      const awarded = resp?.data?.pointsAwarded ?? null;
+      this.pointsAwarded.set(awarded);
+
+      const left = resp?.data?.attemptsLeftToday ?? null;
+      this.attemptsLeftToday.set(left);
+
+      const updatedUser = resp?.data?.user;
+      if (updatedUser) {
+        const current = this.auth.activeUser();
+        this.auth.activeUser.set({ ...(current as any), ...updatedUser });
+        localStorage.setItem('activeUser', JSON.stringify(this.auth.activeUser()));
+      }
+
+      this.showWinModal.set(true);
+    })
+    .catch((err) => {
+      console.error('Error awarding memory points:', err);
       this.pointsAwarded.set(null);
       this.attemptsLeftToday.set(null);
       this.showWinModal.set(true);
-      return;
-    }
+    });
+}
 
-    const b = this.board();
-
-    fetch(`${this.baseUrl}/complete`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        cols: b.cols,
-        rows: b.rows,
-        moves: this.moves(),
-      }),
-    })
-      .then(async (r) => {
-        const data = await r.json().catch(() => ({}));
-        if (!r.ok) throw data;
-        return data;
-      })
-      .then((resp) => {
-        const awarded = resp?.data?.pointsAwarded ?? null;
-        this.pointsAwarded.set(awarded);
-
-        const left = resp?.data?.attemptsLeftToday ?? null;
-        this.attemptsLeftToday.set(left);
-
-        // actualizar user en frontend
-        const updatedUser = resp?.data?.user;
-        if (updatedUser) {
-          const current = this.auth.activeUser();
-          this.auth.activeUser.set({ ...(current as any), ...updatedUser });
-          localStorage.setItem('activeUser', JSON.stringify(this.auth.activeUser()));
-        }
-
-        this.showWinModal.set(true);
-      })
-      .catch((err) => {
-        console.error('Error awarding memory points:', err);
-
-        this.pointsAwarded.set(null);
-        this.attemptsLeftToday.set(null);
-        this.showWinModal.set(true);
-      });
-  }
 }
