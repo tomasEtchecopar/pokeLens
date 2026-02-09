@@ -291,58 +291,57 @@ export class MemoryGame {
 
   /* ===== award points ===== */
   private awardPointsForWin() {
-    const token = localStorage.getItem('token');
+  const token = localStorage.getItem('accessToken'); // ✅ MISMA KEY que en deck
 
-    // si no hay token, igual mostramos modal pero sin puntos
-    if (!token) {
+  // si no hay token, igual mostramos modal pero sin puntos
+  if (!token) {
+    this.pointsAwarded.set(null);
+    this.attemptsLeftToday.set(null);
+    this.showWinModal.set(true);
+    return;
+  }
+
+  const b = this.board();
+
+  fetch(`${this.baseUrl}/complete`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: `Bearer ${token}`, // ✅ ahora sí
+    },
+    body: JSON.stringify({
+      cols: b.cols,
+      rows: b.rows,
+      moves: this.moves(),
+    }),
+  })
+    .then(async (r) => {
+      const data = await r.json().catch(() => ({}));
+      if (!r.ok) throw { status: r.status, data }; // ✅ para ver status real
+      return data;
+    })
+    .then((resp) => {
+      const awarded = resp?.data?.pointsAwarded ?? null;
+      this.pointsAwarded.set(awarded);
+
+      const left = resp?.data?.attemptsLeftToday ?? null;
+      this.attemptsLeftToday.set(left);
+
+      const updatedUser = resp?.data?.user;
+      if (updatedUser) {
+        const current = this.auth.activeUser();
+        this.auth.activeUser.set({ ...(current as any), ...updatedUser });
+        localStorage.setItem('activeUser', JSON.stringify(this.auth.activeUser()));
+      }
+
+      this.showWinModal.set(true);
+    })
+    .catch((err) => {
+      console.error('Error awarding memory points:', err);
       this.pointsAwarded.set(null);
       this.attemptsLeftToday.set(null);
       this.showWinModal.set(true);
-      return;
-    }
+    });
+}
 
-    const b = this.board();
-
-    fetch(`${this.baseUrl}/complete`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify({
-        cols: b.cols,
-        rows: b.rows,
-        moves: this.moves(),
-      }),
-    })
-      .then(async (r) => {
-        const data = await r.json().catch(() => ({}));
-        if (!r.ok) throw data;
-        return data;
-      })
-      .then((resp) => {
-        const awarded = resp?.data?.pointsAwarded ?? null;
-        this.pointsAwarded.set(awarded);
-
-        const left = resp?.data?.attemptsLeftToday ?? null;
-        this.attemptsLeftToday.set(left);
-
-        // actualizar user en frontend
-        const updatedUser = resp?.data?.user;
-        if (updatedUser) {
-          const current = this.auth.activeUser();
-          this.auth.activeUser.set({ ...(current as any), ...updatedUser });
-          localStorage.setItem('activeUser', JSON.stringify(this.auth.activeUser()));
-        }
-
-        this.showWinModal.set(true);
-      })
-      .catch((err) => {
-        console.error('Error awarding memory points:', err);
-
-        this.pointsAwarded.set(null);
-        this.attemptsLeftToday.set(null);
-        this.showWinModal.set(true);
-      });
-  }
 }
