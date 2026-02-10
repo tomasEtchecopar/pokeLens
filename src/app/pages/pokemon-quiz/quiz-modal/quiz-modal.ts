@@ -1,4 +1,5 @@
-import { Component, input, output, signal } from '@angular/core';
+import { Component, inject, input, output, signal } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-quiz-start-modal',
@@ -7,10 +8,11 @@ import { Component, input, output, signal } from '@angular/core';
   styleUrl: './quiz-modal.css',
 })
 export class QuizStartModal {
-  isOpen = input(false);
 
+  isOpen = input(false);
   start = output<void>();
   closed = output<void>();
+  readonly router = inject(Router);
 
   // modal interno (reglas)
   readonly showRules = signal(false);
@@ -22,6 +24,8 @@ export class QuizStartModal {
   onClose() {
     this.showRules.set(false);
     this.closed.emit();
+    this.router.navigateByUrl('/home');
+
   }
 
   openRules() {

@@ -7,6 +7,7 @@ import { AuthModal } from '../auth-modal/auth-modal';
 import { BackgroundAudioService } from '../../core/background-audio.service';
 import { MemoryWinModal } from './memory-modal/memory-modal';
 import { environment } from '../../../enviroments/enviroment';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-memory-game',
@@ -18,7 +19,8 @@ import { environment } from '../../../enviroments/enviroment';
 export class MemoryGame {
   /* ===== services ===== */
   private readonly auth = inject(AuthServ);
-readonly audio = inject(BackgroundAudioService);
+  readonly audio = inject(BackgroundAudioService);
+  readonly router = inject(Router);
 
   private readonly baseUrl = `${environment.apiUrl}/memory`;
 
@@ -94,6 +96,10 @@ readonly audio = inject(BackgroundAudioService);
 
   closeScoreModal() {
     this.showScoreModal.set(false);
+  }
+  onClose() {
+    this.showStartModal.set(false);
+    this.router.navigateByUrl('/home');
   }
 
   /* ===== start modal action ===== */
@@ -290,57 +296,57 @@ readonly audio = inject(BackgroundAudioService);
 
   /* ===== award points ===== */
   private awardPointsForWin() {
-  const token = localStorage.getItem('accessToken'); // ✅ MISMA KEY que en deck
+    const token = localStorage.getItem('accessToken'); // ✅ MISMA KEY que en deck
 
-  // si no hay token, igual mostramos modal pero sin puntos
-  if (!token) {
-    this.pointsAwarded.set(null);
-    this.attemptsLeftToday.set(null);
-    this.showWinModal.set(true);
-    return;
-  }
-
-  const b = this.board();
-
-  fetch(`${this.baseUrl}/complete`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${token}`, // ✅ ahora sí
-    },
-    body: JSON.stringify({
-      cols: b.cols,
-      rows: b.rows,
-      moves: this.moves(),
-    }),
-  })
-    .then(async (r) => {
-      const data = await r.json().catch(() => ({}));
-      if (!r.ok) throw { status: r.status, data }; // ✅ para ver status real
-      return data;
-    })
-    .then((resp) => {
-      const awarded = resp?.data?.pointsAwarded ?? null;
-      this.pointsAwarded.set(awarded);
-
-      const left = resp?.data?.attemptsLeftToday ?? null;
-      this.attemptsLeftToday.set(left);
-
-      const updatedUser = resp?.data?.user;
-      if (updatedUser) {
-        const current = this.auth.activeUser();
-        this.auth.activeUser.set({ ...(current as any), ...updatedUser });
-        localStorage.setItem('activeUser', JSON.stringify(this.auth.activeUser()));
-      }
-
-      this.showWinModal.set(true);
-    })
-    .catch((err) => {
-      console.error('Error awarding memory points:', err);
+    // si no hay token, igual mostramos modal pero sin puntos
+    if (!token) {
       this.pointsAwarded.set(null);
       this.attemptsLeftToday.set(null);
       this.showWinModal.set(true);
-    });
-}
+      return;
+    }
+
+    const b = this.board();
+
+    fetch(`${this.baseUrl}/complete`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`, // ✅ ahora sí
+      },
+      body: JSON.stringify({
+        cols: b.cols,
+        rows: b.rows,
+        moves: this.moves(),
+      }),
+    })
+      .then(async (r) => {
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) throw { status: r.status, data }; // ✅ para ver status real
+        return data;
+      })
+      .then((resp) => {
+        const awarded = resp?.data?.pointsAwarded ?? null;
+        this.pointsAwarded.set(awarded);
+
+        const left = resp?.data?.attemptsLeftToday ?? null;
+        this.attemptsLeftToday.set(left);
+
+        const updatedUser = resp?.data?.user;
+        if (updatedUser) {
+          const current = this.auth.activeUser();
+          this.auth.activeUser.set({ ...(current as any), ...updatedUser });
+          localStorage.setItem('activeUser', JSON.stringify(this.auth.activeUser()));
+        }
+
+        this.showWinModal.set(true);
+      })
+      .catch((err) => {
+        console.error('Error awarding memory points:', err);
+        this.pointsAwarded.set(null);
+        this.attemptsLeftToday.set(null);
+        this.showWinModal.set(true);
+      });
+  }
 
 }
