@@ -43,6 +43,4 @@ __screenshots__/
 Thumbs.db
 
 
-# Angular env (local only)
-src/enviroments/enviroment.ts
-src/enviroments/*.local.ts
+

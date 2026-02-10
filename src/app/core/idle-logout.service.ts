@@ -100,7 +100,7 @@ export class IdleLogoutService {
     const startRaw = localStorage.getItem(this.KEY_SESSION_START);
     const lastRaw = localStorage.getItem(this.KEY_LAST_ACTIVITY);
 
-    // ✅ Si faltan marcadores, NO desloguea: los crea y listo
+    //Si faltan marcadores, NO desloguea: los crea y listo
     if (!startRaw || !lastRaw) {
       this.ensureSessionMarkers();
       return;
@@ -109,7 +109,7 @@ export class IdleLogoutService {
     const start = Number(startRaw);
     const last = Number(lastRaw);
 
-    // ✅ Si están corruptos, los resetea sin romper
+    // Si están corruptos, los resetea sin romper
     if (!start || !last) {
       this.onLoginSuccess();
       return;
@@ -130,7 +130,7 @@ export class IdleLogoutService {
   }
 
   private forceLogout(msg: string) {
-    // ✅ anti-loop: si ya estás en la pantalla de login, no redirige
+    // anti-loop: si ya estás en la pantalla de login, no redirige
     if (this.router.url.startsWith(this.LOGIN_ROUTE)) {
       this.auth.logOut();
       this.onLogout();
