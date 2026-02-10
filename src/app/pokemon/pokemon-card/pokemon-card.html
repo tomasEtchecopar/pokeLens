@@ -25,9 +25,13 @@
         }
         <div class="types">
           @for (type of pokemon.types; track type.slot) {
-          <span class="type type-{{ type.type.name }}">{{ translateType(type.type.name) | titlecase }}</span>
+          <button type="button" class="type type-{{ type.type.name }}"
+            (click)="goToTypeCatalog($event, type.type.name)">
+            {{ translateType(type.type.name) | titlecase }}
+          </button>
           }
         </div>
+
         <div class="info">
           <div class="info-row">
             <span>ALT</span>

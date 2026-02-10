@@ -51,4 +51,12 @@ export class PokemonCard {
   onPokemonCaptured() {
     this.showCaptureModal.set(false);
   }
+  goToTypeCatalog(event: Event, typeName: string) {
+    event.preventDefault();
+    event.stopPropagation();
+    this.router.navigate(['/catalog'], {
+      queryParams: { type: typeName }
+    });
+  }
+
 }

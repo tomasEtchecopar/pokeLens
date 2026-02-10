@@ -13,6 +13,9 @@ import { SortOption } from '../../pokemon/models/pokemon-sort';
 import { PokemonFilterMenu } from './pokemon-filtering-and-sorting/pokemon-filter-menu/pokemon-filter-menu';
 import { PokemonCatalogState } from './pokemon-catalog-state';
 import { Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+import { distinctUntilChanged, map } from 'rxjs';
+
 
 @Component({
   selector: 'app-pokemon-catalog',
@@ -25,18 +28,19 @@ export class PokemonCatalog implements OnInit, AfterViewInit, OnDestroy {
   readonly catalogState = inject(PokemonCatalogState);
   private readonly ngZone = inject(NgZone);
   private readonly router = inject(Router);
+  private readonly route = inject(ActivatedRoute);
 
   pokemons = this.catalogState.loadedPokemons.asReadonly();
   isLoading = this.catalogState.isLoading.asReadonly();
   hasMore = this.catalogState.hasMore.asReadonly();
 
-   private observer?: IntersectionObserver;
-    private sentinelAttached = false;
-      private navigationSubscription?: any;
+  private observer?: IntersectionObserver;
+  private sentinelAttached = false;
+  private navigationSubscription?: any;
 
 
-  ngOnInit(){
-  // saves scroll when navigating FROM catalog to other route
+  ngOnInit() {
+    // saves scroll when navigating FROM catalog to other route
     this.navigationSubscription = this.router.events
       .pipe(filter(event => event instanceof NavigationStart))
       .subscribe((event: NavigationStart) => {
@@ -52,6 +56,28 @@ export class PokemonCatalog implements OnInit, AfterViewInit, OnDestroy {
         }
       });
 
+    this.route.queryParamMap
+      .pipe(
+        map(q => (q.get('type') || '').trim()),
+        distinctUntilChanged()
+      )
+      .subscribe((type) => {
+        const current = this.catalogState.filters();
+
+        if (!type) {
+          if (!current.type) return; // ya estaba limpio
+          const { type: _removed, ...rest } = current as any;
+
+          this.catalogState.setFilters(rest as FilterOptions);
+          return;
+        }
+
+        // Si hay type, aplicarlo
+        const next: FilterOptions = { ...current, type: type as any };
+        this.catalogState.setFilters(next);
+      });
+
+
     if (this.pokemons().length === 0 && this.catalogState.savedScrollPosition() === 0) {
       console.log('first load of catalog');
       this.catalogState.reset();
@@ -63,8 +89,8 @@ export class PokemonCatalog implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-    ngAfterViewInit(){
-   if (this.scrollSentinel?.nativeElement && !this.sentinelAttached) {
+  ngAfterViewInit() {
+    if (this.scrollSentinel?.nativeElement && !this.sentinelAttached) {
       console.log("initializing scroll observer");
       this.initScroll(this.scrollSentinel.nativeElement);
       this.sentinelAttached = true;
@@ -139,11 +165,11 @@ export class PokemonCatalog implements OnInit, AfterViewInit, OnDestroy {
     this.catalogState.setFilters(filters);
   }
 
-  onSort(sort: SortOption | null){
+  onSort(sort: SortOption | null) {
     this.catalogState.setSort(sort ?? { key: 'id', dir: 'asc' });
   }
 
-  hasActiveFiltersOrSearch(){
+  hasActiveFiltersOrSearch() {
     const hasSearch = this.catalogState.search().length > 0;
     const filters = this.catalogState.filters();
     const hasFilters =
