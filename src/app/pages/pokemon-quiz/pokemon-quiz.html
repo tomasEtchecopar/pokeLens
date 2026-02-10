@@ -110,7 +110,7 @@
         }
       </div>
 
-      @if (quizService.hasAnswered()) {
+      @if (quizService.hasAnswered() && !quizService.isValidating()) {
       <button class="next-button" (click)="nextQuestion()"
         [disabled]="quizService.isValidating() || quizService.isLoading()">
         Siguiente Pregunta →
@@ -130,5 +130,4 @@
     </div>
   </div>
 </div>
-
 }
