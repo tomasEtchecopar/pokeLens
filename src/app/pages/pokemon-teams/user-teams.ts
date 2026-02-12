@@ -10,7 +10,7 @@ import { catchError, forkJoin, map, of } from 'rxjs';
 import { PokemonService } from '../../pokemon/pokemon-service';
 import { NotificationService } from '../../core/notification.service';
 import { ConfirmModalComponent } from '../../components/notification-modal/notification-menu-modal';
-import { EditNicknameModalComponent } from './edit-nickname-modal'; // ajustá ruta
+import { EditNicknameModalComponent } from './edit-nickname-modal';
 
 /**
  * UserTeams manages the user's pokemon teams.
@@ -399,7 +399,7 @@ export class UserTeams implements OnInit {
   }
 
   backToProfile() {
-    this.router.navigateByUrl('/profile');
+    this.router.navigateByUrl('/user/profile');
   }
 
   goToCatalog() {

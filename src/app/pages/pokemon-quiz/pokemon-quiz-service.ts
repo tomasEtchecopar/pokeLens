@@ -8,7 +8,7 @@ import { QuizQuestion, QuizStats } from '../../pokemon/models/pokemon-quiz-model
 
 export type QuizValidateData = {
   isCorrect: boolean;
-  correctAnswer?: string; // solo viene cuando erró (si el backend lo manda)
+  correctAnswer?: string;
   pointsAwarded: number;
   pointsBlocked: boolean;
   correctToday: number;
@@ -16,7 +16,6 @@ export type QuizValidateData = {
   user: any | null;
 };
 const SUSPENSE_PHRASES = [
-  // Las que ya tenías
   '¿Será este…?',
   'La Pokédex está pensando…',
   'Procesando datos…',
@@ -223,7 +222,7 @@ export class PokemonQuizService {
         console.error('Error validating answer:', err);
 
         // Si falla el backend, dejamos la UI en estado "respondido",
-        // pero isCorrect quedará null (o lo podés setear en false si preferís).
+        // pero isCorrect quedará null.
         return of(null);
       }),
       finalize(() => {

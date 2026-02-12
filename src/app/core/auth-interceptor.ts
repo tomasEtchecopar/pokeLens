@@ -30,6 +30,7 @@ export const authInterceptor: HttpInterceptorFn = (req, next) => {
         return throwError(() => error);
       }
 
+
       return authService.refreshAccessToken(refreshToken).pipe(
         switchMap((res: any) => {
           localStorage.setItem('accessToken', res.accessToken);

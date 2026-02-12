@@ -1,307 +1,77 @@
-import { Component, inject, input, model, OnInit } from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  ReactiveFormsModule,
-  ValidationErrors,
-  Validators
-} from '@angular/forms';
-import { User } from '../../user/user-model';
-import { UserClient } from '../../core/user-client.service';
-import { AuthServ } from '../../core/auth.service';
-import { debounceTime, distinctUntilChanged, forkJoin, of, switchMap } from 'rxjs';
+import { Component, inject, signal, computed } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { Router } from '@angular/router';
-import { PointsService } from '../../core/points.service';
+import { AuthServ } from '../../core/auth.service';
 import { NotificationService } from '../../core/notification.service';
 
-const emailPatter = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+//Validador: password y confirmPassword deben coincidir
+function passwordsMatchValidator(group: AbstractControl): ValidationErrors | null {
+  const pass = group.get('password')?.value;
+  const confirm = group.get('confirmPassword')?.value;
+  if (!pass || !confirm) return null;
+  return pass === confirm ? null : { passwordsMismatch: true };
+}
 
 @Component({
   selector: 'app-sign-in',
+  standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './sign-in.html',
   styleUrl: './sign-in.css',
 })
-export class SignIn implements OnInit {
-  private readonly users: UserClient = inject(UserClient);
-  private readonly formBuilder = inject(FormBuilder);
+export class SignIn {
+  private readonly fb = inject(FormBuilder);
   private readonly auth = inject(AuthServ);
-  private readonly router = inject(Router);
-  private readonly points = inject(PointsService);
   private readonly notification = inject(NotificationService);
+  private readonly router = inject(Router);
 
-  readonly isEditing = model<boolean>(false);
-  readonly client = input<User>();
+  readonly loading = signal(false);
+  readonly title = computed(() => 'Crear cuenta');
 
-  protected emailTaken = false;
-  protected usernameTaken = false;
+  readonly form = this.fb.nonNullable.group(
+    {
+      username: ['', Validators.required],
+      mail: ['', [Validators.required, Validators.email]],
+      birthDate: ['', Validators.required], 
+      password: ['', [Validators.required, Validators.minLength(6)]],
+      confirmPassword: ['', Validators.required],
+    },
+    { validators: [passwordsMatchValidator] }
+  );
 
-  private normalizeUsername(v: string): string {
-    return (v ?? '').trim().toLowerCase();
-  }
-
-  private normalizeEmail(v: string): string {
-    return (v ?? '').trim().toLowerCase();
-  }
-
-  private minAgeValidator(minAge: number) {
-    return (control: AbstractControl): ValidationErrors | null => {
-      const value = control.value as string | null;
-      if (!value) return null;
-
-      const parts = value.split('-').map(Number);
-      if (parts.length !== 3 || parts.some(n => Number.isNaN(n))) return { invalidDate: true };
-
-      const [y, m, d] = parts;
-      const birth = new Date(y, m - 1, d);
-      if (Number.isNaN(birth.getTime())) return { invalidDate: true };
-
-      const now = new Date();
-      const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-      if (birth > today) return { futureDate: true };
-
-      let age = today.getFullYear() - birth.getFullYear();
-      const hasNotHadBirthdayThisYear =
-        today.getMonth() < birth.getMonth() ||
-        (today.getMonth() === birth.getMonth() && today.getDate() < birth.getDate());
-      if (hasNotHadBirthdayThisYear) age--;
-
-      return age >= minAge ? null : { minAge: true };
-    };
-  }
-
-  protected readonly form = this.formBuilder.nonNullable.group({
-    username: ['', Validators.required],
-    birthDate: ['', [Validators.required, this.minAgeValidator(8)]],
-    mail: this.formBuilder.nonNullable.control('', {
-      validators: [Validators.required, Validators.email, Validators.pattern(emailPatter)],
-      updateOn: 'blur',
-    }),
-    password: ['', Validators.required],
-  });
-
-  ngOnInit(): void {
-    const u = this.client();
-
-    if (this.isEditing() && u) {
-      const birth = (u.birthDate ?? '').toString().slice(0, 10);
-
-      this.form.patchValue({
-        username: u.username ?? '',
-        birthDate: birth,
-        mail: u.mail ?? '',
-        password: u.password ?? ''
-      });
-
-      // No permitir editar birthDate en edición
-      this.form.controls.birthDate.disable({ emitEvent: false });
-    } else {
-      // En registro, se habilita
-      this.form.controls.birthDate.enable({ emitEvent: false });
-    }
-
-    // EMAIL availability
-    this.form.controls.mail.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        switchMap(raw => {
-          const ctrl = this.form.controls.mail;
-          const value = this.normalizeEmail(raw ?? '');
-
-          if (!value || ctrl.invalid) return of(false);
-
-          const current = this.client();
-          const currentMail = this.normalizeEmail(current?.mail ?? '');
-
-          // Si estás editando y no cambió el email, no chequees
-          if (this.isEditing() && currentMail === value) return of(false);
-
-          return this.auth.existsEmail(value);
-        })
-      )
-      .subscribe(exists => this.emailTaken = exists);
-
-    // USERNAME availability
-    this.form.controls.username.valueChanges
-      .pipe(
-        debounceTime(400),
-        distinctUntilChanged(),
-        switchMap(raw => {
-          const value = this.normalizeUsername(raw ?? '');
-          if (!value) return of(false);
-
-          const current = this.client();
-          const currentUsername = this.normalizeUsername(current?.username ?? '');
-
-          // Si estás editando y no cambió el username, no chequees
-          if (this.isEditing() && currentUsername === value) return of(false);
-
-          return this.auth.existsUsername(value);
-        })
-      )
-      .subscribe(exists => this.usernameTaken = exists);
-  }
-
-  onSubmit() {
+  submit() {
     if (this.form.invalid) {
       this.form.markAllAsTouched();
-      this.notification.notify('El formulario es inválido.');
+      this.notification.notify('Revisá los campos del formulario.');
       return;
     }
 
-    // =========================
-    // EDIT MODE
-    // =========================
-    if (this.isEditing()) {
-      const current = this.auth.activeUser();
-      if (!current?.id) {
-        this.notification.notify('No se encontró el usuario a editar');
-        return;
-      }
+    const username = this.form.controls.username.value.trim().toLowerCase();
+    const mail = this.form.controls.mail.value.trim().toLowerCase();
+    const birthDate = this.form.controls.birthDate.value; 
+    const password = this.form.controls.password.value;
 
-      const userId = current.id;
+    this.loading.set(true);
 
-      const username = this.normalizeUsername(this.form.controls.username.value ?? '');
-      const mail = this.normalizeEmail(this.form.controls.mail.value ?? '');
-      const password = this.form.controls.password.value ?? '';
-
-      const oldUsername = this.normalizeUsername(current.username ?? '');
-      const oldMail = this.normalizeEmail(current.mail ?? '');
-
-      const usernameChanged = username !== oldUsername;
-      const mailChanged = mail !== oldMail;
-
-      const checkUsername$ = usernameChanged ? this.auth.existsUsername(username) : of(false);
-      const checkEmail$ = mailChanged ? this.auth.existsEmail(mail) : of(false);
-
-      forkJoin({ usernameExists: checkUsername$, emailExists: checkEmail$ })
-        .pipe(
-          switchMap(({ usernameExists, emailExists }) => {
-            if (usernameExists) {
-              this.notification.notify('Ese usuario ya existe.');
-              return of(null);
-            }
-            if (emailExists) {
-              this.notification.notify('Ese email ya está registrado.');
-              return of(null);
-            }
-
-            const payload = {
-              username,
-              mail,
-              password,
-              avatar_url: this.avatarUrlFromUsername(username),
-            };
-
-            return this.users.updateUser(payload as any, userId);
-          })
-        )
-        .subscribe({
-          next: (res) => {
-            if (!res) return;
-            this.auth.activeUser.set(res);
-            localStorage.setItem('activeUser', JSON.stringify(res));
-            this.notification.notify('Perfil actualizado');
-            this.isEditing.set(false);
-          },
-          error: (err) => {
-            console.error('UPDATE ERROR BODY:', err.error);
-            this.notification.notify(
-              typeof err.error === 'string'
-                ? err.error
-                : err.error?.message || err.error?.error || 'No se pudo actualizar el perfil'
-            );
-          }
-        });
-
-      return;
-    }
-
-    // =========================
-    // REGISTRATION MODE
-    // =========================
-    const raw = this.form.getRawValue();
-
-    const username = this.normalizeUsername(raw.username ?? '');
-    const mail = this.normalizeEmail(raw.mail ?? '');
-
-    forkJoin({
-      usernameExists: this.auth.existsUsername(username),
-      emailExists: this.auth.existsEmail(mail),
-    })
-      .pipe(
-        switchMap(({ usernameExists, emailExists }) => {
-          if (usernameExists) {
-            this.notification.notify('Ese usuario ya existe.');
-            return of(null);
-          }
-          if (emailExists) {
-            this.notification.notify('Ese email ya está registrado.');
-            return of(null);
-          }
-
-          const puntos = this.points.randomPoints();
-
-          const newUser: User = {
-            ...raw,
-            username,
-            mail,
-            avatar_url: this.avatarUrlFromUsername(username),
-            points: puntos,
-            login_dates: [new Date().toISOString()],
-            last_team_created_at: null,
-          };
-
-          return this.users.addUser(newUser);
-        })
-      )
-      .subscribe({
-        next: (res) => {
-          if (!res) return;
-
-          const { user, token } = res;
-          const puntos = user.points ?? 0;
-
-          this.notification.notify(`Usuario registrado! Has recibido ${puntos} puntos de Bienvenida!`);
-
-          this.auth.activeUser.set(user);
-          localStorage.setItem('activeUser', JSON.stringify(user));
-          localStorage.setItem('token', token);
-
-          this.form.reset({ username: '', birthDate: '', mail: '', password: '' });
-          this.emailTaken = false;
-          this.usernameTaken = false;
-
-          this.router.navigateByUrl('/home');
-        },
-        error: (err) => {
-          console.error('REGISTER ERROR BODY:', err.error);
-          this.notification.notify(
-            typeof err.error === 'string'
-              ? err.error
-              : err.error?.message || err.error?.error || 'No se pudo registrar el usuario'
-          );
-        }
-      });
+    this.auth.register({ username, mail, birthDate, password }).subscribe({
+      next: () => {
+        this.router.navigateByUrl('/catalog');
+      },
+      error: (err: any) => {
+        console.error('REGISTER ERROR:', err?.error || err);
+        this.notification.notify(
+          typeof err?.error === 'string'
+            ? err.error
+            : err?.error?.message || err?.error?.error || 'No se pudo crear la cuenta'
+        );
+        this.loading.set(false);
+      },
+      complete: () => this.loading.set(false),
+    });
   }
 
-  private fnv1aHash(str: string): number {
-    let hash = 2166136261;
-    for (let i = 0; i < str.length; i++) {
-      hash ^= str.charCodeAt(i);
-      hash = Math.imul(hash, 16777619);
-    }
-    return hash >>> 0;
-  }
-
-  private avatarUrlFromUsername(username: string): string {
-    const seed = this.normalizeUsername(username);
-    const h = this.fnv1aHash(seed);
-
-    const maxPokemon = 1010;
-    const pokemonId = (h % maxPokemon) + 1;
-
-    return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${pokemonId}.png`;
+  // Helpers para el HTML
+  get passwordsMismatch(): boolean {
+    return !!this.form.errors?.['passwordsMismatch'];
   }
 }

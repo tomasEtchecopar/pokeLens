@@ -1,7 +1,6 @@
 import { Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLinkActive, RouterLinkWithHref } from "@angular/router";
 import { AuthServ } from '../core/auth.service';
-import { PokemonQuizService } from '../pages/pokemon-quiz/pokemon-quiz-service';
 import { NotificationMenu } from '../components/notification-menu/notification-menu.component';
 
 @Component({
@@ -13,7 +12,6 @@ import { NotificationMenu } from '../components/notification-menu/notification-m
 export class Header {
   private readonly router = inject(Router);
   private readonly auth = inject(AuthServ);
-  private readonly quiz = inject(PokemonQuizService)
 
   readonly user = computed(() => this.auth.activeUser());
   readonly sidebarOpen = signal(false);

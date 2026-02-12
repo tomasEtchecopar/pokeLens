@@ -1,5 +1,4 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { PokemonService } from '../../pokemon/pokemon-service';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { MemoryCard } from '../../pokemon/models/memory-card-model';
 import { AuthServ } from '../../core/auth.service';
@@ -296,7 +295,7 @@ export class MemoryGame {
 
   /* ===== award points ===== */
   private awardPointsForWin() {
-    const token = localStorage.getItem('accessToken'); // ✅ MISMA KEY que en deck
+    const token = localStorage.getItem('accessToken');
 
     // si no hay token, igual mostramos modal pero sin puntos
     if (!token) {
@@ -312,7 +311,7 @@ export class MemoryGame {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`, // ✅ ahora sí
+        Authorization: `Bearer ${token}`, 
       },
       body: JSON.stringify({
         cols: b.cols,
@@ -322,7 +321,7 @@ export class MemoryGame {
     })
       .then(async (r) => {
         const data = await r.json().catch(() => ({}));
-        if (!r.ok) throw { status: r.status, data }; // ✅ para ver status real
+        if (!r.ok) throw { status: r.status, data }; 
         return data;
       })
       .then((resp) => {

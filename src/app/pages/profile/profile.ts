@@ -1,19 +1,19 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { DatePipe } from '@angular/common';
-
 import { AuthServ } from '../../core/auth.service';
 import { PointsService } from '../../core/points.service';
 import { NotificationService } from '../../core/notification.service';
 import { PointEvent } from '../../user/user-model';
-import { SignIn } from '../sign-in/sign-in';
+import { EditProfile } from '../profile/edit-profile/edit-profile';
 import { UserClient } from '../../core/user-client.service';
 import { PokemonQuizService } from '../pokemon-quiz/pokemon-quiz-service';
+import { IdleLogoutService } from '../../core/idle-logout.service';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [SignIn, DatePipe],
+  imports: [EditProfile, DatePipe],
   templateUrl: './profile.html',
   styleUrl: './profile.css',
 })
@@ -25,6 +25,8 @@ export class Profile {
   private readonly notification = inject(NotificationService);
   private readonly points = inject(PointsService);
   private readonly clienteService = inject(UserClient)
+  readonly sessionTime = inject(IdleLogoutService);
+
   isDeleteModalOpen = signal(false);
   confirmDeleteClick = signal(false);
 
@@ -110,6 +112,8 @@ export class Profile {
     this.auth.logOut();
     this.router.navigateByUrl('home');
     this.quiz.resetStats();
+    this.sessionTime.stop();
+    this.sessionTime.onLogout();
   }
   confirmDeleteAccount() {
     const user = this.usuario();
@@ -120,7 +124,7 @@ export class Profile {
         localStorage.removeItem('activeUser');
         localStorage.removeItem('accessToken');
         localStorage.removeItem('refreshToken');
-        localStorage.removeItem('token'); // por si quedó legacy
+        localStorage.removeItem('token'); 
 
         this.auth.activeUser.set(undefined);
 

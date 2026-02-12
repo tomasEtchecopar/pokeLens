@@ -1,45 +1,27 @@
-@if (!usuario()) {
-<app-auth-modal></app-auth-modal>
-} @else {
-
-<!--  MODAL DE INICIO  -->
+@if (!usuario()) { <app-auth-modal></app-auth-modal> }
+@else {
+<!-- MODAL DE INICIO -->
 @if (showStartModal()) {
 <div class="start-overlay" (click)="$event.stopPropagation()">
   <div class="start-modal" (click)="$event.stopPropagation()">
     <div class="start-header">
-      <div class="start-title">🧠 MEMOTEST POKÉMON</div>
-      <button class="score-x" type="button" (click)="onClose()">✕</button>
-
+      <div class="start-title">🧠 MEMOTEST POKÉMON</div> <button class="score-x" type="button"
+        (click)="onClose()">✕</button>
     </div>
-
     <div class="start-content">
-      <p class="start-line">
-        Memoria. Precisión. Puntos.
-        <br>
-        Entrená tu memoria Pokémon.
-      </p>
-
-      <div class="start-actions">
-        <button class="btn primary" type="button" (click)="startFromModal()">
-          Jugar
-        </button>
-
-        <button class="btn secondary" type="button" (click)="openScoreModal()">
-          Puntaje
-        </button>
+      <p class="start-line"> Memoria. Precisión. Puntos. <br> Entrená tu memoria Pokémon. </p>
+      <div class="start-actions"> <button class="btn primary" type="button" (click)="startFromModal()"> Jugar </button>
+        <button class="btn secondary" type="button" (click)="openScoreModal()"> Puntaje </button>
       </div>
-
     </div>
-
     <!-- MODAL INTERNO: PUNTAJE -->
     @if (showScoreModal()) {
     <div class="score-overlay" (click)="closeScoreModal()">
       <div class="score-modal" (click)="$event.stopPropagation()">
         <div class="score-header">
-          <div class="score-title">🏆 Puntaje</div>
-          <button class="score-x" type="button" (click)="closeScoreModal()">✕</button>
+          <div class="score-title">🏆 Puntaje</div> <button class="score-x" type="button"
+            (click)="closeScoreModal()">✕</button>
         </div>
-
         <div class="score-content">
           <div class="score-block">
             <div class="score-subtitle">Tablero 4x3</div>
@@ -50,7 +32,6 @@
               <li><b>> 15</b> mov → <b>10</b> pts</li>
             </ul>
           </div>
-
           <div class="score-block">
             <div class="score-subtitle">Tablero 6x3</div>
             <ul class="score-list">
@@ -60,89 +41,54 @@
               <li><b>> 20</b> mov → <b>15</b> pts</li>
             </ul>
           </div>
-
-          <div class="score-actions">
-            <button class="btn primary" type="button" (click)="closeScoreModal()">
-              Entendido
-            </button>
-          </div>
+          <div class="score-actions"> <button class="btn primary" type="button" (click)="closeScoreModal()"> Entendido
+            </button> </div>
         </div>
       </div>
-    </div>
-    }
+    </div> }
   </div>
-</div>
-}
-
-
-<div class="memory-page">
+</div> } <div class="memory-page">
   <h1 class="title">MEMOTEST POKÉMON</h1>
-
   <div class="memory-topbar">
     <div class="stat">Tamaño: <b>{{ board().cols }}×{{ board().rows }}</b></div>
     <div class="stat">Movimientos: <b>{{ moves() }}</b></div>
     <div class="stat">Pares: <b>{{ matches() }}/{{ pairs() }}</b></div>
-
-    <div class="sizes">
-      @for (b of boards; track b.cols) {
-      <button class="btn" (click)="setBoard(b)" [class.active]="board().cols === b.cols"
-        [disabled]="locked() || !gameStarted()">
-        {{ b.cols }}×{{ b.rows }}
-      </button>
-      }
-    </div>
-
-    <div class="volume-control">
-      <span class="speaker">🔊</span>
-      <input class="volume-slider" type="range" min="0" max="100" [value]="audio.getVolume() * 100"
-        (input)="audio.setVolume($any($event.target).value / 100)" />
-    </div>
-
-
-    <button class="btn primary" (click)="startNewGame()" [disabled]="locked() || !gameStarted()">
-      Reiniciar
-    </button>
+    <div class="sizes"> @for (b of boards; track b.cols) { <button class="btn" (click)="setBoard(b)"
+        [class.active]="board().cols === b.cols" [disabled]="locked() || !gameStarted()"> {{ b.cols }}×{{ b.rows }}
+      </button> } </div>
+    <div class="volume-control"> <span class="speaker">🔊</span> <input class="volume-slider" type="range" min="0"
+        max="100" [value]="audio.getVolume() * 100" (input)="audio.setVolume($any($event.target).value / 100)" /> </div>
+    <button class="btn primary" (click)="startNewGame()" [disabled]="locked() || !gameStarted()"> Reiniciar </button>
   </div>
-
   <!-- MODAL DE VICTORIA -->
   <app-memory-win-modal [isOpen]="showWinModal()" [moves]="moves()" [pointsAwarded]="pointsAwarded()"
     [attemptsLeftToday]="attemptsLeftToday()" (closed)="closeWinModal()" (restart)="restartFromWin()">
   </app-memory-win-modal>
-
-
-  <div class="grid" [style.gridTemplateColumns]="'repeat(' + board().cols + ', minmax(110px, 1fr))'">
-    @for (card of cards(); track card.uid; let i = $index) {
-    <button class="memory-card" [class.flipped]="card.isFlipped || card.isMatched" [class.matched]="card.isMatched"
+  <div class="grid" [style.gridTemplateColumns]="'repeat(' + board().cols + ', minmax(110px, 1fr))'"> @for (card of
+    cards(); track card.uid; let i = $index) { <button class="memory-card"
+      [class.flipped]="card.isFlipped || card.isMatched" [class.matched]="card.isMatched"
       [class.just-matched]="card.justMatched" [class.just-error]="card.justError" (click)="onCardClick(i)"
       [disabled]="locked() || card.isMatched || !gameStarted()">
       <div class="card-inner">
-
         <!-- DORSO -->
         <div class="card-face card-front">
           <div class="card-backplate">
             <div class="mark">?</div>
           </div>
         </div>
-
         <!-- FRENTE -->
         <div class="card-face card-back">
           <div class="pokedex-screen">
             <div class="screen-bezel">
               <div class="screen-left">
                 <div class="lcd-screen">
-                  <div class="sprite-container">
-                    <img width="160" height="160" [src]="card.pokemon.sprites.front_default!"
-                      [alt]="card.pokemon.name" />
-                  </div>
+                  <div class="sprite-container"> <img width="160" height="160"
+                      [src]="card.pokemon.sprites.front_default!" [alt]="card.pokemon.name" /> </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
       </div>
-    </button>
-    }
-  </div>
-</div>
-}
+    </button> } </div>
+</div> }

@@ -48,7 +48,7 @@ export class PokemonQuiz implements OnInit, OnDestroy {
     this.showStartModal.set(false);
     this.gameStarted.set(true);
 
-    // 🎵 tema random (.opus) sin repetir hasta agotar (según tu implementación)
+    // tema random sin repetir hasta agotar
     this.audio.playBackgroundRandom(QUIZ_BGM_TRACKS);
 
     // primera pregunta
@@ -99,7 +99,7 @@ export class PokemonQuiz implements OnInit, OnDestroy {
     img.style.display = 'none';
   }
 
-  // Slider de volumen (ideal: 0..1)
+  // Slider de volumen 
   onVolumeChange(event: Event): void {
     const input = event.target as HTMLInputElement;
     const value = Number(input.value);

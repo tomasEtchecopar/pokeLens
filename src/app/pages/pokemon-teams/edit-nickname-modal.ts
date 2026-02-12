@@ -46,7 +46,7 @@ import { FormsModule } from '@angular/forms';
     }
   `,
   styles: [`
-    /* ✅ Reusamos el MISMO look de AddPokemonModal */
+    /* Reusamos el MISMO look de AddPokemonModal */
 
     .modal-overlay {
       position: fixed;
