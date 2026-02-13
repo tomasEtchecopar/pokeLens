@@ -3,13 +3,11 @@ import { AuthServ } from '../../core/auth.service';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NotificationService } from '../../core/notification.service';
+import { IdleLogoutService } from '../../core/idle-logout.service';
 
-/**
- * LogIn component handles user authentication.
- * Validates credentials and redirects to catalog on success.
- */
 @Component({
   selector: 'app-log-in',
+  standalone: true,
   imports: [ReactiveFormsModule],
   templateUrl: './log-in.html',
   styleUrl: './log-in.css',
@@ -19,35 +17,47 @@ export class LogIn {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
   private readonly notification = inject(NotificationService);
+  readonly sessionTimer = inject(IdleLogoutService);
 
   protected readonly form = this.fb.nonNullable.group({
     username: ['', Validators.required],
-    password: ['', Validators.required]
+    password: ['', Validators.required],
   });
 
-  /**
-   * Handles login submission.
-   * Validates form, calls auth service, and navigates to catalog on success.
-   * Shows alerts for validation errors or incorrect credentials.
-   */
   logIn() {
     if (this.form.invalid) {
+      this.form.markAllAsTouched();
       this.notification.notify('Complete correctamente todos los campos');
       return;
     }
 
     const { username, password } = this.form.getRawValue();
 
-    // Subscribe to login observable before navigating (important for proper flow)
     this.auth.login(username, password).subscribe({
       next: () => {
-        console.log('Logueado correctamente')
-        this.router.navigateByUrl('/catalogo');
+        this.sessionTimer.start();
+        this.router.navigateByUrl('/catalog');
       },
-      error: (err) => {
-        console.error(err);
-        this.notification.notify('Usuario o contraseña incorrectos');
-      }
+      error: (err: any) => {
+        console.error('LOGIN ERROR:', err);
+
+        const msg =
+          typeof err?.error === 'string'
+            ? err.error
+            : err?.error?.message || err?.error?.error;
+
+        if (err?.status === 0) {
+          this.notification.notify('No se pudo conectar al servidor (CORS / API caída)');
+          return;
+        }
+
+        if (err?.status === 401) {
+          this.notification.notify(msg || 'Usuario o contraseña incorrectos');
+          return;
+        }
+
+        this.notification.notify(msg || 'Error al iniciar sesión');
+      },
     });
   }
 }

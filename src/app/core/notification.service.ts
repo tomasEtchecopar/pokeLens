@@ -22,7 +22,7 @@ export class NotificationService {
   notificationHistory = signal<Notification[]>([]);
 
   // Configuración
-  private readonly DEFAULT_DURATION = 3000; // 3 segundos
+  private readonly DEFAULT_DURATION = 5000; // 5 segundos
   private readonly MAX_HISTORY = 100;
   private notificationCounter = 0;
 

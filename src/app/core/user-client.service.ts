@@ -16,13 +16,6 @@ export class UserClient {
     return this.http.get<User>(`${this.baseUrl}/${id}`);
   }
 
-  addUser(user: User): Observable<{ user: User; token: string }> {
-    return this.http.post<{ user: User; token: string }>(
-      `${environment.apiUrl}/auth/register`,
-      user
-    );
-  }
-
   updateUser(user: User, id: string | number): Observable<User> {
     return this.http.put<User>(`${this.baseUrl}/${id}`, user);
   }

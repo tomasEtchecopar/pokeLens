@@ -16,7 +16,7 @@ export class PointsService {
   }
 
   /**
-   * Obtiene el historial de puntos (ahora desde tabla separada)
+   * Obtiene el historial de puntos
    */
   getHistory(userId: string, limit?: number): Observable<PointEvent[]> {
     const actualLimit = !limit || limit === Infinity ? 100 : limit;

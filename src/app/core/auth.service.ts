@@ -12,11 +12,37 @@ export class AuthServ {
   private readonly http = inject(HttpClient);
   private readonly notification = inject(NotificationService);
 
-  // environment.apiUrl ya trae /api (en tu caso), así que armamos /auth directo
   private readonly baseUrl = `${environment.apiUrl}/auth`;
 
   public readonly activeUser = signal<User | undefined>(undefined);
   public readonly isLoggedIn = computed(() => this.activeUser() !== undefined);
+
+
+  register(payload: {
+    username: string;
+    mail: string;
+    birthDate: string; // YYYY-MM-DD
+    password: string;
+  }): Observable<void> {
+    return this.http
+      .post<{ user: User; accessToken?: string; refreshToken?: string }>(
+        `${this.baseUrl}/register`,
+        payload
+      )
+      .pipe(
+        tap(({ user, accessToken, refreshToken }) => {
+          this.notification.clearAll();
+          this.activeUser.set(user);
+          localStorage.setItem('activeUser', JSON.stringify(user));
+          if (accessToken) localStorage.setItem('accessToken', accessToken);
+          if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+
+          this.notification.notify('Cuenta creada');
+        }),
+        map(() => void 0)
+      );
+  }
+
 
   existsEmail(email: string) {
     const e = (email ?? '').trim().toLowerCase();
@@ -69,10 +95,11 @@ export class AuthServ {
     localStorage.removeItem('accessToken');
     localStorage.removeItem('refreshToken');
     this.notification.clearAll();
-
   }
 
-  refreshAccessToken(refreshToken: string){
+
+
+  refreshAccessToken(refreshToken: string) {
     return this.http.post(`${this.baseUrl}/refresh`, { refreshToken });
   }
 

@@ -1,0 +1,32 @@
+<form class="retro-form" [formGroup]="form" (ngSubmit)="save()">
+  <h2 class="retro-title">Editar perfil</h2>
+  <p class="retro-subtitle">Podés cambiar tu username y tu email.</p>
+
+  <div class="form-field">
+    <label for="username">Username</label>
+    <input id="username" formControlName="username" placeholder="ej: ash" autocomplete="off" />
+    @if (form.controls.username.touched && form.controls.username.invalid) {
+    <small>Username requerido</small>
+    }
+  </div>
+
+  <div class="form-field">
+    <label for="mail">Email</label>
+    <input id="mail" formControlName="mail" placeholder="ej: ash@mail.com" autocomplete="email" />
+    @if (form.controls.mail.touched && form.controls.mail.invalid) {
+    <small>Email inválido</small>
+    }
+  </div>
+
+ 
+
+  <div class="actions">
+    <button class="btn-signIn" type="submit" [disabled]="form.invalid">
+      Guardar cambios
+    </button>
+
+    <button class="btn-signIn" type="reset" (click)="cancel()">
+      Cancelar
+    </button>
+  </div>
+</form>

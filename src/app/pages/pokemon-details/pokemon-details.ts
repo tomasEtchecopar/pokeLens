@@ -1,5 +1,4 @@
 import { Component, inject} from '@angular/core';
-import { FilterOptions } from '../../pokemon/models/pokemon-filters';
 import { computed } from '@angular/core';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { DecimalPipe, NgClass, TitleCasePipe } from '@angular/common';
@@ -20,10 +19,7 @@ import { PokemonService } from '../../pokemon/pokemon-service';
 })
 export class PokemonDetails {
   private readonly service = inject(PokemonService);
-  private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
-  private readonly routeParams = toSignal(this.route.paramMap);
-  private readonly pokemonName = computed(() => this.routeParams()?.get('name') ?? '');
 
   protected readonly pokemon = toSignal(this.route.paramMap.pipe(switchMap(params =>{
     const name = params.get('name');

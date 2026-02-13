@@ -6,6 +6,14 @@ import { AuthServ } from './auth.service';
 import { NotificationService } from './notification.service';
 
 @Injectable({ providedIn: 'root' })
+
+
+//El backend expira el token, este servicio es puramente Front. Solo actua como capa de seguridad UX
+/*
+//Cerrar sesión si el usuario está inactivo 2 horas
+//Forzar re-login cada 24 horas
+//Detectar si el usuario volvió a la pestaña después de mucho tiempo
+*/
 export class IdleLogoutService {
   private readonly auth = inject(AuthServ);
   private readonly router = inject(Router);
@@ -16,6 +24,7 @@ export class IdleLogoutService {
 
 
   private readonly IDLE_MS = 2 * 60 * 60 * 1000;     // 2 horas
+  // private readonly IDLE_MS = 10 * 1000;     // 10seg
   private readonly REAUTH_MS = 24 * 60 * 60 * 1000;  // 24 horas
 
   private readonly KEY_LAST_ACTIVITY = 'pl_last_activity_at';

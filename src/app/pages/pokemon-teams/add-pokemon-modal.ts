@@ -2,7 +2,6 @@ import { Component, effect, inject, input, output, signal } from '@angular/core'
 import { FormsModule } from '@angular/forms';
 import { Pokemon } from '../../pokemon/models/pokemon-models';
 import { AuthServ } from '../../core/auth.service';
-import { User } from '../../user/user-model';
 import { TeamService } from '../../core/team.service';
 import { Team } from './team-model';
 import { Router } from '@angular/router';

@@ -71,8 +71,6 @@ export class PokemonCatalog implements OnInit, AfterViewInit, OnDestroy {
           this.catalogState.setFilters(rest as FilterOptions);
           return;
         }
-
-        // Si hay type, aplicarlo
         const next: FilterOptions = { ...current, type: type as any };
         this.catalogState.setFilters(next);
       });
