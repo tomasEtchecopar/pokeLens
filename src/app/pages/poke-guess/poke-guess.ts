@@ -6,7 +6,6 @@ import { AuthServ } from '../../core/auth.service';
 import { PointsService } from '../../core/points.service';
 import { NotificationService } from '../../core/notification.service';
 import { AuthModal } from '../auth-modal/auth-modal';
-import { PointEvent } from '../../user/user-model';
 
 interface TileState extends LetterState {
   revealed: boolean;
@@ -20,12 +19,12 @@ interface TileState extends LetterState {
   styleUrls: ['./poke-guess.css']
 })
 export class PokeGuess implements OnInit {
-private pokeguessService = inject(PokeGuessService);
-private auth = inject(AuthServ);
-private points = inject(PointsService);
-private notification = inject(NotificationService);
+  private pokeguessService = inject(PokeGuessService);
+  private auth = inject(AuthServ);
+  private points = inject(PointsService);
+  private notification = inject(NotificationService);
 
-protected readonly usuario = computed(() => this.auth.activeUser());
+  protected readonly usuario = computed(() => this.auth.activeUser());
 
   letterCount = signal<number>(0);
   currentGuess = signal<string>('');
@@ -109,8 +108,8 @@ protected readonly usuario = computed(() => this.auth.activeUser());
             if (ls && ls.char) {
               const current = letterStates.get(ls.char);
               if (!current ||
-                  (current === 'absent' && ls.state !== 'absent') ||
-                  (current === 'present' && ls.state === 'correct')) {
+                (current === 'absent' && ls.state !== 'absent') ||
+                (current === 'present' && ls.state === 'correct')) {
                 letterStates.set(ls.char, ls.state);
               }
             }
@@ -232,8 +231,10 @@ protected readonly usuario = computed(() => this.auth.activeUser());
         this.won.set(response.won);
 
         if (response.correct) {
-          this.message.set('¡Correcto! ');
-          this.awardPointsForCorrectAnswer()
+          if (response.pointsAwarded && response.pointsAwarded > 0) {
+            this.notification.notify(`¡Correcto! +${response.pointsAwarded} puntos`);
+          }
+          this.message.set('¡Correcto!');
         } else if (response.gameOver) {
           this.message.set(`Era: ${response.correctAnswer?.toUpperCase()}`);
           this.correctAnswer.set(response.correctAnswer || '');
@@ -256,43 +257,5 @@ protected readonly usuario = computed(() => this.auth.activeUser());
       }
     });
   }
-  private awardPointsForCorrectAnswer(): void {
-    const user = this.auth.activeUser();
-    if (!user || !user.id) {
-      return;
-    }
 
-    const amount = 20;
-    const reason = 'Respuesta correcta en PokeGuess';
-    const today = new Date();
-
-    // Step 1: Add points
-    this.points.addPoints(user, amount, reason).subscribe({
-      next: (updatedUser) => {
-        const event: PointEvent= {
-          amount,
-          reason,
-          created_at: today.toISOString()
-        };
-
-        // Step 2: Add to history
-        this.points.addHistory(updatedUser, event).subscribe({
-          next: (finalUser) => {
-            // Step 3: Sync with auth and localStorage
-            this.auth.activeUser.set(finalUser);
-            localStorage.setItem('activeUser', JSON.stringify(finalUser));
-
-            // Step 4: Show notification with points
-            this.notification.notify(`¡Respuesta correcta! +${amount} puntos`);
-          },
-          error: () => {
-            console.error('Error al registrar el historial de puntos');
-          }
-        });
-      },
-      error: () => {
-        console.error('Error al sumar puntos por respuesta correcta');
-      }
-    });
-  }
 }

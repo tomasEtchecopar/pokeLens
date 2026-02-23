@@ -4,9 +4,9 @@ import { environment } from '../../../enviroments/enviroment';
 import { ApiResponse } from '../../core/api-model';
 import { map } from 'rxjs';
 
-export interface LetterState{
+export interface LetterState {
   char: string;
-  state: 'correct' | 'present' | 'absent' ;
+  state: 'correct' | 'present' | 'absent';
 }
 export interface GuessHistoryItem {
   word: string;
@@ -28,6 +28,7 @@ export interface GuessResponse {
   won: boolean;
   letterStates: LetterState[];
   correctAnswer?: string;
+  pointsAwarded?: number;
 }
 
 @Injectable({
@@ -37,13 +38,13 @@ export class PokeGuessService {
   private apiUrl = `${environment.apiUrl}/pokeguess`;
   private http = inject(HttpClient);
 
- getGameInfo(){
+  getGameInfo() {
     return this.http.get<ApiResponse<GameInfo>>(`${this.apiUrl}/info`).pipe(
       map(response => response.data)
     );
   }
 
-  submitGuess(guess: string){
+  submitGuess(guess: string) {
     return this.http.post<ApiResponse<GuessResponse>>(`${this.apiUrl}/guess`, { guess }).pipe(
       map(response => response.data)
     );

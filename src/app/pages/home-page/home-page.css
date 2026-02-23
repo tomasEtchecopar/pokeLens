@@ -1,12 +1,11 @@
 .home-container {
+  margin-top: 1rem;
   width: 100%;
-  min-height: 100vh;
-  background: #2c2c2c;
+  flex: 1; 
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start;
-  padding: 2rem 1rem;
+  padding: 1rem;
   box-sizing: border-box;
 }
 

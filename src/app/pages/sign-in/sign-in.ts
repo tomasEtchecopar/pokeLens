@@ -26,7 +26,6 @@ export class SignIn {
   private readonly router = inject(Router);
 
   readonly loading = signal(false);
-  readonly title = computed(() => 'Crear cuenta');
 
   readonly form = this.fb.nonNullable.group(
     {
