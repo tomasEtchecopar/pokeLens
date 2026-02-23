@@ -42,8 +42,6 @@
   </table>
 
   <div class="pager">
-    <button class="btn" (click)="prev()" disabled="{{offset() === 0}}">Anterior</button>
     <span>Mostrando {{getVisibleStart()}} - {{getVisibleEnd()}} de {{total()}}</span>
-    <button class="btn" (click)="next()" disabled="{{offset() + limit() >= total()}}">Siguiente</button>
   </div>
 </div>

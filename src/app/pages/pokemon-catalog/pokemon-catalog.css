@@ -17,16 +17,14 @@
   text-align: center;
   text-transform: uppercase;
   letter-spacing: 3px;
-  padding: 1rem 1rem 1rem;
+  padding: 2rem 2rem 1.5rem;
   margin: 0 auto;
   text-shadow:
     2px 2px 0 #111,
     4px 4px 0 #111;
-  /* background: #5f0b0b; */
   background: #d43030;
   display: inline-block;
   border: 3px solid #000;
-  /* box-shadow: 0 0 12px rgba(0, 0, 0, 0.8); */
 }
 
 .center app-search-bar {
